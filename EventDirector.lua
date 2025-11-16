@@ -42,7 +42,7 @@ function EventDirector:Update()
 end
 
 function EventDirector:Trigger(event, ...)
-    local eventListeners = self._Listeners[event]
+    local eventListeners = self._Listeners[event] or self._Listeners.All
 
     if eventListeners then
         for index, eventListener in pairs(eventListeners) do

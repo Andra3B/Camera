@@ -16,19 +16,19 @@ function NetworkController.Create(controllerSocket)
 end
 
 function NetworkController.GetStringFromCommands(commands)
-	local commandsString = buffer.new():put(" ")
+	local commandsString = buffer.new()
 
 	for _, command in ipairs(commands) do
-		commandsString:put("&", command[0])
+		commandsString:put("&", command[1])
 
-		if #command > 0 then
+		if #command > 1 then
 			commandsString:put(":")
 
-			for argumentIndex, argument in ipairs(command) do
-				local argumentString = tostring(argument)
+			for index = 2, #command, 1 do
+				local argument = command[index]
 
 				if type(argument) == "string" then
-					for bytePosition, codePoint in utf8.codes(argumentString) do
+					for bytePosition, codePoint in utf8.codes(argument) do
 						local character = utf8.char(codePoint)
 						
 						if
@@ -42,9 +42,11 @@ function NetworkController.GetStringFromCommands(commands)
 
 						commandsString:put(character)
 					end
+				else
+					commandsString:put(argument)
 				end
-
-				commandsString:put(argumentIndex < #command and "," or "")
+				
+				commandsString:put(index < #command and "," or "")
 			end
 		end
 	end
@@ -78,17 +80,19 @@ function NetworkController.GetCommandsFromString(commandsString)
 					local commandName = string.sub(commandsString, commandStart + 1, bytePosition - 1)
 				
 					if #commandName > 0 then
-						table.insert(parsedCommands, {[0] = commandName})
+						table.insert(parsedCommands, {commandName})
 					end
 				end
 
 				commandStart = bytePosition
 			elseif character == ':' then
-				local commandName = string.sub(commandsString, commandStart + 1, bytePosition - 1)
+				if commandStart then
+					local commandName = string.sub(commandsString, commandStart + 1, bytePosition - 1)
 
-				if #commandName > 0 then
-					commandTable = {[0] = commandName}
-					table.insert(parsedCommands, commandTable)
+					if #commandName > 0 then
+						commandTable = {commandName}
+						table.insert(parsedCommands, commandTable)
+					end
 				end
 
 				commandStart = nil
@@ -102,7 +106,7 @@ function NetworkController.GetCommandsFromString(commandsString)
 					local commandName = string.sub(commandsString, commandStart + 1, bytePosition - 1)
 
 					if #commandName > 0 then
-						table.insert(parsedCommands, {[0] = commandName})
+						table.insert(parsedCommands, {commandName})
 					end
 				end
 
@@ -125,6 +129,24 @@ function NetworkController.GetCommandsFromString(commandsString)
 	end
 end
 
+function NetworkController.GetPrivateIP()
+	return socket.dns.toip(socket.dns.gethostname())
+end
+
+function NetworkController.GetFreePort()
+	local portFinder = socket.tcp()
+	portFinder:bind("*", 0, 1)
+
+	local _, freePort = portFinder:getsockname()
+	portFinder:close()
+
+	return freePort
+end
+
+function NetworkController:GetEvents()
+	return self._Events
+end
+
 function NetworkController:GetRetries()
 	return self._Retries
 end
@@ -135,6 +157,23 @@ end
 
 function NetworkController:Update()
 	self._Events:Update()
+end
+
+function NetworkController:Bind(IPAddress, port)
+	IPAddress = IPAddress or NetworkController.GetPrivateIP()
+	port = port or 0
+
+	local success, errorMessage = self._Socket:bind(IPAddress, port)
+
+	if success == 1 then
+		return true
+	else
+		return false, errorMessage
+	end
+end
+
+function NetworkController:IsDestroyed()
+	return self._Destroyed
 end
 
 function NetworkController:Destroy()

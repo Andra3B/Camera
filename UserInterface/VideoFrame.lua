@@ -1,34 +1,52 @@
-local Interactive = loadfile("UserInterface/Interactive.lua")(
-	require("UserInterface.Frame")
-)
+local Frame = require("UserInterface.Frame")
 
 local VideoFrame = {}
 
 function VideoFrame.Create()
-	local self = Class.CreateInstance(Interactive.Create(), VideoFrame)
+	local self = Class.CreateInstance(Frame.Create(), VideoFrame)
 
 	self._Video = nil
 
 	self._Playing = false
-	self._Timer = 0
+	self._Time = 0
 
 	return self
 end
 
 function VideoFrame:Update(deltaTime)
-	Interactive.Update(self, deltaTime)
+	Frame.Update(self, deltaTime)
 
-	local video = self:GetVideo()
+	if self._Playing then
+		local video = self:GetVideo()
 
-	if video and self:IsPlaying() and not video:IsEndOfStream() then
-		self._Timer = self._Timer - deltaTime
+		if video then
+			self._Time = self._Time + deltaTime
 
-		if self._Timer <= 0 then
-			local lastFrameTime = video:GetTime()
+			if video.FrameTime - self._Time < 0 then
+				local success, needsAnotherPacket, endOfFrames
 
-			video:GetNextFrame()
-			video:RefreshYUVImages()
-			self._Timer = video:GetTime() - lastFrameTime
+				while true do
+					success = video:GetNextPacket()
+
+					if not success or video.EndOfStream then
+						self:SetPlaying(false)
+
+						break
+					else
+						if video.Livestreaming then
+							video:SendPacketToLivestream()
+						end
+
+						success, needsAnotherPacket, endOfFrames = video:GetNextFrame()
+						
+						if success and not needsAnotherPacket then
+							break
+						end
+					end
+				end
+
+				video:RefreshYUVImages()
+			end
 		end
 	end
 end
@@ -38,40 +56,26 @@ function VideoFrame:Draw()
 
 	if video then
 		video:RefreshRGBAImage()
-
-		local absolutePosition = self:GetAbsolutePosition()
-		local absoluteSize = self:GetAbsoluteSize()
-		
-		local rgbaImage = video:GetRGBAImage()
-		local width, height = rgbaImage:getDimensions()
-
-		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-		love.graphics.draw(
-			rgbaImage,
-			absolutePosition.X, absolutePosition.Y,
-			0,
-			absoluteSize.X / width, absoluteSize.Y / height,
-			0, 0,
-			0, 0
-		)
-	else
-		Interactive.Draw(self)
 	end
+	
+	Frame.Draw(self)
 end
 
 function VideoFrame:GetVideo()
 	return self._Video
 end
 
+function VideoFrame:GetBackgroundImage()
+	return self._Video and self._Video:GetRGBAImage() or Frame.GetBackgroundImage(self)
+end
+
 function VideoFrame:SetVideo(video)
-	if Class.IsA(video, "Video") then
-		self._Video = video
-		self._Timer = 0
+	self._Video = video
+	self._Time = 0
 
-		return true
+	if not video then
+		self._Playing = false
 	end
-
-	return false
 end
 
 function VideoFrame:IsPlaying()
@@ -90,8 +94,8 @@ function VideoFrame:Destroy()
 
 		self._Video = nil
 
-		Interactive.Destroy(self)
+		Frame.Destroy(self)
 	end
 end
 
-return Class.CreateClass(VideoFrame, "VideoFrame", Interactive)
+return Class.CreateClass(VideoFrame, "VideoFrame", Frame)

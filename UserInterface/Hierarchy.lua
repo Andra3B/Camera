@@ -28,7 +28,6 @@ function Hierarchy:RecursiveUpdate(deltaTime)
 end
 
 function Hierarchy:Refresh()
-	self._Events:Push("Refreshed")
 end
 
 function Hierarchy:RecursiveRefresh()
@@ -49,6 +48,10 @@ end
 
 function Hierarchy:GetParent()
 	return self._Parent
+end
+
+function Hierarchy:GetChildCount()
+	return #self._Children
 end
 
 local function AcenstorIterator(parent)
@@ -94,18 +97,19 @@ function Hierarchy:SetParent(parent)
 		self._Parent = nil
 	end
 
-	if not parent then
-		self._Parent = nil
-	elseif parent ~= self and Class.IsA(parent, "Hierarchy") then
-		self._Parent = parent
+	if parent then
+		if parent ~= self and Class.IsA(parent, "Hierarchy") then
+			self._Parent = parent
 
-		table.insert(parent._Children, self)
+			table.insert(parent._Children, self)
+			self:RecursiveRefresh()
+		else
+			return false
+		end
 	else
-		return false
+		self._Parent = nil
 	end
-
-	self:RecursiveRefresh()
-
+	
 	return true
 end
 
@@ -115,8 +119,8 @@ local function ChildIterator(children)
 	end
 end
 
-function Hierarchy:IterateChildren()
-	return coroutine.wrap(ChildIterator), self._Children, nil
+function Hierarchy:GetChildren()
+	return self._Children
 end
 
 function Hierarchy:GetChildWithName(name)
@@ -136,11 +140,7 @@ function Hierarchy:GetChildWithType(childType)
 end
 
 function Hierarchy:AddChild(child)
-	if Class.IsA(child, "Hierarchy") then
-		return child:SetParent(self)
-	end
-
-	return false
+	return child:SetParent(self)
 end
 
 local function DescendantIterator(children)
@@ -180,11 +180,7 @@ function Hierarchy:RemoveAllChildren()
 end
 
 function Hierarchy:RemoveChild(child)
-	if Class.IsA(child, "Hierarchy") then
-		return child:SetParent(nil)
-	end
-
-	return false
+	return child:SetParent(nil)
 end
 
 function Hierarchy:RemoveChildWithName(name)
@@ -217,7 +213,6 @@ end
 
 function Hierarchy:Destroy()
 	if not self._Destroyed then
-		
 		for _, child in ipairs(self._Children) do
 			child:Destroy()
 		end

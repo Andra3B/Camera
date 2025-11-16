@@ -11,25 +11,8 @@ function NetworkServer.Create(serverSocket)
 	return self
 end
 
-function NetworkServer:GetNetworkClient(index)
+function NetworkServer:GetClient(index)
 	return self._Connections[index]
-end
-
-function NetworkServer:Bind(IPAddress, port)
-	local success, errorMessage = self._Socket:bind(IPAddress, port)
-
-	if success == 1 then
-		return true
-	else
-		Log.Error(
-			Enum.LogCategory.Network,
-			"Failed to bind to %s:%s! %s",
-			IPAddress, port,
-			errorMessage
-		)
-
-		return false
-	end
 end
 
 function NetworkServer:GetLocalDetails()
@@ -39,20 +22,7 @@ end
 function NetworkServer:Listen()
 	local success, errorMessage = self._Socket:listen(10)
 
-	if success == 1 then
-		return true
-	else
-		local localIPAddress, localPort = self:GetLocalDetails()
-
-		Log.Error(
-			Enum.LogCategory.Network,
-			"Failed to listen on %s:%s! %s",
-			localIPAddress, localPort,
-			errorMessage
-		)
-
-		return false
-	end
+	return success == 1, errorMessage
 end
 
 function NetworkServer:Update()
@@ -62,7 +32,7 @@ function NetworkServer:Update()
 		local clientSocket = self._Socket:accept()
 
 		if clientSocket then
-			local networkClient = NetworkClient.Create(clientSocket)
+			local networkClient = NetworkClient.Create(clientSocket, self)
 
 			table.insert(self._Connections, networkClient)
 		else
@@ -71,16 +41,16 @@ function NetworkServer:Update()
 	end
 
 	local index = 1
-
 	while index <= #self._Connections do
 		local networkClient = self._Connections[index]
 
-		if networkClient:GetRemoteDetails() then
+		if networkClient:IsConnected() then
 			networkClient:Update()
 
 			index = index + 1
 		else
-			table.remove(self._Connections, index):Destroy()
+			table.remove(self._Connections, index)
+			networkClient:Destroy()
 		end
 	end
 end

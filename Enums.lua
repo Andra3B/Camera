@@ -20,12 +20,6 @@ Enum.PathType = Enum.Create({
     Folder = 2
 })
 
-Enum.ExecutionMode = Enum.Create({
-	Read = "r",
-	Write = "w",
-	Execute = "e"
-})
-
 Enum.HorizontalAlignment = Enum.Create({
 	Left = 1,
 	Middle = 2,

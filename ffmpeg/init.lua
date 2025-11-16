@@ -20,7 +20,7 @@ local defines = FFILoader.LoadDefinitions(
 
 defines.AVERROR_EAGAIN = -11
 
-return {
+local ffmpeg = {
 	avutil = FFILoader.CreateLibrary("avutil-60", defines, true),
 	avcodec = FFILoader.CreateLibrary("avcodec-62", defines, true),
 	avformat = FFILoader.CreateLibrary("avformat-62", defines, true),
@@ -28,3 +28,5 @@ return {
 	avfilter = FFILoader.CreateLibrary("avfilter-11", defines, true),
 	swscale = FFILoader.CreateLibrary("swscale-9", defines, true)
 }
+
+return ffmpeg

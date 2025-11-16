@@ -15,20 +15,12 @@ function TextBox.Create()
 	return self
 end
 
-function TextBox:Refresh()
-	Interactive.Refresh(self)
-
-	self:SetText(self:GetText())
-end
-
 function TextBox:Draw()
 	Interactive.Draw(self)
 
-	local text = self:GetText()
-
 	local absolutePosition = self._AbsolutePosition
 	
-	if self._Focused then
+	if self._AbsoluteActive and self:IsFocused() then
 		local absoluteCursorOffset = self:GetAbsoluteCursorOffset()
 		local absoluteCursorSize = self:GetAbsoluteCursorSize()
 		
@@ -38,18 +30,18 @@ function TextBox:Draw()
 			absolutePosition.Y + absoluteCursorOffset.Y,
 			absoluteCursorSize.X, absoluteCursorSize.Y
 		)
-	elseif #text == 0 then
+	elseif #self:GetText() == 0 then
 		local absoluteTextOffset = self._AbsoluteTextOffset
 		
 		love.graphics.setColor(self:GetPlaceholderTextColour():Unpack())
 		love.graphics.print(
 			self:GetPlaceholderText(),
 			absolutePosition.X + absoluteTextOffset.X,
-			absolutePosition.Y + absoluteTextOffset.Y,
-			0,
-			1, 1
+			absolutePosition.Y + absoluteTextOffset.Y
 		)
 	end
+
+	Interactive.PostDraw(self)
 end
 
 function TextBox:SetText(text)
@@ -126,44 +118,30 @@ function TextBox:Submit()
 end
 
 function TextBox:Input(inputType, scancode, state)
-	if state.Z < 0 then
-		if inputType == Enum.InputType.Keyboard then
-			if scancode == "left" then
-				self:SetCursorPosition(self:GetCursorPosition() - 1)
-			elseif scancode == "right" then
-				self:SetCursorPosition(self:GetCursorPosition() + 1)
-			elseif scancode == "backspace" then
-				local text = self:GetText()
-				local cursorPosition = self:GetCursorPosition()
+	if self._AbsoluteActive and state.Z < 0 and inputType == Enum.InputType.Keyboard then
+		if scancode == "left" then
+			self:SetCursorPosition(self:GetCursorPosition() - 1)
+		elseif scancode == "right" then
+			self:SetCursorPosition(self:GetCursorPosition() + 1)
+		elseif scancode == "backspace" then
+			local text = self:GetText()
+			local cursorPosition = self:GetCursorPosition()
 
-				if cursorPosition > 0 and #text > 0 then
-					self:SetText(string.replace(
-						text,
-						utf8.offset(text, cursorPosition),
-						utf8.offset(text, cursorPosition + 1) - 1,
-						""
-					))
+			if cursorPosition > 0 and #text > 0 then
+				self:SetText(string.replace(
+					text,
+					utf8.offset(text, cursorPosition),
+					utf8.offset(text, cursorPosition + 1) - 1,
+					""
+				))
 					
-					if cursorPosition < utf8.len(text) then
-						self:SetCursorPosition(cursorPosition - 1)
-					end
+				if cursorPosition < utf8.len(text) then
+					self:SetCursorPosition(cursorPosition - 1)
 				end
+			end
 
-			elseif scancode == "return" then
-				self:Submit()
-			end
-		elseif inputType == Enum.InputType.Mouse then
-			if scancode == "leftmousebutton" then
-				local text = self:GetText()
-				
-				if #text == 0 then
-					self:SetCursorPosition(0)
-				else
-					self:SetCursorPosition(math.floor((
-						((state.X - self._AbsoluteTextOffset.X) / self._AbsoluteTextSize.X) * utf8.len(text)
-					) + 0.5))
-				end
-			end
+		elseif scancode == "return" then
+			self:Submit()
 		end
 	end
 end

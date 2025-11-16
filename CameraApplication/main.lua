@@ -56,13 +56,14 @@ FFILoader = require("FFILoader")
 
 ffmpeg = require("ffmpeg.init")
 
-local ApplicationNetworkClient = nil
+local ApplicationNetworkServer = nil
 
 local livestreaming = false
+local LivestreamVideoFrame = nil
 
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
-	love.window.setTitle("Client")
+	love.window.setTitle("Camera")
 	love.window.setMode(width * 0.5, height * 0.5, {
 		["fullscreen"] = false,
 		["stencil"] = false,
@@ -73,13 +74,15 @@ function love.load(args)
 
 	UserInterface.Initialise()
 
-	ApplicationNetworkClient = NetworkClient.Create()
-	ApplicationNetworkClient:Bind()
+	ApplicationNetworkServer = NetworkServer.Create()
+	
+	ApplicationNetworkServer:Bind()
+	local IPAddress, port = ApplicationNetworkServer:GetLocalDetails()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-
+	
 	local ContentFrame = UserInterface.ViewSelectorFrame.Create()
 	ContentFrame.RelativeSize = Vector2.Create(0.95, 0.87)
 	ContentFrame.RelativePosition = Vector2.Create(0.025, 0.105)
@@ -124,140 +127,50 @@ function love.load(args)
 	local NetworkCommandLabel = UserInterface.Label.Create()
 	NetworkCommandLabel.RelativeSize = Vector2.Create(1.0, 0.08)
 	NetworkCommandLabel.PixelSize = Vector2.Create(-20, 0)
-	NetworkCommandLabel.RelativePosition = Vector2.Create(0.0, 0.08)
-	NetworkCommandLabel.PixelPosition = Vector2.Create(10, 20)
-
-	local NetworkMessageTextBox = UserInterface.TextBox.Create()
-	NetworkMessageTextBox.RelativeSize = Vector2.Create(1.0, 0.08)
-	NetworkMessageTextBox.PixelSize = Vector2.Create(-20, 0)
-	NetworkMessageTextBox.PixelPosition = Vector2.Create(10, 10)
-	NetworkMessageTextBox.PlaceholderText = "Enter Message..."
-	NetworkMessageTextBox.Events:Listen("Submit", function(text)
-		local command = {{
-			"SendMessage",
-			text
-		}}
-
-		local commandString = NetworkClient.GetStringFromCommands(command)
-		NetworkCommandLabel.Text = "Command: "..(commandString and commandString or "Invalid command")
-
-		ApplicationNetworkClient:Send(command)
-	end)
+	NetworkCommandLabel.PixelPosition = Vector2.Create(10, 10)
 
 	local LivestreamViewFrame = UserInterface.Frame.Create()
 	LivestreamViewFrame.RelativeSize = Vector2.One
 	LivestreamViewFrame.BackgroundColour = Vector4.Zero
 
-	local LivestreamVideoFrame = UserInterface.VideoFrame.Create()
-	LivestreamVideoFrame.RelativeSize = Vector2.Create(1.0, 0.92)
-	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -30)
+	LivestreamVideoFrame = UserInterface.VideoFrame.Create()
+	LivestreamVideoFrame.RelativeSize = Vector2.Create(1, 1)
+	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	LivestreamVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
-
-	local LivestreamStartButton = UserInterface.Button.Create()
-	LivestreamStartButton.RelativeSize = Vector2.Create(1.0, 0.08)
-	LivestreamStartButton.PixelSize = Vector2.Create(-20, 0)
-	LivestreamStartButton.RelativePosition = Vector2.Create(0, 0.92)
-	LivestreamStartButton.PixelPosition = Vector2.Create(10, -10)
-	LivestreamStartButton.BackgroundColour = Vector4.Create(1.0, 1.0, 1.0, 0.6)
-	LivestreamStartButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
-	LivestreamStartButton.Text = "Start Livestream"
-	LivestreamStartButton.Events:Listen("Pressed", function(pressed)
-		if pressed then
-			if livestreaming then
-				ApplicationNetworkClient:Send({{
-					"StopLivestream"
-				}})
-
-				LivestreamVideoFrame.Video:Destroy()
-				LivestreamVideoFrame.Video = nil
-
-				livestreaming = false
-
-				LivestreamStartButton.Text = "Start Livestream"
-			else
-				local freePort = NetworkClient.GetFreePort()
-
-				ApplicationNetworkClient:Send({{
-					"StartLivestream",
-					freePort
-				}})
-
-				LivestreamVideoFrame.Video = UserInterface.Video.CreateFromURL(
-					"udp://"..ApplicationNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=1000000"
-				)
-				LivestreamVideoFrame.Playing = true
-				livestreaming = true
-
-				LivestreamStartButton.Text = "Stop Livestream"
-			end
-		end
-	end)
 
 	local SettingsViewFrame = UserInterface.Frame.Create()
 	SettingsViewFrame.RelativeSize = Vector2.One
 	SettingsViewFrame.BackgroundColour = Vector4.Zero
 
-	local SettingsIPAddressTextBox = UserInterface.TextBox.Create()
-	SettingsIPAddressTextBox.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsIPAddressTextBox.PixelSize = Vector2.Create(-15, 0)
-	SettingsIPAddressTextBox.PixelPosition = Vector2.Create(10, 10)
-	SettingsIPAddressTextBox.PlaceholderText = "Enter IP address..."
+	local SettingsIPAddressLabel = UserInterface.Label.Create()
+	SettingsIPAddressLabel.RelativeSize = Vector2.Create(0.5, 0.08)
+	SettingsIPAddressLabel.PixelSize = Vector2.Create(-15, 0)
+	SettingsIPAddressLabel.PixelPosition = Vector2.Create(10, 10)
+	SettingsIPAddressLabel.Text = IPAddress
 
-	local SettingsPortTextBox = UserInterface.TextBox.Create()
-	SettingsPortTextBox.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsPortTextBox.PixelSize = Vector2.Create(-15, 0)
-	SettingsPortTextBox.RelativePosition = Vector2.Create(0.5, 0)
-	SettingsPortTextBox.PixelPosition = Vector2.Create(5, 10)
-	SettingsPortTextBox.PlaceholderText = "Enter port..."
+	local SettingsPortLabel = UserInterface.Label.Create()
+	SettingsPortLabel.RelativeSize = Vector2.Create(0.5, 0.08)
+	SettingsPortLabel.PixelSize = Vector2.Create(-15, 0)
+	SettingsPortLabel.RelativePosition = Vector2.Create(0.5, 0)
+	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
+	SettingsPortLabel.Text = port
 
-	local SettingsConnectButton = UserInterface.Button.Create()
-	SettingsConnectButton.RelativeSize = Vector2.Create(1.0, 0.08)
-	SettingsConnectButton.PixelSize = Vector2.Create(-20, 0)
-	SettingsConnectButton.RelativePosition = Vector2.Create(0, 0.08)
-	SettingsConnectButton.PixelPosition = Vector2.Create(10, 20)
-	SettingsConnectButton.BackgroundColour = Vector4.Create(1.0, 1.0, 1.0, 0.6)
-	SettingsConnectButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
-	SettingsConnectButton.Text = "Connect"
-	SettingsConnectButton.Events:Listen("Pressed", function(pressed)
-		if pressed then
-			if ApplicationNetworkClient.Connected then
-				ApplicationNetworkClient:Disconnect()
-
-				SettingsConnectButton.Text = "Connect"
-			else
-				local success, errorMessage = false, "Port is not a number"
-				local port = tonumber(SettingsPortTextBox.Text)
-
-				if port then
-					success, errorMessage = ApplicationNetworkClient:ConnectUsingIPAddress(
-						SettingsIPAddressTextBox.Text,
-						port,
-						3
-					)
-				end
-
-				if success then
-					love.window.showMessageBox("Connection Established", "Connection established.", "info")
-
-					SettingsConnectButton.Text = "Disconnect"
-				else
-					love.window.showMessageBox("Connection Failed", "Connection failed! "..errorMessage, "error")
-				end
-
-			end
-		end
-	end)
+	local SettingsVideoSourceTextBox = UserInterface.TextBox.Create()
+	SettingsVideoSourceTextBox.RelativeSize = Vector2.Create(1, 0.08)
+	SettingsVideoSourceTextBox.PixelSize = Vector2.Create(-20, 0)
+	SettingsVideoSourceTextBox.RelativePosition = Vector2.Create(0, 0.08)
+	SettingsVideoSourceTextBox.PixelPosition = Vector2.Create(10, 20)
+	SettingsVideoSourceTextBox.PlaceholderText = "Enter video source..."
+	SettingsVideoSourceTextBox.Text = "Assets/Videos/WateringCan.mp4"
 
 	NetworkViewFrame:AddChild(NetworkCommandLabel)
-	NetworkViewFrame:AddChild(NetworkMessageTextBox)
 
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
-	LivestreamViewFrame:AddChild(LivestreamStartButton)
 
-	SettingsViewFrame:AddChild(SettingsIPAddressTextBox)
-	SettingsViewFrame:AddChild(SettingsPortTextBox)
-	SettingsViewFrame:AddChild(SettingsConnectButton)
+	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
+	SettingsViewFrame:AddChild(SettingsPortLabel)
+	SettingsViewFrame:AddChild(SettingsVideoSourceTextBox)
 
 	ContentFrame:AddChild(NetworkViewFrame)
 	ContentFrame:AddChild(LivestreamViewFrame)
@@ -268,35 +181,69 @@ function love.load(args)
 	Root:AddChild(SettingsViewButton)
 	Root:AddChild(ContentFrame)
 
-	ApplicationNetworkClient.Events:Listen("StopLivestream", function()
-		if LivestreamVideoFrame.Video then
-			LivestreamVideoFrame.Video:Destroy()
-			LivestreamVideoFrame.Video = nil
-		end
+	ApplicationNetworkServer.Events:Listen("StartLivestream", function(from, port)
+		if livestreaming then return end
 		
-		livestreaming = false
+		local video = UserInterface.Video.CreateFromURL(SettingsVideoSourceTextBox.Text)
 
-		LivestreamStartButton.Text = "Start Livestream"
+		if video then
+			LivestreamVideoFrame.Video = video
+			video:StartLivestream("udp://"..from:GetRemoteDetails()..":"..port)
+		
+			LivestreamVideoFrame.Playing = true
+			livestreaming = true
+		else
+			love.window.showMessageBox("Couldn't Find Video Source", "Couldn't find video source!", "error")
+		end
 	end)
+
+	ApplicationNetworkServer.Events:Listen("StopLivestream", function()
+		LivestreamVideoFrame.Playing = false
+	end)
+
+	ApplicationNetworkServer.Events:Listen("SendMessage", function(from, message)
+		local IPAddress, port = from:GetRemoteDetails()
+		
+		NetworkCommandLabel.Text = "Received message \""..message.."\" from ("..IPAddress..", "..port..")"
+	end)
+
+	ApplicationNetworkServer:Listen()
 
 	UserInterface.SetRoot(Root)
 end
 
 function love.quit(exitCode)
+	if livestreaming then
+		ApplicationNetworkServer:GetClient(1):Send({{
+			"StopLivestream"
+		}})
+	end
+
 	UserInterface.Deinitialise()
-	
-	ApplicationNetworkClient:Destroy()
-	ApplicationNetworkClient = nil
+
+
+	ApplicationNetworkServer:Destroy()
 end
 
 function love.update(deltaTime)
-	ApplicationNetworkClient:Update()
+	ApplicationNetworkServer:Update()
 
 	UserInterface.Update(deltaTime)
+
+	if livestreaming and not LivestreamVideoFrame.Playing then
+		ApplicationNetworkServer:GetClient(1):Send({{
+			"StopLivestream"
+		}})
+
+		LivestreamVideoFrame.Video:Destroy()
+		LivestreamVideoFrame.Video = nil
+
+		livestreaming = false
+	end
 end
 
 function love.draw()
-	-- love.graphics.clear(0, 0, 0, 0)
+	love.graphics.clear(0, 0, 0, 0)
 
 	UserInterface.Draw()
 

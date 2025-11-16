@@ -2,36 +2,41 @@ local NetworkController = require("NetworkController")
 
 local NetworkClient = {}
 
-function NetworkClient.Create(clientSocket)
+function NetworkClient.Create(clientSocket, owner)
 	local self = Class.CreateInstance(NetworkController.Create(clientSocket), NetworkClient)
+	
+	self._Owner = owner
 
 	return self
 end
 
-function NetworkClient:ConnectUsingIPAddress(IPAddress, port, timeout)
+function NetworkClient:ConnectUsingIPAddress(ipAddress, port, timeout)
 	self._Socket:settimeout(timeout)
-	local success, errorMessage = self._Socket:connect(IPAddress, port)
+	local success, errorMessage = self._Socket:connect(ipAddress, port)
 	self._Socket:settimeout(0)
 
 	if success == 1 then
 		return true
 	else
-		local sourceIPAddress, sourcePort = self:GetLocalDetails()
-
-		Log.Error(
-			Enum.LogCategory.Network,
-			"%s:%s failed to connect to %s:%s! %s",
-			sourceIPAddress, sourcePort,
-			ipAddress, port,
-			errorMessage
-		)
-
-		return false
+		return false, errorMessage
 	end
 end
 
 function NetworkClient:ConnectUsingMACAddress(macAddress)
+end
 
+function NetworkClient:Disconnect()
+	self._Socket:close()
+	self._Socket = socket.tcp()
+	self._Socket:settimeout(0)
+end
+
+function NetworkClient:IsConnected()
+	return self._Socket:getpeername() ~= nil
+end
+
+function NetworkClient:GetOwner()
+	return self._Owner
 end
 
 function NetworkClient:GetLocalDetails()
@@ -45,55 +50,61 @@ end
 function NetworkClient:Update()
 	NetworkController.Update(self)
 
-	local commands
-	local data = buffer.new()
-	local retries = 0
-	local errorMessage = "Retry limit reached"
+	if self:IsConnected() then
+		local commands = nil
+		local data = buffer.new()
+		local retries = 0
+		local errorMessage = "Retry limit reached"
 
-	while retries <= self._Retries do
-		local partialData, partialErrorMessage = self._Socket:receive("*l")
+		while retries <= self._Retries do
+			local partialData, partialErrorMessage = self._Socket:receive("*l")
 			
-		if partialData then
-			data:put(partialData)
+			if partialData then
+				data:put(partialData)
 
-			commands = NetworkController.GetCommandsFromString(data:tostring())
+				commands = NetworkController.GetCommandsFromString(data:tostring())
 
-			if commands then
+				if commands then
+					break
+				end
+			else
+				errorMessage = partialErrorMessage
+
 				break
 			end
-		else
-			errorMessage = partialErrorMessage
 
-			break
+			retries = retries + 1
 		end
 
-		retries = retries + 1
-	end
+		if #data > 0 then
+			if commands then
+				for _, command in ipairs(commands) do
+					self._Events:Push(command[1], select(2, unpack(command)))
+					
+					if self._Owner then
+						self._Owner.Events:Push(command[1], self, select(2, unpack(command)))
+					end
+				end
+			else
+				local sourceIPAddress, sourcePort = self:GetLocalDetails()
+				local remoteIPAddress, remotePort = self:GetRemoteDetails()
 
-	if #data > 0 then
-		if commands then
-			for _, command in ipairs(commands) do
-				self._Events:Push(command[0], unpack(command))
+				Log.Error(
+					Enum.LogCategory.Network,
+					"%s:%s failed to read valid data from %s:%s! %s",
+					sourceIPAddress, sourcePort,
+					remoteIPAddress, remotePort,
+					errorMessage
+				)
 			end
-		else
-			local sourceIPAddress, sourcePort = self:GetLocalDetails()
-			local remoteIPAddress, remotePort = self:GetRemoteDetails()
-
-			Log.Error(
-				Enum.LogCategory.Network,
-				"%s:%s failed to read valid data from %s:%s! %s",
-				sourceIPAddress, sourcePort,
-				remoteIPAddress, remotePort,
-				errorMessage
-			)
 		end
-	end
 
-	data:free()
+		data:free()
+	end
 end
 
 function NetworkClient:Send(commands)
-	local commandsString = NetworkController.GetStringFromCommands(commands).."\n"
+	local commandsString = " "..NetworkController.GetStringFromCommands(commands).."\n"
 
 	local lastByteSent = 1
 	local errorMessage
@@ -102,22 +113,19 @@ function NetworkClient:Send(commands)
 		lastByteSent, errorMessage = self._Socket:send(commandsString, lastByteSent + 1)
 
 		if not lastByteSent then
-			local sourceIPAddress, sourcePort = self:GetLocalDetails()
-			local remoteIPAddress, remotePort = self:GetRemoteDetails()
-
-			Log.Error(
-				Enum.LogCategory.Network,
-				"%s:%s failed to send data to %s:%s! %s",
-				sourceIPAddress, sourcePort,
-				remoteIPAddress, remotePort,
-				errorMessage
-			)
-
-			return false
+			return false, errorMessage
 		end
 	end
 
 	return true
+end
+
+function NetworkClient:Destroy()
+	if not self._Destroyed then
+		self._Owner = nil
+
+		NetworkController.Destroy(self)
+	end
 end
 
 return Class.CreateClass(NetworkClient, "NetworkClient", NetworkController)

@@ -20,6 +20,12 @@ function Label.Create()
 	return self
 end
 
+function Label:Refresh()
+	Frame.Refresh(self)
+
+	self:SetText(self:GetText())
+end
+
 function Label:Draw()
 	Frame.Draw(self)
 
@@ -31,9 +37,7 @@ function Label:Draw()
 	love.graphics.print(
 		self:GetText(),
 		absolutePosition.X + absoluteTextOffset.X,
-		absolutePosition.Y + absoluteTextOffset.Y,
-		0,
-		1, 1
+		absolutePosition.Y + absoluteTextOffset.Y
 	)
 end
 
