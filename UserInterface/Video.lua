@@ -81,11 +81,12 @@ end
 
 function Video.CreateFromURL(url)
 	local sourceHandleHandle = ffi.new("AVFormatContext*[1]")
+	local status = ffmpeg.avformat.avformat_open_input(sourceHandleHandle, url, nil, nil)
 
-	if ffmpeg.avformat.avformat_open_input(sourceHandleHandle, url, nil, nil) == 0 then
+	if status == 0 then
 		return Video.CreateFromHandle(sourceHandleHandle[0])
 	else
-		Log.Error(Enum.LogCategory.Video, "Failed to open url %s", url)
+		Log.Error(Enum.LogCategory.Video, "Failed to open url %s! %s", url, GetAVErrorString(status))
 	end
 end
 
@@ -139,7 +140,9 @@ function Video:RefreshRGBAImage()
 	if not self._RefreshedRGBAImage then
 		love.graphics.push("all")
 
+		love.graphics.setScissor()
 		love.graphics.setCanvas(self._RGBAImage)
+		love.graphics.setBlendMode("replace", "premultiplied")
 
 		love.graphics.setShader(UserInterface.Shaders.YUV2RGBA)
 		UserInterface.Shaders.YUV2RGBA:send("uvImage", self._UVImage)

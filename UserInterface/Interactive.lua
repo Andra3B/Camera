@@ -10,10 +10,12 @@ function Interactive.Create()
 	self._AbsoluteActive = true
 	
 	self._Focused = false
-	self._Hovering = false
-	
-	self._InactiveBackgroundColour = nil
-	self._InactiveColourMultiplier = 0.75
+	self._CanFocus = true
+
+	self._PressedBackgroundColour = nil
+	self._PressedColourMultiplier = 2
+
+	self._InactiveOverlayColour = Vector4.Create(0.8, 0.8, 0.8, 0.75)
 	
 	self._FocusedBackgroundColour = nil
 	self._FocusedColourMultiplier = 1.5
@@ -36,52 +38,78 @@ function Interactive:Refresh()
 	end
 end
 
+function Interactive:PostDraw()
+	if not self._AbsoluteActive then
+		local absolutePosition = self._AbsolutePosition
+		local absoluteSize = self._AbsoluteSize
+		local cornerRadius = self:GetCornerRadius()
+
+		love.graphics.setColor(self:GetInactiveOverlayColour():Unpack())
+		love.graphics.rectangle(
+			"fill",
+			absolutePosition.X, absolutePosition.Y,
+			absoluteSize.X, absoluteSize.Y,
+			cornerRadius, cornerRadius
+		)
+	end
+end
+
 function Interactive:GetBackgroundColour()
 	local backgroundColour = BASE_CLASS.GetBackgroundColour(self)
 
-	if not self._AbsoluteActive then
-		return
-			self:GetInactiveBackgroundColour() or
-			backgroundColour * self:GetInactiveColourMultiplier()
-	elseif self._Hovering then
-		return
-			self:GetHoveringBackgroundColour() or
-			backgroundColour * self:GetHoveringColourMultiplier()
-	elseif self._Focused then
-		return
-			self:GetFocusedBackgroundColour() or
-			backgroundColour * self:GetFocusedColourMultiplier()
-	else
-		return backgroundColour
+	if self._AbsoluteActive then
+		if self:IsPressed() then
+			return
+				self:GetPressedBackgroundColour() or
+				backgroundColour * self:GetPressedColourMultiplier()
+		elseif self:IsHovering() then
+			return
+				self:GetHoveringBackgroundColour() or
+				backgroundColour * self:GetHoveringColourMultiplier()
+		elseif self:IsFocused() then
+			return
+				self:GetFocusedBackgroundColour() or
+				backgroundColour * self:GetFocusedColourMultiplier()
+		end
 	end
+	
+	return backgroundColour
 end
 
 function Interactive:IsActive()
 	return self._Active
 end
 
-function Interactive:GetInactiveBackgroundColour()
-	return self._InactiveBackgroundColour
+function Interactive:GetAbsoluteActive()
+	return self._AbsoluteActive
 end
 
-function Interactive:GetInactiveColourMultiplier()
-	return self._InactiveColourMultiplier
+function Interactive:GetInactiveOverlayColour()
+	return self._InactiveOverlayColour
 end
 
 function Interactive:SetActive(active)
 	self._Active = active
+
+	if self:IsPressed() and not active then
+		self._Events:Push("Pressed", false)
+	end
 end
 
-function Interactive:SetInactiveBackgroundColour(colour)
-	self._InactiveBackgroundColour = colour
+function Interactive:SetInactiveOverlayColour(colour)
+	self._InactiveOverlayColour = colour
 end
 
-function Interactive:SetInactiveColourMultiplier(multiplier)
-	self._InactiveColourMultiplier = multiplier
+function Interactive:GetCanFocus()
+	return self._CanFocus
+end
+
+function Interactive:SetCanFocus(canFocus)
+	self._CanFocus = canFocus
 end
 
 function Interactive:IsFocused()
-	return self._Focused
+	return UserInterface.Focus == self
 end
 
 function Interactive:GetFocusedBackgroundColour()
@@ -90,10 +118,6 @@ end
 
 function Interactive:GetFocusedColourMultiplier()
 	return self._FocusedColourMultiplier
-end
-
-function Interactive:SetFocused(focus)
-	self._Focused = focus
 end
 
 function Interactive:SetFocusedBackgroundColour(colour)
@@ -105,7 +129,7 @@ function Interactive:SetFocusedColourMultiplier(multiplier)
 end
 
 function Interactive:IsHovering()
-	return self._Hovering
+	return UserInterface.Hovering == self
 end
 
 function Interactive:GetHoveringBackgroundColour()
@@ -116,10 +140,6 @@ function Interactive:GetHoveringColourMultiplier()
 	return self._HoveringColourMultiplier
 end
 
-function Interactive:SetHovering(hovering)
-	self._Hovering = hovering
-end
-
 function Interactive:SetHoveringBackgroundColour(colour)
 	self._HoveringBackgroundColour = colour
 end
@@ -128,11 +148,32 @@ function Interactive:SetHoveringColourMultiplier(multiplier)
 	self._HoveringColourMultiplier = multiplier
 end
 
+function Interactive:IsPressed()
+	return UserInterface.CurrentlyPressed == self
+end
+
+function Interactive:GetPressedBackgroundColour()
+	return self._PressedBackgroundColour
+end
+
+function Interactive:GetPressedColourMultiplier()
+	return self._PressedColourMultiplier
+end
+
+function Interactive:SetPressedBackgroundColour(colour)
+	self._PressedBackgroundColour = colour
+end
+
+function Interactive:SetPressedColourMultiplier(multiplier)
+	self._PressedColourMultiplier = multiplier
+end
+
 function Interactive:Destroy()
 	if not self._Destroyed then
-		self._InactiveBackgroundColour = nil
+		self._InactiveOverlayColour = nil
 		self._FocusedBackgroundColour = nil
 		self._HoveringBackgroundColour = nil
+		self._PressedBackgroundColour = nil
 		
 		BASE_CLASS.Destroy(self)
 	end

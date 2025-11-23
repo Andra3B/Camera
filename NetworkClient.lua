@@ -7,8 +7,6 @@ function NetworkClient.Create(clientSocket, owner)
 	
 	self._Owner = owner
 
-	self._Connected = clientSocket ~= nil and clientSocket:getpeername() ~= nil
-
 	return self
 end
 
@@ -18,8 +16,6 @@ function NetworkClient:ConnectUsingIPAddress(ipAddress, port, timeout)
 	self._Socket:settimeout(0)
 
 	if success == 1 then
-		self._Connected = true
-
 		return true
 	else
 		return false, errorMessage
@@ -29,8 +25,14 @@ end
 function NetworkClient:ConnectUsingMACAddress(macAddress)
 end
 
+function NetworkClient:Disconnect()
+	self._Socket:close()
+	self._Socket = socket.tcp()
+	self._Socket:settimeout(0)
+end
+
 function NetworkClient:IsConnected()
-	return self._Connected
+	return self._Socket:getpeername() ~= nil
 end
 
 function NetworkClient:GetOwner()
@@ -48,7 +50,7 @@ end
 function NetworkClient:Update()
 	NetworkController.Update(self)
 
-	if self._Connected then
+	if self:IsConnected() then
 		local commands = nil
 		local data = buffer.new()
 		local retries = 0
@@ -56,7 +58,7 @@ function NetworkClient:Update()
 
 		while retries <= self._Retries do
 			local partialData, partialErrorMessage = self._Socket:receive("*l")
-				
+			
 			if partialData then
 				data:put(partialData)
 

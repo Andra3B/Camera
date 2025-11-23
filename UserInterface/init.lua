@@ -7,6 +7,8 @@ UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
+UserInterface.ScrollFrame = require("UserInterface.ScrollFrame")
+UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
 UserInterface.Video = require("UserInterface.Video")
@@ -17,7 +19,9 @@ UserInterface.Events = nil
 
 UserInterface.Root = nil
 
-UserInterface.PreFocus = nil
+UserInterface.Hovering = nil
+UserInterface.LastPressed = nil
+UserInterface.CurrentlyPressed = nil
 UserInterface.Focus = nil
 
 local MOUSE_INPUT_STRINGS = {
@@ -68,27 +72,26 @@ function UserInterface.Input(inputType, scancode, state)
 		local interactiveFrame = UserInterface.GetFrameContainingPoint(state.X, state.Y, UserInterface.Root, "Interactive")
 
 		if scancode == "mousemovement" then
-			if interactiveFrame ~= UserInterface.PreFocus then
-				if UserInterface.PreFocus then
-					UserInterface.PreFocus:SetHovering(false)
-				end
-
-				UserInterface.PreFocus = interactiveFrame
-
+			UserInterface.Hovering = interactiveFrame
+		elseif scancode == "leftmousebutton" then
+			if state.Z < 0 then
 				if interactiveFrame then
-					interactiveFrame:SetHovering(true)
-				end
-			end
-		elseif scancode == "leftmousebutton" and state.Z < 0 then
-			if interactiveFrame ~= UserInterface.Focus then
-				if UserInterface.Focus then
-					UserInterface.Focus:SetFocused(false)
+					UserInterface.CurrentlyPressed = interactiveFrame
+					UserInterface.LastPressed = interactiveFrame
+
+					interactiveFrame.Events:Push("Pressed", true)
 				end
 
-				UserInterface.Focus = interactiveFrame
+				UserInterface.Focus = (
+					interactiveFrame and
+					interactiveFrame.AbsoluteActive and
+					interactiveFrame.CanFocus
+				) and interactiveFrame or nil
+			else
+				if UserInterface.CurrentlyPressed then
+					UserInterface.CurrentlyPressed.Events:Push("Pressed", false)
 
-				if interactiveFrame then
-					interactiveFrame:SetFocused(true)
+					UserInterface.CurrentlyPressed = nil
 				end
 			end
 		end
@@ -117,10 +120,12 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 				containingFrame = frame
 			end
 
-			for childIndex = #frame._Children, 1, -1 do
+			local children = frame:GetChildren()
+
+			for childIndex = #children, 1, -1 do
 				local childContainingFrame = UserInterface.GetFrameContainingPoint(
 					x, y,
-					frame._Children[childIndex],
+					children[childIndex],
 					frameType
 				)
 
@@ -148,11 +153,7 @@ end
 
 function UserInterface.Draw()
 	if UserInterface.Root then
-		love.graphics.push("all")
-
 		UserInterface.Root:RecursiveDraw()
-		
-		love.graphics.pop()
 	end
 end
 

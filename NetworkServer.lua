@@ -35,7 +35,6 @@ function NetworkServer:Update()
 			local networkClient = NetworkClient.Create(clientSocket, self)
 
 			table.insert(self._Connections, networkClient)
-			self._Events:Push("ConnectionCreated", networkClient)
 		else
 			break
 		end
@@ -45,13 +44,11 @@ function NetworkServer:Update()
 	while index <= #self._Connections do
 		local networkClient = self._Connections[index]
 
-		if networkClient:GetRemoteDetails() then
+		if networkClient:IsConnected() then
 			networkClient:Update()
 
 			index = index + 1
 		else
-			self._Events:Push("ConnectionDestroyed", networkClient)
-			
 			table.remove(self._Connections, index)
 			networkClient:Destroy()
 		end

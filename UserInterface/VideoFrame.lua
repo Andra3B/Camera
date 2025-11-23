@@ -33,6 +33,10 @@ function VideoFrame:Update(deltaTime)
 
 						break
 					else
+						if video.Livestreaming then
+							video:SendPacketToLivestream()
+						end
+
 						success, needsAnotherPacket, endOfFrames = video:GetNextFrame()
 						
 						if success and not needsAnotherPacket then
@@ -52,34 +56,26 @@ function VideoFrame:Draw()
 
 	if video then
 		video:RefreshRGBAImage()
-
-		local absolutePosition = self:GetAbsolutePosition()
-		local absoluteSize = self:GetAbsoluteSize()
-		
-		local rgbaImage = video:GetRGBAImage()
-		local width, height = rgbaImage:getDimensions()
-
-		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-		love.graphics.draw(
-			rgbaImage,
-			absolutePosition.X, absolutePosition.Y,
-			0,
-			absoluteSize.X / width, absoluteSize.Y / height,
-			0, 0,
-			0, 0
-		)
-	else
-		Frame.Draw(self)
 	end
+	
+	Frame.Draw(self)
 end
 
 function VideoFrame:GetVideo()
 	return self._Video
 end
 
+function VideoFrame:GetBackgroundImage()
+	return self._Video and self._Video:GetRGBAImage() or Frame.GetBackgroundImage(self)
+end
+
 function VideoFrame:SetVideo(video)
 	self._Video = video
 	self._Time = 0
+
+	if not video then
+		self._Playing = false
+	end
 end
 
 function VideoFrame:IsPlaying()

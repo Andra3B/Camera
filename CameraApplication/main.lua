@@ -57,26 +57,13 @@ FFILoader = require("FFILoader")
 ffmpeg = require("ffmpeg.init")
 
 local ApplicationNetworkServer = nil
-local Livestream = nil
 
-local livestreamTimer = 0
-
-local function OnStartLivestream(from, port)
-	livestreamTimer = 0
-	Livestream = UserInterface.Video.CreateFromURL("Assets/Videos/WateringCan.mp4")
-	Livestream:StartLivestream("udp://"..from:GetRemoteDetails()..":"..port)
-end
-
-local function OnStopLivestream(from)
-	if Livestream then
-		Livestream:Destroy()
-	end
-	
-	Livestream = nil
-end
+local livestreaming = false
+local LivestreamVideoFrame = nil
 
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
+	love.window.setTitle("Camera")
 	love.window.setMode(width * 0.5, height * 0.5, {
 		["fullscreen"] = false,
 		["stencil"] = false,
@@ -88,61 +75,170 @@ function love.load(args)
 	UserInterface.Initialise()
 
 	ApplicationNetworkServer = NetworkServer.Create()
-
-	ApplicationNetworkServer.Events:Listen("StartLivestream", OnStartLivestream)
-	ApplicationNetworkServer.Events:Listen("StopLivestream", OnStopLivestream)
-
-	ApplicationNetworkServer:Bind("192.168.1.204", 0)
-	ApplicationNetworkServer:Listen()
+	
+	ApplicationNetworkServer:Bind()
+	local IPAddress, port = ApplicationNetworkServer:GetLocalDetails()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	
+	local ContentFrame = UserInterface.ViewSelectorFrame.Create()
+	ContentFrame.RelativeSize = Vector2.Create(0.95, 0.87)
+	ContentFrame.RelativePosition = Vector2.Create(0.025, 0.105)
+	ContentFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
 
-	StatusLabel = UserInterface.Label.Create()
-	StatusLabel.RelativeSize = Vector2.Create(0.95, 0.075)
-	StatusLabel.RelativePosition = Vector2.Create(0.025, 0.9)
-	StatusLabel.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
-	StatusLabel.Text = string.format(
-		"Local IP Address: %s, Local Port: %s",
-		ApplicationNetworkServer:GetLocalDetails()
-	)
+	local NetworkTestingViewButton = UserInterface.Button.Create()
+	NetworkTestingViewButton.RelativeSize = Vector2.Create(1/3, 0.08)
+	NetworkTestingViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
+	NetworkTestingViewButton.Text = "Network Testing"
+	NetworkTestingViewButton.Events:Listen("Pressed", function(pressed)
+		if pressed then
+			ContentFrame.VisibleChildIndex = 1
+		end
+	end)
 
-	Root:AddChild(StatusLabel)
+	local LivestreamTestingViewButton = UserInterface.Button.Create()
+	LivestreamTestingViewButton.RelativeSize = Vector2.Create(1/3, 0.08)
+	LivestreamTestingViewButton.RelativePosition = Vector2.Create(1/3, 0)
+	LivestreamTestingViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
+	LivestreamTestingViewButton.Text = "Livestream Testing"
+	LivestreamTestingViewButton.Events:Listen("Pressed", function(pressed)
+		if pressed then
+			ContentFrame.VisibleChildIndex = 2
+		end
+	end)
+
+	local SettingsViewButton = UserInterface.Button.Create()
+	SettingsViewButton.RelativeSize = Vector2.Create(1/3, 0.08)
+	SettingsViewButton.RelativePosition = Vector2.Create(2/3, 0)
+	SettingsViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
+	SettingsViewButton.Text = "Settings"
+	SettingsViewButton.Events:Listen("Pressed", function(pressed)
+		if pressed then
+			ContentFrame.VisibleChildIndex = 3
+		end
+	end)
+
+	local NetworkViewFrame = UserInterface.Frame.Create()
+	NetworkViewFrame.RelativeSize = Vector2.One
+	NetworkViewFrame.BackgroundColour = Vector4.Zero
+
+	local NetworkCommandLabel = UserInterface.Label.Create()
+	NetworkCommandLabel.RelativeSize = Vector2.Create(1.0, 0.08)
+	NetworkCommandLabel.PixelSize = Vector2.Create(-20, 0)
+	NetworkCommandLabel.PixelPosition = Vector2.Create(10, 10)
+
+	local LivestreamViewFrame = UserInterface.Frame.Create()
+	LivestreamViewFrame.RelativeSize = Vector2.One
+	LivestreamViewFrame.BackgroundColour = Vector4.Zero
+
+	LivestreamVideoFrame = UserInterface.VideoFrame.Create()
+	LivestreamVideoFrame.RelativeSize = Vector2.Create(1, 1)
+	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -20)
+	LivestreamVideoFrame.PixelPosition = Vector2.Create(10, 10)
+	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
+
+	local SettingsViewFrame = UserInterface.Frame.Create()
+	SettingsViewFrame.RelativeSize = Vector2.One
+	SettingsViewFrame.BackgroundColour = Vector4.Zero
+
+	local SettingsIPAddressLabel = UserInterface.Label.Create()
+	SettingsIPAddressLabel.RelativeSize = Vector2.Create(0.5, 0.08)
+	SettingsIPAddressLabel.PixelSize = Vector2.Create(-15, 0)
+	SettingsIPAddressLabel.PixelPosition = Vector2.Create(10, 10)
+	SettingsIPAddressLabel.Text = IPAddress
+
+	local SettingsPortLabel = UserInterface.Label.Create()
+	SettingsPortLabel.RelativeSize = Vector2.Create(0.5, 0.08)
+	SettingsPortLabel.PixelSize = Vector2.Create(-15, 0)
+	SettingsPortLabel.RelativePosition = Vector2.Create(0.5, 0)
+	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
+	SettingsPortLabel.Text = port
+
+	local SettingsVideoSourceTextBox = UserInterface.TextBox.Create()
+	SettingsVideoSourceTextBox.RelativeSize = Vector2.Create(1, 0.08)
+	SettingsVideoSourceTextBox.PixelSize = Vector2.Create(-20, 0)
+	SettingsVideoSourceTextBox.RelativePosition = Vector2.Create(0, 0.08)
+	SettingsVideoSourceTextBox.PixelPosition = Vector2.Create(10, 20)
+	SettingsVideoSourceTextBox.PlaceholderText = "Enter video source..."
+	SettingsVideoSourceTextBox.Text = "Assets/Videos/WateringCan.mp4"
+
+	NetworkViewFrame:AddChild(NetworkCommandLabel)
+
+	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
+
+	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
+	SettingsViewFrame:AddChild(SettingsPortLabel)
+	SettingsViewFrame:AddChild(SettingsVideoSourceTextBox)
+
+	ContentFrame:AddChild(NetworkViewFrame)
+	ContentFrame:AddChild(LivestreamViewFrame)
+	ContentFrame:AddChild(SettingsViewFrame)
+
+	Root:AddChild(NetworkTestingViewButton)
+	Root:AddChild(LivestreamTestingViewButton)
+	Root:AddChild(SettingsViewButton)
+	Root:AddChild(ContentFrame)
+
+	ApplicationNetworkServer.Events:Listen("StartLivestream", function(from, port)
+		if livestreaming then return end
+		
+		local video = UserInterface.Video.CreateFromURL(SettingsVideoSourceTextBox.Text)
+
+		if video then
+			LivestreamVideoFrame.Video = video
+			video:StartLivestream("udp://"..from:GetRemoteDetails()..":"..port)
+		
+			LivestreamVideoFrame.Playing = true
+			livestreaming = true
+		else
+			love.window.showMessageBox("Couldn't Find Video Source", "Couldn't find video source!", "error")
+		end
+	end)
+
+	ApplicationNetworkServer.Events:Listen("StopLivestream", function()
+		LivestreamVideoFrame.Playing = false
+	end)
+
+	ApplicationNetworkServer.Events:Listen("SendMessage", function(from, message)
+		local IPAddress, port = from:GetRemoteDetails()
+		
+		NetworkCommandLabel.Text = "Received message \""..message.."\" from ("..IPAddress..", "..port..")"
+	end)
+
+	ApplicationNetworkServer:Listen()
 
 	UserInterface.SetRoot(Root)
 end
 
 function love.quit(exitCode)
+	if livestreaming then
+		ApplicationNetworkServer:GetClient(1):Send({{
+			"StopLivestream"
+		}})
+	end
+
 	UserInterface.Deinitialise()
-	
-	OnStopLivestream()
+
 
 	ApplicationNetworkServer:Destroy()
-	ApplicationNetworkServer = nil
 end
 
 function love.update(deltaTime)
 	ApplicationNetworkServer:Update()
 
 	UserInterface.Update(deltaTime)
-	
-	if Livestream then
-		livestreamTimer = livestreamTimer + deltaTime
 
-		if Livestream.PacketTime - livestreamTimer < 0 then
-			if Livestream:GetNextPacket() then
-				if Livestream.EndOfStream then
-					ApplicationNetworkServer:GetClient(1):Send({{
-						"StopLivestream"
-					}})
-					
-					OnStopLivestream()
-				else
-					Livestream:SendPacketToLivestream()
-				end
-			end
-		end
+	if livestreaming and not LivestreamVideoFrame.Playing then
+		ApplicationNetworkServer:GetClient(1):Send({{
+			"StopLivestream"
+		}})
+
+		LivestreamVideoFrame.Video:Destroy()
+		LivestreamVideoFrame.Video = nil
+
+		livestreaming = false
 	end
 end
 

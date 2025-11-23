@@ -37,9 +37,7 @@ function Label:Draw()
 	love.graphics.print(
 		self:GetText(),
 		absolutePosition.X + absoluteTextOffset.X,
-		absolutePosition.Y + absoluteTextOffset.Y,
-		0,
-		1, 1
+		absolutePosition.Y + absoluteTextOffset.Y
 	)
 end
 

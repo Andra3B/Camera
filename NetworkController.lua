@@ -129,11 +129,15 @@ function NetworkController.GetCommandsFromString(commandsString)
 	end
 end
 
+function NetworkController.GetPrivateIP()
+	return socket.dns.toip(socket.dns.gethostname())
+end
+
 function NetworkController.GetFreePort()
 	local portFinder = socket.tcp()
 	portFinder:bind("*", 0, 1)
 
-	local _, freePort = portFinder:getsocketname()
+	local _, freePort = portFinder:getsockname()
 	portFinder:close()
 
 	return freePort
@@ -156,6 +160,9 @@ function NetworkController:Update()
 end
 
 function NetworkController:Bind(IPAddress, port)
+	IPAddress = IPAddress or NetworkController.GetPrivateIP()
+	port = port or 0
+
 	local success, errorMessage = self._Socket:bind(IPAddress, port)
 
 	if success == 1 then
