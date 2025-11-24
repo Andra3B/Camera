@@ -95,7 +95,6 @@ function Frame:RecursiveDraw()
 		end
 
 		love.graphics.setScissor()
-		love.graphics.origin()
 	end
 end
 
