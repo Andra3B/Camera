@@ -100,7 +100,7 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 		ffi.cdef(declarations)
 	end
 
-	for line in io.lines(preprocessedHeaderPath) do
+	for line in love and love.filesystem.lines(preprocessedHeaderPath) or io.lines(preprocessedHeaderPath) do
 		if string.find(line, "^%s*$") then
 		elseif string.find(line, "^# %d") then
 			fromLibrary = false
@@ -168,7 +168,7 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 				string.find(declaration, ";", 1, true) and
 				select(2, string.gsub(declaration, "{", "")) == select(2, string.gsub(declaration, "}", ""))
 			then
-				declaration = declaration:gsub("%[%[.+%]%]", ""):gsub("__attribute__%(%(.+%)%)", "")
+				declaration = declaration:gsub("%[%[.-%]%]", ""):gsub("__attribute__%(%(.-%)%)", "")
 				pcall(ffi.cdef, declaration)
 
 				declaration = ""

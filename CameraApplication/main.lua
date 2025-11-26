@@ -1,60 +1,12 @@
-ffi = require("ffi")
-utf8 = require("utf8")
-buffer = require("string.buffer")
+require("SetupEnvironment")
+
 socket = require("socket")
-
-Class = require("Class")
-
-Enum = require("Enum")
-require("Enums")
-
-Log = require("Log")
-
-Vector2 = require("Vector2")
-Vector3 = require("Vector3")
-Vector4 = require("Vector4")
-
-EventDirector = require("EventDirector")
-
-NetworkServer = require("NetworkServer")
-NetworkClient = require("NetworkClient")
+utf8 = require("utf8")
 
 UserInterface = require("UserInterface")
+libav = require("libav")
 
-table.new = require("table.new")
-table.empty = table.new(0, 0)
-
-table.erase = function(tab, cleanupCallback)
-	for key, value in pairs(tab) do
-		if cleanupCallback then
-			cleanupCallback(value)
-		end
-
-		tab[key] = nil
-	end
-end
-
-string.replace = function(str, from, to, with)
-	if to >= #str then
-		return string.sub(str, 1, from - 1)..with
-	else
-		return string.sub(str, 1, from - 1)..with..string.sub(str, to + 1)
-	end
-end
-
-math.clamp = function(value, min, max)
-	if value < min then
-		return min
-	elseif value > max then
-		return max
-	else
-		return value
-	end
-end
-
-FFILoader = require("FFILoader")
-
-ffmpeg = require("ffmpeg.init")
+NetworkServer = require("NetworkServer")
 
 local ApplicationNetworkServer = nil
 
@@ -162,7 +114,7 @@ function love.load(args)
 	SettingsVideoSourceTextBox.RelativePosition = Vector2.Create(0, 0.08)
 	SettingsVideoSourceTextBox.PixelPosition = Vector2.Create(10, 20)
 	SettingsVideoSourceTextBox.PlaceholderText = "Enter video source..."
-	SettingsVideoSourceTextBox.Text = "Assets/Videos/WateringCan.mp4"
+	SettingsVideoSourceTextBox.Text = "Assets/Videos/Ocean.mp4"
 
 	NetworkViewFrame:AddChild(NetworkCommandLabel)
 

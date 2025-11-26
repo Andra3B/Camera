@@ -1,4 +1,4 @@
-local Interactive = loadfile("UserInterface/Interactive.lua")(
+local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(
 	require("UserInterface.Label")
 )
 

@@ -1,8 +1,0 @@
-Camera:
-./configure --disable-everything --enable-gpl --enable-libv4l2 --enable-v4l2-m2m --enable-encoder=h264_v4l2m2m --enable-decoder=h264_v4l2m2m,h264 --enable-muxer=mp4,mpegts --enable-demuxer=mov,mp4,mpegts --enable-protocol=tcp,udp,file --enable-parser=h264 --enable-bsf=h264_mp4toannexb --enable-libx264 --enable-encoder=libx264 --enable-filter=scale,fps,format --enable-pthreads --enable-ffmpeg --enable-ffprobe --enable-shared --disable-debug --disable-doc --disable-static --disable-x86asm
-
-UNIX Client:
-./configure --disable-everything --enable-shared --enable-decoder=h264 --enable-demuxer=mov,mp4,mpegts --enable-parser=h264 --enable-bsf=h264_mp4toannexb --enable-protocol=tcp,udp,file --enable-pthreads --enable-ffmpeg --enable-ffprobe
-
-Windows Client:
-./configure --disable-everything --enable-shared --enable-decoder=h264 --enable-demuxer=mov,mp4,mpegts --enable-parser=h264 --enable-bsf=h264_mp4toannexb --enable-protocol=tcp,udp,file --enable-w32threads --enable-ffmpeg --enable-ffprobe
