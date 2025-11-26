@@ -36,3 +36,22 @@ Enum.InputType = Enum.Create({
 	Keyboard = 1,
 	Mouse = 2
 })
+
+Enum.PathType = Enum.Create({
+    File = 1,
+    Folder = 2
+})
+
+Enum.ExecutionMode = Enum.Create({
+	Read = "r",
+	Write = "w",
+	Execute = "e"
+})
+
+Enum.OptionDataType = Enum.Create({
+	String = 1,
+	Boolean = 2,
+	Number = 3,
+	FileSystem = 4,
+	Enum = 5
+})

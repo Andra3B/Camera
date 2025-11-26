@@ -9,7 +9,7 @@
 			"type": "lua-local",
 			"request": "launch",
 			"program": {
-				"command": "love.exe"
+				"command": "love"
 			},
 			"args": [
 				"${workspaceFolder}",
@@ -21,11 +21,59 @@
 			"type": "lua-local",
 			"request": "launch",
 			"program": {
-				"command": "love.exe"
+				"command": "love"
 			},
 			"args": [
 				"${workspaceFolder}",
 				"CameraApplication"
+			]
+		},
+		{
+			"name": "Debug Build",
+			"type": "lua-local",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"program": {
+				"command": "luajit"
+			},
+			"args": [
+				"${workspaceFolder}/Build.lua",
+			]
+		},
+		{
+			"name": "Build Client",
+			"type": "lua-local",
+			"request": "launch",
+			"program": {
+				"command": "luajit"
+			},
+			"args": [
+				"${workspaceFolder}/Build.lua",
+				"--Target=Client"
+			]
+		},
+		{
+			"name": "Build Camera",
+			"type": "lua-local",
+			"request": "launch",
+			"program": {
+				"command": "luajit"
+			},
+			"args": [
+				"${workspaceFolder}/Build.lua",
+				"--Target=Camera"
+			]
+		},
+		{
+			"name": "Build All",
+			"type": "lua-local",
+			"request": "launch",
+			"program": {
+				"command": "luajit"
+			},
+			"args": [
+				"${workspaceFolder}/Build.lua",
+				"--Target=All"
 			]
 		}
 	],
