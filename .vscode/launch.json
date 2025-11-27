@@ -39,8 +39,8 @@
 			"args": [
 				"${workspaceFolder}/Build.lua",
 				"--Target=${input:TargetInput}",
-				"--LoveFolder=${input:LoveFolderInput}",
-				"--LibAVFolder=${input:LibAVFolderInput}"
+				"--LoveFolder=\"${input:LoveFolderInput}\"",
+				"--LibAVFolder=\"${input:LibAVFolderInput}\""
 			]
 		}
 	],
@@ -56,13 +56,13 @@
 			"id": "LoveFolderInput",
 			"type": "promptString",
 			"description": "Enter path to the Love2D folder",
-			"default": "D:/Love2D"
+			"default": "C:/Program Files/Love2D"
 		},
 		{
 			"id": "LibAVFolderInput",
 			"type": "promptString",
 			"description": "Enter path to the LibAV folder",
-			"default": "D:/ffmpeg/bin"
+			"default": "C:/Program Files/ffmpeg/bin"
 		}
 	],
 

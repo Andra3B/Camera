@@ -100,7 +100,7 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 		ffi.cdef(declarations)
 	end
 
-	for line in io.lines(preprocessedHeaderPath) do
+	for line in love and love.filesystem.lines(preprocessedHeaderPath) or io.lines(preprocessedHeaderPath) do
 		if string.find(line, "^%s*$") then
 		elseif string.find(line, "^# %d") then
 			fromLibrary = false
