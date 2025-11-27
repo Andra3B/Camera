@@ -26,12 +26,12 @@ local libAVFolder = System.Options.LibAVFolder.Value
 local function BuildClient()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkController.lua, NetworkClient.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua -DestinationPath Client.zip",
+			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua -DestinationPath Client.zip",
 			Enum.ExecutionMode.Execute
 		)
 	else
 		System.Execute(
-			"tar -c -f Client.tar ClientApplication/main.lua ClientApplication/conf.lua Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkController.lua NetworkClient.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			"tar -c -f Client.tar ClientApplication/main.lua ClientApplication/conf.lua",
 			Enum.ExecutionMode.Execute
 		)
 	end
@@ -44,6 +44,24 @@ local function BuildClient()
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
+						System.Copy("Assets", "ClientBuild") and
+						System.Copy("libav", "ClientBuild") and
+						System.Copy("UserInterface", "ClientBuild") and
+						System.Copy("Class.lua", "ClientBuild") and
+						System.Copy("Enum.lua", "ClientBuild") and
+						System.Copy("Enums.lua", "ClientBuild") and
+						System.Copy("EventDirector.lua", "ClientBuild") and
+						System.Copy("EventListener.lua", "ClientBuild") and
+						System.Copy("FFILoader.lua", "ClientBuild") and
+						System.Copy("Log.lua", "ClientBuild") and
+						System.Copy("NetworkController.lua", "ClientBuild") and
+						System.Copy("NetworkClient.lua", "ClientBuild") and
+						System.Copy("SetupEnvironment.lua", "ClientBuild") and
+						System.Copy("System.lua", "ClientBuild") and
+						System.Copy("Vector2.lua", "ClientBuild") and
+						System.Copy("Vector3.lua", "ClientBuild") and
+						System.Copy("Vector4.lua", "ClientBuild") and
+
 						System.Copy(loveFolder.."/SDL2.dll", "ClientBuild") and
 						System.Copy(loveFolder.."/OpenAL32.dll", "ClientBuild") and
 						System.Copy(loveFolder.."/license.txt", "ClientBuild") and
@@ -60,7 +78,7 @@ local function BuildClient()
 						System.Copy(libAVFolder.."/avfilter-11.dll", "ClientBuild") and
 						System.Copy(libAVFolder.."/swscale-9.dll", "ClientBuild")
 					) then
-						Log.Critical(Enum.LogCategory.Build, "Failed to copy required DLLs to the ClientBuild folder!")
+						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the ClientBuild folder!")
 					end
 				else
 					Log.Critical(Enum.LogCategory.Build, "Failed to create Client.exe!")
@@ -88,12 +106,12 @@ end
 local function BuildCamera()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkController.lua, NetworkServer.lua, NetworkClient.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua -DestinationPath Camera.zip",
+			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua -DestinationPath Camera.zip",
 			Enum.ExecutionMode.Execute
 		)
 	else
 		System.Execute(
-			"tar -c -f Camera.tar CameraApplication/main.lua CameraApplication/conf.lua Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkController.lua NetworkServer.lua NetworkClient.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			"tar -c -f Camera.tar CameraApplication/main.lua CameraApplication/conf.lua",
 			Enum.ExecutionMode.Execute
 		)
 	end
@@ -106,6 +124,25 @@ local function BuildCamera()
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
+						System.Copy("Assets", "ClientBuild") and
+						System.Copy("libav", "ClientBuild") and
+						System.Copy("UserInterface", "ClientBuild") and
+						System.Copy("Class.lua", "ClientBuild") and
+						System.Copy("Enum.lua", "ClientBuild") and
+						System.Copy("Enums.lua", "ClientBuild") and
+						System.Copy("EventDirector.lua", "ClientBuild") and
+						System.Copy("EventListener.lua", "ClientBuild") and
+						System.Copy("FFILoader.lua", "ClientBuild") and
+						System.Copy("Log.lua", "ClientBuild") and
+						System.Copy("NetworkController.lua", "ClientBuild") and
+						System.Copy("NetworkServer.lua", "ClientBuild") and
+						System.Copy("NetworkClient.lua", "ClientBuild") and
+						System.Copy("SetupEnvironment.lua", "ClientBuild") and
+						System.Copy("System.lua", "ClientBuild") and
+						System.Copy("Vector2.lua", "ClientBuild") and
+						System.Copy("Vector3.lua", "ClientBuild") and
+						System.Copy("Vector4.lua", "ClientBuild") and
+
 						System.Copy(loveFolder.."/SDL2.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/OpenAL32.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/license.txt", "CameraBuild") and
@@ -122,7 +159,7 @@ local function BuildCamera()
 						System.Copy(libAVFolder.."/avfilter-11.dll", "CameraBuild") and
 						System.Copy(libAVFolder.."/swscale-9.dll", "CameraBuild")
 					) then
-						Log.Critical(Enum.LogCategory.Build, "Failed to copy required DLLs to the CameraBuild folder!")
+						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the CameraBuild folder!")
 					end
 				else
 					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.exe!")
