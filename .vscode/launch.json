@@ -38,49 +38,37 @@
 			},
 			"args": [
 				"${workspaceFolder}/Build.lua",
+				"--Target=${input:TargetInput}",
+				"--LoveFolder=${input:LoveFolderInput}",
+				"--LibAVFolder=${input:LibAVFolderInput}"
 			]
+		}
+	],
+
+	"inputs": [
+		{
+			"id": "TargetInput",
+			"type": "promptString",
+			"description": "Enter name target name",
+			"default": "All"
 		},
 		{
-			"name": "Build Client",
-			"type": "lua-local",
-			"request": "launch",
-			"program": {
-				"command": "luajit"
-			},
-			"args": [
-				"${workspaceFolder}/Build.lua",
-				"--Target=Client"
-			]
+			"id": "LoveFolderInput",
+			"type": "promptString",
+			"description": "Enter path to the Love2D folder",
+			"default": "D:/Love2D"
 		},
 		{
-			"name": "Build Camera",
-			"type": "lua-local",
-			"request": "launch",
-			"program": {
-				"command": "luajit"
-			},
-			"args": [
-				"${workspaceFolder}/Build.lua",
-				"--Target=Camera"
-			]
-		},
-		{
-			"name": "Build All",
-			"type": "lua-local",
-			"request": "launch",
-			"program": {
-				"command": "luajit"
-			},
-			"args": [
-				"${workspaceFolder}/Build.lua",
-				"--Target=All"
-			]
+			"id": "LibAVFolderInput",
+			"type": "promptString",
+			"description": "Enter path to the LibAV folder",
+			"default": "D:/ffmpeg/bin"
 		}
 	],
 
 	"compounds": [
 		{
-			"name": "Debug All",
+			"name": "Debug Camera And Client",
 			"configurations": ["Debug Client", "Debug Camera"]
 		}
 	]

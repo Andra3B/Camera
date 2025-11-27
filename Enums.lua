@@ -2,7 +2,8 @@ Enum.LogCategory = Enum.Create({
     Application = 1,
 	Video = 2,
 	UserInterface = 3,
-	Network = 4
+	Network = 4,
+	Build = 5
 })
 
 Enum.LogPriority = Enum.Create({

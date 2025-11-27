@@ -1,6 +1,6 @@
 local defines = FFILoader.LoadDefinitions(
 	{"libav", "libsw"},
-	"ffmpeg/ffmpeg.i", {
+	"libav/libav.i", {
 		UINT8_C = function(val) return val end,
 		UINT16_C = function(val) return val end,
 		UINT32_C = function(val) return val end,
@@ -20,7 +20,7 @@ local defines = FFILoader.LoadDefinitions(
 
 defines.AVERROR_EAGAIN = -11
 
-local ffmpeg = {
+local libav = {
 	avutil = FFILoader.CreateLibrary("avutil-60", defines, true),
 	avcodec = FFILoader.CreateLibrary("avcodec-62", defines, true),
 	avformat = FFILoader.CreateLibrary("avformat-62", defines, true),
@@ -29,4 +29,4 @@ local ffmpeg = {
 	swscale = FFILoader.CreateLibrary("swscale-9", defines, true)
 }
 
-return ffmpeg
+return libav
