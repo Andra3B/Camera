@@ -156,11 +156,10 @@ local function BuildCamera()
 				local executableFile = io.open("CameraBuild/Camera", "w+")
 
 				if executableFile then
-					executableFile:write([[
-						#!/bin/sh
-						exec love "$(dirname "$0")/Camera.love"
-					]])
-
+					executableFile:write(
+						"#!/bin/sh\nexec love \"$(dirname \"$0\")/Camera.love\""
+					)
+					
 					executableFile:close()
 
 					if System.Execute(
