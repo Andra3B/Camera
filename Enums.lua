@@ -53,6 +53,6 @@ Enum.OptionDataType = Enum.Create({
 	String = 1,
 	Boolean = 2,
 	Number = 3,
-	FileSystem = 4,
-	Enum = 5
+	Enum = 4,
+	Path = 5
 })

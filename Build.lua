@@ -8,12 +8,12 @@ System.Options = {
 
 	["LoveFolder"] = {
 		DataType = Enum.OptionDataType.Path,
-		Required = true
+		Required = false
 	},
 
 	["LibAVFolder"] = {
 		DataType = Enum.OptionDataType.Path,
-		Required = true
+		Required = false
 	}
 }
 
