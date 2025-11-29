@@ -26,42 +26,17 @@ local libAVFolder = System.Options.LibAVFolder.Value
 local function BuildClient()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua -DestinationPath Client.zip",
+			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua -DestinationPath Client.zip",
 			Enum.ExecutionMode.Execute
 		)
-	else
-		System.Execute(
-			"tar -c -f Client.tar ClientApplication/main.lua ClientApplication/conf.lua",
-			Enum.ExecutionMode.Execute
-		)
-	end
 
-	if System.Execute("mv Client.zip Client.love", Enum.ExecutionMode.Execute) == 0 then
 		if System.Create("ClientBuild/") then
-			if jit.os == "Windows" then
+			if System.Execute("mv Client.zip Client.love", Enum.ExecutionMode.Execute) == 0 then
 				if System.Execute(
 					"cat \""..loveFolder.."love.exe\" Client.love > ClientBuild/Client.exe",
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
-						System.Copy("Assets", "ClientBuild") and
-						System.Copy("libav", "ClientBuild") and
-						System.Copy("UserInterface", "ClientBuild") and
-						System.Copy("Class.lua", "ClientBuild") and
-						System.Copy("Enum.lua", "ClientBuild") and
-						System.Copy("Enums.lua", "ClientBuild") and
-						System.Copy("EventDirector.lua", "ClientBuild") and
-						System.Copy("EventListener.lua", "ClientBuild") and
-						System.Copy("FFILoader.lua", "ClientBuild") and
-						System.Copy("Log.lua", "ClientBuild") and
-						System.Copy("NetworkController.lua", "ClientBuild") and
-						System.Copy("NetworkClient.lua", "ClientBuild") and
-						System.Copy("SetupEnvironment.lua", "ClientBuild") and
-						System.Copy("System.lua", "ClientBuild") and
-						System.Copy("Vector2.lua", "ClientBuild") and
-						System.Copy("Vector3.lua", "ClientBuild") and
-						System.Copy("Vector4.lua", "ClientBuild") and
-
 						System.Copy(loveFolder.."/SDL2.dll", "ClientBuild") and
 						System.Copy(loveFolder.."/OpenAL32.dll", "ClientBuild") and
 						System.Copy(loveFolder.."/license.txt", "ClientBuild") and
@@ -83,66 +58,64 @@ local function BuildClient()
 				else
 					Log.Critical(Enum.LogCategory.Build, "Failed to create Client.exe!")
 				end
+
+				System.Destroy("Client.love")
 			else
-				if System.Execute(
-					"cat "..loveFolder.."/love Client.love > Client && chmod a+x Client",
-					Enum.ExecutionMode.Execute
-				) == 0 then
-				
-				else
-					Log.Critical(Enum.LogCategory.Build, "Failed to create Client!")
-				end
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Client.love!")
 			end
 		else
 			Log.Critical(Enum.LogCategory.Build, "Failed to create ClientBuild folder!")
 		end
-
-		System.Destroy("Client.love")
 	else
-		Log.Critical(Enum.LogCategory.Build, "Failed to create Client.love!")
+		System.Execute(
+			"zip -9 -r Client.zip ClientApplication/main.lua ClientApplication/conf.lua Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			Enum.ExecutionMode.Execute
+		)
+		
+		if System.Create("ClientBuild/") then
+			if System.Execute("mv Client.zip ClientBuild/Client.love", Enum.ExecutionMode.Execute) == 0 then
+				local executableFile = io.open("ClientBuild/Client", "w+")
+
+				if executableFile then
+					executableFile:write([[
+						#!/bin/sh
+						exec love "$(dirname "$0")/Client.love"
+					]])
+
+					executableFile:close()
+
+					if System.Execute(
+						"chmod a+x ClientBuild/Client",
+						Enum.ExecutionMode.Execute
+					) ~= 0 then
+						Log.Critical(Enum.LogCategory.Build, "Failed to make Client executable!")
+					end
+				else
+					Log.Critical(Enum.LogCategory.Build, "Failed to create Client!")
+				end
+			else
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Client.love!")
+			end	
+		else
+			Log.Critical(Enum.LogCategory.Build, "Failed to create ClientBuild folder!")
+		end
 	end
 end
 
 local function BuildCamera()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua -DestinationPath Camera.zip",
+			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkServer.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua -DestinationPath Camera.zip",
 			Enum.ExecutionMode.Execute
 		)
-	else
-		System.Execute(
-			"tar -c -f Camera.tar CameraApplication/main.lua CameraApplication/conf.lua",
-			Enum.ExecutionMode.Execute
-		)
-	end
 
-	if System.Execute("mv Camera.zip Camera.love", Enum.ExecutionMode.Execute) == 0 then
 		if System.Create("CameraBuild/") then
-			if jit.os == "Windows" then
+			if System.Execute("mv Camera.zip Camera.love", Enum.ExecutionMode.Execute) == 0 then
 				if System.Execute(
 					"cat \""..loveFolder.."love.exe\" Camera.love > CameraBuild/Camera.exe",
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
-						System.Copy("Assets", "ClientBuild") and
-						System.Copy("libav", "ClientBuild") and
-						System.Copy("UserInterface", "ClientBuild") and
-						System.Copy("Class.lua", "ClientBuild") and
-						System.Copy("Enum.lua", "ClientBuild") and
-						System.Copy("Enums.lua", "ClientBuild") and
-						System.Copy("EventDirector.lua", "ClientBuild") and
-						System.Copy("EventListener.lua", "ClientBuild") and
-						System.Copy("FFILoader.lua", "ClientBuild") and
-						System.Copy("Log.lua", "ClientBuild") and
-						System.Copy("NetworkController.lua", "ClientBuild") and
-						System.Copy("NetworkServer.lua", "ClientBuild") and
-						System.Copy("NetworkClient.lua", "ClientBuild") and
-						System.Copy("SetupEnvironment.lua", "ClientBuild") and
-						System.Copy("System.lua", "ClientBuild") and
-						System.Copy("Vector2.lua", "ClientBuild") and
-						System.Copy("Vector3.lua", "ClientBuild") and
-						System.Copy("Vector4.lua", "ClientBuild") and
-
 						System.Copy(loveFolder.."/SDL2.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/OpenAL32.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/license.txt", "CameraBuild") and
@@ -164,23 +137,47 @@ local function BuildCamera()
 				else
 					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.exe!")
 				end
+
+				System.Destroy("Camera.love")
 			else
-				if System.Execute(
-					"cat "..loveFolder.."/love Camera.love > Camera && chmod a+x Camera",
-					Enum.ExecutionMode.Execute
-				) == 0 then
-				
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
+			end
+		else
+			Log.Critical(Enum.LogCategory.Build, "Failed to create ClientBuild folder!")
+		end
+	else
+		System.Execute(
+			"zip -9 -r Camera.zip CameraApplication/main.lua CameraApplication/conf.lua Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			Enum.ExecutionMode.Execute
+		)
+		
+		if System.Create("CameraBuild/") then
+			if System.Execute("mv Camera.zip CameraBuild/Camera.love", Enum.ExecutionMode.Execute) == 0 then
+				local executableFile = io.open("CameraBuild/Camera", "w+")
+
+				if executableFile then
+					executableFile:write([[
+						#!/bin/sh
+						exec love "$(dirname "$0")/Camera.love"
+					]])
+
+					executableFile:close()
+
+					if System.Execute(
+						"chmod a+x CameraBuild/Camera",
+						Enum.ExecutionMode.Execute
+					) ~= 0 then
+						Log.Critical(Enum.LogCategory.Build, "Failed to make Camera executable!")
+					end
 				else
 					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera!")
 				end
-			end
+			else
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
+			end	
 		else
 			Log.Critical(Enum.LogCategory.Build, "Failed to create CameraBuild folder!")
 		end
-
-		System.Destroy("Camera.love")
-	else
-		Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
 	end
 end
 
