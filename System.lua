@@ -65,7 +65,7 @@ function System.UpdateOptions(arguments)
 end
 
 function System.Execute(command, mode)
-	local finalCommand = "bash -c '"..string.gsub(command, "\"", "\\\"").."'"
+	local finalCommand = "bash -c '"..command.."'"
 
 	if mode == Enum.ExecutionMode.Execute then
 		return os.execute(finalCommand)

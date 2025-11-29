@@ -33,7 +33,7 @@ local function BuildClient()
 		if System.Create("ClientBuild/") then
 			if System.Execute("mv Client.zip Client.love", Enum.ExecutionMode.Execute) == 0 then
 				if System.Execute(
-					"cat \""..loveFolder.."love.exe\" Client.love > ClientBuild/Client.exe",
+					"cat \""..loveFolder.."love.exe\" Client.love > ClientBuild/Client.exe ",
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
@@ -112,7 +112,7 @@ local function BuildCamera()
 		if System.Create("CameraBuild/") then
 			if System.Execute("mv Camera.zip Camera.love", Enum.ExecutionMode.Execute) == 0 then
 				if System.Execute(
-					"cat \""..loveFolder.."love.exe\" Camera.love > CameraBuild/Camera.exe",
+					"cat \""..loveFolder.."love.exe\" Camera.love > CameraBuild/Camera.exe ",
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
