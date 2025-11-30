@@ -1,4 +1,4 @@
-# 0 "MyHeader.h"
+# 0 "libav.h"
 # 0 "<built-in>"
 #define __STDC__ 1
 # 0 "<built-in>"
@@ -847,7 +847,7 @@
 #define __DECIMAL_BID_FORMAT__ 1
 # 0 "<command-line>"
 #undef _REENTRANT
-# 1 "MyHeader.h"
+# 1 "libav.h"
 # 1 "libavcodec/avcodec.h" 1
 # 22 "libavcodec/avcodec.h"
 #define AVCODEC_AVCODEC_H 
@@ -862,15 +862,15 @@
 # 20 "./libavutil/samplefmt.h"
 #define AVUTIL_SAMPLEFMT_H 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h" 1 3 4
-# 9 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h" 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h" 1 3 4
+# 9 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h" 3 4
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stdint.h" 1 3 4
-# 26 "D:/mingw64/x86_64-w64-mingw32/include/stdint.h" 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdint.h" 1 3 4
+# 26 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdint.h" 3 4
 #define _STDINT_H 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/crtdefs.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/crtdefs.h" 1 3 4
 
 
 
@@ -880,7 +880,7 @@
 
 #define _INC_CRTDEFS 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 1 3 4
 
 
 
@@ -890,7 +890,7 @@
 
 #define _INC_CORECRT 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 1 3 4
 
 
 
@@ -900,7 +900,7 @@
 
 #define _INC__MINGW_H 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 1 3 4
 
 
 
@@ -944,10 +944,10 @@
 
 #define __MINGW32_MAJOR_VERSION 3
 #define __MINGW32_MINOR_VERSION 11
-# 65 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 65 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define _M_AMD64 100
 #define _M_X64 100
-# 108 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 108 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
              
 #undef _
 #define _ 1
@@ -958,7 +958,7 @@
 
 #undef _
              
-# 129 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 129 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __MINGW_IMP_SYMBOL(sym) __MINGW64_PASTE(__imp_,sym)
 #define __MINGW_IMP_LSYMBOL(sym) __MINGW64_PASTE(__imp_,sym)
 #define __MINGW_USYMBOL(sym) sym
@@ -972,7 +972,7 @@
 
 #define __MINGW_ASM_CALL(func) __asm__(__MINGW64_STRINGIFY(__MINGW_USYMBOL(func)))
 #define __MINGW_ASM_CRT_CALL(func) __asm__(__STRINGIFY(func))
-# 167 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 167 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #undef __MINGW_EXTENSION
 
 
@@ -1041,9 +1041,9 @@
 
 
 #define __MINGW_GNUC_PREREQ(major,minor) (__GNUC__ > (major) || (__GNUC__ == (major) && __GNUC_MINOR__ >= (minor)))
-# 245 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 245 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __MINGW_MSC_PREREQ(major,minor) 0
-# 257 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 257 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __MINGW_ATTRIB_DEPRECATED_STR(X) 
 
 
@@ -1062,7 +1062,7 @@
 
 
 #define __MINGW_ATTRIB_DEPRECATED_SEC_WARN __MINGW_ATTRIB_DEPRECATED_STR(__MINGW_SEC_WARN_STR)
-# 293 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 293 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __MINGW_MS_PRINTF(__format,__args) __attribute__((__format__(__ms_printf__, __format,__args)))
 
 
@@ -1097,19 +1097,19 @@
 #define __MINGW_SELECTANY __attribute__((__selectany__))
 
        
-# 349 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 349 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __MINGW_FORTIFY_LEVEL 0
-# 389 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 389 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __mingw_bos_ovr __mingw_ovr
-# 402 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 402 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #define __MINGW_FORTIFY_VA_ARG 0
 
 
        
-# 405 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
+# 405 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_mac.h" 3 4
 #undef __has_builtin
-# 11 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h" 1 3 4
+# 11 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h" 1 3 4
 
 
 
@@ -1118,7 +1118,7 @@
 
 
 #define _INC_MINGW_SECAPI 
-# 29 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h" 3 4
+# 29 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h" 3 4
 #undef _CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES
 #undef _CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES_MEMORY
 #undef _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES
@@ -1132,12 +1132,12 @@
 
 
 #define __MINGW_CRT_NAME_CONCAT2(sym) ::sym ##_s
-# 69 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h" 3 4
+# 69 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_secapi.h" 3 4
 #define __CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES_MEMORY_0_3_(__ret,__func,__type1,__attrib1,__arg1,__type2,__attrib2,__arg2,__type3,__attrib3,__arg3) _CRTIMP __ret __cdecl __func(__type1 * __attrib1 __arg1, __type2 __attrib2 __arg2, __type3 __attrib3 __arg3) __MINGW_ATTRIB_DEPRECATED_SEC_WARN;
-# 12 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
-# 24 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 12 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
+# 24 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __LONG32 long
-# 44 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 44 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MINGW_IMPORT extern __attribute__ ((__dllimport__))
 
 
@@ -1152,13 +1152,13 @@
 
 
 #define __DECLSPEC_SUPPORTED 
-# 70 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 70 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define USE___UUIDOF 0
 
 
 
 #define _inline __inline
-# 83 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 83 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __CRT_INLINE extern inline __attribute__((__gnu_inline__))
 
 
@@ -1179,17 +1179,17 @@
 
 #define __MINGW_CXX11_CONSTEXPR 
 #define __MINGW_CXX14_CONSTEXPR 
-# 118 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 118 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __UNUSED_PARAM(x) x __attribute__ ((__unused__))
-# 133 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 133 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __restrict_arr __restrict
-# 149 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 149 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MINGW_ATTRIB_NORETURN __attribute__ ((__noreturn__))
 #define __MINGW_ATTRIB_CONST __attribute__ ((__const__))
-# 160 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 160 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MINGW_ATTRIB_MALLOC __attribute__ ((__malloc__))
 #define __MINGW_ATTRIB_PURE __attribute__ ((__pure__))
-# 174 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 174 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MINGW_ATTRIB_NONNULL(arg) __attribute__ ((__nonnull__ (arg)))
 
 
@@ -1206,7 +1206,7 @@
 #define __MINGW_ATTRIB_DEPRECATED __attribute__ ((__deprecated__))
 
 #define __MINGW_ATTRIB_DEPRECATED_MSG(x) __attribute__ ((__deprecated__(x)))
-# 204 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 204 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MINGW_NOTHROW __attribute__ ((__nothrow__))
 
 
@@ -1229,9 +1229,9 @@
 
 
 #define __MINGW_BROKEN_INTERFACE(x) __MINGW_PRAGMA_PARAM(message ("Interface " _CRT_STRINGIZE(x) " has unverified layout."))
-# 236 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 236 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MSVCRT_VERSION__ 0xE00
-# 246 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 246 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define _UCRT 
 
 
@@ -1252,7 +1252,7 @@
 #define __int16 short
 #define __int32 int
 #define __int64 long long
-# 279 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 279 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __ptr32 
 #define __ptr64 
 
@@ -1265,12 +1265,12 @@
 
 
 #define __forceinline extern __inline__ __attribute__((__always_inline__,__gnu_inline__))
-# 302 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 302 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __nothrow 
 
 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/vadefs.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/vadefs.h" 1 3 4
 
 
 
@@ -1279,8 +1279,8 @@
 
 #define _INC_VADEFS 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 1 3 4
-# 674 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 1 3 4
+# 674 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define MINGW_SDK_INIT 
 
 
@@ -1292,19 +1292,19 @@
 #define __GOT_SECURE_LIB__ __STDC_SECURE_LIB__
 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h" 1 3 4
 
 #define MINGW_DDK_H 
 
 #define MINGW_HAS_DDK_H 1
-# 686 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
-# 10 "D:/mingw64/x86_64-w64-mingw32/include/vadefs.h" 2 3 4
+# 686 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
+# 10 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/vadefs.h" 2 3 4
 
 
 #undef _CRT_PACKING
 #define _CRT_PACKING 8
 #pragma pack(push,_CRT_PACKING)
-# 23 "D:/mingw64/x86_64-w64-mingw32/include/vadefs.h" 3 4
+# 23 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/vadefs.h" 3 4
 #define __GNUC_VA_LIST 
   typedef __builtin_va_list __gnuc_va_list;
 
@@ -1314,7 +1314,7 @@
 #define _VA_LIST_DEFINED 
 
   typedef __gnuc_va_list va_list;
-# 42 "D:/mingw64/x86_64-w64-mingw32/include/vadefs.h" 3 4
+# 42 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/vadefs.h" 3 4
 #define _ADDRESSOF(v) (&(v))
 
 
@@ -1325,9 +1325,9 @@
 #define _crt_va_arg(v,l) __builtin_va_arg(v,l)
 #define _crt_va_end(v) __builtin_va_end(v)
 #define _crt_va_copy(d,s) __builtin_va_copy(d,s)
-# 103 "D:/mingw64/x86_64-w64-mingw32/include/vadefs.h" 3 4
+# 103 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/vadefs.h" 3 4
 #pragma pack(pop)
-# 307 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
+# 307 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 2 3 4
 
 
 #define __CRT_STRINGIZE(_Value) #_Value
@@ -1362,7 +1362,7 @@
 
 
 #define _MRTIMP2 _CRTIMP
-# 349 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 349 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define _DLL 
 
 
@@ -1403,14 +1403,14 @@
 
 
 #define _CRT_OBSOLETE(_NewItem) 
-# 400 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 400 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define _CONST_RETURN 
 
 
 
 
 #define UNALIGNED __unaligned
-# 415 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 415 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define _CRT_ALIGN(x) __attribute__ ((__aligned__ (x)))
 
 
@@ -1429,19 +1429,19 @@
 
 
 #define _CRT_UNUSED(x) (void)x
-# 458 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 458 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __USE_MINGW_ANSI_STDIO 0
-# 478 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 478 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #undef _CRT_glob
 #define _CRT_glob _dowildcard
-# 495 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 495 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __ANONYMOUS_DEFINED 
 #define _ANONYMOUS_UNION __MINGW_EXTENSION
 #define _ANONYMOUS_STRUCT __MINGW_EXTENSION
 
 #define _UNION_NAME(x) 
 #define _STRUCT_NAME(x) 
-# 520 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 520 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define DUMMYUNIONNAME 
 #define DUMMYUNIONNAME1 
 #define DUMMYUNIONNAME2 
@@ -1452,16 +1452,16 @@
 #define DUMMYUNIONNAME7 
 #define DUMMYUNIONNAME8 
 #define DUMMYUNIONNAME9 
-# 542 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 542 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define DUMMYSTRUCTNAME 
 #define DUMMYSTRUCTNAME1 
 #define DUMMYSTRUCTNAME2 
 #define DUMMYSTRUCTNAME3 
 #define DUMMYSTRUCTNAME4 
 #define DUMMYSTRUCTNAME5 
-# 587 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 587 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __CRT_UUID_DECL(type,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) 
-# 599 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 599 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 #define __MINGW_DEBUGBREAK_IMPL !__has_builtin(__debugbreak)
 
 
@@ -1508,15 +1508,15 @@ extern __inline__ __attribute__((__always_inline__,__gnu_inline__)) void __attri
 
 
 #define __MINGW_PREFETCH_IMPL !__has_builtin(__prefetch)
-# 665 "D:/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
+# 665 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw.h" 3 4
 const char *__mingw_get_crt_info (void);
-# 11 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 2 3 4
+# 11 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 2 3 4
 
 
 #undef _CRT_PACKING
 #define _CRT_PACKING 8
 #pragma pack(push,_CRT_PACKING)
-# 24 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
+# 24 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
 #define _CRTNOALIAS 
 
 
@@ -1617,7 +1617,7 @@ typedef long __time32_t;
 
 #define _TIME64_T_DEFINED 
 __extension__ typedef long long __time64_t;
-# 134 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
+# 134 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
 #define _TIME_T_DEFINED 
 
 
@@ -1628,7 +1628,7 @@ typedef __time64_t time_t;
 
 
 #define _CRT_SECURE_CPP_NOTHROW throw()
-# 262 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
+# 262 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
 #define __DEFINE_CPP_OVERLOAD_SECURE_FUNC_0_0(__ret,__func,__dsttype,__dst) 
 #define __DEFINE_CPP_OVERLOAD_SECURE_FUNC_0_1(__ret,__func,__dsttype,__dst,__type1,__arg1) 
 #define __DEFINE_CPP_OVERLOAD_SECURE_FUNC_0_2(__ret,__func,__dsttype,__dst,__type1,__arg1,__type2,__arg2) 
@@ -1653,7 +1653,7 @@ typedef __time64_t time_t;
 #define __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_3(__ret_type,__ret_policy,__decl_spec,__name,__dst_attr,__dst_type,__dst,__arg1_type,__arg1,__arg2_type,__arg2,__arg3_type,__arg3) __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_3_EX(__ret_type, __ret_policy, __decl_spec, __func_name, __func_name ##_s, __dst_attr, __dst_type, __dst, __arg1_type, __arg1, __arg2_type, __arg2, __arg3_type, __arg3)
 
 #define __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_4(__ret_type,__ret_policy,__decl_spec,__name,__dst_attr,__dst_type,__dst,__arg1_type,__arg1,__arg2_type,__arg2,__arg3_type,__arg3,__arg4_type,__arg4) __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_4_EX(__ret_type, __ret_policy, __decl_spec, __func_name, __func_name ##_s, __dst_attr, __dst_type, __dst, __arg1_type, __arg1, __arg2_type, __arg2, __arg3_type, __arg3, __arg4_type, __arg4)
-# 422 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
+# 422 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
 #define __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_0_EX(__ret_type,__ret_policy,__decl_spec,__name,__sec_name,__dst_attr,__dst_type,__dst) 
 #define __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_1_EX(__ret_type,__ret_policy,__decl_spec,__name,__sec_name,__dst_attr,__dst_type,__dst,__arg1_type,__arg1) 
 #define __DEFINE_CPP_OVERLOAD_STANDARD_FUNC_0_2_EX(__ret_type,__ret_policy,__decl_spec,__name,__sec_name,__dst_attr,__dst_type,__dst,__arg1_type,__arg1,__arg2_type,__arg2) 
@@ -1689,27 +1689,27 @@ typedef struct threadlocaleinfostruct {
   const unsigned short *_locale_pctype;
   int _locale_mb_cur_max;
   unsigned int _locale_lc_codepage;
-# 482 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
+# 482 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
 } threadlocinfo;
 
 
 
 #define __crt_typefix(ctype) 
-# 496 "D:/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
+# 496 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt.h" 3 4
 #define _CRT_USE_WINAPI_FAMILY_DESKTOP_APP 
 
 
 
 
 #pragma pack(pop)
-# 11 "D:/mingw64/x86_64-w64-mingw32/include/crtdefs.h" 2 3 4
-# 29 "D:/mingw64/x86_64-w64-mingw32/include/stdint.h" 2 3 4
+# 11 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/crtdefs.h" 2 3 4
+# 29 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdint.h" 2 3 4
 
 #define __need_wint_t 
 #define __need_wchar_t 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 10 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 10 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
 #define _INC_STDDEF 
 
 
@@ -1727,25 +1727,25 @@ typedef struct threadlocaleinfostruct {
   __attribute__ ((__dllimport__)) extern unsigned long __attribute__((__cdecl__)) __threadid(void);
 #define _threadid (__threadid())
   __attribute__ ((__dllimport__)) extern uintptr_t __attribute__((__cdecl__)) __threadhandle(void);
-# 337 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+# 337 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
 #undef __need_wchar_t
-# 353 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+# 353 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
 #undef __need_wint_t
-# 409 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+# 409 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
 #undef __need_NULL
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
-# 40 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 40 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 #define _STDDEF_H 
 #define _STDDEF_H_ 
 
 #define _ANSI_STDDEF_H 
-# 174 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 174 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 #undef __need_ptrdiff_t
-# 253 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 253 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 #undef __need_size_t
-# 365 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 365 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 #undef __need_wchar_t
-# 415 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 415 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 #undef NULL
 
 
@@ -1775,16 +1775,16 @@ typedef struct threadlocaleinfostruct {
 typedef struct {
   long long __max_align_ll __attribute__((__aligned__(__alignof__(long long))));
   long double __max_align_ld __attribute__((__aligned__(__alignof__(long double))));
-# 452 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 452 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 } max_align_t;
-# 465 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
+# 465 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 3 4
 #define _GCC_NULLPTR_T 
   typedef __typeof__(nullptr) nullptr_t;
 
 
 #define unreachable() (__builtin_unreachable ())
 #define __STDC_VERSION_STDDEF_H__ 202311L
-# 33 "D:/mingw64/x86_64-w64-mingw32/include/stdint.h" 2 3 4
+# 33 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdint.h" 2 3 4
 
 
 typedef signed char int8_t;
@@ -1922,7 +1922,7 @@ __extension__ typedef unsigned long long uintmax_t;
 
 #define WINT_MIN 0U
 #define WINT_MAX 0xffffU
-# 193 "D:/mingw64/x86_64-w64-mingw32/include/stdint.h" 3 4
+# 193 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdint.h" 3 4
 #define INT8_C(val) (INT_LEAST8_MAX-INT_LEAST8_MAX+(val))
 #define INT16_C(val) (INT_LEAST16_MAX-INT_LEAST16_MAX+(val))
 #define INT32_C(val) (INT_LEAST32_MAX-INT_LEAST32_MAX+(val))
@@ -1938,7 +1938,7 @@ __extension__ typedef unsigned long long uintmax_t;
 
 #define INTMAX_C(val) val ##LL
 #define UINTMAX_C(val) val ##ULL
-# 12 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h" 2 3 4
+# 12 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdint.h" 2 3 4
 #pragma GCC diagnostic pop
 
 
@@ -2043,23 +2043,9 @@ int av_samples_set_silence(uint8_t * const *audio_data, int offset, int nb_sampl
 
 
 
-#define AV_HAS_ATTRIBUTE(x) __has_attribute(x)
-
-
-
-
-
-
-
-#define AV_HAS_STD_ATTRIBUTE(x) __has_c_attribute(x)
-
-
-
-
-
 
 #define av_always_inline __attribute__((always_inline)) inline
-# 69 "./libavutil/attributes.h"
+# 55 "./libavutil/attributes.h"
 #define av_extern_inline extern inline
 
 
@@ -2067,9 +2053,7 @@ int av_samples_set_silence(uint8_t * const *audio_data, int offset, int nb_sampl
 
 
 
-#define av_warn_unused_result [[nodiscard]]
-
-
+#define av_warn_unused_result __attribute__((warn_unused_result))
 
 
 
@@ -2107,12 +2091,12 @@ int av_samples_set_silence(uint8_t * const *audio_data, int offset, int nb_sampl
 
 
 
-#define attribute_deprecated [[deprecated]]
-# 132 "./libavutil/attributes.h"
+#define attribute_deprecated __attribute__((deprecated))
+# 114 "./libavutil/attributes.h"
 #define AV_NOWARN_DEPRECATED(code) _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wdeprecated-declarations\"") code _Pragma("GCC diagnostic pop")
-# 149 "./libavutil/attributes.h"
-#define av_unused [[maybe_unused]]
-# 162 "./libavutil/attributes.h"
+# 131 "./libavutil/attributes.h"
+#define av_unused __attribute__((unused))
+# 142 "./libavutil/attributes.h"
 #define av_used __attribute__((used))
 
 
@@ -2132,13 +2116,1418 @@ int av_samples_set_silence(uint8_t * const *audio_data, int offset, int nb_sampl
 
 
 #define av_builtin_constant_p __builtin_constant_p
+#define av_printf_format(fmtpos,attrpos) __attribute__((__format__(__printf__, fmtpos, attrpos)))
 
 
 
 
 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 1 3
+#define av_noreturn __attribute__((noreturn))
+# 32 "libavcodec/avcodec.h" 2
+# 1 "./libavutil/avutil.h" 1
+# 22 "./libavutil/avutil.h"
+#define AVUTIL_AVUTIL_H 
+# 171 "./libavutil/avutil.h"
+unsigned avutil_version(void);
+
+
+
+
+
+
+const char *av_version_info(void);
+
+
+
+
+const char *avutil_configuration(void);
+
+
+
+
+const char *avutil_license(void);
+# 199 "./libavutil/avutil.h"
+enum AVMediaType {
+    AVMEDIA_TYPE_UNKNOWN = -1,
+    AVMEDIA_TYPE_VIDEO,
+    AVMEDIA_TYPE_AUDIO,
+    AVMEDIA_TYPE_DATA,
+    AVMEDIA_TYPE_SUBTITLE,
+    AVMEDIA_TYPE_ATTACHMENT,
+    AVMEDIA_TYPE_NB
+};
+
+
+
+
+
+const char *av_get_media_type_string(enum AVMediaType media_type);
+# 225 "./libavutil/avutil.h"
+#define FF_LAMBDA_SHIFT 7
+#define FF_LAMBDA_SCALE (1<<FF_LAMBDA_SHIFT)
+#define FF_QP2LAMBDA 118
+#define FF_LAMBDA_MAX (256*128-1)
+
+#define FF_QUALITY_SCALE FF_LAMBDA_SCALE
+# 248 "./libavutil/avutil.h"
+#define AV_NOPTS_VALUE ((int64_t)UINT64_C(0x8000000000000000))
+
+
+
+
+
+#define AV_TIME_BASE 1000000
+# 264 "./libavutil/avutil.h"
+#define AV_TIME_BASE_Q (AVRational){1, AV_TIME_BASE}
+# 277 "./libavutil/avutil.h"
+enum AVPictureType {
+    AV_PICTURE_TYPE_NONE = 0,
+    AV_PICTURE_TYPE_I,
+    AV_PICTURE_TYPE_P,
+    AV_PICTURE_TYPE_B,
+    AV_PICTURE_TYPE_S,
+    AV_PICTURE_TYPE_SI,
+    AV_PICTURE_TYPE_SP,
+    AV_PICTURE_TYPE_BI,
+};
+# 295 "./libavutil/avutil.h"
+char av_get_picture_type_char(enum AVPictureType pict_type);
+
+
+
+
+
+# 1 "./libavutil/common.h" 1
+# 27 "./libavutil/common.h"
+#define AVUTIL_COMMON_H 
+
+
+
+
+
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/errno.h" 1 3
+
+
+
+
+
+
+#define _INC_ERRNO 
+# 24 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/errno.h" 3
+#define EPERM 1
+#define ENOENT 2
+#define ENOFILE ENOENT
+#define ESRCH 3
+#define EINTR 4
+#define EIO 5
+#define ENXIO 6
+#define E2BIG 7
+#define ENOEXEC 8
+#define EBADF 9
+#define ECHILD 10
+#define EAGAIN 11
+#define ENOMEM 12
+#define EACCES 13
+#define EFAULT 14
+#define EBUSY 16
+#define EEXIST 17
+#define EXDEV 18
+#define ENODEV 19
+#define ENOTDIR 20
+#define EISDIR 21
+#define ENFILE 23
+#define EMFILE 24
+#define ENOTTY 25
+#define EFBIG 27
+#define ENOSPC 28
+#define ESPIPE 29
+#define EROFS 30
+#define EMLINK 31
+#define EPIPE 32
+#define EDOM 33
+#define EDEADLK 36
+#define ENAMETOOLONG 38
+#define ENOLCK 39
+#define ENOSYS 40
+#define ENOTEMPTY 41
+
+
+
+#define _SECURECRT_ERRCODE_VALUES_DEFINED 
+#define EINVAL 22
+#define ERANGE 34
+#define EILSEQ 42
+#define STRUNCATE 80
+
+
+
+#define EDEADLOCK EDEADLK
+
+
+
+
+#define ENOTSUP 129
+
+
+
+
+
+#define EAFNOSUPPORT 102
+
+
+
+#define EADDRINUSE 100
+
+
+
+#define EADDRNOTAVAIL 101
+
+
+
+#define EISCONN 113
+
+
+
+#define ENOBUFS 119
+
+
+
+#define ECONNABORTED 106
+
+
+
+#define EALREADY 103
+
+
+
+#define ECONNREFUSED 107
+
+
+
+#define ECONNRESET 108
+
+
+
+#define EDESTADDRREQ 109
+
+
+
+#define EHOSTUNREACH 110
+
+
+
+#define EMSGSIZE 115
+
+
+
+#define ENETDOWN 116
+
+
+
+#define ENETRESET 117
+
+
+
+#define ENETUNREACH 118
+
+
+
+#define ENOPROTOOPT 123
+
+
+
+#define ENOTSOCK 128
+
+
+
+#define ENOTCONN 126
+
+
+
+#define ECANCELED 105
+
+
+
+#define EINPROGRESS 112
+
+
+
+#define EOPNOTSUPP 130
+
+
+
+#define EWOULDBLOCK 140
+
+
+
+#define EOWNERDEAD 133
+
+
+
+#define EPROTO 134
+
+
+
+#define EPROTONOSUPPORT 135
+
+
+
+#define EBADMSG 104
+
+
+
+#define EIDRM 111
+
+
+
+#define ENODATA 120
+
+
+
+#define ENOLINK 121
+
+
+
+#define ENOMSG 122
+
+
+
+#define ENOSR 124
+
+
+
+#define ENOSTR 125
+
+
+
+#define ENOTRECOVERABLE 127
+
+
+
+#define ETIME 137
+
+
+
+#define ETXTBSY 139
+
+
+
+
+#define ETIMEDOUT 138
+
+
+
+#define ELOOP 114
+
+
+
+#define EPROTOTYPE 136
+
+
+
+#define EOVERFLOW 132
+# 34 "./libavutil/common.h" 2
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 1 3
+# 9 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+#define _INTTYPES_H_ 
+
+
+
+#define __need_wchar_t 
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 163 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+#undef __need_ptrdiff_t
+# 240 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+#undef __need_size_t
+# 337 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+#undef __need_wchar_t
+# 394 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+#undef NULL
+
+
+
+
+#define NULL ((void *)0)
+# 409 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
+#undef __need_NULL
+
+
+
+
+#define offsetof(TYPE,MEMBER) __builtin_offsetof (TYPE, MEMBER)
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 15 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 2 3
+
+
+
+
+
+
+# 20 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+typedef struct {
+ intmax_t quot;
+ intmax_t rem;
+ } imaxdiv_t;
+# 34 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+#define PRId64 "lld"
+#define PRIi64 "lli"
+#define PRIo64 "llo"
+#define PRIu64 "llu"
+#define PRIx64 "llx"
+#define PRIX64 "llX"
+# 50 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+#define PRId8 "d"
+#define PRId16 "d"
+#define PRId32 "d"
+
+#define PRIdLEAST8 "d"
+#define PRIdLEAST16 "d"
+#define PRIdLEAST32 "d"
+#define PRIdLEAST64 PRId64
+
+#define PRIdFAST8 "d"
+#define PRIdFAST16 "d"
+#define PRIdFAST32 "d"
+#define PRIdFAST64 PRId64
+
+#define PRIdMAX PRId64
+
+#define PRIi8 "i"
+#define PRIi16 "i"
+#define PRIi32 "i"
+
+#define PRIiLEAST8 "i"
+#define PRIiLEAST16 "i"
+#define PRIiLEAST32 "i"
+#define PRIiLEAST64 PRIi64
+
+#define PRIiFAST8 "i"
+#define PRIiFAST16 "i"
+#define PRIiFAST32 "i"
+#define PRIiFAST64 PRIi64
+
+#define PRIiMAX PRIi64
+
+#define PRIo8 "o"
+#define PRIo16 "o"
+#define PRIo32 "o"
+
+#define PRIoLEAST8 "o"
+#define PRIoLEAST16 "o"
+#define PRIoLEAST32 "o"
+#define PRIoLEAST64 PRIo64
+
+#define PRIoFAST8 "o"
+#define PRIoFAST16 "o"
+#define PRIoFAST32 "o"
+#define PRIoFAST64 PRIo64
+
+#define PRIoMAX PRIo64
+
+
+#define PRIu8 "u"
+#define PRIu16 "u"
+#define PRIu32 "u"
+
+
+#define PRIuLEAST8 "u"
+#define PRIuLEAST16 "u"
+#define PRIuLEAST32 "u"
+#define PRIuLEAST64 PRIu64
+
+#define PRIuFAST8 "u"
+#define PRIuFAST16 "u"
+#define PRIuFAST32 "u"
+#define PRIuFAST64 PRIu64
+
+#define PRIuMAX PRIu64
+
+#define PRIx8 "x"
+#define PRIx16 "x"
+#define PRIx32 "x"
+
+#define PRIxLEAST8 "x"
+#define PRIxLEAST16 "x"
+#define PRIxLEAST32 "x"
+#define PRIxLEAST64 PRIx64
+
+#define PRIxFAST8 "x"
+#define PRIxFAST16 "x"
+#define PRIxFAST32 "x"
+#define PRIxFAST64 PRIx64
+
+#define PRIxMAX PRIx64
+
+#define PRIX8 "X"
+#define PRIX16 "X"
+#define PRIX32 "X"
+
+#define PRIXLEAST8 "X"
+#define PRIXLEAST16 "X"
+#define PRIXLEAST32 "X"
+#define PRIXLEAST64 PRIX64
+
+#define PRIXFAST8 "X"
+#define PRIXFAST16 "X"
+#define PRIXFAST32 "X"
+#define PRIXFAST64 PRIX64
+
+#define PRIXMAX PRIX64
+# 155 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+#define SCNd16 "hd"
+#define SCNd32 "d"
+#define SCNd64 PRId64
+
+#define SCNdLEAST16 "hd"
+#define SCNdLEAST32 "d"
+#define SCNdLEAST64 PRId64
+
+#define SCNdFAST16 "hd"
+#define SCNdFAST32 "d"
+#define SCNdFAST64 PRId64
+
+#define SCNdMAX PRId64
+
+#define SCNi16 "hi"
+#define SCNi32 "i"
+#define SCNi64 PRIi64
+
+#define SCNiLEAST16 "hi"
+#define SCNiLEAST32 "i"
+#define SCNiLEAST64 PRIi64
+
+#define SCNiFAST16 "hi"
+#define SCNiFAST32 "i"
+#define SCNiFAST64 PRIi64
+
+#define SCNiMAX PRIi64
+
+#define SCNo16 "ho"
+#define SCNo32 "o"
+#define SCNo64 PRIo64
+
+#define SCNoLEAST16 "ho"
+#define SCNoLEAST32 "o"
+#define SCNoLEAST64 PRIo64
+
+#define SCNoFAST16 "ho"
+#define SCNoFAST32 "o"
+#define SCNoFAST64 PRIo64
+
+#define SCNoMAX PRIo64
+
+#define SCNx16 "hx"
+#define SCNx32 "x"
+#define SCNx64 PRIx64
+
+#define SCNxLEAST16 "hx"
+#define SCNxLEAST32 "x"
+#define SCNxLEAST64 PRIx64
+
+#define SCNxFAST16 "hx"
+#define SCNxFAST32 "x"
+#define SCNxFAST64 PRIx64
+
+#define SCNxMAX PRIx64
+
+
+
+#define SCNu16 "hu"
+#define SCNu32 "u"
+#define SCNu64 PRIu64
+
+#define SCNuLEAST16 "hu"
+#define SCNuLEAST32 "u"
+#define SCNuLEAST64 PRIu64
+
+#define SCNuFAST16 "hu"
+#define SCNuFAST32 "u"
+#define SCNuFAST64 PRIu64
+
+#define SCNuMAX PRIu64
+
+
+#define PRIdPTR PRId64
+#define PRIiPTR PRIi64
+#define PRIoPTR PRIo64
+#define PRIuPTR PRIu64
+#define PRIxPTR PRIx64
+#define PRIXPTR PRIX64
+#define SCNdPTR PRId64
+#define SCNiPTR PRIi64
+#define SCNoPTR PRIo64
+#define SCNxPTR PRIx64
+#define SCNuPTR PRIu64
+# 260 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+#define SCNd8 "hhd"
+#define SCNdLEAST8 "hhd"
+#define SCNdFAST8 "hhd"
+
+#define SCNi8 "hhi"
+#define SCNiLEAST8 "hhi"
+#define SCNiFAST8 "hhi"
+
+#define SCNo8 "hho"
+#define SCNoLEAST8 "hho"
+#define SCNoFAST8 "hho"
+
+#define SCNx8 "hhx"
+#define SCNxLEAST8 "hhx"
+#define SCNxFAST8 "hhx"
+
+
+#define SCNu8 "hhu"
+#define SCNuLEAST8 "hhu"
+#define SCNuFAST8 "hhu"
+# 327 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
+intmax_t __attribute__((__cdecl__)) imaxabs (intmax_t j);
+
+
+
+
+imaxdiv_t __attribute__((__cdecl__)) imaxdiv (intmax_t numer, intmax_t denom);
+
+
+
+intmax_t __attribute__((__cdecl__)) strtoimax (const char* __restrict__ nptr,
+                            char** __restrict__ endptr, int base);
+uintmax_t __attribute__((__cdecl__)) strtoumax (const char* __restrict__ nptr,
+        char** __restrict__ endptr, int base);
+
+intmax_t __attribute__((__cdecl__)) wcstoimax (const wchar_t* __restrict__ nptr,
+                            wchar_t** __restrict__ endptr, int base);
+uintmax_t __attribute__((__cdecl__)) wcstoumax (const wchar_t* __restrict__ nptr,
+        wchar_t** __restrict__ endptr, int base);
+# 35 "./libavutil/common.h" 2
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
+# 30 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
+#define _GCC_LIMITS_H_ 
+
+
+
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h" 1 3 4
+
+
+
+
+
+#define _GCC_NEXT_LIMITS_H 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
+# 210 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/limits.h" 1 3 4
+# 9 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/limits.h" 3 4
+#define _INC_LIMITS 
+# 20 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/limits.h" 3 4
+#define PATH_MAX 260
+
+#define CHAR_BIT 8
+#define SCHAR_MIN (-128)
+#define SCHAR_MAX 127
+#define UCHAR_MAX 0xff
+
+
+
+
+
+#define CHAR_MIN SCHAR_MIN
+#define CHAR_MAX SCHAR_MAX
+
+
+#define MB_LEN_MAX 5
+#define SHRT_MIN (-32768)
+#define SHRT_MAX 32767
+#define USHRT_MAX 0xffffU
+#define INT_MIN (-2147483647 - 1)
+#define INT_MAX 2147483647
+#define UINT_MAX 0xffffffffU
+#define LONG_MIN (-2147483647L - 1)
+#define LONG_MAX 2147483647L
+#define ULONG_MAX 0xffffffffUL
+#define LLONG_MAX 9223372036854775807ll
+#define LLONG_MIN (-9223372036854775807ll - 1)
+#define ULLONG_MAX 0xffffffffffffffffull
+
+#define _I8_MIN (-127 - 1)
+#define _I8_MAX 127
+#define _UI8_MAX 0xffu
+
+#define _I16_MIN (-32767 - 1)
+#define _I16_MAX 32767
+#define _UI16_MAX 0xffffu
+
+#define _I32_MIN (-2147483647 - 1)
+#define _I32_MAX 2147483647
+#define _UI32_MAX 0xffffffffu
+
+
+#undef LONG_LONG_MAX
+#define LONG_LONG_MAX 9223372036854775807ll
+#undef LONG_LONG_MIN
+#define LONG_LONG_MIN (-LONG_LONG_MAX-1)
+#undef ULONG_LONG_MAX
+#define ULONG_LONG_MAX (2ull * LONG_LONG_MAX + 1ull)
+
+
+#define _I64_MIN (-9223372036854775807ll - 1)
+#define _I64_MAX 9223372036854775807ll
+#define _UI64_MAX 0xffffffffffffffffull
+# 84 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/limits.h" 3 4
+#define SSIZE_MAX _I64_MAX
+# 211 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 2 3 4
+# 10 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h" 2 3 4
+#pragma GCC diagnostic pop
+#undef _GCC_NEXT_LIMITS_H
+# 35 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 2 3 4
+# 60 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
+#define _LIMITS_H___ 
+
+
+#undef CHAR_BIT
+#define CHAR_BIT __CHAR_BIT__
+
+
+
+
+
+
+
+#undef SCHAR_MIN
+#define SCHAR_MIN (-SCHAR_MAX - 1)
+#undef SCHAR_MAX
+#define SCHAR_MAX __SCHAR_MAX__
+
+
+#undef UCHAR_MAX
+
+
+
+#define UCHAR_MAX (SCHAR_MAX * 2 + 1)
+# 96 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
+#undef CHAR_MIN
+#define CHAR_MIN SCHAR_MIN
+#undef CHAR_MAX
+#define CHAR_MAX SCHAR_MAX
+
+
+
+#undef SHRT_MIN
+#define SHRT_MIN (-SHRT_MAX - 1)
+#undef SHRT_MAX
+#define SHRT_MAX __SHRT_MAX__
+
+
+#undef USHRT_MAX
+
+
+
+#define USHRT_MAX (SHRT_MAX * 2 + 1)
+
+
+
+#undef INT_MIN
+#define INT_MIN (-INT_MAX - 1)
+#undef INT_MAX
+#define INT_MAX __INT_MAX__
+
+
+#undef UINT_MAX
+#define UINT_MAX (INT_MAX * 2U + 1U)
+
+
+
+#undef LONG_MIN
+#define LONG_MIN (-LONG_MAX - 1L)
+#undef LONG_MAX
+#define LONG_MAX __LONG_MAX__
+
+
+#undef ULONG_MAX
+#define ULONG_MAX (LONG_MAX * 2UL + 1UL)
+
+
+
+#undef LLONG_MIN
+#define LLONG_MIN (-LLONG_MAX - 1LL)
+#undef LLONG_MAX
+#define LLONG_MAX __LONG_LONG_MAX__
+
+
+#undef ULLONG_MAX
+#define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+
+
+
+
+#undef LONG_LONG_MIN
+#define LONG_LONG_MIN (-LONG_LONG_MAX - 1LL)
+#undef LONG_LONG_MAX
+#define LONG_LONG_MAX __LONG_LONG_MAX__
+
+
+#undef ULONG_LONG_MAX
+#define ULONG_LONG_MAX (LONG_LONG_MAX * 2ULL + 1ULL)
+
+
+
+
+
+#undef CHAR_WIDTH
+#define CHAR_WIDTH __SCHAR_WIDTH__
+#undef SCHAR_WIDTH
+#define SCHAR_WIDTH __SCHAR_WIDTH__
+#undef UCHAR_WIDTH
+#define UCHAR_WIDTH __SCHAR_WIDTH__
+#undef SHRT_WIDTH
+#define SHRT_WIDTH __SHRT_WIDTH__
+#undef USHRT_WIDTH
+#define USHRT_WIDTH __SHRT_WIDTH__
+#undef INT_WIDTH
+#define INT_WIDTH __INT_WIDTH__
+#undef UINT_WIDTH
+#define UINT_WIDTH __INT_WIDTH__
+#undef LONG_WIDTH
+#define LONG_WIDTH __LONG_WIDTH__
+#undef ULONG_WIDTH
+#define ULONG_WIDTH __LONG_WIDTH__
+#undef LLONG_WIDTH
+#define LLONG_WIDTH __LONG_LONG_WIDTH__
+#undef ULLONG_WIDTH
+#define ULLONG_WIDTH __LONG_LONG_WIDTH__
+
+
+
+
+#undef BOOL_MAX
+#define BOOL_MAX 1
+#undef BOOL_WIDTH
+#define BOOL_WIDTH 1
+
+
+#undef BITINT_MAXWIDTH
+#define BITINT_MAXWIDTH __BITINT_MAXWIDTH__
+
+
+#define __STDC_VERSION_LIMITS_H__ 202311L
+# 36 "./libavutil/common.h" 2
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 1 3
+
+
+
+
+
+
+#define _MATH_H_ 
+
+
+       
+# 11 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+
+
+
+
+struct _exception;
+
+#pragma pack(push,_CRT_PACKING)
+
+#define _DOMAIN 1
+#define _SING 2
+#define _OVERFLOW 3
+#define _UNDERFLOW 4
+#define _TLOSS 5
+#define _PLOSS 6
+
+
+
+
+#define DOMAIN _DOMAIN
+#define SING _SING
+#define OVERFLOW _OVERFLOW
+#define UNDERFLOW _UNDERFLOW
+#define TLOSS _TLOSS
+#define PLOSS _PLOSS
+
+
+
+
+
+#define M_E 2.7182818284590452354
+#define M_LOG2E 1.4426950408889634074
+#define M_LOG10E 0.43429448190325182765
+#define M_LN2 0.69314718055994530942
+#define M_LN10 2.30258509299404568402
+#define M_PI 3.14159265358979323846
+#define M_PI_2 1.57079632679489661923
+#define M_PI_4 0.78539816339744830962
+#define M_1_PI 0.31830988618379067154
+#define M_2_PI 0.63661977236758134308
+#define M_2_SQRTPI 1.12837916709551257390
+#define M_SQRT2 1.41421356237309504880
+#define M_SQRT1_2 0.70710678118654752440
+
+
+
+
+#define __MINGW_FPCLASS_DEFINED 1
+
+#define _FPCLASS_SNAN 0x0001
+#define _FPCLASS_QNAN 0x0002
+#define _FPCLASS_NINF 0x0004
+#define _FPCLASS_NN 0x0008
+#define _FPCLASS_ND 0x0010
+#define _FPCLASS_NZ 0x0020
+#define _FPCLASS_PZ 0x0040
+#define _FPCLASS_PD 0x0080
+#define _FPCLASS_PN 0x0100
+#define _FPCLASS_PINF 0x0200
+# 95 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define __mingw_types_compatible_p(type1,type2) __builtin_types_compatible_p (type1, type2)
+
+
+
+
+
+
+
+#define __mingw_choose_expr __builtin_choose_expr
+# 113 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define __MINGW_SOFTMATH 
+
+
+
+  typedef union __mingw_dbl_type_t {
+    double x;
+    unsigned long long val;
+    __extension__ struct {
+      unsigned int low, high;
+    } lh;
+  } __mingw_dbl_type_t;
+
+  typedef union __mingw_flt_type_t {
+    float x;
+    unsigned int val;
+  } __mingw_flt_type_t;
+
+  typedef union __mingw_ldbl_type_t
+  {
+    long double x;
+    __extension__ struct {
+      unsigned int low, high;
+      int sign_exponent : 16;
+      int res1 : 16;
+      int res0 : 32;
+    } lh;
+  } __mingw_ldbl_type_t;
+
+
+
+
+  extern double * __imp__HUGE;
+#define _HUGE (* __MINGW_IMP_SYMBOL(_HUGE))
+
+
+
+#define HUGE_VAL __builtin_huge_val()
+
+
+
+
+
+#define _EXCEPTION_DEFINED 
+  struct _exception {
+    int type;
+    const char *name;
+    double arg1;
+    double arg2;
+    double retval;
+  };
+
+  void __mingw_raise_matherr (int typ, const char *name, double a1, double a2,
+         double rslt);
+  void __mingw_setusermatherr (int (__attribute__((__cdecl__)) *)(struct _exception *));
+  __attribute__ ((__dllimport__)) void __setusermatherr(int (__attribute__((__cdecl__)) *)(struct _exception *));
+#define __setusermatherr __mingw_setusermatherr
+
+
+  double __attribute__((__cdecl__)) sin(double _X);
+  double __attribute__((__cdecl__)) cos(double _X);
+  double __attribute__((__cdecl__)) tan(double _X);
+  double __attribute__((__cdecl__)) sinh(double _X);
+  double __attribute__((__cdecl__)) cosh(double _X);
+  double __attribute__((__cdecl__)) tanh(double _X);
+  double __attribute__((__cdecl__)) asin(double _X);
+  double __attribute__((__cdecl__)) acos(double _X);
+  double __attribute__((__cdecl__)) atan(double _X);
+  double __attribute__((__cdecl__)) atan2(double _Y,double _X);
+  double __attribute__((__cdecl__)) exp(double _X);
+  double __attribute__((__cdecl__)) log(double _X);
+  double __attribute__((__cdecl__)) log10(double _X);
+  double __attribute__((__cdecl__)) pow(double _X,double _Y);
+  double __attribute__((__cdecl__)) sqrt(double _X);
+  double __attribute__((__cdecl__)) ceil(double _X);
+  double __attribute__((__cdecl__)) floor(double _X);
+
+
+  extern float __attribute__((__cdecl__)) fabsf (float x);
+  extern long double __attribute__((__cdecl__)) fabsl (long double);
+  extern double __attribute__((__cdecl__)) fabs (double _X);
+# 231 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+  double __attribute__((__cdecl__)) ldexp(double _X,int _Y);
+  double __attribute__((__cdecl__)) frexp(double _X,int *_Y);
+  double __attribute__((__cdecl__)) modf(double _X,double *_Y);
+  double __attribute__((__cdecl__)) fmod(double _X,double _Y);
+
+  void __attribute__((__cdecl__)) sincos (double __x, double *p_sin, double *p_cos);
+  void __attribute__((__cdecl__)) sincosl (long double __x, long double *p_sin, long double *p_cos);
+  void __attribute__((__cdecl__)) sincosf (float __x, float *p_sin, float *p_cos);
+
+
+#define _CRT_ABS_DEFINED 
+  int __attribute__((__cdecl__)) abs(int _X);
+  long __attribute__((__cdecl__)) labs(long _X);
+
+
+#define _CRT_ATOF_DEFINED 
+  double __attribute__((__cdecl__)) atof(const char *_String);
+  double __attribute__((__cdecl__)) _atof_l(const char *_String,_locale_t _Locale);
+
+
+#define EDOM 33
+#define ERANGE 34
+
+
+#define _COMPLEX_DEFINED 
+  struct _complex {
+    double x;
+    double y;
+  };
+
+
+  double __attribute__((__cdecl__)) _cabs(struct _complex _ComplexA);
+  double __attribute__((__cdecl__)) _hypot(double _X,double _Y);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _j0(double _X);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _j1(double _X);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _jn(int _X,double _Y);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _y0(double _X);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _y1(double _X);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _yn(int _X,double _Y);
+
+#define _CRT_MATHERR_DEFINED 
+  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _matherr (struct _exception *);
+# 282 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define _SIGN_DEFINED 
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _chgsign (double _X);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _copysign (double _Number,double _Sign);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _logb (double);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _nextafter (double, double);
+  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _scalb (double, long);
+  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _finite (double);
+  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _fpclass (double);
+  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _isnan (double);
+
+
+
+
+
+
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) j0 (double) ;
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) j1 (double) ;
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) jn (int, double) ;
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) y0 (double) ;
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) y1 (double) ;
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) yn (int, double) ;
+
+
+
+__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) chgsign (double);
+# 315 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) finite (double);
+  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) fpclass (double);
+
+#define FP_SNAN _FPCLASS_SNAN
+#define FP_QNAN _FPCLASS_QNAN
+#define FP_NINF _FPCLASS_NINF
+#define FP_PINF _FPCLASS_PINF
+#define FP_NDENORM _FPCLASS_ND
+#define FP_PDENORM _FPCLASS_PD
+#define FP_NZERO _FPCLASS_NZ
+#define FP_PZERO _FPCLASS_PZ
+#define FP_NNORM _FPCLASS_NN
+#define FP_PNORM _FPCLASS_PN
+# 341 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define HUGE_VALF __builtin_huge_valf()
+#define HUGE_VALL __builtin_huge_vall()
+#define INFINITY __builtin_inff()
+#define NAN __builtin_nanf("")
+# 359 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+typedef float float_t;
+typedef double double_t;
+# 380 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define FP_NAN 0x0100
+#define FP_NORMAL 0x0400
+#define FP_INFINITE (FP_NAN | FP_NORMAL)
+#define FP_ZERO 0x4000
+#define FP_SUBNORMAL (FP_NORMAL | FP_ZERO)
+# 394 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+  extern int __attribute__((__cdecl__)) __fpclassifyl (long double);
+  extern int __attribute__((__cdecl__)) __fpclassifyf (float);
+  extern int __attribute__((__cdecl__)) __fpclassify (double);
+# 481 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define __dfp_expansion(__call,__fin,x) __fin
+
+
+#define fpclassify(x) __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), double), __fpclassify(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), float), __fpclassifyf(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), long double), __fpclassifyl(x), __dfp_expansion(__fpclassify,(__builtin_trap(),0),x))))
+# 498 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define isfinite(x) ((fpclassify(x) & FP_NAN) == 0)
+
+
+#define isinf(x) (fpclassify(x) == FP_INFINITE)
+
+
+
+
+
+  extern int __attribute__((__cdecl__)) __isnan (double);
+  extern int __attribute__((__cdecl__)) __isnanf (float);
+  extern int __attribute__((__cdecl__)) __isnanl (long double);
+# 578 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define isnan(x) __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), double), __isnan((double)(x)), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), float), __isnanf((float)(x)), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), long double), __isnanl((long double)(x)), __dfp_expansion(__isnan,(__builtin_trap(),(int)0),x))))
+# 591 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define isnormal(x) (fpclassify(x) == FP_NORMAL)
+
+
+  extern int __attribute__((__cdecl__)) __signbit (double);
+  extern int __attribute__((__cdecl__)) __signbitf (float);
+  extern int __attribute__((__cdecl__)) __signbitl (long double);
+# 638 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define signbit(x) __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), double), __signbit(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), float), __signbitf(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), long double), __signbitl(x), __dfp_expansion(__signbit,(__builtin_trap(),x),x))))
+# 651 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+  extern float __attribute__((__cdecl__)) sinf(float _X);
+  extern long double __attribute__((__cdecl__)) sinl(long double);
+
+  extern float __attribute__((__cdecl__)) cosf(float _X);
+  extern long double __attribute__((__cdecl__)) cosl(long double);
+
+  extern float __attribute__((__cdecl__)) tanf(float _X);
+  extern long double __attribute__((__cdecl__)) tanl(long double);
+  extern float __attribute__((__cdecl__)) asinf(float _X);
+  extern long double __attribute__((__cdecl__)) asinl(long double);
+
+  extern float __attribute__((__cdecl__)) acosf (float);
+  extern long double __attribute__((__cdecl__)) acosl (long double);
+
+  extern float __attribute__((__cdecl__)) atanf (float);
+  extern long double __attribute__((__cdecl__)) atanl (long double);
+
+  extern float __attribute__((__cdecl__)) atan2f (float, float);
+  extern long double __attribute__((__cdecl__)) atan2l (long double, long double);
+
+
+  extern float __attribute__((__cdecl__)) sinhf(float _X);
+
+
+
+  extern long double __attribute__((__cdecl__)) sinhl(long double);
+
+  extern float __attribute__((__cdecl__)) coshf(float _X);
+
+
+
+  extern long double __attribute__((__cdecl__)) coshl(long double);
+
+  extern float __attribute__((__cdecl__)) tanhf(float _X);
+
+
+
+  extern long double __attribute__((__cdecl__)) tanhl(long double);
+
+
+
+  extern double __attribute__((__cdecl__)) acosh (double);
+  extern float __attribute__((__cdecl__)) acoshf (float);
+  extern long double __attribute__((__cdecl__)) acoshl (long double);
+
+
+  extern double __attribute__((__cdecl__)) asinh (double);
+  extern float __attribute__((__cdecl__)) asinhf (float);
+  extern long double __attribute__((__cdecl__)) asinhl (long double);
+
+
+  extern double __attribute__((__cdecl__)) atanh (double);
+  extern float __attribute__((__cdecl__)) atanhf (float);
+  extern long double __attribute__((__cdecl__)) atanhl (long double);
+
+
+
+  extern float __attribute__((__cdecl__)) expf(float _X);
+
+
+
+  extern long double __attribute__((__cdecl__)) expl(long double);
+
+
+  extern double __attribute__((__cdecl__)) exp2(double);
+  extern float __attribute__((__cdecl__)) exp2f(float);
+  extern long double __attribute__((__cdecl__)) exp2l(long double);
+
+
+
+  extern double __attribute__((__cdecl__)) expm1(double);
+  extern float __attribute__((__cdecl__)) expm1f(float);
+  extern long double __attribute__((__cdecl__)) expm1l(long double);
+
+
+  extern float frexpf(float _X,int *_Y);
+
+
+
+  extern long double __attribute__((__cdecl__)) frexpl(long double,int *);
+
+
+#define FP_ILOGB0 ((int)0x80000000)
+#define FP_ILOGBNAN ((int)0x7fffffff)
+  extern int __attribute__((__cdecl__)) ilogb (double);
+  extern int __attribute__((__cdecl__)) ilogbf (float);
+  extern int __attribute__((__cdecl__)) ilogbl (long double);
+
+
+  extern float __attribute__((__cdecl__)) ldexpf(float _X,int _Y);
+
+
+
+  extern long double __attribute__((__cdecl__)) ldexpl (long double, int);
+
+
+  extern float __attribute__((__cdecl__)) logf (float);
+  extern long double __attribute__((__cdecl__)) logl(long double);
+
+
+  extern float __attribute__((__cdecl__)) log10f (float);
+  extern long double __attribute__((__cdecl__)) log10l(long double);
+
+
+  extern double __attribute__((__cdecl__)) log1p(double);
+  extern float __attribute__((__cdecl__)) log1pf(float);
+  extern long double __attribute__((__cdecl__)) log1pl(long double);
+
+
+  extern double __attribute__((__cdecl__)) log2 (double);
+  extern float __attribute__((__cdecl__)) log2f (float);
+  extern long double __attribute__((__cdecl__)) log2l (long double);
+
+
+  extern double __attribute__((__cdecl__)) logb (double);
+  extern float __attribute__((__cdecl__)) logbf (float);
+  extern long double __attribute__((__cdecl__)) logbl (long double);
+
+
+  extern float __attribute__((__cdecl__)) modff (float, float*);
+  extern long double __attribute__((__cdecl__)) modfl (long double, long double*);
+
+
+  extern double __attribute__((__cdecl__)) scalbn (double, int);
+  extern float __attribute__((__cdecl__)) scalbnf (float, int);
+  extern long double __attribute__((__cdecl__)) scalbnl (long double, int);
+
+  extern double __attribute__((__cdecl__)) scalbln (double, long);
+  extern float __attribute__((__cdecl__)) scalblnf (float, long);
+  extern long double __attribute__((__cdecl__)) scalblnl (long double, long);
+
+
+
+  extern double __attribute__((__cdecl__)) cbrt (double);
+  extern float __attribute__((__cdecl__)) cbrtf (float);
+  extern long double __attribute__((__cdecl__)) cbrtl (long double);
+
+
+  extern double __attribute__((__cdecl__)) hypot (double, double) ;
+  extern float __attribute__((__cdecl__)) hypotf (float x, float y);
+
+
+
+  extern long double __attribute__((__cdecl__)) hypotl (long double, long double);
+
+
+  extern float __attribute__((__cdecl__)) powf(float _X,float _Y);
+
+
+
+  extern long double __attribute__((__cdecl__)) powl (long double, long double);
+
+
+  extern float __attribute__((__cdecl__)) sqrtf (float);
+  extern long double sqrtl(long double);
+
+
+  extern double __attribute__((__cdecl__)) erf (double);
+  extern float __attribute__((__cdecl__)) erff (float);
+  extern long double __attribute__((__cdecl__)) erfl (long double);
+
+
+  extern double __attribute__((__cdecl__)) erfc (double);
+  extern float __attribute__((__cdecl__)) erfcf (float);
+  extern long double __attribute__((__cdecl__)) erfcl (long double);
+
+
+  extern double __attribute__((__cdecl__)) lgamma (double);
+  extern float __attribute__((__cdecl__)) lgammaf (float);
+  extern long double __attribute__((__cdecl__)) lgammal (long double);
+
+  extern int signgam;
+
+
+  extern double __attribute__((__cdecl__)) tgamma (double);
+  extern float __attribute__((__cdecl__)) tgammaf (float);
+  extern long double __attribute__((__cdecl__)) tgammal (long double);
+
+
+  extern float __attribute__((__cdecl__)) ceilf (float);
+  extern long double __attribute__((__cdecl__)) ceill (long double);
+
+
+  extern float __attribute__((__cdecl__)) floorf (float);
+  extern long double __attribute__((__cdecl__)) floorl (long double);
+
+
+  extern double __attribute__((__cdecl__)) nearbyint ( double);
+  extern float __attribute__((__cdecl__)) nearbyintf (float);
+  extern long double __attribute__((__cdecl__)) nearbyintl (long double);
+
+
+
+extern double __attribute__((__cdecl__)) rint (double);
+extern float __attribute__((__cdecl__)) rintf (float);
+extern long double __attribute__((__cdecl__)) rintl (long double);
+
+
+extern long __attribute__((__cdecl__)) lrint (double);
+extern long __attribute__((__cdecl__)) lrintf (float);
+extern long __attribute__((__cdecl__)) lrintl (long double);
+
+__extension__ long long __attribute__((__cdecl__)) llrint (double);
+__extension__ long long __attribute__((__cdecl__)) llrintf (float);
+__extension__ long long __attribute__((__cdecl__)) llrintl (long double);
+
+
+
+  extern double __attribute__((__cdecl__)) round (double);
+  extern float __attribute__((__cdecl__)) roundf (float);
+  extern long double __attribute__((__cdecl__)) roundl (long double);
+
+
+  extern long __attribute__((__cdecl__)) lround (double);
+  extern long __attribute__((__cdecl__)) lroundf (float);
+  extern long __attribute__((__cdecl__)) lroundl (long double);
+  __extension__ long long __attribute__((__cdecl__)) llround (double);
+  __extension__ long long __attribute__((__cdecl__)) llroundf (float);
+  __extension__ long long __attribute__((__cdecl__)) llroundl (long double);
+
+
+
+  extern double __attribute__((__cdecl__)) trunc (double);
+  extern float __attribute__((__cdecl__)) truncf (float);
+  extern long double __attribute__((__cdecl__)) truncl (long double);
+
+
+  extern float __attribute__((__cdecl__)) fmodf (float, float);
+  extern long double __attribute__((__cdecl__)) fmodl (long double, long double);
+
+
+  extern double __attribute__((__cdecl__)) remainder (double, double);
+  extern float __attribute__((__cdecl__)) remainderf (float, float);
+  extern long double __attribute__((__cdecl__)) remainderl (long double, long double);
+
+
+  extern double __attribute__((__cdecl__)) remquo(double, double, int *);
+  extern float __attribute__((__cdecl__)) remquof(float, float, int *);
+  extern long double __attribute__((__cdecl__)) remquol(long double, long double, int *);
+
+
+  extern double __attribute__((__cdecl__)) copysign (double, double);
+  extern float __attribute__((__cdecl__)) copysignf (float, float);
+  extern long double __attribute__((__cdecl__)) copysignl (long double, long double);
+# 916 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+  extern double __attribute__((__cdecl__)) nan(const char *tagp);
+  extern float __attribute__((__cdecl__)) nanf(const char *tagp);
+  extern long double __attribute__((__cdecl__)) nanl(const char *tagp);
+
+
+#define _nan() nan("")
+#define _nanf() nanf("")
+#define _nanl() nanl("")
+
+
+
+  extern double __attribute__((__cdecl__)) nextafter (double, double);
+  extern float __attribute__((__cdecl__)) nextafterf (float, float);
+  extern long double __attribute__((__cdecl__)) nextafterl (long double, long double);
+
+
+  extern double __attribute__((__cdecl__)) nexttoward (double, long double);
+  extern float __attribute__((__cdecl__)) nexttowardf (float, long double);
+  extern long double __attribute__((__cdecl__)) nexttowardl (long double, long double);
+
+
+
+  extern double __attribute__((__cdecl__)) fdim (double x, double y);
+  extern float __attribute__((__cdecl__)) fdimf (float x, float y);
+  extern long double __attribute__((__cdecl__)) fdiml (long double x, long double y);
+
+
+
+
+
+
+
+  extern double __attribute__((__cdecl__)) fmax (double, double);
+  extern float __attribute__((__cdecl__)) fmaxf (float, float);
+  extern long double __attribute__((__cdecl__)) fmaxl (long double, long double);
+
+
+  extern double __attribute__((__cdecl__)) fmin (double, double);
+  extern float __attribute__((__cdecl__)) fminf (float, float);
+  extern long double __attribute__((__cdecl__)) fminl (long double, long double);
+
+
+
+  extern double __attribute__((__cdecl__)) fma (double, double, double);
+  extern float __attribute__((__cdecl__)) fmaf (float, float, float);
+  extern long double __attribute__((__cdecl__)) fmal (long double, long double, long double);
+# 974 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#define isgreater(x,y) __builtin_isgreater(x, y)
+#define isgreaterequal(x,y) __builtin_isgreaterequal(x, y)
+#define isless(x,y) __builtin_isless(x, y)
+#define islessequal(x,y) __builtin_islessequal(x, y)
+#define islessgreater(x,y) __builtin_islessgreater(x, y)
+#define isunordered(x,y) __builtin_isunordered(x, y)
+# 1010 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _copysignf (float _Number,float _Sign);
+   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _chgsignf (float _X);
+   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _logbf(float _X);
+   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _nextafterf(float _X,float _Y);
+   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _finitef(float _X);
+   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _isnanf(float _X);
+   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _fpclassf(float _X);
+
+
+
+   extern long double __attribute__((__cdecl__)) _chgsignl (long double);
+#define _copysignl copysignl
+
+
+#define _hypotl hypotl
+
+
+#define matherr _matherr
+#define HUGE _HUGE
+# 1410 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/math.h" 3
+#pragma pack(pop)
+# 37 "./libavutil/common.h" 2
+
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 1 3
 
 
 
@@ -2147,7 +3536,7 @@ int av_samples_set_silence(uint8_t * const *audio_data, int offset, int nb_sampl
 
 #define _INC_STDIO 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h" 1 3
 
 
 
@@ -2163,8 +3552,6 @@ int av_samples_set_silence(uint8_t * const *audio_data, int offset, int nb_sampl
 
 
 
-
-# 16 "D:/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h" 3
 unsigned long long* __attribute__((__cdecl__)) __local_stdio_printf_options(void);
 unsigned long long* __attribute__((__cdecl__)) __local_stdio_scanf_options(void);
 
@@ -2185,7 +3572,7 @@ unsigned long long* __attribute__((__cdecl__)) __local_stdio_scanf_options(void)
 
 
 #define _CRT_INTERNAL_LOCAL_SCANF_OPTIONS (*__local_stdio_scanf_options())
-# 10 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
+# 10 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
 
 #pragma pack(push,_CRT_PACKING)
 
@@ -2212,7 +3599,7 @@ unsigned long long* __attribute__((__cdecl__)) __local_stdio_scanf_options(void)
   struct _iobuf {
 
     void *_Placeholder;
-# 46 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 46 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
   };
   typedef struct _iobuf FILE;
 #define _FILE_DEFINED 
@@ -2228,7 +3615,7 @@ unsigned long long* __attribute__((__cdecl__)) __local_stdio_scanf_options(void)
 
 
 #define L_tmpnam 260
-# 70 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 70 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 #define SEEK_CUR 1
 #define SEEK_END 2
 #define SEEK_SET 0
@@ -2242,8 +3629,8 @@ unsigned long long* __attribute__((__cdecl__)) __local_stdio_scanf_options(void)
 #define _SYS_OPEN 20
 
 #define TMP_MAX 2147483647
-# 99 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h" 1 3
+# 99 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_off_t.h" 1 3
 
 #define _OFF_T_DEFINED 
 
@@ -2270,7 +3657,7 @@ unsigned long long* __attribute__((__cdecl__)) __local_stdio_scanf_options(void)
 
 
 typedef off32_t off_t;
-# 100 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
+# 100 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
 
 __attribute__ ((__dllimport__)) FILE *__attribute__((__cdecl__)) __acrt_iob_func(unsigned index);
 
@@ -2285,7 +3672,7 @@ __attribute__ ((__dllimport__)) FILE *__attribute__((__cdecl__)) __acrt_iob_func
 
   __extension__ typedef long long fpos_t;
 #define _FPOSOFF(fp) ((long)(fp))
-# 122 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 122 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 #define _STDSTREAM_DEFINED 
 
 #define stdin (__acrt_iob_func(0))
@@ -2296,7 +3683,7 @@ __attribute__ ((__dllimport__)) FILE *__attribute__((__cdecl__)) __acrt_iob_func
 #define _IOFBF 0x0000
 #define _IOLBF 0x0040
 #define _IONBF 0x0004
-# 156 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 156 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 extern
   __attribute__((__format__(__gnu_scanf__, 2,3))) __attribute__ ((__nonnull__ (2)))
   int __attribute__((__cdecl__)) __mingw_sscanf(const char * __restrict__ _Src,const char * __restrict__ _Format,...);
@@ -2423,7 +3810,7 @@ extern
 
 #define __MINGW_PRINTF_FORMAT __gnu_printf__
 #define __MINGW_SCANF_FORMAT __gnu_scanf__
-# 436 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 436 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 #undef __builtin_vsnprintf
 #undef __builtin_vsprintf
 
@@ -2475,7 +3862,7 @@ extern
 
 
 #pragma GCC diagnostic pop
-# 535 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 535 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _filbuf(FILE *_File);
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _flsbuf(int _Ch,FILE *_File);
 
@@ -2541,7 +3928,7 @@ extern
   static __attribute__ ((__unused__)) __inline__ __attribute__((__cdecl__)) _off64_t ftello64(FILE *_File) {
     return _ftelli64(_File);
   }
-# 609 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 609 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 #define _FILE_OFFSET_BITS_SET_FSEEKO 
 
 
@@ -2619,7 +4006,7 @@ extern
   int __attribute__((__cdecl__)) _vsnprintf(char * __restrict__ _Dest,size_t _Count,const char * __restrict__ _Format,va_list _Args) ;
   __attribute__((__format__ (__gnu_printf__, 3, 4))) __attribute__ ((__nonnull__ (3)))
   int __attribute__((__cdecl__)) _snprintf(char * __restrict__ _Dest,size_t _Count,const char * __restrict__ _Format,...) ;
-# 737 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 737 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 
@@ -2628,9 +4015,9 @@ extern
 
   __attribute__((__format__ (__gnu_printf__, 3, 4))) __attribute__ ((__nonnull__ (3)))
   int snprintf (char * __restrict__ __stream, size_t __n, const char * __restrict__ __format, ...);
-# 803 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 803 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 #pragma GCC diagnostic pop
-# 905 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 905 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _set_printf_count_output(int _Value);
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _get_printf_count_output(void);
 
@@ -2717,7 +4104,7 @@ extern
   int __attribute__((__cdecl__)) __stdio_common_vfwprintf(unsigned long long options, FILE *file, const wchar_t *format, _locale_t locale, va_list valist);
   int __attribute__((__cdecl__)) __stdio_common_vswscanf(unsigned long long options, const wchar_t *input, size_t length, const wchar_t *format, _locale_t locale, va_list valist);
   int __attribute__((__cdecl__)) __stdio_common_vfwscanf(unsigned long long options, FILE *file, const wchar_t *format, _locale_t locale, va_list valist);
-# 1101 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1101 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
  
   int __attribute__((__cdecl__)) fwscanf(FILE * __restrict__ _File,const wchar_t * __restrict__ _Format,...);
 
@@ -2740,7 +4127,7 @@ extern
   int __attribute__((__cdecl__)) wprintf(const wchar_t * __restrict__ _Format,...);
   int __attribute__((__cdecl__)) vfwprintf(FILE * __restrict__ _File,const wchar_t * __restrict__ _Format,va_list _ArgList);
   int __attribute__((__cdecl__)) vwprintf(const wchar_t * __restrict__ _Format,va_list _ArgList);
-# 1145 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1145 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
   int __attribute__((__cdecl__)) swprintf(wchar_t * __restrict__ _Dest,size_t _Count,const wchar_t * __restrict__ _Format,...);
   int __attribute__((__cdecl__)) vswprintf(wchar_t * __restrict__ _Dest,size_t _Count,const wchar_t * __restrict__ _Format,va_list _Args);
   int __attribute__((__cdecl__)) snwprintf(wchar_t * __restrict__ s, size_t n, const wchar_t * __restrict__ format, ...);
@@ -2783,7 +4170,7 @@ extern
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _vswprintf(wchar_t * __restrict__ _Dest,const wchar_t * __restrict__ _Format,va_list _Args);
 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/swprintf.inl" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/swprintf.inl" 1 3
 
 
 
@@ -2792,8 +4179,8 @@ extern
 
 
 #define _INC_SWPRINTF_INL 
-# 1188 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
-# 1201 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1188 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
+# 1201 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
   __attribute__ ((__dllimport__)) wchar_t *__attribute__((__cdecl__)) _wtempnam(const wchar_t *_Directory,const wchar_t *_FilePrefix);
 
 
@@ -2896,11 +4283,11 @@ extern
 
 
 #define __MINGW_MBWC_CONVERT_DEFINED 
-# 1315 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1315 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 int __attribute__((__cdecl__)) __mingw_str_wide_utf8 (const wchar_t * const wptr, char **mbptr, size_t * buflen);
-# 1329 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1329 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 int __attribute__((__cdecl__)) __mingw_str_utf8_wide (const char *const mbptr, wchar_t ** wptr, size_t * buflen);
-# 1338 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
+# 1338 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 3
 void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
 
 
@@ -2950,7 +4337,7 @@ void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
 
 #pragma pack(pop)
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 1 3
 
 
 
@@ -2959,8 +4346,8 @@ void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
 
 #define _INC_STDIO_S 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 1 3
-# 10 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 2 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 1 3
+# 10 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 2 3
 
 
 
@@ -2968,7 +4355,7 @@ void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
 
 
 #define _SECIMP __declspec(dllimport)
-# 25 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
+# 25 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
 #define _STDIO_S_DEFINED 
 #define L_tmpnam_s L_tmpnam
 #define TMP_MAX_S TMP_MAX
@@ -3458,7 +4845,7 @@ void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
     __builtin_va_end(_ArgList);
     return _Ret;
   }
-# 583 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
+# 583 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
  
  
  
@@ -3705,7 +5092,7 @@ void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
     __builtin_va_end(_ArgList);
     return _Ret;
   }
-# 862 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
+# 862 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
  
  
  
@@ -3716,1445 +5103,11 @@ void __attribute__((__cdecl__)) __mingw_str_free(void *ptr);
 
   __attribute__ ((__dllimport__)) errno_t __attribute__((__cdecl__)) _wtmpnam_s(wchar_t *_DstBuf,size_t _SizeInWords);
  
-# 912 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
+# 912 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdio_s.h" 3
   __attribute__ ((__dllimport__)) size_t __attribute__((__cdecl__)) _fread_nolock_s(void *_DstBuf,size_t _DstSize,size_t _ElementSize,size_t _Count,FILE *_File);
-# 1388 "D:/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
-# 188 "./libavutil/attributes.h" 2
-
-
-
-#define AV_PRINTF_FMT __MINGW_PRINTF_FORMAT
-
-
-
-
-
-#define AV_SCANF_FMT __MINGW_SCANF_FORMAT
-
-
-
-
-
-#define av_printf_format(fmtpos,attrpos) __attribute__((format(AV_PRINTF_FMT, fmtpos, attrpos)))
-
-
-
-
-
-#define av_scanf_format(fmtpos,attrpos) __attribute__((format(AV_SCANF_FMT, fmtpos, attrpos)))
-
-
-
-
-
-#define av_noreturn [[noreturn]]
-# 32 "libavcodec/avcodec.h" 2
-# 1 "./libavutil/avutil.h" 1
-# 22 "./libavutil/avutil.h"
-#define AVUTIL_AVUTIL_H 
-# 170 "./libavutil/avutil.h"
-
-# 170 "./libavutil/avutil.h"
-unsigned avutil_version(void);
-
-
-
-
-
-
-const char *av_version_info(void);
-
-
-
-
-const char *avutil_configuration(void);
-
-
-
-
-const char *avutil_license(void);
-# 198 "./libavutil/avutil.h"
-enum AVMediaType {
-    AVMEDIA_TYPE_UNKNOWN = -1,
-    AVMEDIA_TYPE_VIDEO,
-    AVMEDIA_TYPE_AUDIO,
-    AVMEDIA_TYPE_DATA,
-    AVMEDIA_TYPE_SUBTITLE,
-    AVMEDIA_TYPE_ATTACHMENT,
-    AVMEDIA_TYPE_NB
-};
-
-
-
-
-
-const char *av_get_media_type_string(enum AVMediaType media_type);
-# 224 "./libavutil/avutil.h"
-#define FF_LAMBDA_SHIFT 7
-#define FF_LAMBDA_SCALE (1<<FF_LAMBDA_SHIFT)
-#define FF_QP2LAMBDA 118
-#define FF_LAMBDA_MAX (256*128-1)
-
-#define FF_QUALITY_SCALE FF_LAMBDA_SCALE
-# 247 "./libavutil/avutil.h"
-#define AV_NOPTS_VALUE ((int64_t)UINT64_C(0x8000000000000000))
-
-
-
-
-
-#define AV_TIME_BASE 1000000
-# 263 "./libavutil/avutil.h"
-#define AV_TIME_BASE_Q (AVRational){1, AV_TIME_BASE}
-# 276 "./libavutil/avutil.h"
-enum AVPictureType {
-    AV_PICTURE_TYPE_NONE = 0,
-    AV_PICTURE_TYPE_I,
-    AV_PICTURE_TYPE_P,
-    AV_PICTURE_TYPE_B,
-    AV_PICTURE_TYPE_S,
-    AV_PICTURE_TYPE_SI,
-    AV_PICTURE_TYPE_SP,
-    AV_PICTURE_TYPE_BI,
-};
-# 294 "./libavutil/avutil.h"
-char av_get_picture_type_char(enum AVPictureType pict_type);
-
-
-
-
-
-# 1 "./libavutil/common.h" 1
-# 27 "./libavutil/common.h"
-#define AVUTIL_COMMON_H 
-
-
-
-
-
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/errno.h" 1 3
-
-
-
-
-
-
-#define _INC_ERRNO 
-# 24 "D:/mingw64/x86_64-w64-mingw32/include/errno.h" 3
-#define EPERM 1
-#define ENOENT 2
-#define ENOFILE ENOENT
-#define ESRCH 3
-#define EINTR 4
-#define EIO 5
-#define ENXIO 6
-#define E2BIG 7
-#define ENOEXEC 8
-#define EBADF 9
-#define ECHILD 10
-#define EAGAIN 11
-#define ENOMEM 12
-#define EACCES 13
-#define EFAULT 14
-#define EBUSY 16
-#define EEXIST 17
-#define EXDEV 18
-#define ENODEV 19
-#define ENOTDIR 20
-#define EISDIR 21
-#define ENFILE 23
-#define EMFILE 24
-#define ENOTTY 25
-#define EFBIG 27
-#define ENOSPC 28
-#define ESPIPE 29
-#define EROFS 30
-#define EMLINK 31
-#define EPIPE 32
-#define EDOM 33
-#define EDEADLK 36
-#define ENAMETOOLONG 38
-#define ENOLCK 39
-#define ENOSYS 40
-#define ENOTEMPTY 41
-
-
-
-#define _SECURECRT_ERRCODE_VALUES_DEFINED 
-#define EINVAL 22
-#define ERANGE 34
-#define EILSEQ 42
-#define STRUNCATE 80
-
-
-
-#define EDEADLOCK EDEADLK
-
-
-
-
-#define ENOTSUP 129
-
-
-
-
-
-#define EAFNOSUPPORT 102
-
-
-
-#define EADDRINUSE 100
-
-
-
-#define EADDRNOTAVAIL 101
-
-
-
-#define EISCONN 113
-
-
-
-#define ENOBUFS 119
-
-
-
-#define ECONNABORTED 106
-
-
-
-#define EALREADY 103
-
-
-
-#define ECONNREFUSED 107
-
-
-
-#define ECONNRESET 108
-
-
-
-#define EDESTADDRREQ 109
-
-
-
-#define EHOSTUNREACH 110
-
-
-
-#define EMSGSIZE 115
-
-
-
-#define ENETDOWN 116
-
-
-
-#define ENETRESET 117
-
-
-
-#define ENETUNREACH 118
-
-
-
-#define ENOPROTOOPT 123
-
-
-
-#define ENOTSOCK 128
-
-
-
-#define ENOTCONN 126
-
-
-
-#define ECANCELED 105
-
-
-
-#define EINPROGRESS 112
-
-
-
-#define EOPNOTSUPP 130
-
-
-
-#define EWOULDBLOCK 140
-
-
-
-#define EOWNERDEAD 133
-
-
-
-#define EPROTO 134
-
-
-
-#define EPROTONOSUPPORT 135
-
-
-
-#define EBADMSG 104
-
-
-
-#define EIDRM 111
-
-
-
-#define ENODATA 120
-
-
-
-#define ENOLINK 121
-
-
-
-#define ENOMSG 122
-
-
-
-#define ENOSR 124
-
-
-
-#define ENOSTR 125
-
-
-
-#define ENOTRECOVERABLE 127
-
-
-
-#define ETIME 137
-
-
-
-#define ETXTBSY 139
-
-
-
-
-#define ETIMEDOUT 138
-
-
-
-#define ELOOP 114
-
-
-
-#define EPROTOTYPE 136
-
-
-
-#define EOVERFLOW 132
-# 34 "./libavutil/common.h" 2
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 1 3
-# 9 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-#define _INTTYPES_H_ 
-
-
-
-#define __need_wchar_t 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 163 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
-#undef __need_ptrdiff_t
-# 240 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
-#undef __need_size_t
-# 337 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
-#undef __need_wchar_t
-# 394 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
-#undef NULL
-
-
-
-
-#define NULL ((void *)0)
-# 409 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 3 4
-#undef __need_NULL
-
-
-
-
-#define offsetof(TYPE,MEMBER) __builtin_offsetof (TYPE, MEMBER)
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
-# 15 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 2 3
-
-
-
-
-
-
-# 20 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-typedef struct {
- intmax_t quot;
- intmax_t rem;
- } imaxdiv_t;
-# 34 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-#define PRId64 "lld"
-#define PRIi64 "lli"
-#define PRIo64 "llo"
-#define PRIu64 "llu"
-#define PRIx64 "llx"
-#define PRIX64 "llX"
-# 50 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-#define PRId8 "d"
-#define PRId16 "d"
-#define PRId32 "d"
-
-#define PRIdLEAST8 "d"
-#define PRIdLEAST16 "d"
-#define PRIdLEAST32 "d"
-#define PRIdLEAST64 PRId64
-
-#define PRIdFAST8 "d"
-#define PRIdFAST16 "d"
-#define PRIdFAST32 "d"
-#define PRIdFAST64 PRId64
-
-#define PRIdMAX PRId64
-
-#define PRIi8 "i"
-#define PRIi16 "i"
-#define PRIi32 "i"
-
-#define PRIiLEAST8 "i"
-#define PRIiLEAST16 "i"
-#define PRIiLEAST32 "i"
-#define PRIiLEAST64 PRIi64
-
-#define PRIiFAST8 "i"
-#define PRIiFAST16 "i"
-#define PRIiFAST32 "i"
-#define PRIiFAST64 PRIi64
-
-#define PRIiMAX PRIi64
-
-#define PRIo8 "o"
-#define PRIo16 "o"
-#define PRIo32 "o"
-
-#define PRIoLEAST8 "o"
-#define PRIoLEAST16 "o"
-#define PRIoLEAST32 "o"
-#define PRIoLEAST64 PRIo64
-
-#define PRIoFAST8 "o"
-#define PRIoFAST16 "o"
-#define PRIoFAST32 "o"
-#define PRIoFAST64 PRIo64
-
-#define PRIoMAX PRIo64
-
-
-#define PRIu8 "u"
-#define PRIu16 "u"
-#define PRIu32 "u"
-
-
-#define PRIuLEAST8 "u"
-#define PRIuLEAST16 "u"
-#define PRIuLEAST32 "u"
-#define PRIuLEAST64 PRIu64
-
-#define PRIuFAST8 "u"
-#define PRIuFAST16 "u"
-#define PRIuFAST32 "u"
-#define PRIuFAST64 PRIu64
-
-#define PRIuMAX PRIu64
-
-#define PRIx8 "x"
-#define PRIx16 "x"
-#define PRIx32 "x"
-
-#define PRIxLEAST8 "x"
-#define PRIxLEAST16 "x"
-#define PRIxLEAST32 "x"
-#define PRIxLEAST64 PRIx64
-
-#define PRIxFAST8 "x"
-#define PRIxFAST16 "x"
-#define PRIxFAST32 "x"
-#define PRIxFAST64 PRIx64
-
-#define PRIxMAX PRIx64
-
-#define PRIX8 "X"
-#define PRIX16 "X"
-#define PRIX32 "X"
-
-#define PRIXLEAST8 "X"
-#define PRIXLEAST16 "X"
-#define PRIXLEAST32 "X"
-#define PRIXLEAST64 PRIX64
-
-#define PRIXFAST8 "X"
-#define PRIXFAST16 "X"
-#define PRIXFAST32 "X"
-#define PRIXFAST64 PRIX64
-
-#define PRIXMAX PRIX64
-# 155 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-#define SCNd16 "hd"
-#define SCNd32 "d"
-#define SCNd64 PRId64
-
-#define SCNdLEAST16 "hd"
-#define SCNdLEAST32 "d"
-#define SCNdLEAST64 PRId64
-
-#define SCNdFAST16 "hd"
-#define SCNdFAST32 "d"
-#define SCNdFAST64 PRId64
-
-#define SCNdMAX PRId64
-
-#define SCNi16 "hi"
-#define SCNi32 "i"
-#define SCNi64 PRIi64
-
-#define SCNiLEAST16 "hi"
-#define SCNiLEAST32 "i"
-#define SCNiLEAST64 PRIi64
-
-#define SCNiFAST16 "hi"
-#define SCNiFAST32 "i"
-#define SCNiFAST64 PRIi64
-
-#define SCNiMAX PRIi64
-
-#define SCNo16 "ho"
-#define SCNo32 "o"
-#define SCNo64 PRIo64
-
-#define SCNoLEAST16 "ho"
-#define SCNoLEAST32 "o"
-#define SCNoLEAST64 PRIo64
-
-#define SCNoFAST16 "ho"
-#define SCNoFAST32 "o"
-#define SCNoFAST64 PRIo64
-
-#define SCNoMAX PRIo64
-
-#define SCNx16 "hx"
-#define SCNx32 "x"
-#define SCNx64 PRIx64
-
-#define SCNxLEAST16 "hx"
-#define SCNxLEAST32 "x"
-#define SCNxLEAST64 PRIx64
-
-#define SCNxFAST16 "hx"
-#define SCNxFAST32 "x"
-#define SCNxFAST64 PRIx64
-
-#define SCNxMAX PRIx64
-
-
-
-#define SCNu16 "hu"
-#define SCNu32 "u"
-#define SCNu64 PRIu64
-
-#define SCNuLEAST16 "hu"
-#define SCNuLEAST32 "u"
-#define SCNuLEAST64 PRIu64
-
-#define SCNuFAST16 "hu"
-#define SCNuFAST32 "u"
-#define SCNuFAST64 PRIu64
-
-#define SCNuMAX PRIu64
-
-
-#define PRIdPTR PRId64
-#define PRIiPTR PRIi64
-#define PRIoPTR PRIo64
-#define PRIuPTR PRIu64
-#define PRIxPTR PRIx64
-#define PRIXPTR PRIX64
-#define SCNdPTR PRId64
-#define SCNiPTR PRIi64
-#define SCNoPTR PRIo64
-#define SCNxPTR PRIx64
-#define SCNuPTR PRIu64
-# 260 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-#define SCNd8 "hhd"
-#define SCNdLEAST8 "hhd"
-#define SCNdFAST8 "hhd"
-
-#define SCNi8 "hhi"
-#define SCNiLEAST8 "hhi"
-#define SCNiFAST8 "hhi"
-
-#define SCNo8 "hho"
-#define SCNoLEAST8 "hho"
-#define SCNoFAST8 "hho"
-
-#define SCNx8 "hhx"
-#define SCNxLEAST8 "hhx"
-#define SCNxFAST8 "hhx"
-
-
-#define SCNu8 "hhu"
-#define SCNuLEAST8 "hhu"
-#define SCNuFAST8 "hhu"
-# 327 "D:/mingw64/x86_64-w64-mingw32/include/inttypes.h" 3
-intmax_t __attribute__((__cdecl__)) imaxabs (intmax_t j);
-
-
-
-
-imaxdiv_t __attribute__((__cdecl__)) imaxdiv (intmax_t numer, intmax_t denom);
-
-
-
-intmax_t __attribute__((__cdecl__)) strtoimax (const char* __restrict__ nptr,
-                            char** __restrict__ endptr, int base);
-uintmax_t __attribute__((__cdecl__)) strtoumax (const char* __restrict__ nptr,
-        char** __restrict__ endptr, int base);
-
-intmax_t __attribute__((__cdecl__)) wcstoimax (const wchar_t* __restrict__ nptr,
-                            wchar_t** __restrict__ endptr, int base);
-uintmax_t __attribute__((__cdecl__)) wcstoumax (const wchar_t* __restrict__ nptr,
-        wchar_t** __restrict__ endptr, int base);
-# 35 "./libavutil/common.h" 2
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
-# 30 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
-#define _GCC_LIMITS_H_ 
-
-
-
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h" 1 3 4
-
-
-
-
-
-#define _GCC_NEXT_LIMITS_H 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
-# 210 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/limits.h" 1 3 4
-# 9 "D:/mingw64/x86_64-w64-mingw32/include/limits.h" 3 4
-#define _INC_LIMITS 
-# 20 "D:/mingw64/x86_64-w64-mingw32/include/limits.h" 3 4
-#define PATH_MAX 260
-
-#define CHAR_BIT 8
-#define SCHAR_MIN (-128)
-#define SCHAR_MAX 127
-#define UCHAR_MAX 0xff
-
-
-
-
-
-#define CHAR_MIN SCHAR_MIN
-#define CHAR_MAX SCHAR_MAX
-
-
-#define MB_LEN_MAX 5
-#define SHRT_MIN (-32768)
-#define SHRT_MAX 32767
-#define USHRT_MAX 0xffffU
-#define INT_MIN (-2147483647 - 1)
-#define INT_MAX 2147483647
-#define UINT_MAX 0xffffffffU
-#define LONG_MIN (-2147483647L - 1)
-#define LONG_MAX 2147483647L
-#define ULONG_MAX 0xffffffffUL
-#define LLONG_MAX 9223372036854775807ll
-#define LLONG_MIN (-9223372036854775807ll - 1)
-#define ULLONG_MAX 0xffffffffffffffffull
-
-#define _I8_MIN (-127 - 1)
-#define _I8_MAX 127
-#define _UI8_MAX 0xffu
-
-#define _I16_MIN (-32767 - 1)
-#define _I16_MAX 32767
-#define _UI16_MAX 0xffffu
-
-#define _I32_MIN (-2147483647 - 1)
-#define _I32_MAX 2147483647
-#define _UI32_MAX 0xffffffffu
-
-
-#undef LONG_LONG_MAX
-#define LONG_LONG_MAX 9223372036854775807ll
-#undef LONG_LONG_MIN
-#define LONG_LONG_MIN (-LONG_LONG_MAX-1)
-#undef ULONG_LONG_MAX
-#define ULONG_LONG_MAX (2ull * LONG_LONG_MAX + 1ull)
-
-
-#define _I64_MIN (-9223372036854775807ll - 1)
-#define _I64_MAX 9223372036854775807ll
-#define _UI64_MAX 0xffffffffffffffffull
-# 84 "D:/mingw64/x86_64-w64-mingw32/include/limits.h" 3 4
-#define SSIZE_MAX _I64_MAX
-# 211 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 2 3 4
-# 10 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/syslimits.h" 2 3 4
-#pragma GCC diagnostic pop
-#undef _GCC_NEXT_LIMITS_H
-# 35 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 2 3 4
-# 60 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
-#define _LIMITS_H___ 
-
-
-#undef CHAR_BIT
-#define CHAR_BIT __CHAR_BIT__
-
-
-
-
-
-
-
-#undef SCHAR_MIN
-#define SCHAR_MIN (-SCHAR_MAX - 1)
-#undef SCHAR_MAX
-#define SCHAR_MAX __SCHAR_MAX__
-
-
-#undef UCHAR_MAX
-
-
-
-#define UCHAR_MAX (SCHAR_MAX * 2 + 1)
-# 96 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 3 4
-#undef CHAR_MIN
-#define CHAR_MIN SCHAR_MIN
-#undef CHAR_MAX
-#define CHAR_MAX SCHAR_MAX
-
-
-
-#undef SHRT_MIN
-#define SHRT_MIN (-SHRT_MAX - 1)
-#undef SHRT_MAX
-#define SHRT_MAX __SHRT_MAX__
-
-
-#undef USHRT_MAX
-
-
-
-#define USHRT_MAX (SHRT_MAX * 2 + 1)
-
-
-
-#undef INT_MIN
-#define INT_MIN (-INT_MAX - 1)
-#undef INT_MAX
-#define INT_MAX __INT_MAX__
-
-
-#undef UINT_MAX
-#define UINT_MAX (INT_MAX * 2U + 1U)
-
-
-
-#undef LONG_MIN
-#define LONG_MIN (-LONG_MAX - 1L)
-#undef LONG_MAX
-#define LONG_MAX __LONG_MAX__
-
-
-#undef ULONG_MAX
-#define ULONG_MAX (LONG_MAX * 2UL + 1UL)
-
-
-
-#undef LLONG_MIN
-#define LLONG_MIN (-LLONG_MAX - 1LL)
-#undef LLONG_MAX
-#define LLONG_MAX __LONG_LONG_MAX__
-
-
-#undef ULLONG_MAX
-#define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
-
-
-
-
-#undef LONG_LONG_MIN
-#define LONG_LONG_MIN (-LONG_LONG_MAX - 1LL)
-#undef LONG_LONG_MAX
-#define LONG_LONG_MAX __LONG_LONG_MAX__
-
-
-#undef ULONG_LONG_MAX
-#define ULONG_LONG_MAX (LONG_LONG_MAX * 2ULL + 1ULL)
-
-
-
-
-
-#undef CHAR_WIDTH
-#define CHAR_WIDTH __SCHAR_WIDTH__
-#undef SCHAR_WIDTH
-#define SCHAR_WIDTH __SCHAR_WIDTH__
-#undef UCHAR_WIDTH
-#define UCHAR_WIDTH __SCHAR_WIDTH__
-#undef SHRT_WIDTH
-#define SHRT_WIDTH __SHRT_WIDTH__
-#undef USHRT_WIDTH
-#define USHRT_WIDTH __SHRT_WIDTH__
-#undef INT_WIDTH
-#define INT_WIDTH __INT_WIDTH__
-#undef UINT_WIDTH
-#define UINT_WIDTH __INT_WIDTH__
-#undef LONG_WIDTH
-#define LONG_WIDTH __LONG_WIDTH__
-#undef ULONG_WIDTH
-#define ULONG_WIDTH __LONG_WIDTH__
-#undef LLONG_WIDTH
-#define LLONG_WIDTH __LONG_LONG_WIDTH__
-#undef ULLONG_WIDTH
-#define ULLONG_WIDTH __LONG_LONG_WIDTH__
-
-
-
-
-#undef BOOL_MAX
-#define BOOL_MAX 1
-#undef BOOL_WIDTH
-#define BOOL_WIDTH 1
-
-
-#undef BITINT_MAXWIDTH
-#define BITINT_MAXWIDTH __BITINT_MAXWIDTH__
-
-
-#define __STDC_VERSION_LIMITS_H__ 202311L
-# 36 "./libavutil/common.h" 2
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 1 3
-
-
-
-
-
-
-#define _MATH_H_ 
-
-
-       
-# 11 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-
-
-
-
-struct _exception;
-
-#pragma pack(push,_CRT_PACKING)
-
-#define _DOMAIN 1
-#define _SING 2
-#define _OVERFLOW 3
-#define _UNDERFLOW 4
-#define _TLOSS 5
-#define _PLOSS 6
-
-
-
-
-#define DOMAIN _DOMAIN
-#define SING _SING
-#define OVERFLOW _OVERFLOW
-#define UNDERFLOW _UNDERFLOW
-#define TLOSS _TLOSS
-#define PLOSS _PLOSS
-
-
-
-
-
-#define M_E 2.7182818284590452354
-#define M_LOG2E 1.4426950408889634074
-#define M_LOG10E 0.43429448190325182765
-#define M_LN2 0.69314718055994530942
-#define M_LN10 2.30258509299404568402
-#define M_PI 3.14159265358979323846
-#define M_PI_2 1.57079632679489661923
-#define M_PI_4 0.78539816339744830962
-#define M_1_PI 0.31830988618379067154
-#define M_2_PI 0.63661977236758134308
-#define M_2_SQRTPI 1.12837916709551257390
-#define M_SQRT2 1.41421356237309504880
-#define M_SQRT1_2 0.70710678118654752440
-
-
-
-
-#define __MINGW_FPCLASS_DEFINED 1
-
-#define _FPCLASS_SNAN 0x0001
-#define _FPCLASS_QNAN 0x0002
-#define _FPCLASS_NINF 0x0004
-#define _FPCLASS_NN 0x0008
-#define _FPCLASS_ND 0x0010
-#define _FPCLASS_NZ 0x0020
-#define _FPCLASS_PZ 0x0040
-#define _FPCLASS_PD 0x0080
-#define _FPCLASS_PN 0x0100
-#define _FPCLASS_PINF 0x0200
-# 95 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define __mingw_types_compatible_p(type1,type2) __builtin_types_compatible_p (type1, type2)
-
-
-
-
-
-
-
-#define __mingw_choose_expr __builtin_choose_expr
-# 113 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define __MINGW_SOFTMATH 
-
-
-
-  typedef union __mingw_dbl_type_t {
-    double x;
-    unsigned long long val;
-    __extension__ struct {
-      unsigned int low, high;
-    } lh;
-  } __mingw_dbl_type_t;
-
-  typedef union __mingw_flt_type_t {
-    float x;
-    unsigned int val;
-  } __mingw_flt_type_t;
-
-  typedef union __mingw_ldbl_type_t
-  {
-    long double x;
-    __extension__ struct {
-      unsigned int low, high;
-      int sign_exponent : 16;
-      int res1 : 16;
-      int res0 : 32;
-    } lh;
-  } __mingw_ldbl_type_t;
-
-
-
-
-  extern double * __imp__HUGE;
-#define _HUGE (* __MINGW_IMP_SYMBOL(_HUGE))
-
-
-
-#define HUGE_VAL __builtin_huge_val()
-
-
-
-
-
-#define _EXCEPTION_DEFINED 
-  struct _exception {
-    int type;
-    const char *name;
-    double arg1;
-    double arg2;
-    double retval;
-  };
-
-  void __mingw_raise_matherr (int typ, const char *name, double a1, double a2,
-         double rslt);
-  void __mingw_setusermatherr (int (__attribute__((__cdecl__)) *)(struct _exception *));
-  __attribute__ ((__dllimport__)) void __setusermatherr(int (__attribute__((__cdecl__)) *)(struct _exception *));
-#define __setusermatherr __mingw_setusermatherr
-
-
-  double __attribute__((__cdecl__)) sin(double _X);
-  double __attribute__((__cdecl__)) cos(double _X);
-  double __attribute__((__cdecl__)) tan(double _X);
-  double __attribute__((__cdecl__)) sinh(double _X);
-  double __attribute__((__cdecl__)) cosh(double _X);
-  double __attribute__((__cdecl__)) tanh(double _X);
-  double __attribute__((__cdecl__)) asin(double _X);
-  double __attribute__((__cdecl__)) acos(double _X);
-  double __attribute__((__cdecl__)) atan(double _X);
-  double __attribute__((__cdecl__)) atan2(double _Y,double _X);
-  double __attribute__((__cdecl__)) exp(double _X);
-  double __attribute__((__cdecl__)) log(double _X);
-  double __attribute__((__cdecl__)) log10(double _X);
-  double __attribute__((__cdecl__)) pow(double _X,double _Y);
-  double __attribute__((__cdecl__)) sqrt(double _X);
-  double __attribute__((__cdecl__)) ceil(double _X);
-  double __attribute__((__cdecl__)) floor(double _X);
-
-
-  extern float __attribute__((__cdecl__)) fabsf (float x);
-  extern long double __attribute__((__cdecl__)) fabsl (long double);
-  extern double __attribute__((__cdecl__)) fabs (double _X);
-# 231 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-  double __attribute__((__cdecl__)) ldexp(double _X,int _Y);
-  double __attribute__((__cdecl__)) frexp(double _X,int *_Y);
-  double __attribute__((__cdecl__)) modf(double _X,double *_Y);
-  double __attribute__((__cdecl__)) fmod(double _X,double _Y);
-
-  void __attribute__((__cdecl__)) sincos (double __x, double *p_sin, double *p_cos);
-  void __attribute__((__cdecl__)) sincosl (long double __x, long double *p_sin, long double *p_cos);
-  void __attribute__((__cdecl__)) sincosf (float __x, float *p_sin, float *p_cos);
-
-
-#define _CRT_ABS_DEFINED 
-  int __attribute__((__cdecl__)) abs(int _X);
-  long __attribute__((__cdecl__)) labs(long _X);
-
-
-#define _CRT_ATOF_DEFINED 
-  double __attribute__((__cdecl__)) atof(const char *_String);
-  double __attribute__((__cdecl__)) _atof_l(const char *_String,_locale_t _Locale);
-
-
-#define EDOM 33
-#define ERANGE 34
-
-
-#define _COMPLEX_DEFINED 
-  struct _complex {
-    double x;
-    double y;
-  };
-
-
-  double __attribute__((__cdecl__)) _cabs(struct _complex _ComplexA);
-  double __attribute__((__cdecl__)) _hypot(double _X,double _Y);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _j0(double _X);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _j1(double _X);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _jn(int _X,double _Y);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _y0(double _X);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _y1(double _X);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _yn(int _X,double _Y);
-
-#define _CRT_MATHERR_DEFINED 
-  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _matherr (struct _exception *);
-# 282 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define _SIGN_DEFINED 
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _chgsign (double _X);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _copysign (double _Number,double _Sign);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _logb (double);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _nextafter (double, double);
-  __attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) _scalb (double, long);
-  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _finite (double);
-  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _fpclass (double);
-  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _isnan (double);
-
-
-
-
-
-
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) j0 (double) ;
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) j1 (double) ;
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) jn (int, double) ;
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) y0 (double) ;
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) y1 (double) ;
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) yn (int, double) ;
-
-
-
-__attribute__ ((__dllimport__)) double __attribute__((__cdecl__)) chgsign (double);
-# 315 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) finite (double);
-  __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) fpclass (double);
-
-#define FP_SNAN _FPCLASS_SNAN
-#define FP_QNAN _FPCLASS_QNAN
-#define FP_NINF _FPCLASS_NINF
-#define FP_PINF _FPCLASS_PINF
-#define FP_NDENORM _FPCLASS_ND
-#define FP_PDENORM _FPCLASS_PD
-#define FP_NZERO _FPCLASS_NZ
-#define FP_PZERO _FPCLASS_PZ
-#define FP_NNORM _FPCLASS_NN
-#define FP_PNORM _FPCLASS_PN
-# 341 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define HUGE_VALF __builtin_huge_valf()
-#define HUGE_VALL __builtin_huge_vall()
-#define INFINITY __builtin_inff()
-#define NAN __builtin_nanf("")
-# 359 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-typedef float float_t;
-typedef double double_t;
-# 380 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define FP_NAN 0x0100
-#define FP_NORMAL 0x0400
-#define FP_INFINITE (FP_NAN | FP_NORMAL)
-#define FP_ZERO 0x4000
-#define FP_SUBNORMAL (FP_NORMAL | FP_ZERO)
-# 394 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-  extern int __attribute__((__cdecl__)) __fpclassifyl (long double);
-  extern int __attribute__((__cdecl__)) __fpclassifyf (float);
-  extern int __attribute__((__cdecl__)) __fpclassify (double);
-# 481 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define __dfp_expansion(__call,__fin,x) __fin
-
-
-#define fpclassify(x) __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), double), __fpclassify(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), float), __fpclassifyf(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), long double), __fpclassifyl(x), __dfp_expansion(__fpclassify,(__builtin_trap(),0),x))))
-# 498 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define isfinite(x) ((fpclassify(x) & FP_NAN) == 0)
-
-
-#define isinf(x) (fpclassify(x) == FP_INFINITE)
-
-
-
-
-
-  extern int __attribute__((__cdecl__)) __isnan (double);
-  extern int __attribute__((__cdecl__)) __isnanf (float);
-  extern int __attribute__((__cdecl__)) __isnanl (long double);
-# 578 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define isnan(x) __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), double), __isnan((double)(x)), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), float), __isnanf((float)(x)), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), long double), __isnanl((long double)(x)), __dfp_expansion(__isnan,(__builtin_trap(),(int)0),x))))
-# 591 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define isnormal(x) (fpclassify(x) == FP_NORMAL)
-
-
-  extern int __attribute__((__cdecl__)) __signbit (double);
-  extern int __attribute__((__cdecl__)) __signbitf (float);
-  extern int __attribute__((__cdecl__)) __signbitl (long double);
-# 638 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define signbit(x) __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), double), __signbit(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), float), __signbitf(x), __mingw_choose_expr ( __mingw_types_compatible_p (__typeof__ (x), long double), __signbitl(x), __dfp_expansion(__signbit,(__builtin_trap(),x),x))))
-# 651 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-  extern float __attribute__((__cdecl__)) sinf(float _X);
-  extern long double __attribute__((__cdecl__)) sinl(long double);
-
-  extern float __attribute__((__cdecl__)) cosf(float _X);
-  extern long double __attribute__((__cdecl__)) cosl(long double);
-
-  extern float __attribute__((__cdecl__)) tanf(float _X);
-  extern long double __attribute__((__cdecl__)) tanl(long double);
-  extern float __attribute__((__cdecl__)) asinf(float _X);
-  extern long double __attribute__((__cdecl__)) asinl(long double);
-
-  extern float __attribute__((__cdecl__)) acosf (float);
-  extern long double __attribute__((__cdecl__)) acosl (long double);
-
-  extern float __attribute__((__cdecl__)) atanf (float);
-  extern long double __attribute__((__cdecl__)) atanl (long double);
-
-  extern float __attribute__((__cdecl__)) atan2f (float, float);
-  extern long double __attribute__((__cdecl__)) atan2l (long double, long double);
-
-
-  extern float __attribute__((__cdecl__)) sinhf(float _X);
-
-
-
-  extern long double __attribute__((__cdecl__)) sinhl(long double);
-
-  extern float __attribute__((__cdecl__)) coshf(float _X);
-
-
-
-  extern long double __attribute__((__cdecl__)) coshl(long double);
-
-  extern float __attribute__((__cdecl__)) tanhf(float _X);
-
-
-
-  extern long double __attribute__((__cdecl__)) tanhl(long double);
-
-
-
-  extern double __attribute__((__cdecl__)) acosh (double);
-  extern float __attribute__((__cdecl__)) acoshf (float);
-  extern long double __attribute__((__cdecl__)) acoshl (long double);
-
-
-  extern double __attribute__((__cdecl__)) asinh (double);
-  extern float __attribute__((__cdecl__)) asinhf (float);
-  extern long double __attribute__((__cdecl__)) asinhl (long double);
-
-
-  extern double __attribute__((__cdecl__)) atanh (double);
-  extern float __attribute__((__cdecl__)) atanhf (float);
-  extern long double __attribute__((__cdecl__)) atanhl (long double);
-
-
-
-  extern float __attribute__((__cdecl__)) expf(float _X);
-
-
-
-  extern long double __attribute__((__cdecl__)) expl(long double);
-
-
-  extern double __attribute__((__cdecl__)) exp2(double);
-  extern float __attribute__((__cdecl__)) exp2f(float);
-  extern long double __attribute__((__cdecl__)) exp2l(long double);
-
-
-
-  extern double __attribute__((__cdecl__)) expm1(double);
-  extern float __attribute__((__cdecl__)) expm1f(float);
-  extern long double __attribute__((__cdecl__)) expm1l(long double);
-
-
-  extern float frexpf(float _X,int *_Y);
-
-
-
-  extern long double __attribute__((__cdecl__)) frexpl(long double,int *);
-
-
-#define FP_ILOGB0 ((int)0x80000000)
-#define FP_ILOGBNAN ((int)0x7fffffff)
-  extern int __attribute__((__cdecl__)) ilogb (double);
-  extern int __attribute__((__cdecl__)) ilogbf (float);
-  extern int __attribute__((__cdecl__)) ilogbl (long double);
-
-
-  extern float __attribute__((__cdecl__)) ldexpf(float _X,int _Y);
-
-
-
-  extern long double __attribute__((__cdecl__)) ldexpl (long double, int);
-
-
-  extern float __attribute__((__cdecl__)) logf (float);
-  extern long double __attribute__((__cdecl__)) logl(long double);
-
-
-  extern float __attribute__((__cdecl__)) log10f (float);
-  extern long double __attribute__((__cdecl__)) log10l(long double);
-
-
-  extern double __attribute__((__cdecl__)) log1p(double);
-  extern float __attribute__((__cdecl__)) log1pf(float);
-  extern long double __attribute__((__cdecl__)) log1pl(long double);
-
-
-  extern double __attribute__((__cdecl__)) log2 (double);
-  extern float __attribute__((__cdecl__)) log2f (float);
-  extern long double __attribute__((__cdecl__)) log2l (long double);
-
-
-  extern double __attribute__((__cdecl__)) logb (double);
-  extern float __attribute__((__cdecl__)) logbf (float);
-  extern long double __attribute__((__cdecl__)) logbl (long double);
-
-
-  extern float __attribute__((__cdecl__)) modff (float, float*);
-  extern long double __attribute__((__cdecl__)) modfl (long double, long double*);
-
-
-  extern double __attribute__((__cdecl__)) scalbn (double, int);
-  extern float __attribute__((__cdecl__)) scalbnf (float, int);
-  extern long double __attribute__((__cdecl__)) scalbnl (long double, int);
-
-  extern double __attribute__((__cdecl__)) scalbln (double, long);
-  extern float __attribute__((__cdecl__)) scalblnf (float, long);
-  extern long double __attribute__((__cdecl__)) scalblnl (long double, long);
-
-
-
-  extern double __attribute__((__cdecl__)) cbrt (double);
-  extern float __attribute__((__cdecl__)) cbrtf (float);
-  extern long double __attribute__((__cdecl__)) cbrtl (long double);
-
-
-  extern double __attribute__((__cdecl__)) hypot (double, double) ;
-  extern float __attribute__((__cdecl__)) hypotf (float x, float y);
-
-
-
-  extern long double __attribute__((__cdecl__)) hypotl (long double, long double);
-
-
-  extern float __attribute__((__cdecl__)) powf(float _X,float _Y);
-
-
-
-  extern long double __attribute__((__cdecl__)) powl (long double, long double);
-
-
-  extern float __attribute__((__cdecl__)) sqrtf (float);
-  extern long double sqrtl(long double);
-
-
-  extern double __attribute__((__cdecl__)) erf (double);
-  extern float __attribute__((__cdecl__)) erff (float);
-  extern long double __attribute__((__cdecl__)) erfl (long double);
-
-
-  extern double __attribute__((__cdecl__)) erfc (double);
-  extern float __attribute__((__cdecl__)) erfcf (float);
-  extern long double __attribute__((__cdecl__)) erfcl (long double);
-
-
-  extern double __attribute__((__cdecl__)) lgamma (double);
-  extern float __attribute__((__cdecl__)) lgammaf (float);
-  extern long double __attribute__((__cdecl__)) lgammal (long double);
-
-  extern int signgam;
-
-
-  extern double __attribute__((__cdecl__)) tgamma (double);
-  extern float __attribute__((__cdecl__)) tgammaf (float);
-  extern long double __attribute__((__cdecl__)) tgammal (long double);
-
-
-  extern float __attribute__((__cdecl__)) ceilf (float);
-  extern long double __attribute__((__cdecl__)) ceill (long double);
-
-
-  extern float __attribute__((__cdecl__)) floorf (float);
-  extern long double __attribute__((__cdecl__)) floorl (long double);
-
-
-  extern double __attribute__((__cdecl__)) nearbyint ( double);
-  extern float __attribute__((__cdecl__)) nearbyintf (float);
-  extern long double __attribute__((__cdecl__)) nearbyintl (long double);
-
-
-
-extern double __attribute__((__cdecl__)) rint (double);
-extern float __attribute__((__cdecl__)) rintf (float);
-extern long double __attribute__((__cdecl__)) rintl (long double);
-
-
-extern long __attribute__((__cdecl__)) lrint (double);
-extern long __attribute__((__cdecl__)) lrintf (float);
-extern long __attribute__((__cdecl__)) lrintl (long double);
-
-__extension__ long long __attribute__((__cdecl__)) llrint (double);
-__extension__ long long __attribute__((__cdecl__)) llrintf (float);
-__extension__ long long __attribute__((__cdecl__)) llrintl (long double);
-
-
-
-  extern double __attribute__((__cdecl__)) round (double);
-  extern float __attribute__((__cdecl__)) roundf (float);
-  extern long double __attribute__((__cdecl__)) roundl (long double);
-
-
-  extern long __attribute__((__cdecl__)) lround (double);
-  extern long __attribute__((__cdecl__)) lroundf (float);
-  extern long __attribute__((__cdecl__)) lroundl (long double);
-  __extension__ long long __attribute__((__cdecl__)) llround (double);
-  __extension__ long long __attribute__((__cdecl__)) llroundf (float);
-  __extension__ long long __attribute__((__cdecl__)) llroundl (long double);
-
-
-
-  extern double __attribute__((__cdecl__)) trunc (double);
-  extern float __attribute__((__cdecl__)) truncf (float);
-  extern long double __attribute__((__cdecl__)) truncl (long double);
-
-
-  extern float __attribute__((__cdecl__)) fmodf (float, float);
-  extern long double __attribute__((__cdecl__)) fmodl (long double, long double);
-
-
-  extern double __attribute__((__cdecl__)) remainder (double, double);
-  extern float __attribute__((__cdecl__)) remainderf (float, float);
-  extern long double __attribute__((__cdecl__)) remainderl (long double, long double);
-
-
-  extern double __attribute__((__cdecl__)) remquo(double, double, int *);
-  extern float __attribute__((__cdecl__)) remquof(float, float, int *);
-  extern long double __attribute__((__cdecl__)) remquol(long double, long double, int *);
-
-
-  extern double __attribute__((__cdecl__)) copysign (double, double);
-  extern float __attribute__((__cdecl__)) copysignf (float, float);
-  extern long double __attribute__((__cdecl__)) copysignl (long double, long double);
-# 916 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-  extern double __attribute__((__cdecl__)) nan(const char *tagp);
-  extern float __attribute__((__cdecl__)) nanf(const char *tagp);
-  extern long double __attribute__((__cdecl__)) nanl(const char *tagp);
-
-
-#define _nan() nan("")
-#define _nanf() nanf("")
-#define _nanl() nanl("")
-
-
-
-  extern double __attribute__((__cdecl__)) nextafter (double, double);
-  extern float __attribute__((__cdecl__)) nextafterf (float, float);
-  extern long double __attribute__((__cdecl__)) nextafterl (long double, long double);
-
-
-  extern double __attribute__((__cdecl__)) nexttoward (double, long double);
-  extern float __attribute__((__cdecl__)) nexttowardf (float, long double);
-  extern long double __attribute__((__cdecl__)) nexttowardl (long double, long double);
-
-
-
-  extern double __attribute__((__cdecl__)) fdim (double x, double y);
-  extern float __attribute__((__cdecl__)) fdimf (float x, float y);
-  extern long double __attribute__((__cdecl__)) fdiml (long double x, long double y);
-
-
-
-
-
-
-
-  extern double __attribute__((__cdecl__)) fmax (double, double);
-  extern float __attribute__((__cdecl__)) fmaxf (float, float);
-  extern long double __attribute__((__cdecl__)) fmaxl (long double, long double);
-
-
-  extern double __attribute__((__cdecl__)) fmin (double, double);
-  extern float __attribute__((__cdecl__)) fminf (float, float);
-  extern long double __attribute__((__cdecl__)) fminl (long double, long double);
-
-
-
-  extern double __attribute__((__cdecl__)) fma (double, double, double);
-  extern float __attribute__((__cdecl__)) fmaf (float, float, float);
-  extern long double __attribute__((__cdecl__)) fmal (long double, long double, long double);
-# 974 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#define isgreater(x,y) __builtin_isgreater(x, y)
-#define isgreaterequal(x,y) __builtin_isgreaterequal(x, y)
-#define isless(x,y) __builtin_isless(x, y)
-#define islessequal(x,y) __builtin_islessequal(x, y)
-#define islessgreater(x,y) __builtin_islessgreater(x, y)
-#define isunordered(x,y) __builtin_isunordered(x, y)
-# 1010 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _copysignf (float _Number,float _Sign);
-   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _chgsignf (float _X);
-   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _logbf(float _X);
-   __attribute__ ((__dllimport__)) float __attribute__((__cdecl__)) _nextafterf(float _X,float _Y);
-   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _finitef(float _X);
-   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _isnanf(float _X);
-   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _fpclassf(float _X);
-
-
-
-   extern long double __attribute__((__cdecl__)) _chgsignl (long double);
-#define _copysignl copysignl
-
-
-#define _hypotl hypotl
-
-
-#define matherr _matherr
-#define HUGE _HUGE
-# 1410 "D:/mingw64/x86_64-w64-mingw32/include/math.h" 3
-#pragma pack(pop)
-# 37 "./libavutil/common.h" 2
-
-
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 1 3
+# 1388 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdio.h" 2 3
+# 39 "./libavutil/common.h" 2
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 1 3
 
 
 
@@ -5164,7 +5117,7 @@ __extension__ long long __attribute__((__cdecl__)) llrintl (long double);
 #define _INC_STDLIB 
 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h" 1 3
 
 
 
@@ -5172,7 +5125,7 @@ __extension__ long long __attribute__((__cdecl__)) llrintl (long double);
 
 
 #define _INC_CORECRT_WSTDLIB 
-# 19 "D:/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h" 3
+# 19 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/corecrt_wstdlib.h" 3
   __attribute__ ((__dllimport__)) errno_t __attribute__((__cdecl__)) _wdupenv_s(wchar_t **_Buffer,size_t *_BufferSizeInWords,const wchar_t *_VarName);
 
 
@@ -5203,12 +5156,12 @@ __extension__ long long __attribute__((__cdecl__)) llrintl (long double);
 
   __attribute__ ((__dllimport__)) errno_t __attribute__((__cdecl__)) _wsplitpath_s(const wchar_t *_FullPath,wchar_t *_Drive,size_t _DriveSizeInWords,wchar_t *_Dir,size_t _DirSizeInWords,wchar_t *_Filename,size_t _FilenameSizeInWords,wchar_t *_Ext,size_t _ExtSizeInWords);
  
-# 11 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
-# 12 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
-# 26 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 11 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
+# 12 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
+# 26 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #pragma pack(push,_CRT_PACKING)
-# 44 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 44 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #define EXIT_SUCCESS 0
 #define EXIT_FAILURE 1
 
@@ -5308,7 +5261,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
   typedef void (__attribute__((__cdecl__)) *_invalid_parameter_handler)(const wchar_t *,const wchar_t *,const wchar_t *,unsigned int,uintptr_t);
   __attribute__ ((__dllimport__)) _invalid_parameter_handler __attribute__((__cdecl__)) _set_invalid_parameter_handler(_invalid_parameter_handler _Handler);
   __attribute__ ((__dllimport__)) _invalid_parameter_handler __attribute__((__cdecl__)) _get_invalid_parameter_handler(void);
-# 151 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 151 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
   __attribute__ ((__dllimport__)) unsigned long *__attribute__((__cdecl__)) __doserrno(void);
 #define _doserrno (*__doserrno())
   errno_t __attribute__((__cdecl__)) _set_doserrno(unsigned long _Value);
@@ -5350,7 +5303,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
 
 
 #define _wpgmptr (* __p__wpgmptr())
-# 221 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 221 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
   __attribute__ ((__dllimport__)) char ***__attribute__((__cdecl__)) __p__environ(void);
   __attribute__ ((__dllimport__)) wchar_t ***__attribute__((__cdecl__)) __p__wenviron(void);
 
@@ -5394,7 +5347,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
 
 
 #define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
-# 273 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 273 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #define _CRT_TERMINATE_DEFINED 
   void __attribute__((__cdecl__)) __attribute__ ((__nothrow__)) exit(int _Code) __attribute__ ((__noreturn__));
   void __attribute__((__cdecl__)) __attribute__ ((__nothrow__)) _exit(int _Code) __attribute__ ((__noreturn__));
@@ -5481,7 +5434,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
   int __attribute__((__cdecl__)) rand(void);
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _set_error_mode(int _Mode);
   void __attribute__((__cdecl__)) srand(unsigned int _Seed);
-# 385 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 385 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
   double __attribute__((__cdecl__)) __attribute__ ((__nothrow__)) strtod(const char * __restrict__ _Str,char ** __restrict__ _EndPtr);
   float __attribute__((__cdecl__)) __attribute__ ((__nothrow__)) strtof(const char * __restrict__ nptr, char ** __restrict__ endptr);
 
@@ -5519,7 +5472,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
 
 
 #define _CRT_ALLOCATION_DEFINED 
-# 452 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 452 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
   void *__attribute__((__cdecl__)) calloc(size_t _NumOfElements,size_t _SizeOfElements);
   void __attribute__((__cdecl__)) free(void *_Memory);
   void *__attribute__((__cdecl__)) malloc(size_t _Size);
@@ -5533,7 +5486,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
   __attribute__ ((__dllimport__)) void *__attribute__((__cdecl__)) _aligned_recalloc(void *_Memory,size_t _Count,size_t _Size,size_t _Alignment);
   __attribute__ ((__dllimport__)) void *__attribute__((__cdecl__)) _aligned_offset_recalloc(void *_Memory,size_t _Count,size_t _Size,size_t _Alignment,size_t _Offset);
   __attribute__ ((__dllimport__)) size_t __attribute__((__cdecl__)) _aligned_msize(void *_Memory,size_t _Alignment,size_t _Offset);
-# 485 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 485 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #define _WSTDLIB_DEFINED 
 
   __attribute__ ((__dllimport__)) wchar_t *__attribute__((__cdecl__)) _itow(int _Value,wchar_t *_Dest,int _Radix) ;
@@ -5543,7 +5496,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
   double __attribute__((__cdecl__)) __mingw_wcstod(const wchar_t * __restrict__ _Str,wchar_t ** __restrict__ _EndPtr);
   float __attribute__((__cdecl__)) __mingw_wcstof(const wchar_t * __restrict__ nptr, wchar_t ** __restrict__ endptr);
   long double __attribute__((__cdecl__)) __mingw_wcstold(const wchar_t * __restrict__, wchar_t ** __restrict__);
-# 506 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 506 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
   double __attribute__((__cdecl__)) wcstod(const wchar_t * __restrict__ _Str,wchar_t ** __restrict__ _EndPtr);
   float __attribute__((__cdecl__)) wcstof(const wchar_t * __restrict__ nptr, wchar_t ** __restrict__ endptr);
 
@@ -5602,7 +5555,7 @@ __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) ___mb_cur_max_fun
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _atodbl_l(_CRT_DOUBLE *_Result,char *_Str,_locale_t _Locale);
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _atoldbl_l(_LDOUBLE *_Result,char *_Str,_locale_t _Locale);
   __attribute__ ((__dllimport__)) int __attribute__((__cdecl__)) _atoflt_l(_CRT_FLOAT *_Result,char *_Str,_locale_t _Locale);
-# 575 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 575 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #undef _lrotr
 #undef _lrotl
 
@@ -5665,7 +5618,7 @@ unsigned long __attribute__((__cdecl__)) _lrotr(unsigned long,int);
 
   __attribute__ ((__dllimport__)) void __attribute__((__cdecl__)) _seterrormode(int _Mode) __attribute__ ((__deprecated__));
   __attribute__ ((__dllimport__)) void __attribute__((__cdecl__)) _sleep(unsigned long _Duration) __attribute__ ((__deprecated__));
-# 654 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 654 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #define sys_errlist _sys_errlist
 #define sys_nerr _sys_nerr
 #define environ _environ
@@ -5709,10 +5662,10 @@ unsigned long __attribute__((__cdecl__)) _lrotr(unsigned long,int);
   __extension__ char *__attribute__((__cdecl__)) ulltoa (unsigned long long , char *, int);
   __extension__ wchar_t *__attribute__((__cdecl__)) lltow (long long, wchar_t *, int);
   __extension__ wchar_t *__attribute__((__cdecl__)) ulltow (unsigned long long, wchar_t *, int);
-# 714 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
+# 714 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 3
 #pragma pack(pop)
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h" 1 3
 
 
 
@@ -5721,9 +5674,9 @@ unsigned long __attribute__((__cdecl__)) _lrotr(unsigned long,int);
 
 #define _INC_STDLIB_S 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 1 3
-# 10 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h" 2 3
-# 19 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h" 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 1 3
+# 10 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h" 2 3
+# 19 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h" 3
   __attribute__ ((__dllimport__)) errno_t __attribute__((__cdecl__)) _dupenv_s(char **_PBuffer,size_t *_PBufferSizeInBytes,const char *_VarName);
 
 
@@ -5766,8 +5719,8 @@ unsigned long __attribute__((__cdecl__)) _lrotr(unsigned long,int);
 
 #define _QSORT_S_DEFINED 
   __attribute__ ((__dllimport__)) void __attribute__((__cdecl__)) qsort_s(void *_Base,size_t _NumOfElements,size_t _SizeOfElements,int (__attribute__((__cdecl__)) *_PtFuncCompare)(void *,const void *,const void *),void *_Context);
-# 717 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/malloc.h" 1 3
+# 717 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/malloc.h" 1 3
 
 
 
@@ -5793,7 +5746,7 @@ unsigned long __attribute__((__cdecl__)) _lrotr(unsigned long,int);
 
 
 #define _STATIC_ASSERT(expr) static_assert(expr)
-# 38 "D:/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
+# 38 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
 #define _HEAPEMPTY (-1)
 #define _HEAPOK (-2)
 #define _HEAPBADBEGIN (-3)
@@ -5817,7 +5770,7 @@ unsigned long __attribute__((__cdecl__)) _lrotr(unsigned long,int);
 
 #define _amblksiz (*__p__amblksiz())
   __attribute__ ((__dllimport__)) unsigned int *__attribute__((__cdecl__)) __p__amblksiz(void);
-# 129 "D:/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
+# 129 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
 void * __mingw_aligned_malloc (size_t _Size, size_t _Alignment);
 void __mingw_aligned_free (void *_Memory);
 void * __mingw_aligned_offset_realloc (void *_Memory, size_t _Size, size_t _Alignment, size_t _Offset);
@@ -5827,8 +5780,8 @@ size_t __mingw_aligned_msize (void *memblock, size_t alignment, size_t offset);
 
 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm_malloc.h" 1 3 4
-# 25 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm_malloc.h" 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm_malloc.h" 1 3 4
+# 25 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/mm_malloc.h" 3 4
 #define _MM_MALLOC_H_INCLUDED 
 
 
@@ -5881,7 +5834,7 @@ _mm_free (void *__aligned_ptr)
   if (__aligned_ptr)
     free (((void **) __aligned_ptr)[-1]);
 }
-# 139 "D:/mingw64/x86_64-w64-mingw32/include/malloc.h" 2 3
+# 139 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/malloc.h" 2 3
 
 
 #define _MAX_WAIT_MALLOC_CRT 60000
@@ -5940,7 +5893,7 @@ _mm_free (void *__aligned_ptr)
     }
     return _Ptr;
   }
-# 206 "D:/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
+# 206 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
 #undef _malloca
 #define _malloca(size) ((((size) + _ALLOCA_S_MARKER_SIZE) <= _ALLOCA_S_THRESHOLD) ? _MarkAllocaS(_alloca((size) + _ALLOCA_S_MARKER_SIZE),_ALLOCA_S_STACK_MARKER) : _MarkAllocaS(malloc((size) + _ALLOCA_S_MARKER_SIZE),_ALLOCA_S_HEAP_MARKER))
 
@@ -5974,11 +5927,11 @@ _mm_free (void *__aligned_ptr)
 #undef alloca
 
 #define alloca(x) __builtin_alloca((x))
-# 264 "D:/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
+# 264 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/malloc.h" 3
 #pragma pack(pop)
-# 718 "D:/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
+# 718 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdlib.h" 2 3
 # 40 "./libavutil/common.h" 2
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/string.h" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/string.h" 1 3
 
 
 
@@ -5986,10 +5939,10 @@ _mm_free (void *__aligned_ptr)
 
 
 #define _INC_STRING 
-# 25 "D:/mingw64/x86_64-w64-mingw32/include/string.h" 3
+# 25 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/string.h" 3
 #define _NLSCMP_DEFINED 
 #define _NLSCMPERROR 2147483647
-# 41 "D:/mingw64/x86_64-w64-mingw32/include/string.h" 3
+# 41 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/string.h" 3
 #define _WConst_return _CONST_RETURN
 
 
@@ -6174,7 +6127,7 @@ _mm_free (void *__aligned_ptr)
 
 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h" 1 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h" 1 3
 
 
 
@@ -6183,9 +6136,9 @@ _mm_free (void *__aligned_ptr)
 
 #define _INC_STRING_S 
 
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/string.h" 1 3
-# 10 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h" 2 3
-# 24 "D:/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h" 3
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/string.h" 1 3
+# 10 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h" 2 3
+# 24 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/sec_api/string_s.h" 3
   __attribute__ ((__dllimport__)) errno_t __attribute__((__cdecl__)) _strset_s(char *_Dst,size_t _DstSize,int _Value);
  
   __attribute__ ((__dllimport__)) errno_t __attribute__((__cdecl__)) _strerror_s(char *_Buf,size_t _SizeInBytes,const char *_ErrMsg);
@@ -6262,7 +6215,7 @@ _mm_free (void *__aligned_ptr)
   extern __inline__ __attribute__((__always_inline__,__gnu_inline__)) size_t __attribute__((__cdecl__)) wcsnlen_s(const wchar_t * _src, size_t _count) {
     return _src ? wcsnlen(_src, _count) : 0;
   }
-# 226 "D:/mingw64/x86_64-w64-mingw32/include/string.h" 2 3
+# 226 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/string.h" 2 3
 # 41 "./libavutil/common.h" 2
 
 # 1 "./libavutil/attributes.h" 1
@@ -6272,9 +6225,9 @@ _mm_free (void *__aligned_ptr)
 #define AVUTIL_ERROR_H 
 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
 # 29 "./libavutil/error.h" 2
 
 # 1 "./libavutil/macros.h" 1
@@ -6402,8 +6355,8 @@ static inline char *av_make_error_string(char *errbuf, size_t errbuf_size, int e
 #define AV_VERSION_MINOR(a) (((a) & 0x00FF00) >> 8)
 #define AV_VERSION_MICRO(a) ((a) & 0xFF)
 # 81 "./libavutil/version.h"
-#define LIBAVUTIL_VERSION_MAJOR 60
-#define LIBAVUTIL_VERSION_MINOR 16
+#define LIBAVUTIL_VERSION_MAJOR 59
+#define LIBAVUTIL_VERSION_MINOR 39
 #define LIBAVUTIL_VERSION_MICRO 100
 
 #define LIBAVUTIL_VERSION_INT AV_VERSION_INT(LIBAVUTIL_VERSION_MAJOR, LIBAVUTIL_VERSION_MINOR, LIBAVUTIL_VERSION_MICRO)
@@ -6416,11 +6369,16 @@ static inline char *av_make_error_string(char *errbuf, size_t errbuf_size, int e
 
 #define LIBAVUTIL_IDENT "Lavu" AV_STRINGIFY(LIBAVUTIL_VERSION)
 # 108 "./libavutil/version.h"
-#define FF_API_MOD_UINTP2 (LIBAVUTIL_VERSION_MAJOR < 61)
-#define FF_API_RISCV_FD_ZBA (LIBAVUTIL_VERSION_MAJOR < 61)
-#define FF_API_VULKAN_FIXED_QUEUES (LIBAVUTIL_VERSION_MAJOR < 61)
-#define FF_API_OPT_INT_LIST (LIBAVUTIL_VERSION_MAJOR < 61)
-#define FF_API_OPT_PTR (LIBAVUTIL_VERSION_MAJOR < 61)
+#define FF_API_HDR_VIVID_THREE_SPLINE (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_FRAME_PKT (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_INTERLACED_FRAME (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_FRAME_KEY (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_PALETTE_HAS_CHANGED (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_VULKAN_CONTIGUOUS_MEMORY (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_H274_FILM_GRAIN_VCS (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_MOD_UINTP2 (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_RISCV_FD_ZBA (LIBAVUTIL_VERSION_MAJOR < 60)
+#define FF_API_VULKAN_FIXED_QUEUES (LIBAVUTIL_VERSION_MAJOR < 60)
 # 46 "./libavutil/common.h" 2
 
 
@@ -6432,9 +6390,9 @@ static inline char *av_make_error_string(char *errbuf, size_t errbuf_size, int e
 # 28 "./libavutil/mem.h"
 #define AVUTIL_MEM_H 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
 # 31 "./libavutil/mem.h" 2
 # 69 "./libavutil/mem.h"
 #define av_malloc_attrib __attribute__((__malloc__))
@@ -6451,7 +6409,7 @@ void *av_calloc(size_t nmemb, size_t size) __attribute__((__malloc__)) __attribu
 # 180 "./libavutil/mem.h"
 void *av_realloc(void *ptr, size_t size) __attribute__((alloc_size(2)));
 # 201 "./libavutil/mem.h"
-[[nodiscard]]
+__attribute__((warn_unused_result))
 int av_reallocp(void *ptr, size_t size);
 # 219 "./libavutil/mem.h"
 void *av_realloc_f(void *ptr, size_t nelem, size_t elsize);
@@ -6480,7 +6438,7 @@ void av_memcpy_backptr(uint8_t *dst, int back, int cnt);
 # 524 "./libavutil/mem.h"
 void av_dynarray_add(void *tab_ptr, int *nb_ptr, void *elem);
 # 536 "./libavutil/mem.h"
-[[nodiscard]]
+__attribute__((warn_unused_result))
 int av_dynarray_add_nofree(void *tab_ptr, int *nb_ptr, void *elem);
 # 562 "./libavutil/mem.h"
 void *av_dynarray2_add(void **tab_ptr, int *nb_ptr, size_t elem_size,
@@ -6726,7 +6684,7 @@ static __attribute__((always_inline)) inline __attribute__((const)) unsigned av_
 
 #define av_mod_uintp2 av_mod_uintp2_c
 
-[[deprecated]]
+__attribute__((deprecated))
 static __attribute__((always_inline)) inline __attribute__((const)) unsigned av_mod_uintp2_c(unsigned a, unsigned p)
 {
     return av_zero_extend_c(a, p);
@@ -6847,20 +6805,20 @@ static __attribute__((always_inline)) inline __attribute__((const)) int av_parit
     return av_popcount_c(v) & 1;
 }
 # 488 "./libavutil/common.h"
-#define GET_UTF8(val,GET_BYTE,ERROR) val= (GET_BYTE); { uint32_t top = (val & 128) >> 1; if ((val & 0xc0) == 0x80 || val >= 0xFE) {ERROR} while (val & top) { unsigned int tmp = (GET_BYTE) - 128; if(tmp>>6) {ERROR} val= (val<<6) + tmp; top <<= 5; } val &= (top << 1) - 1; }
+#define GET_UTF8(val,GET_BYTE,ERROR) val= (uint8_t)(GET_BYTE); { uint32_t top = (val & 128) >> 1; if ((val & 0xc0) == 0x80 || val >= 0xFE) {ERROR} while (val & top) { unsigned int tmp = (uint8_t)(GET_BYTE) - 128; if(tmp>>6) {ERROR} val= (val<<6) + tmp; top <<= 5; } val &= (top << 1) - 1; }
 # 513 "./libavutil/common.h"
-#define GET_UTF16(val,GET_16BIT,ERROR) val = (GET_16BIT); { unsigned int hi = val - 0xD800; if (hi < 0x800) { val = (GET_16BIT) - 0xDC00; if (val > 0x3FFU || hi > 0x3FFU) {ERROR} val += (hi<<10) + 0x10000; } }
+#define GET_UTF16(val,GET_16BIT,ERROR) val = (uint16_t)(GET_16BIT); { unsigned int hi = val - 0xD800; if (hi < 0x800) { val = (uint16_t)(GET_16BIT) - 0xDC00; if (val > 0x3FFU || hi > 0x3FFU) {ERROR} val += (hi<<10) + 0x10000; } }
 # 541 "./libavutil/common.h"
 #define PUT_UTF8(val,tmp,PUT_BYTE) { int bytes, shift; uint32_t in = val; if (in < 0x80) { tmp = in; PUT_BYTE } else { bytes = (av_log2(in) + 4) / 5; shift = (bytes - 1) * 6; tmp = (256 - (256 >> bytes)) | (in >> shift); PUT_BYTE while (shift >= 6) { shift -= 6; tmp = 0x80 | ((in >> shift) & 0x3f); PUT_BYTE } } }
 # 575 "./libavutil/common.h"
 #define PUT_UTF16(val,tmp,PUT_16BIT) { uint32_t in = val; if (in < 0x10000) { tmp = in; PUT_16BIT } else { tmp = 0xD800 | ((in - 0x10000) >> 10); PUT_16BIT tmp = 0xDC00 | ((in - 0x10000) & 0x3FF); PUT_16BIT } }
-# 301 "./libavutil/avutil.h" 2
+# 302 "./libavutil/avutil.h" 2
 # 1 "./libavutil/rational.h" 1
 # 30 "./libavutil/rational.h"
 #define AVUTIL_RATIONAL_H 
 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/limits.h" 1 3 4
 # 34 "./libavutil/rational.h" 2
 # 58 "./libavutil/rational.h"
 typedef struct AVRational{
@@ -6955,7 +6913,7 @@ uint32_t av_q2intfloat(AVRational q);
 
 
 AVRational av_gcd_q(AVRational a, AVRational b, int max_den, AVRational def);
-# 302 "./libavutil/avutil.h" 2
+# 303 "./libavutil/avutil.h" 2
 
 
 # 1 "./libavutil/mathematics.h" 1
@@ -7135,19 +7093,19 @@ int64_t av_add_stable(AVRational ts_tb, int64_t ts, AVRational inc_tb, int64_t i
 
 
 double av_bessel_i0(double x);
-# 305 "./libavutil/avutil.h" 2
+# 306 "./libavutil/avutil.h" 2
 # 1 "./libavutil/log.h" 1
 # 22 "./libavutil/log.h"
 #define AVUTIL_LOG_H 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stdarg.h" 1 3 4
-# 36 "D:/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdarg.h" 1 3 4
+# 36 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
 #define _STDARG_H 
 #define _ANSI_STDARG_H_ 
 
 #undef __need___va_list
-# 52 "D:/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
+# 52 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
 #define va_start(v,l) __builtin_va_start(v,l)
 #define va_end(v) __builtin_va_end(v)
 #define va_arg(v,l) __builtin_va_arg(v,l)
@@ -7155,7 +7113,7 @@ double av_bessel_i0(double x);
 #define va_copy(d,s) __builtin_va_copy(d,s)
 
 #define __va_copy(d,s) __builtin_va_copy(d,s)
-# 113 "D:/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
+# 113 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
 #define _VA_LIST_ 
 
 
@@ -7169,8 +7127,8 @@ double av_bessel_i0(double x);
 
 
 #define __va_list__ 
-# 140 "D:/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/_mingw_stdarg.h" 1 3 4
+# 140 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdarg.h" 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/_mingw_stdarg.h" 1 3 4
 
 
 
@@ -7179,8 +7137,8 @@ double av_bessel_i0(double x);
 
 
 #define _INC_STDARG 
-# 141 "D:/mingw64/x86_64-w64-mingw32/include/stdarg.h" 2 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h" 2 3 4
+# 141 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stdarg.h" 2 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stdarg.h" 2 3 4
 # 25 "./libavutil/log.h" 2
 
 
@@ -7197,7 +7155,6 @@ typedef enum {
     AV_CLASS_CATEGORY_BITSTREAM_FILTER,
     AV_CLASS_CATEGORY_SWSCALER,
     AV_CLASS_CATEGORY_SWRESAMPLER,
-    AV_CLASS_CATEGORY_HWDEVICE,
     AV_CLASS_CATEGORY_DEVICE_VIDEO_OUTPUT = 40,
     AV_CLASS_CATEGORY_DEVICE_VIDEO_INPUT,
     AV_CLASS_CATEGORY_DEVICE_AUDIO_OUTPUT,
@@ -7206,15 +7163,6 @@ typedef enum {
     AV_CLASS_CATEGORY_DEVICE_INPUT,
     AV_CLASS_CATEGORY_NB
 }AVClassCategory;
-
-enum AVClassStateFlags {
-
-
-
-
-
-    AV_CLASS_STATE_INITIALIZED = (1 << 0),
-};
 
 #define AV_IS_INPUT_DEVICE(category) (((category) == AV_CLASS_CATEGORY_DEVICE_VIDEO_INPUT) || ((category) == AV_CLASS_CATEGORY_DEVICE_AUDIO_INPUT) || ((category) == AV_CLASS_CATEGORY_DEVICE_INPUT))
 
@@ -7245,7 +7193,12 @@ typedef struct AVClass {
 
 
     const char* (*item_name)(void* ctx);
-# 96 "./libavutil/log.h"
+
+
+
+
+
+
     const struct AVOption *option;
 
 
@@ -7255,13 +7208,21 @@ typedef struct AVClass {
 
 
     int version;
-# 113 "./libavutil/log.h"
-    int log_level_offset_offset;
-# 124 "./libavutil/log.h"
-    int parent_log_context_offset;
-# 133 "./libavutil/log.h"
-    AVClassCategory category;
 
+
+
+
+
+    int log_level_offset_offset;
+# 107 "./libavutil/log.h"
+    int parent_log_context_offset;
+
+
+
+
+
+
+    AVClassCategory category;
 
 
 
@@ -7272,18 +7233,17 @@ typedef struct AVClass {
 
 
 
+
     int (*query_ranges)(struct AVOptionRanges **, void *obj, const char *key, int flags);
 
 
 
 
     void* (*child_next)(void *obj, void *prev);
-# 167 "./libavutil/log.h"
+# 146 "./libavutil/log.h"
     const struct AVClass* (*child_class_iterate)(void **iter);
-# 176 "./libavutil/log.h"
-    int state_flags_offset;
 } AVClass;
-# 192 "./libavutil/log.h"
+# 162 "./libavutil/log.h"
 #define AV_LOG_QUIET -8
 
 
@@ -7331,41 +7291,33 @@ typedef struct AVClass {
 #define AV_LOG_TRACE 56
 
 #define AV_LOG_MAX_OFFSET (AV_LOG_TRACE - AV_LOG_QUIET)
-# 252 "./libavutil/log.h"
+# 222 "./libavutil/log.h"
 #define AV_LOG_C(x) ((x) << 8)
-# 268 "./libavutil/log.h"
-void av_log(void *avcl, int level, const char *fmt, ...) __attribute__((format(
-# 268 "./libavutil/log.h" 3
-                                                        __gnu_printf__
-# 268 "./libavutil/log.h"
-                                                        , 3, 4)));
-# 289 "./libavutil/log.h"
-void av_log_once(void* avcl, int initial_level, int subsequent_level, int *state, const char *fmt, ...) __attribute__((format(
-# 289 "./libavutil/log.h" 3
-                                                                                                       __gnu_printf__
-# 289 "./libavutil/log.h"
-                                                                                                       , 5, 6)));
-# 307 "./libavutil/log.h"
+# 238 "./libavutil/log.h"
+void av_log(void *avcl, int level, const char *fmt, ...) __attribute__((__format__(__printf__, 3, 4)));
+# 259 "./libavutil/log.h"
+void av_log_once(void* avcl, int initial_level, int subsequent_level, int *state, const char *fmt, ...) __attribute__((__format__(__printf__, 5, 6)));
+# 277 "./libavutil/log.h"
 void av_vlog(void *avcl, int level, const char *fmt, va_list vl);
-# 316 "./libavutil/log.h"
+# 286 "./libavutil/log.h"
 int av_log_get_level(void);
-# 325 "./libavutil/log.h"
+# 295 "./libavutil/log.h"
 void av_log_set_level(int level);
-# 337 "./libavutil/log.h"
+# 307 "./libavutil/log.h"
 void av_log_set_callback(void (*callback)(void*, int, const char*, va_list));
-# 352 "./libavutil/log.h"
+# 322 "./libavutil/log.h"
 void av_log_default_callback(void *avcl, int level, const char *fmt,
                              va_list vl);
-# 362 "./libavutil/log.h"
+# 332 "./libavutil/log.h"
 const char* av_default_item_name(void* ctx);
 AVClassCategory av_default_get_category(void *ptr);
-# 372 "./libavutil/log.h"
+# 342 "./libavutil/log.h"
 void av_log_format_line(void *ptr, int level, const char *fmt, va_list vl,
                         char *line, int line_size, int *print_prefix);
-# 389 "./libavutil/log.h"
+# 359 "./libavutil/log.h"
 int av_log_format_line2(void *ptr, int level, const char *fmt, va_list vl,
                         char *line, int line_size, int *print_prefix);
-# 400 "./libavutil/log.h"
+# 370 "./libavutil/log.h"
 #define AV_LOG_SKIP_REPEATED 1
 
 
@@ -7376,19 +7328,9 @@ int av_log_format_line2(void *ptr, int level, const char *fmt, va_list vl,
 
 #define AV_LOG_PRINT_LEVEL 2
 
-
-
-
-#define AV_LOG_PRINT_TIME 4
-
-
-
-
-#define AV_LOG_PRINT_DATETIME 8
-
 void av_log_set_flags(int arg);
 int av_log_get_flags(void);
-# 306 "./libavutil/avutil.h" 2
+# 307 "./libavutil/avutil.h" 2
 # 1 "./libavutil/pixfmt.h" 1
 # 22 "./libavutil/pixfmt.h"
 #define AVUTIL_PIXFMT_H 
@@ -7733,79 +7675,6 @@ enum AVPixelFormat {
 
     AV_PIX_FMT_D3D12,
 
-    AV_PIX_FMT_AYUV,
-
-    AV_PIX_FMT_UYVA,
-
-    AV_PIX_FMT_VYU444,
-
-    AV_PIX_FMT_V30XBE,
-    AV_PIX_FMT_V30XLE,
-
-    AV_PIX_FMT_RGBF16BE,
-    AV_PIX_FMT_RGBF16LE,
-
-    AV_PIX_FMT_RGBA128BE,
-    AV_PIX_FMT_RGBA128LE,
-
-    AV_PIX_FMT_RGB96BE,
-    AV_PIX_FMT_RGB96LE,
-
-    AV_PIX_FMT_Y216BE,
-    AV_PIX_FMT_Y216LE,
-
-    AV_PIX_FMT_XV48BE,
-    AV_PIX_FMT_XV48LE,
-
-    AV_PIX_FMT_GBRPF16BE,
-    AV_PIX_FMT_GBRPF16LE,
-    AV_PIX_FMT_GBRAPF16BE,
-    AV_PIX_FMT_GBRAPF16LE,
-
-    AV_PIX_FMT_GRAYF16BE,
-    AV_PIX_FMT_GRAYF16LE,
-
-
-
-
-    AV_PIX_FMT_AMF_SURFACE,
-
-    AV_PIX_FMT_GRAY32BE,
-    AV_PIX_FMT_GRAY32LE,
-
-    AV_PIX_FMT_YAF32BE,
-    AV_PIX_FMT_YAF32LE,
-
-    AV_PIX_FMT_YAF16BE,
-    AV_PIX_FMT_YAF16LE,
-
-    AV_PIX_FMT_GBRAP32BE,
-    AV_PIX_FMT_GBRAP32LE,
-
-    AV_PIX_FMT_YUV444P10MSBBE,
-    AV_PIX_FMT_YUV444P10MSBLE,
-    AV_PIX_FMT_YUV444P12MSBBE,
-    AV_PIX_FMT_YUV444P12MSBLE,
-    AV_PIX_FMT_GBRP10MSBBE,
-    AV_PIX_FMT_GBRP10MSBLE,
-    AV_PIX_FMT_GBRP12MSBBE,
-    AV_PIX_FMT_GBRP12MSBLE,
-
-    AV_PIX_FMT_OHCODEC,
-
-    AV_PIX_FMT_GRAY10MSBBE,
-    AV_PIX_FMT_GRAY10MSBLE,
-    AV_PIX_FMT_GRAY12MSBBE,
-    AV_PIX_FMT_GRAY12MSBLE,
-    AV_PIX_FMT_YUV420P10MSBBE,
-    AV_PIX_FMT_YUV420P10MSBLE,
-    AV_PIX_FMT_YUV420P12MSBBE,
-    AV_PIX_FMT_YUV420P12MSBLE,
-    AV_PIX_FMT_YUV422P10MSBBE,
-    AV_PIX_FMT_YUV422P10MSBLE,
-    AV_PIX_FMT_YUV422P12MSBBE,
-    AV_PIX_FMT_YUV422P12MSBLE,
-
     AV_PIX_FMT_NB
 };
 
@@ -7827,7 +7696,6 @@ enum AVPixelFormat {
 #define AV_PIX_FMT_GRAY12 AV_PIX_FMT_NE(GRAY12BE, GRAY12LE)
 #define AV_PIX_FMT_GRAY14 AV_PIX_FMT_NE(GRAY14BE, GRAY14LE)
 #define AV_PIX_FMT_GRAY16 AV_PIX_FMT_NE(GRAY16BE, GRAY16LE)
-#define AV_PIX_FMT_GRAY32 AV_PIX_FMT_NE(GRAY32BE, GRAY32LE)
 #define AV_PIX_FMT_YA16 AV_PIX_FMT_NE(YA16BE, YA16LE)
 #define AV_PIX_FMT_RGB48 AV_PIX_FMT_NE(RGB48BE, RGB48LE)
 #define AV_PIX_FMT_RGB565 AV_PIX_FMT_NE(RGB565BE, RGB565LE)
@@ -7858,15 +7726,6 @@ enum AVPixelFormat {
 #define AV_PIX_FMT_YUV422P16 AV_PIX_FMT_NE(YUV422P16BE, YUV422P16LE)
 #define AV_PIX_FMT_YUV444P16 AV_PIX_FMT_NE(YUV444P16BE, YUV444P16LE)
 
-#define AV_PIX_FMT_GRAY10MSB AV_PIX_FMT_NE(GRAY10MSBBE, GRAY10MSBLE)
-#define AV_PIX_FMT_GRAY12MSB AV_PIX_FMT_NE(GRAY12MSBBE, GRAY12MSBLE)
-#define AV_PIX_FMT_YUV420P10MSB AV_PIX_FMT_NE(YUV420P10MSBBE, YUV420P10MSBLE)
-#define AV_PIX_FMT_YUV420P12MSB AV_PIX_FMT_NE(YUV420P12MSBBE, YUV420P12MSBLE)
-#define AV_PIX_FMT_YUV422P10MSB AV_PIX_FMT_NE(YUV422P10MSBBE, YUV422P10MSBLE)
-#define AV_PIX_FMT_YUV422P12MSB AV_PIX_FMT_NE(YUV422P12MSBBE, YUV422P12MSBLE)
-#define AV_PIX_FMT_YUV444P10MSB AV_PIX_FMT_NE(YUV444P10MSBBE, YUV444P10MSBLE)
-#define AV_PIX_FMT_YUV444P12MSB AV_PIX_FMT_NE(YUV444P12MSBBE, YUV444P12MSBLE)
-
 #define AV_PIX_FMT_GBRP9 AV_PIX_FMT_NE(GBRP9BE , GBRP9LE)
 #define AV_PIX_FMT_GBRP10 AV_PIX_FMT_NE(GBRP10BE, GBRP10LE)
 #define AV_PIX_FMT_GBRP12 AV_PIX_FMT_NE(GBRP12BE, GBRP12LE)
@@ -7876,26 +7735,16 @@ enum AVPixelFormat {
 #define AV_PIX_FMT_GBRAP12 AV_PIX_FMT_NE(GBRAP12BE, GBRAP12LE)
 #define AV_PIX_FMT_GBRAP14 AV_PIX_FMT_NE(GBRAP14BE, GBRAP14LE)
 #define AV_PIX_FMT_GBRAP16 AV_PIX_FMT_NE(GBRAP16BE, GBRAP16LE)
-#define AV_PIX_FMT_GBRAP32 AV_PIX_FMT_NE(GBRAP32BE, GBRAP32LE)
-
-#define AV_PIX_FMT_GBRP10MSB AV_PIX_FMT_NE(GBRP10MSBBE, GBRP10MSBLE)
-#define AV_PIX_FMT_GBRP12MSB AV_PIX_FMT_NE(GBRP12MSBBE, GBRP12MSBLE)
 
 #define AV_PIX_FMT_BAYER_BGGR16 AV_PIX_FMT_NE(BAYER_BGGR16BE, BAYER_BGGR16LE)
 #define AV_PIX_FMT_BAYER_RGGB16 AV_PIX_FMT_NE(BAYER_RGGB16BE, BAYER_RGGB16LE)
 #define AV_PIX_FMT_BAYER_GBRG16 AV_PIX_FMT_NE(BAYER_GBRG16BE, BAYER_GBRG16LE)
 #define AV_PIX_FMT_BAYER_GRBG16 AV_PIX_FMT_NE(BAYER_GRBG16BE, BAYER_GRBG16LE)
 
-#define AV_PIX_FMT_GBRPF16 AV_PIX_FMT_NE(GBRPF16BE, GBRPF16LE)
-#define AV_PIX_FMT_GBRAPF16 AV_PIX_FMT_NE(GBRAPF16BE, GBRAPF16LE)
 #define AV_PIX_FMT_GBRPF32 AV_PIX_FMT_NE(GBRPF32BE, GBRPF32LE)
 #define AV_PIX_FMT_GBRAPF32 AV_PIX_FMT_NE(GBRAPF32BE, GBRAPF32LE)
 
-#define AV_PIX_FMT_GRAYF16 AV_PIX_FMT_NE(GRAYF16BE, GRAYF16LE)
 #define AV_PIX_FMT_GRAYF32 AV_PIX_FMT_NE(GRAYF32BE, GRAYF32LE)
-
-#define AV_PIX_FMT_YAF16 AV_PIX_FMT_NE(YAF16BE, YAF16LE)
-#define AV_PIX_FMT_YAF32 AV_PIX_FMT_NE(YAF32BE, YAF32LE)
 
 #define AV_PIX_FMT_YUVA420P9 AV_PIX_FMT_NE(YUVA420P9BE , YUVA420P9LE)
 #define AV_PIX_FMT_YUVA422P9 AV_PIX_FMT_NE(YUVA422P9BE , YUVA422P9LE)
@@ -7918,11 +7767,8 @@ enum AVPixelFormat {
 
 #define AV_PIX_FMT_Y210 AV_PIX_FMT_NE(Y210BE, Y210LE)
 #define AV_PIX_FMT_Y212 AV_PIX_FMT_NE(Y212BE, Y212LE)
-#define AV_PIX_FMT_Y216 AV_PIX_FMT_NE(Y216BE, Y216LE)
 #define AV_PIX_FMT_XV30 AV_PIX_FMT_NE(XV30BE, XV30LE)
 #define AV_PIX_FMT_XV36 AV_PIX_FMT_NE(XV36BE, XV36LE)
-#define AV_PIX_FMT_XV48 AV_PIX_FMT_NE(XV48BE, XV48LE)
-#define AV_PIX_FMT_V30X AV_PIX_FMT_NE(V30XBE, V30XLE)
 #define AV_PIX_FMT_X2RGB10 AV_PIX_FMT_NE(X2RGB10BE, X2RGB10LE)
 #define AV_PIX_FMT_X2BGR10 AV_PIX_FMT_NE(X2BGR10BE, X2BGR10LE)
 
@@ -7933,14 +7779,10 @@ enum AVPixelFormat {
 #define AV_PIX_FMT_P216 AV_PIX_FMT_NE(P216BE, P216LE)
 #define AV_PIX_FMT_P416 AV_PIX_FMT_NE(P416BE, P416LE)
 
-#define AV_PIX_FMT_RGBF16 AV_PIX_FMT_NE(RGBF16BE, RGBF16LE)
 #define AV_PIX_FMT_RGBAF16 AV_PIX_FMT_NE(RGBAF16BE, RGBAF16LE)
 
 #define AV_PIX_FMT_RGBF32 AV_PIX_FMT_NE(RGBF32BE, RGBF32LE)
 #define AV_PIX_FMT_RGBAF32 AV_PIX_FMT_NE(RGBAF32BE, RGBAF32LE)
-
-#define AV_PIX_FMT_RGB96 AV_PIX_FMT_NE(RGB96BE, RGB96LE)
-#define AV_PIX_FMT_RGBA128 AV_PIX_FMT_NE(RGBA128BE, RGBA128LE)
 
 
 
@@ -7964,12 +7806,7 @@ enum AVColorPrimaries {
     AVCOL_PRI_SMPTE432 = 12,
     AVCOL_PRI_EBU3213 = 22,
     AVCOL_PRI_JEDEC_P22 = AVCOL_PRI_EBU3213,
-    AVCOL_PRI_NB,
-
-
-    AVCOL_PRI_EXT_BASE = 256,
-    AVCOL_PRI_V_GAMUT = AVCOL_PRI_EXT_BASE,
-    AVCOL_PRI_EXT_NB
+    AVCOL_PRI_NB
 };
 
 
@@ -7998,12 +7835,7 @@ enum AVColorTransferCharacteristic {
     AVCOL_TRC_SMPTE428 = 17,
     AVCOL_TRC_SMPTEST428_1 = AVCOL_TRC_SMPTE428,
     AVCOL_TRC_ARIB_STD_B67 = 18,
-    AVCOL_TRC_NB,
-
-
-    AVCOL_TRC_EXT_BASE = 256,
-    AVCOL_TRC_V_LOG = AVCOL_TRC_EXT_BASE,
-    AVCOL_TRC_EXT_NB
+    AVCOL_TRC_NB
 };
 
 
@@ -8032,16 +7864,16 @@ enum AVColorSpace {
     AVCOL_SPC_YCGCO_RO = 17,
     AVCOL_SPC_NB
 };
-# 761 "./libavutil/pixfmt.h"
+# 651 "./libavutil/pixfmt.h"
 enum AVColorRange {
     AVCOL_RANGE_UNSPECIFIED = 0,
-# 779 "./libavutil/pixfmt.h"
+# 669 "./libavutil/pixfmt.h"
     AVCOL_RANGE_MPEG = 1,
-# 796 "./libavutil/pixfmt.h"
+# 686 "./libavutil/pixfmt.h"
     AVCOL_RANGE_JPEG = 2,
     AVCOL_RANGE_NB
 };
-# 815 "./libavutil/pixfmt.h"
+# 705 "./libavutil/pixfmt.h"
 enum AVChromaLocation {
     AVCHROMA_LOC_UNSPECIFIED = 0,
     AVCHROMA_LOC_LEFT = 1,
@@ -8052,17 +7884,7 @@ enum AVChromaLocation {
     AVCHROMA_LOC_BOTTOM = 6,
     AVCHROMA_LOC_NB
 };
-
-
-
-
-enum AVAlphaMode {
-    AVALPHA_MODE_UNSPECIFIED = 0,
-    AVALPHA_MODE_PREMULTIPLIED = 1,
-    AVALPHA_MODE_STRAIGHT = 2,
-    AVALPHA_MODE_NB
-};
-# 307 "./libavutil/avutil.h" 2
+# 308 "./libavutil/avutil.h" 2
 
 
 
@@ -8072,12 +7894,10 @@ static inline void *av_x_if_null(const void *p, const void *x)
     return (void *)(intptr_t)(p ? p : x);
 }
 # 325 "./libavutil/avutil.h"
-[[deprecated]]
 unsigned av_int_list_length_for_size(unsigned elsize,
                                      const void *list, uint64_t term) __attribute__((pure));
-# 336 "./libavutil/avutil.h"
+# 335 "./libavutil/avutil.h"
 #define av_int_list_length(list,term) av_int_list_length_for_size(sizeof(*(list)), list, term)
-
 
 
 
@@ -8088,16 +7908,16 @@ AVRational av_get_time_base_q(void);
 #define AV_FOURCC_MAX_STRING_SIZE 32
 
 #define av_fourcc2str(fourcc) av_fourcc_make_string((char[AV_FOURCC_MAX_STRING_SIZE]){0}, fourcc)
-# 357 "./libavutil/avutil.h"
+# 355 "./libavutil/avutil.h"
 char *av_fourcc_make_string(char *buf, uint32_t fourcc);
 # 33 "libavcodec/avcodec.h" 2
 # 1 "./libavutil/buffer.h" 1
 # 26 "./libavutil/buffer.h"
 #define AVUTIL_BUFFER_H 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
 # 29 "./libavutil/buffer.h" 2
 # 74 "./libavutil/buffer.h"
 typedef struct AVBuffer AVBuffer;
@@ -8254,15 +8074,12 @@ enum AVChannel {
     AV_CHAN_TOP_SURROUND_LEFT,
     AV_CHAN_TOP_SURROUND_RIGHT,
 
-    AV_CHAN_BINAURAL_LEFT = 61,
-    AV_CHAN_BINAURAL_RIGHT,
-
 
     AV_CHAN_UNUSED = 0x200,
 
 
     AV_CHAN_UNKNOWN = 0x300,
-# 108 "./libavutil/channel_layout.h"
+# 105 "./libavutil/channel_layout.h"
     AV_CHAN_AMBISONIC_BASE = 0x400,
 
 
@@ -8288,14 +8105,14 @@ enum AVChannelOrder {
 
 
     AV_CHANNEL_ORDER_CUSTOM,
-# 155 "./libavutil/channel_layout.h"
+# 152 "./libavutil/channel_layout.h"
     AV_CHANNEL_ORDER_AMBISONIC,
 
 
 
     FF_CHANNEL_ORDER_NB
 };
-# 175 "./libavutil/channel_layout.h"
+# 172 "./libavutil/channel_layout.h"
 #define AV_CH_FRONT_LEFT (1ULL << AV_CHAN_FRONT_LEFT )
 #define AV_CH_FRONT_RIGHT (1ULL << AV_CHAN_FRONT_RIGHT )
 #define AV_CH_FRONT_CENTER (1ULL << AV_CHAN_FRONT_CENTER )
@@ -8330,8 +8147,6 @@ enum AVChannelOrder {
 #define AV_CH_SIDE_SURROUND_RIGHT (1ULL << AV_CHAN_SIDE_SURROUND_RIGHT )
 #define AV_CH_TOP_SURROUND_LEFT (1ULL << AV_CHAN_TOP_SURROUND_LEFT )
 #define AV_CH_TOP_SURROUND_RIGHT (1ULL << AV_CHAN_TOP_SURROUND_RIGHT )
-#define AV_CH_BINAURAL_LEFT (1ULL << AV_CHAN_BINAURAL_LEFT )
-#define AV_CH_BINAURAL_RIGHT (1ULL << AV_CHAN_BINAURAL_RIGHT )
 
 
 
@@ -8364,20 +8179,17 @@ enum AVChannelOrder {
 #define AV_CH_LAYOUT_7POINT1 (AV_CH_LAYOUT_5POINT1|AV_CH_BACK_LEFT|AV_CH_BACK_RIGHT)
 #define AV_CH_LAYOUT_7POINT1_WIDE (AV_CH_LAYOUT_5POINT1|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER)
 #define AV_CH_LAYOUT_7POINT1_WIDE_BACK (AV_CH_LAYOUT_5POINT1_BACK|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER)
-#define AV_CH_LAYOUT_5POINT1POINT2 (AV_CH_LAYOUT_5POINT1|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT)
 #define AV_CH_LAYOUT_5POINT1POINT2_BACK (AV_CH_LAYOUT_5POINT1_BACK|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT)
 #define AV_CH_LAYOUT_OCTAGONAL (AV_CH_LAYOUT_5POINT0|AV_CH_BACK_LEFT|AV_CH_BACK_CENTER|AV_CH_BACK_RIGHT)
 #define AV_CH_LAYOUT_CUBE (AV_CH_LAYOUT_QUAD|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT)
-#define AV_CH_LAYOUT_5POINT1POINT4_BACK (AV_CH_LAYOUT_5POINT1POINT2|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT)
+#define AV_CH_LAYOUT_5POINT1POINT4_BACK (AV_CH_LAYOUT_5POINT1POINT2_BACK|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT)
 #define AV_CH_LAYOUT_7POINT1POINT2 (AV_CH_LAYOUT_7POINT1|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT)
 #define AV_CH_LAYOUT_7POINT1POINT4_BACK (AV_CH_LAYOUT_7POINT1POINT2|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT)
 #define AV_CH_LAYOUT_7POINT2POINT3 (AV_CH_LAYOUT_7POINT1POINT2|AV_CH_TOP_BACK_CENTER|AV_CH_LOW_FREQUENCY_2)
 #define AV_CH_LAYOUT_9POINT1POINT4_BACK (AV_CH_LAYOUT_7POINT1POINT4_BACK|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER)
-#define AV_CH_LAYOUT_9POINT1POINT6 (AV_CH_LAYOUT_9POINT1POINT4_BACK|AV_CH_TOP_SIDE_LEFT|AV_CH_TOP_SIDE_RIGHT)
 #define AV_CH_LAYOUT_HEXADECAGONAL (AV_CH_LAYOUT_OCTAGONAL|AV_CH_WIDE_LEFT|AV_CH_WIDE_RIGHT|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT|AV_CH_TOP_BACK_CENTER|AV_CH_TOP_FRONT_CENTER|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT)
-#define AV_CH_LAYOUT_BINAURAL (AV_CH_BINAURAL_LEFT|AV_CH_BINAURAL_RIGHT)
 #define AV_CH_LAYOUT_STEREO_DOWNMIX (AV_CH_STEREO_LEFT|AV_CH_STEREO_RIGHT)
-#define AV_CH_LAYOUT_22POINT2 (AV_CH_LAYOUT_9POINT1POINT6|AV_CH_BACK_CENTER|AV_CH_LOW_FREQUENCY_2|AV_CH_TOP_FRONT_CENTER|AV_CH_TOP_CENTER|AV_CH_TOP_BACK_CENTER|AV_CH_BOTTOM_FRONT_CENTER|AV_CH_BOTTOM_FRONT_LEFT|AV_CH_BOTTOM_FRONT_RIGHT)
+#define AV_CH_LAYOUT_22POINT2 (AV_CH_LAYOUT_7POINT1POINT4_BACK|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER|AV_CH_BACK_CENTER|AV_CH_LOW_FREQUENCY_2|AV_CH_TOP_FRONT_CENTER|AV_CH_TOP_CENTER|AV_CH_TOP_SIDE_LEFT|AV_CH_TOP_SIDE_RIGHT|AV_CH_TOP_BACK_CENTER|AV_CH_BOTTOM_FRONT_CENTER|AV_CH_BOTTOM_FRONT_LEFT|AV_CH_BOTTOM_FRONT_RIGHT)
 
 #define AV_CH_LAYOUT_7POINT1_TOP_BACK AV_CH_LAYOUT_5POINT1POINT2_BACK
 
@@ -8391,13 +8203,13 @@ enum AVMatrixEncoding {
     AV_MATRIX_ENCODING_DOLBYHEADPHONE,
     AV_MATRIX_ENCODING_NB
 };
-# 283 "./libavutil/channel_layout.h"
+# 275 "./libavutil/channel_layout.h"
 typedef struct AVChannelCustom {
     enum AVChannel id;
     char name[16];
     void *opaque;
 } AVChannelCustom;
-# 319 "./libavutil/channel_layout.h"
+# 311 "./libavutil/channel_layout.h"
 typedef struct AVChannelLayout {
 
 
@@ -8416,9 +8228,9 @@ typedef struct AVChannelLayout {
 
 
     union {
-# 351 "./libavutil/channel_layout.h"
+# 343 "./libavutil/channel_layout.h"
         uint64_t mask;
-# 370 "./libavutil/channel_layout.h"
+# 362 "./libavutil/channel_layout.h"
         AVChannelCustom *map;
     } u;
 
@@ -8434,7 +8246,7 @@ typedef struct AVChannelLayout {
 
 
 #define AV_CHANNEL_LAYOUT_MASK(nb,m) { AV_CHANNEL_ORDER_NATIVE, (nb), { m }, NULL }
-# 394 "./libavutil/channel_layout.h"
+# 386 "./libavutil/channel_layout.h"
 #define AV_CHANNEL_LAYOUT_MONO AV_CHANNEL_LAYOUT_MASK(1, AV_CH_LAYOUT_MONO)
 #define AV_CHANNEL_LAYOUT_STEREO AV_CHANNEL_LAYOUT_MASK(2, AV_CH_LAYOUT_STEREO)
 #define AV_CHANNEL_LAYOUT_2POINT1 AV_CHANNEL_LAYOUT_MASK(3, AV_CH_LAYOUT_2POINT1)
@@ -8461,7 +8273,6 @@ typedef struct AVChannelLayout {
 #define AV_CHANNEL_LAYOUT_7POINT1 AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_7POINT1)
 #define AV_CHANNEL_LAYOUT_7POINT1_WIDE AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_7POINT1_WIDE)
 #define AV_CHANNEL_LAYOUT_7POINT1_WIDE_BACK AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_7POINT1_WIDE_BACK)
-#define AV_CHANNEL_LAYOUT_5POINT1POINT2 AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_5POINT1POINT2)
 #define AV_CHANNEL_LAYOUT_5POINT1POINT2_BACK AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_5POINT1POINT2_BACK)
 #define AV_CHANNEL_LAYOUT_OCTAGONAL AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_OCTAGONAL)
 #define AV_CHANNEL_LAYOUT_CUBE AV_CHANNEL_LAYOUT_MASK(8, AV_CH_LAYOUT_CUBE)
@@ -8470,9 +8281,7 @@ typedef struct AVChannelLayout {
 #define AV_CHANNEL_LAYOUT_7POINT1POINT4_BACK AV_CHANNEL_LAYOUT_MASK(12, AV_CH_LAYOUT_7POINT1POINT4_BACK)
 #define AV_CHANNEL_LAYOUT_7POINT2POINT3 AV_CHANNEL_LAYOUT_MASK(12, AV_CH_LAYOUT_7POINT2POINT3)
 #define AV_CHANNEL_LAYOUT_9POINT1POINT4_BACK AV_CHANNEL_LAYOUT_MASK(14, AV_CH_LAYOUT_9POINT1POINT4_BACK)
-#define AV_CHANNEL_LAYOUT_9POINT1POINT6 AV_CHANNEL_LAYOUT_MASK(16, AV_CH_LAYOUT_9POINT1POINT6)
 #define AV_CHANNEL_LAYOUT_HEXADECAGONAL AV_CHANNEL_LAYOUT_MASK(16, AV_CH_LAYOUT_HEXADECAGONAL)
-#define AV_CHANNEL_LAYOUT_BINAURAL AV_CHANNEL_LAYOUT_MASK(2, AV_CH_LAYOUT_BINAURAL)
 #define AV_CHANNEL_LAYOUT_STEREO_DOWNMIX AV_CHANNEL_LAYOUT_MASK(2, AV_CH_LAYOUT_STEREO_DOWNMIX)
 #define AV_CHANNEL_LAYOUT_22POINT2 AV_CHANNEL_LAYOUT_MASK(24, AV_CH_LAYOUT_22POINT2)
 
@@ -8486,7 +8295,7 @@ typedef struct AVChannelLayout {
 
 
 struct AVBPrint;
-# 457 "./libavutil/channel_layout.h"
+# 446 "./libavutil/channel_layout.h"
 int av_channel_name(char *buf, size_t buf_size, enum AVChannel channel);
 
 
@@ -8495,7 +8304,7 @@ int av_channel_name(char *buf, size_t buf_size, enum AVChannel channel);
 
 
 void av_channel_name_bprint(struct AVBPrint *bp, enum AVChannel channel_id);
-# 476 "./libavutil/channel_layout.h"
+# 465 "./libavutil/channel_layout.h"
 int av_channel_description(char *buf, size_t buf_size, enum AVChannel channel);
 
 
@@ -8512,11 +8321,11 @@ void av_channel_description_bprint(struct AVBPrint *bp, enum AVChannel channel_i
 
 
 enum AVChannel av_channel_from_string(const char *name);
-# 508 "./libavutil/channel_layout.h"
+# 497 "./libavutil/channel_layout.h"
 int av_channel_layout_custom_init(AVChannelLayout *channel_layout, int nb_channels);
-# 520 "./libavutil/channel_layout.h"
+# 509 "./libavutil/channel_layout.h"
 int av_channel_layout_from_mask(AVChannelLayout *channel_layout, uint64_t mask);
-# 543 "./libavutil/channel_layout.h"
+# 532 "./libavutil/channel_layout.h"
 int av_channel_layout_from_string(AVChannelLayout *channel_layout,
                                   const char *str);
 
@@ -8527,7 +8336,7 @@ int av_channel_layout_from_string(AVChannelLayout *channel_layout,
 
 
 void av_channel_layout_default(AVChannelLayout *ch_layout, int nb_channels);
-# 563 "./libavutil/channel_layout.h"
+# 552 "./libavutil/channel_layout.h"
 const AVChannelLayout *av_channel_layout_standard(void **opaque);
 
 
@@ -8537,9 +8346,9 @@ const AVChannelLayout *av_channel_layout_standard(void **opaque);
 
 
 void av_channel_layout_uninit(AVChannelLayout *channel_layout);
-# 583 "./libavutil/channel_layout.h"
+# 572 "./libavutil/channel_layout.h"
 int av_channel_layout_copy(AVChannelLayout *dst, const AVChannelLayout *src);
-# 598 "./libavutil/channel_layout.h"
+# 587 "./libavutil/channel_layout.h"
 int av_channel_layout_describe(const AVChannelLayout *channel_layout,
                                char *buf, size_t buf_size);
 
@@ -8551,27 +8360,27 @@ int av_channel_layout_describe(const AVChannelLayout *channel_layout,
 
 int av_channel_layout_describe_bprint(const AVChannelLayout *channel_layout,
                                       struct AVBPrint *bp);
-# 619 "./libavutil/channel_layout.h"
+# 608 "./libavutil/channel_layout.h"
 enum AVChannel
 av_channel_layout_channel_from_index(const AVChannelLayout *channel_layout, unsigned int idx);
-# 631 "./libavutil/channel_layout.h"
+# 620 "./libavutil/channel_layout.h"
 int av_channel_layout_index_from_channel(const AVChannelLayout *channel_layout,
                                          enum AVChannel channel);
-# 646 "./libavutil/channel_layout.h"
+# 635 "./libavutil/channel_layout.h"
 int av_channel_layout_index_from_string(const AVChannelLayout *channel_layout,
                                         const char *name);
-# 661 "./libavutil/channel_layout.h"
+# 650 "./libavutil/channel_layout.h"
 enum AVChannel
 av_channel_layout_channel_from_string(const AVChannelLayout *channel_layout,
                                       const char *name);
-# 674 "./libavutil/channel_layout.h"
+# 663 "./libavutil/channel_layout.h"
 uint64_t av_channel_layout_subset(const AVChannelLayout *channel_layout,
                                   uint64_t mask);
-# 684 "./libavutil/channel_layout.h"
+# 673 "./libavutil/channel_layout.h"
 int av_channel_layout_check(const AVChannelLayout *channel_layout);
-# 699 "./libavutil/channel_layout.h"
+# 688 "./libavutil/channel_layout.h"
 int av_channel_layout_compare(const AVChannelLayout *chl, const AVChannelLayout *chl1);
-# 709 "./libavutil/channel_layout.h"
+# 698 "./libavutil/channel_layout.h"
 int av_channel_layout_ambisonic_order(const AVChannelLayout *channel_layout);
 
 
@@ -8585,7 +8394,7 @@ int av_channel_layout_ambisonic_order(const AVChannelLayout *channel_layout);
 
 
 #define AV_CHANNEL_LAYOUT_RETYPE_FLAG_CANONICAL (1 << 1)
-# 756 "./libavutil/channel_layout.h"
+# 745 "./libavutil/channel_layout.h"
 int av_channel_layout_retype(AVChannelLayout *channel_layout, enum AVChannelOrder order, int flags);
 # 35 "libavcodec/avcodec.h" 2
 # 1 "./libavutil/dict.h" 1
@@ -8603,7 +8412,6 @@ int av_channel_layout_retype(AVChannelLayout *channel_layout, enum AVChannelOrde
 #define AV_DICT_APPEND 32
 
 #define AV_DICT_MULTIKEY 64
-#define AV_DICT_DEDUP 128
 
 
 
@@ -8614,10 +8422,10 @@ typedef struct AVDictionaryEntry {
 } AVDictionaryEntry;
 
 typedef struct AVDictionary AVDictionary;
-# 111 "./libavutil/dict.h"
+# 110 "./libavutil/dict.h"
 AVDictionaryEntry *av_dict_get(const AVDictionary *m, const char *key,
                                const AVDictionaryEntry *prev, int flags);
-# 138 "./libavutil/dict.h"
+# 137 "./libavutil/dict.h"
 const AVDictionaryEntry *av_dict_iterate(const AVDictionary *m,
                                          const AVDictionaryEntry *prev);
 
@@ -8628,7 +8436,7 @@ const AVDictionaryEntry *av_dict_iterate(const AVDictionary *m,
 
 
 int av_dict_count(const AVDictionary *m);
-# 166 "./libavutil/dict.h"
+# 165 "./libavutil/dict.h"
 int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags);
 
 
@@ -8638,11 +8446,11 @@ int av_dict_set(AVDictionary **pm, const char *key, const char *value, int flags
 
 
 int av_dict_set_int(AVDictionary **pm, const char *key, int64_t value, int flags);
-# 193 "./libavutil/dict.h"
+# 192 "./libavutil/dict.h"
 int av_dict_parse_string(AVDictionary **pm, const char *str,
                          const char *key_val_sep, const char *pairs_sep,
                          int flags);
-# 210 "./libavutil/dict.h"
+# 209 "./libavutil/dict.h"
 int av_dict_copy(AVDictionary **dst, const AVDictionary *src, int flags);
 
 
@@ -8650,7 +8458,7 @@ int av_dict_copy(AVDictionary **dst, const AVDictionary *src, int flags);
 
 
 void av_dict_free(AVDictionary **m);
-# 235 "./libavutil/dict.h"
+# 234 "./libavutil/dict.h"
 int av_dict_get_string(const AVDictionary *m, char **buffer,
                        const char key_val_sep, const char pairs_sep);
 # 36 "libavcodec/avcodec.h" 2
@@ -8658,9 +8466,9 @@ int av_dict_get_string(const AVDictionary *m, char **buffer,
 # 26 "./libavutil/frame.h"
 #define AVUTIL_FRAME_H 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
 # 29 "./libavutil/frame.h" 2
 
 
@@ -8840,14 +8648,6 @@ enum AVFrameSideDataType {
     AV_FRAME_DATA_LCEVC,
 # 245 "./libavutil/frame.h"
     AV_FRAME_DATA_VIEW_ID,
-# 256 "./libavutil/frame.h"
-    AV_FRAME_DATA_3D_REFERENCE_DISPLAYS,
-
-
-
-
-
-     AV_FRAME_DATA_EXIF,
 };
 
 enum AVActiveFormatDescription {
@@ -8859,7 +8659,7 @@ enum AVActiveFormatDescription {
     AV_AFD_16_9_SP_14_9 = 14,
     AV_AFD_SP_4_3 = 15,
 };
-# 282 "./libavutil/frame.h"
+# 265 "./libavutil/frame.h"
 typedef struct AVFrameSideData {
     enum AVFrameSideDataType type;
     uint8_t *data;
@@ -8881,27 +8681,6 @@ enum AVSideDataProps {
 
 
     AV_SIDE_DATA_PROP_MULTI = (1 << 1),
-
-
-
-
-
-
-    AV_SIDE_DATA_PROP_SIZE_DEPENDENT = (1 << 2),
-
-
-
-
-
-
-    AV_SIDE_DATA_PROP_COLOR_DEPENDENT = (1 << 3),
-
-
-
-
-
-
-    AV_SIDE_DATA_PROP_CHANNEL_DEPENDENT = (1 << 4),
 };
 
 
@@ -8919,31 +8698,31 @@ typedef struct AVSideDataDescriptor {
 
     unsigned props;
 } AVSideDataDescriptor;
-# 353 "./libavutil/frame.h"
+# 315 "./libavutil/frame.h"
 typedef struct AVRegionOfInterest {
 
 
 
 
     uint32_t self_size;
-# 368 "./libavutil/frame.h"
+# 330 "./libavutil/frame.h"
     int top;
     int bottom;
     int left;
     int right;
-# 395 "./libavutil/frame.h"
+# 357 "./libavutil/frame.h"
     AVRational qoffset;
 } AVRegionOfInterest;
-# 427 "./libavutil/frame.h"
+# 389 "./libavutil/frame.h"
 typedef struct AVFrame {
 #define AV_NUM_DATA_POINTERS 8
-# 448 "./libavutil/frame.h"
+# 410 "./libavutil/frame.h"
     uint8_t *data[8];
-# 472 "./libavutil/frame.h"
+# 434 "./libavutil/frame.h"
     int linesize[8];
-# 488 "./libavutil/frame.h"
+# 450 "./libavutil/frame.h"
     uint8_t **extended_data;
-# 499 "./libavutil/frame.h"
+# 461 "./libavutil/frame.h"
     int width, height;
 
 
@@ -8960,6 +8739,16 @@ typedef struct AVFrame {
 
 
     int format;
+
+
+
+
+
+
+
+    __attribute__((deprecated))
+    int key_frame;
+
 
 
 
@@ -8995,18 +8784,44 @@ typedef struct AVFrame {
 
 
     int quality;
-# 565 "./libavutil/frame.h"
+# 537 "./libavutil/frame.h"
     void *opaque;
-# 585 "./libavutil/frame.h"
+# 557 "./libavutil/frame.h"
     int repeat_pict;
 
 
 
 
+
+
+
+    __attribute__((deprecated))
+    int interlaced_frame;
+
+
+
+
+
+
+    __attribute__((deprecated))
+    int top_field_first;
+
+
+
+
+
+
+    __attribute__((deprecated))
+    int palette_has_changed;
+
+
+
+
+
     int sample_rate;
-# 604 "./libavutil/frame.h"
+# 602 "./libavutil/frame.h"
     AVBufferRef *buf[8];
-# 618 "./libavutil/frame.h"
+# 616 "./libavutil/frame.h"
     AVBufferRef **extended_buf;
 
 
@@ -9015,7 +8830,7 @@ typedef struct AVFrame {
 
     AVFrameSideData **side_data;
     int nb_side_data;
-# 638 "./libavutil/frame.h"
+# 636 "./libavutil/frame.h"
 #define AV_FRAME_FLAG_CORRUPT (1 << 0)
 
 
@@ -9034,14 +8849,6 @@ typedef struct AVFrame {
 
 
 #define AV_FRAME_FLAG_TOP_FIELD_FIRST (1 << 4)
-
-
-
-
-
-
-
-#define AV_FRAME_FLAG_LOSSLESS (1 << 5)
 
 
 
@@ -9077,6 +8884,10 @@ typedef struct AVFrame {
 
 
     int64_t best_effort_timestamp;
+# 698 "./libavutil/frame.h"
+    __attribute__((deprecated))
+    int64_t pkt_pos;
+
 
 
 
@@ -9084,27 +8895,31 @@ typedef struct AVFrame {
 
 
     AVDictionary *metadata;
-# 714 "./libavutil/frame.h"
+# 716 "./libavutil/frame.h"
     int decode_error_flags;
 #define FF_DECODE_ERROR_INVALID_BITSTREAM 1
 #define FF_DECODE_ERROR_MISSING_REFERENCE 2
 #define FF_DECODE_ERROR_CONCEALMENT_ACTIVE 4
 #define FF_DECODE_ERROR_DECODE_SLICES 8
+# 732 "./libavutil/frame.h"
+    __attribute__((deprecated))
+    int pkt_size;
+
 
 
 
 
 
     AVBufferRef *hw_frames_ctx;
-# 740 "./libavutil/frame.h"
+# 756 "./libavutil/frame.h"
     AVBufferRef *opaque_ref;
-# 750 "./libavutil/frame.h"
+# 766 "./libavutil/frame.h"
     size_t crop_top;
     size_t crop_bottom;
     size_t crop_left;
     size_t crop_right;
-# 765 "./libavutil/frame.h"
-    void *private_ref;
+# 785 "./libavutil/frame.h"
+    AVBufferRef *private_ref;
 
 
 
@@ -9115,48 +8930,41 @@ typedef struct AVFrame {
 
 
     int64_t duration;
-
-
-
-
-
-
-    enum AVAlphaMode alpha_mode;
 } AVFrame;
-# 796 "./libavutil/frame.h"
+# 809 "./libavutil/frame.h"
 AVFrame *av_frame_alloc(void);
-# 805 "./libavutil/frame.h"
+# 818 "./libavutil/frame.h"
 void av_frame_free(AVFrame **frame);
-# 822 "./libavutil/frame.h"
-int av_frame_ref(AVFrame *dst, const AVFrame *src);
 # 835 "./libavutil/frame.h"
+int av_frame_ref(AVFrame *dst, const AVFrame *src);
+# 848 "./libavutil/frame.h"
 int av_frame_replace(AVFrame *dst, const AVFrame *src);
-# 844 "./libavutil/frame.h"
+# 857 "./libavutil/frame.h"
 AVFrame *av_frame_clone(const AVFrame *src);
 
 
 
 
 void av_frame_unref(AVFrame *frame);
-# 858 "./libavutil/frame.h"
+# 871 "./libavutil/frame.h"
 void av_frame_move_ref(AVFrame *dst, AVFrame *src);
-# 884 "./libavutil/frame.h"
+# 896 "./libavutil/frame.h"
 int av_frame_get_buffer(AVFrame *frame, int align);
-# 898 "./libavutil/frame.h"
+# 910 "./libavutil/frame.h"
 int av_frame_is_writable(AVFrame *frame);
-# 912 "./libavutil/frame.h"
+# 924 "./libavutil/frame.h"
 int av_frame_make_writable(AVFrame *frame);
-# 925 "./libavutil/frame.h"
+# 937 "./libavutil/frame.h"
 int av_frame_copy(AVFrame *dst, const AVFrame *src);
-# 935 "./libavutil/frame.h"
+# 947 "./libavutil/frame.h"
 int av_frame_copy_props(AVFrame *dst, const AVFrame *src);
-# 946 "./libavutil/frame.h"
+# 958 "./libavutil/frame.h"
 AVBufferRef *av_frame_get_plane_buffer(const AVFrame *frame, int plane);
-# 957 "./libavutil/frame.h"
+# 969 "./libavutil/frame.h"
 AVFrameSideData *av_frame_new_side_data(AVFrame *frame,
                                         enum AVFrameSideDataType type,
                                         size_t size);
-# 973 "./libavutil/frame.h"
+# 985 "./libavutil/frame.h"
 AVFrameSideData *av_frame_new_side_data_from_buf(AVFrame *frame,
                                                  enum AVFrameSideDataType type,
                                                  AVBufferRef *buf);
@@ -9178,10 +8986,10 @@ void av_frame_remove_side_data(AVFrame *frame, enum AVFrameSideDataType type);
 
 
 enum {
-# 1002 "./libavutil/frame.h"
+# 1014 "./libavutil/frame.h"
     AV_FRAME_CROP_UNALIGNED = 1 << 0,
 };
-# 1021 "./libavutil/frame.h"
+# 1033 "./libavutil/frame.h"
 int av_frame_apply_cropping(AVFrame *frame, int flags);
 
 
@@ -9194,7 +9002,7 @@ const char *av_frame_side_data_name(enum AVFrameSideDataType type);
 
 
 const AVSideDataDescriptor *av_frame_side_data_desc(enum AVFrameSideDataType type);
-# 1043 "./libavutil/frame.h"
+# 1055 "./libavutil/frame.h"
 void av_frame_side_data_free(AVFrameSideData ***sd, int *nb_sd);
 
 
@@ -9206,23 +9014,18 @@ void av_frame_side_data_free(AVFrameSideData ***sd, int *nb_sd);
 
 
 #define AV_FRAME_SIDE_DATA_FLAG_REPLACE (1 << 1)
-
-
-
-
-#define AV_FRAME_SIDE_DATA_FLAG_NEW_REF (1 << 2)
-# 1078 "./libavutil/frame.h"
+# 1085 "./libavutil/frame.h"
 AVFrameSideData *av_frame_side_data_new(AVFrameSideData ***sd, int *nb_sd,
                                         enum AVFrameSideDataType type,
                                         size_t size, unsigned int flags);
-# 1104 "./libavutil/frame.h"
+# 1111 "./libavutil/frame.h"
 AVFrameSideData *av_frame_side_data_add(AVFrameSideData ***sd, int *nb_sd,
                                         enum AVFrameSideDataType type,
                                         AVBufferRef **buf, unsigned int flags);
-# 1127 "./libavutil/frame.h"
+# 1134 "./libavutil/frame.h"
 int av_frame_side_data_clone(AVFrameSideData ***sd, int *nb_sd,
                              const AVFrameSideData *src, unsigned int flags);
-# 1140 "./libavutil/frame.h"
+# 1147 "./libavutil/frame.h"
 const AVFrameSideData *av_frame_side_data_get_c(const AVFrameSideData * const *sd,
                                                 const int nb_sd,
                                                 enum AVFrameSideDataType type);
@@ -9247,13 +9050,6 @@ const AVFrameSideData *av_frame_side_data_get(AVFrameSideData * const *sd,
 
 void av_frame_side_data_remove(AVFrameSideData ***sd, int *nb_sd,
                                enum AVFrameSideDataType type);
-
-
-
-
-
-void av_frame_side_data_remove_by_props(AVFrameSideData ***sd, int *nb_sd,
-                                        int props);
 # 37 "libavcodec/avcodec.h" 2
 # 1 "./libavutil/log.h" 1
 # 38 "libavcodec/avcodec.h" 2
@@ -9293,11 +9089,8 @@ enum AVHWDeviceType {
     AV_HWDEVICE_TYPE_MEDIACODEC,
     AV_HWDEVICE_TYPE_VULKAN,
     AV_HWDEVICE_TYPE_D3D12VA,
-    AV_HWDEVICE_TYPE_AMF,
-
-    AV_HWDEVICE_TYPE_OHCODEC,
 };
-# 63 "./libavutil/hwcontext.h"
+# 60 "./libavutil/hwcontext.h"
 typedef struct AVHWDeviceContext {
 
 
@@ -9311,9 +9104,9 @@ typedef struct AVHWDeviceContext {
 
 
     enum AVHWDeviceType type;
-# 88 "./libavutil/hwcontext.h"
+# 85 "./libavutil/hwcontext.h"
     void *hwctx;
-# 100 "./libavutil/hwcontext.h"
+# 97 "./libavutil/hwcontext.h"
     void (*free)(struct AVHWDeviceContext *ctx);
 
 
@@ -9321,7 +9114,7 @@ typedef struct AVHWDeviceContext {
 
     void *user_opaque;
 } AVHWDeviceContext;
-# 118 "./libavutil/hwcontext.h"
+# 115 "./libavutil/hwcontext.h"
 typedef struct AVHWFramesContext {
 
 
@@ -9342,7 +9135,7 @@ typedef struct AVHWFramesContext {
 
 
     AVHWDeviceContext *device_ctx;
-# 153 "./libavutil/hwcontext.h"
+# 150 "./libavutil/hwcontext.h"
     void *hwctx;
 
 
@@ -9357,13 +9150,13 @@ typedef struct AVHWFramesContext {
 
 
     void *user_opaque;
-# 181 "./libavutil/hwcontext.h"
+# 178 "./libavutil/hwcontext.h"
     AVBufferPool *pool;
-# 190 "./libavutil/hwcontext.h"
+# 187 "./libavutil/hwcontext.h"
     int initial_pool_size;
-# 200 "./libavutil/hwcontext.h"
+# 197 "./libavutil/hwcontext.h"
     enum AVPixelFormat format;
-# 213 "./libavutil/hwcontext.h"
+# 210 "./libavutil/hwcontext.h"
     enum AVPixelFormat sw_format;
 
 
@@ -9373,7 +9166,7 @@ typedef struct AVHWFramesContext {
 
     int width, height;
 } AVHWFramesContext;
-# 230 "./libavutil/hwcontext.h"
+# 227 "./libavutil/hwcontext.h"
 enum AVHWDeviceType av_hwdevice_find_type_by_name(const char *name);
 
 
@@ -9383,31 +9176,31 @@ enum AVHWDeviceType av_hwdevice_find_type_by_name(const char *name);
 
 
 const char *av_hwdevice_get_type_name(enum AVHWDeviceType type);
-# 248 "./libavutil/hwcontext.h"
+# 245 "./libavutil/hwcontext.h"
 enum AVHWDeviceType av_hwdevice_iterate_types(enum AVHWDeviceType prev);
-# 257 "./libavutil/hwcontext.h"
+# 254 "./libavutil/hwcontext.h"
 AVBufferRef *av_hwdevice_ctx_alloc(enum AVHWDeviceType type);
-# 267 "./libavutil/hwcontext.h"
+# 264 "./libavutil/hwcontext.h"
 int av_hwdevice_ctx_init(AVBufferRef *ref);
-# 294 "./libavutil/hwcontext.h"
+# 291 "./libavutil/hwcontext.h"
 int av_hwdevice_ctx_create(AVBufferRef **device_ctx, enum AVHWDeviceType type,
                            const char *device, AVDictionary *opts, int flags);
-# 318 "./libavutil/hwcontext.h"
+# 315 "./libavutil/hwcontext.h"
 int av_hwdevice_ctx_create_derived(AVBufferRef **dst_ctx,
                                    enum AVHWDeviceType type,
                                    AVBufferRef *src_ctx, int flags);
-# 338 "./libavutil/hwcontext.h"
+# 335 "./libavutil/hwcontext.h"
 int av_hwdevice_ctx_create_derived_opts(AVBufferRef **dst_ctx,
                                         enum AVHWDeviceType type,
                                         AVBufferRef *src_ctx,
                                         AVDictionary *options, int flags);
-# 352 "./libavutil/hwcontext.h"
+# 349 "./libavutil/hwcontext.h"
 AVBufferRef *av_hwframe_ctx_alloc(AVBufferRef *device_ctx);
-# 362 "./libavutil/hwcontext.h"
+# 359 "./libavutil/hwcontext.h"
 int av_hwframe_ctx_init(AVBufferRef *ref);
-# 373 "./libavutil/hwcontext.h"
+# 370 "./libavutil/hwcontext.h"
 int av_hwframe_get_buffer(AVBufferRef *hwframe_ctx, AVFrame *frame, int flags);
-# 404 "./libavutil/hwcontext.h"
+# 401 "./libavutil/hwcontext.h"
 int av_hwframe_transfer_data(AVFrame *dst, const AVFrame *src, int flags);
 
 enum AVHWFrameTransferDirection {
@@ -9421,11 +9214,11 @@ enum AVHWFrameTransferDirection {
 
     AV_HWFRAME_TRANSFER_DIRECTION_TO,
 };
-# 433 "./libavutil/hwcontext.h"
+# 430 "./libavutil/hwcontext.h"
 int av_hwframe_transfer_get_formats(AVBufferRef *hwframe_ctx,
                                     enum AVHWFrameTransferDirection dir,
                                     enum AVPixelFormat **formats, int flags);
-# 444 "./libavutil/hwcontext.h"
+# 441 "./libavutil/hwcontext.h"
 typedef struct AVHWFramesConstraints {
 
 
@@ -9454,9 +9247,9 @@ typedef struct AVHWFramesConstraints {
     int max_width;
     int max_height;
 } AVHWFramesConstraints;
-# 483 "./libavutil/hwcontext.h"
+# 480 "./libavutil/hwcontext.h"
 void *av_hwdevice_hwconfig_alloc(AVBufferRef *device_ctx);
-# 497 "./libavutil/hwcontext.h"
+# 494 "./libavutil/hwcontext.h"
 AVHWFramesConstraints *av_hwdevice_get_hwframe_constraints(AVBufferRef *ref,
                                                            const void *hwconfig);
 
@@ -9493,9 +9286,9 @@ enum {
 
     AV_HWFRAME_MAP_DIRECT = 1 << 3,
 };
-# 574 "./libavutil/hwcontext.h"
+# 571 "./libavutil/hwcontext.h"
 int av_hwframe_map(AVFrame *dst, const AVFrame *src, int flags);
-# 595 "./libavutil/hwcontext.h"
+# 592 "./libavutil/hwcontext.h"
 int av_hwframe_ctx_create_derived(AVBufferRef **derived_frame_ctx,
                                   enum AVPixelFormat format,
                                   AVBufferRef *derived_device_ctx,
@@ -9524,25 +9317,19 @@ int av_hwframe_ctx_create_derived(AVBufferRef **derived_frame_ctx,
 
 
 
-#define LIBAVCODEC_VERSION_MAJOR 62
+#define LIBAVCODEC_VERSION_MAJOR 61
 # 40 "./libavcodec/version_major.h"
-#define FF_API_INIT_PACKET (LIBAVCODEC_VERSION_MAJOR < 63)
+#define FF_API_INIT_PACKET (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_SUBFRAMES (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_TICKS_PER_FRAME (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_DROPCHANGED (LIBAVCODEC_VERSION_MAJOR < 62)
 
-#define FF_API_V408_CODECID (LIBAVCODEC_VERSION_MAJOR < 63)
-#define FF_API_CODEC_PROPS (LIBAVCODEC_VERSION_MAJOR < 63)
-#define FF_API_EXR_GAMMA (LIBAVCODEC_VERSION_MAJOR < 63)
-
-#define FF_API_NVDEC_OLD_PIX_FMTS (LIBAVCODEC_VERSION_MAJOR < 63)
-
-#define FF_API_PARSER_PRIVATE (LIBAVCODEC_VERSION_MAJOR < 63)
-#define FF_API_PARSER_CODECID (LIBAVCODEC_VERSION_MAJOR < 63)
-
-
-#define FF_CODEC_OMX (LIBAVCODEC_VERSION_MAJOR < 63)
-
-#define FF_CODEC_SONIC_ENC (LIBAVCODEC_VERSION_MAJOR < 63)
-
-#define FF_CODEC_SONIC_DEC (LIBAVCODEC_VERSION_MAJOR < 63)
+#define FF_API_AVFFT (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_FF_PROFILE_LEVEL (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_AVCODEC_CLOSE (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_BUFFER_MIN_SIZE (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_VDPAU_ALLOC_GET_SET (LIBAVCODEC_VERSION_MAJOR < 62)
+#define FF_API_QUALITY_FACTOR (LIBAVCODEC_VERSION_MAJOR < 62)
 # 28 "./libavcodec/codec_id.h" 2
 # 49 "./libavcodec/codec_id.h"
 enum AVCodecID {
@@ -9705,9 +9492,7 @@ enum AVCodecID {
     AV_CODEC_ID_BMV_VIDEO,
     AV_CODEC_ID_VBLE,
     AV_CODEC_ID_DXTORY,
-
     AV_CODEC_ID_V410,
-
     AV_CODEC_ID_XWD,
     AV_CODEC_ID_CDXL,
     AV_CODEC_ID_XBM,
@@ -9755,10 +9540,8 @@ enum AVCodecID {
     AV_CODEC_ID_012V,
     AV_CODEC_ID_AVUI,
     AV_CODEC_ID_TARGA_Y216,
-
     AV_CODEC_ID_V308,
     AV_CODEC_ID_V408,
-
     AV_CODEC_ID_YUV4,
     AV_CODEC_ID_AVRN,
     AV_CODEC_ID_CPIA,
@@ -9825,11 +9608,6 @@ enum AVCodecID {
     AV_CODEC_ID_RTV1,
     AV_CODEC_ID_VMIX,
     AV_CODEC_ID_LEAD,
-    AV_CODEC_ID_DNXUC,
-    AV_CODEC_ID_RV60,
-    AV_CODEC_ID_JPEGXL_ANIM,
-    AV_CODEC_ID_APV,
-    AV_CODEC_ID_PRORES_RAW,
 
 
     AV_CODEC_ID_FIRST_AUDIO = 0x10000,
@@ -9924,16 +9702,6 @@ enum AVCodecID {
     AV_CODEC_ID_ADPCM_IMA_MOFLEX,
     AV_CODEC_ID_ADPCM_IMA_ACORN,
     AV_CODEC_ID_ADPCM_XMD,
-    AV_CODEC_ID_ADPCM_IMA_XBOX,
-    AV_CODEC_ID_ADPCM_SANYO,
-    AV_CODEC_ID_ADPCM_IMA_HVQM4,
-    AV_CODEC_ID_ADPCM_IMA_PDA,
-    AV_CODEC_ID_ADPCM_N64,
-    AV_CODEC_ID_ADPCM_IMA_HVQM2,
-    AV_CODEC_ID_ADPCM_IMA_MAGIX,
-    AV_CODEC_ID_ADPCM_PSXC,
-    AV_CODEC_ID_ADPCM_CIRCUS,
-    AV_CODEC_ID_ADPCM_IMA_ESCAPE,
 
 
     AV_CODEC_ID_AMR_NB = 0x12000,
@@ -10062,8 +9830,6 @@ enum AVCodecID {
     AV_CODEC_ID_OSQ,
     AV_CODEC_ID_QOA,
     AV_CODEC_ID_LC3,
-    AV_CODEC_ID_G728,
-    AV_CODEC_ID_AHX,
 
 
     AV_CODEC_ID_FIRST_SUBTITLE = 0x17000,
@@ -10093,7 +9859,6 @@ enum AVCodecID {
     AV_CODEC_ID_HDMV_TEXT_SUBTITLE,
     AV_CODEC_ID_TTML,
     AV_CODEC_ID_ARIB_CAPTION,
-    AV_CODEC_ID_IVTV_VBI,
 
 
     AV_CODEC_ID_FIRST_UNKNOWN = 0x18000,
@@ -10111,7 +9876,6 @@ enum AVCodecID {
     AV_CODEC_ID_BIN_DATA,
     AV_CODEC_ID_SMPTE_2038,
     AV_CODEC_ID_LCEVC,
-    AV_CODEC_ID_SMPTE_436M_ANC,
 
 
     AV_CODEC_ID_PROBE = 0x19000,
@@ -10152,9 +9916,9 @@ const char *avcodec_get_name(enum AVCodecID id);
 
 
 int av_get_bits_per_sample(enum AVCodecID codec_id);
-# 665 "./libavcodec/codec_id.h"
+# 642 "./libavcodec/codec_id.h"
 int av_get_exact_bits_per_sample(enum AVCodecID codec_id);
-# 678 "./libavcodec/codec_id.h"
+# 655 "./libavcodec/codec_id.h"
 const char *avcodec_profile_name(enum AVCodecID codec_id, int profile);
 
 
@@ -10184,6 +9948,9 @@ enum AVCodecID av_get_pcm_codec(enum AVSampleFormat fmt, int be);
 
 
 #define AV_CODEC_CAP_SMALL_LAST_FRAME (1 << 6)
+# 95 "libavcodec/codec.h"
+#define AV_CODEC_CAP_SUBFRAMES (1 << 8)
+
 
 
 
@@ -10216,7 +9983,7 @@ enum AVCodecID av_get_pcm_codec(enum AVSampleFormat fmt, int be);
 
 
 #define AV_CODEC_CAP_VARIABLE_FRAME_SIZE (1 << 16)
-# 123 "libavcodec/codec.h"
+# 138 "libavcodec/codec.h"
 #define AV_CODEC_CAP_AVOID_PROBING (1 << 17)
 
 
@@ -10291,28 +10058,28 @@ typedef struct AVCodec {
 
 
 
-    [[deprecated]]
+    __attribute__((deprecated))
     const AVRational *supported_framerates;
-    [[deprecated]]
+    __attribute__((deprecated))
     const enum AVPixelFormat *pix_fmts;
-    [[deprecated]]
+    __attribute__((deprecated))
     const int *supported_samplerates;
-    [[deprecated]]
+    __attribute__((deprecated))
     const enum AVSampleFormat *sample_fmts;
 
     const AVClass *priv_class;
     const AVProfile *profiles;
-# 219 "libavcodec/codec.h"
+# 234 "libavcodec/codec.h"
     const char *wrapper_name;
 
 
 
 
 
-    [[deprecated]]
+    __attribute__((deprecated))
     const AVChannelLayout *ch_layouts;
 } AVCodec;
-# 238 "libavcodec/codec.h"
+# 253 "libavcodec/codec.h"
 const AVCodec *av_codec_iterate(void **opaque);
 
 
@@ -10355,7 +10122,7 @@ int av_codec_is_encoder(const AVCodec *codec);
 
 
 int av_codec_is_decoder(const AVCodec *codec);
-# 288 "libavcodec/codec.h"
+# 303 "libavcodec/codec.h"
 const char *av_get_profile_name(const AVCodec *codec, int profile);
 
 enum {
@@ -10367,7 +10134,7 @@ enum {
 
 
     AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX = 0x01,
-# 311 "libavcodec/codec.h"
+# 326 "libavcodec/codec.h"
     AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX = 0x02,
 
 
@@ -10376,12 +10143,12 @@ enum {
 
 
     AV_CODEC_HW_CONFIG_METHOD_INTERNAL = 0x04,
-# 327 "libavcodec/codec.h"
+# 342 "libavcodec/codec.h"
     AV_CODEC_HW_CONFIG_METHOD_AD_HOC = 0x08,
 };
 
 typedef struct AVCodecHWConfig {
-# 339 "libavcodec/codec.h"
+# 354 "libavcodec/codec.h"
     enum AVPixelFormat pix_fmt;
 
 
@@ -10396,7 +10163,7 @@ typedef struct AVCodecHWConfig {
 
     enum AVHWDeviceType device_type;
 } AVCodecHWConfig;
-# 361 "libavcodec/codec.h"
+# 376 "libavcodec/codec.h"
 const AVCodecHWConfig *avcodec_get_hw_config(const AVCodec *codec, int index);
 # 42 "libavcodec/avcodec.h" 2
 # 1 "libavcodec/codec_id.h" 1
@@ -10553,9 +10320,6 @@ const AVCodecHWConfig *avcodec_get_hw_config(const AVCodec *codec, int index);
 #define AV_PROFILE_PRORES_4444 4
 #define AV_PROFILE_PRORES_XQ 5
 
-#define AV_PROFILE_PRORES_RAW 0
-#define AV_PROFILE_PRORES_RAW_HQ 1
-
 #define AV_PROFILE_ARIB_PROFILE_A 0
 #define AV_PROFILE_ARIB_PROFILE_C 1
 
@@ -10564,14 +10328,6 @@ const AVCodecHWConfig *avcodec_get_hw_config(const AVCodec *codec, int index);
 
 #define AV_PROFILE_EVC_BASELINE 0
 #define AV_PROFILE_EVC_MAIN 1
-
-#define AV_PROFILE_APV_422_10 33
-#define AV_PROFILE_APV_422_12 44
-#define AV_PROFILE_APV_444_10 55
-#define AV_PROFILE_APV_444_12 66
-#define AV_PROFILE_APV_4444_10 77
-#define AV_PROFILE_APV_4444_12 88
-#define AV_PROFILE_APV_400_10 99
 
 
 #define AV_LEVEL_UNKNOWN -99
@@ -10669,10 +10425,10 @@ typedef struct AVCPBProperties {
 
 
     int64_t buffer_size;
-# 312 "libavcodec/defs.h"
+# 301 "libavcodec/defs.h"
     uint64_t vbv_delay;
 } AVCPBProperties;
-# 324 "libavcodec/defs.h"
+# 313 "libavcodec/defs.h"
 AVCPBProperties *av_cpb_properties_alloc(size_t *size);
 
 
@@ -10687,30 +10443,16 @@ typedef struct AVProducerReferenceTime {
     int64_t wallclock;
     int flags;
 } AVProducerReferenceTime;
-
-
-
-
-
-
-
-typedef struct AVRTCPSenderReport {
-    uint32_t ssrc;
-    uint64_t ntp_timestamp;
-    uint32_t rtp_timestamp;
-    uint32_t sender_nb_packets;
-    uint32_t sender_nb_bytes;
-} AVRTCPSenderReport;
-# 360 "libavcodec/defs.h"
+# 335 "libavcodec/defs.h"
 unsigned int av_xiphlacing(unsigned char *s, unsigned int v);
 # 44 "libavcodec/avcodec.h" 2
 # 1 "libavcodec/packet.h" 1
 # 22 "libavcodec/packet.h"
 #define AVCODEC_PACKET_H 
 
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
 # 25 "libavcodec/packet.h" 2
 
 
@@ -10929,57 +10671,38 @@ enum AVPacketSideDataType {
 
 
     AV_PKT_DATA_LCEVC,
-# 357 "libavcodec/packet.h"
-    AV_PKT_DATA_3D_REFERENCE_DISPLAYS,
-
-
-
-
-
-    AV_PKT_DATA_RTCP_SR,
-
-
-
-
-
-     AV_PKT_DATA_EXIF,
-# 379 "libavcodec/packet.h"
+# 356 "libavcodec/packet.h"
     AV_PKT_DATA_NB
 };
-# 409 "libavcodec/packet.h"
+
+
+#define AV_PKT_DATA_QUALITY_FACTOR AV_PKT_DATA_QUALITY_STATS
+# 390 "libavcodec/packet.h"
 typedef struct AVPacketSideData {
     uint8_t *data;
     size_t size;
     enum AVPacketSideDataType type;
 } AVPacketSideData;
-# 429 "libavcodec/packet.h"
+# 410 "libavcodec/packet.h"
 AVPacketSideData *av_packet_side_data_new(AVPacketSideData **psd, int *pnb_sd,
                                           enum AVPacketSideDataType type,
                                           size_t size, int flags);
-# 452 "libavcodec/packet.h"
+# 433 "libavcodec/packet.h"
 AVPacketSideData *av_packet_side_data_add(AVPacketSideData **sd, int *nb_sd,
                                           enum AVPacketSideDataType type,
                                           void *data, size_t size, int flags);
-# 465 "libavcodec/packet.h"
+# 446 "libavcodec/packet.h"
 const AVPacketSideData *av_packet_side_data_get(const AVPacketSideData *sd,
                                                 int nb_sd,
                                                 enum AVPacketSideDataType type);
-# 478 "libavcodec/packet.h"
+# 459 "libavcodec/packet.h"
 void av_packet_side_data_remove(AVPacketSideData *sd, int *nb_sd,
                                 enum AVPacketSideDataType type);
-# 490 "libavcodec/packet.h"
+# 471 "libavcodec/packet.h"
 void av_packet_side_data_free(AVPacketSideData **sd, int *nb_sd);
 
-struct AVFrameSideData;
-# 505 "libavcodec/packet.h"
-int av_packet_side_data_from_frame(AVPacketSideData **sd, int *nb_sd,
-                                   const struct AVFrameSideData *src, unsigned int flags);
-# 519 "libavcodec/packet.h"
-int av_packet_side_data_to_frame(struct AVFrameSideData ***sd, int *nb_sd,
-                                 const AVPacketSideData *src, unsigned int flags);
-
 const char *av_packet_side_data_name(enum AVPacketSideDataType type);
-# 565 "libavcodec/packet.h"
+# 516 "libavcodec/packet.h"
 typedef struct AVPacket {
 
 
@@ -10987,7 +10710,7 @@ typedef struct AVPacket {
 
 
     AVBufferRef *buf;
-# 581 "libavcodec/packet.h"
+# 532 "libavcodec/packet.h"
     int64_t pts;
 
 
@@ -11021,7 +10744,7 @@ typedef struct AVPacket {
 
 
     void *opaque;
-# 624 "libavcodec/packet.h"
+# 575 "libavcodec/packet.h"
     AVBufferRef *opaque_ref;
 
 
@@ -11034,7 +10757,7 @@ typedef struct AVPacket {
 } AVPacket;
 
 
-[[deprecated]]
+__attribute__((deprecated))
 typedef struct AVPacketList {
     AVPacket pkt;
     struct AVPacketList *next;
@@ -11066,16 +10789,16 @@ enum AVSideDataParamChangeFlags {
     AV_SIDE_DATA_PARAM_CHANGE_SAMPLE_RATE = 0x0004,
     AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS = 0x0008,
 };
-# 680 "libavcodec/packet.h"
+# 631 "libavcodec/packet.h"
 AVPacket *av_packet_alloc(void);
-# 692 "libavcodec/packet.h"
+# 643 "libavcodec/packet.h"
 AVPacket *av_packet_clone(const AVPacket *src);
-# 701 "libavcodec/packet.h"
+# 652 "libavcodec/packet.h"
 void av_packet_free(AVPacket **pkt);
-# 718 "libavcodec/packet.h"
-[[deprecated]]
+# 669 "libavcodec/packet.h"
+__attribute__((deprecated))
 void av_init_packet(AVPacket *pkt);
-# 730 "libavcodec/packet.h"
+# 681 "libavcodec/packet.h"
 int av_new_packet(AVPacket *pkt, int size);
 
 
@@ -11093,23 +10816,23 @@ void av_shrink_packet(AVPacket *pkt, int size);
 
 
 int av_grow_packet(AVPacket *pkt, int grow_by);
-# 761 "libavcodec/packet.h"
+# 712 "libavcodec/packet.h"
 int av_packet_from_data(AVPacket *pkt, uint8_t *data, int size);
-# 771 "libavcodec/packet.h"
+# 722 "libavcodec/packet.h"
 uint8_t* av_packet_new_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
                                  size_t size);
-# 787 "libavcodec/packet.h"
+# 738 "libavcodec/packet.h"
 int av_packet_add_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
                             uint8_t *data, size_t size);
-# 798 "libavcodec/packet.h"
+# 749 "libavcodec/packet.h"
 int av_packet_shrink_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
                                size_t size);
-# 810 "libavcodec/packet.h"
+# 761 "libavcodec/packet.h"
 uint8_t* av_packet_get_side_data(const AVPacket *pkt, enum AVPacketSideDataType type,
                                  size_t *size);
-# 820 "libavcodec/packet.h"
+# 771 "libavcodec/packet.h"
 uint8_t *av_packet_pack_dictionary(AVDictionary *dict, size_t *size);
-# 829 "libavcodec/packet.h"
+# 780 "libavcodec/packet.h"
 int av_packet_unpack_dictionary(const uint8_t *data, size_t size,
                                 AVDictionary **dict);
 
@@ -11120,27 +10843,20 @@ int av_packet_unpack_dictionary(const uint8_t *data, size_t size,
 
 
 void av_packet_free_side_data(AVPacket *pkt);
-# 857 "libavcodec/packet.h"
+# 808 "libavcodec/packet.h"
 int av_packet_ref(AVPacket *dst, const AVPacket *src);
-# 867 "libavcodec/packet.h"
+# 818 "libavcodec/packet.h"
 void av_packet_unref(AVPacket *pkt);
-# 877 "libavcodec/packet.h"
+# 828 "libavcodec/packet.h"
 void av_packet_move_ref(AVPacket *dst, AVPacket *src);
-# 890 "libavcodec/packet.h"
+# 841 "libavcodec/packet.h"
 int av_packet_copy_props(AVPacket *dst, const AVPacket *src);
-# 906 "libavcodec/packet.h"
+# 857 "libavcodec/packet.h"
 int av_packet_make_refcounted(AVPacket *pkt);
-# 917 "libavcodec/packet.h"
+# 868 "libavcodec/packet.h"
 int av_packet_make_writable(AVPacket *pkt);
-# 930 "libavcodec/packet.h"
+# 881 "libavcodec/packet.h"
 void av_packet_rescale_ts(AVPacket *pkt, AVRational tb_src, AVRational tb_dst);
-
-
-
-
-
-
-struct AVContainerFifo *av_container_fifo_alloc_avpacket(unsigned flags);
 # 45 "libavcodec/avcodec.h" 2
 # 1 "libavcodec/version_major.h" 1
 # 46 "libavcodec/avcodec.h" 2
@@ -11153,7 +10869,7 @@ struct AVContainerFifo *av_container_fifo_alloc_avpacket(unsigned flags);
 #define AVCODEC_VERSION_H 
 # 32 "libavcodec/version.h"
 #define LIBAVCODEC_VERSION_MINOR 19
-#define LIBAVCODEC_VERSION_MICRO 100
+#define LIBAVCODEC_VERSION_MICRO 101
 
 #define LIBAVCODEC_VERSION_INT AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, LIBAVCODEC_VERSION_MINOR, LIBAVCODEC_VERSION_MICRO)
 
@@ -11372,11 +11088,6 @@ typedef struct AVCodecParameters {
 
 
     int seek_preroll;
-
-
-
-
-    enum AVAlphaMode alpha_mode;
 } AVCodecParameters;
 
 
@@ -11409,14 +11120,20 @@ int av_get_audio_frame_duration2(AVCodecParameters *par, int frame_bytes);
 
 
 struct AVCodecParameters;
-# 193 "libavcodec/avcodec.h"
+# 198 "libavcodec/avcodec.h"
+#define AV_INPUT_BUFFER_MIN_SIZE 16384
+
+
+
+
+
 typedef struct RcOverride{
     int start_frame;
     int end_frame;
     int qscale;
     float quality_factor;
 } RcOverride;
-# 209 "libavcodec/avcodec.h"
+# 220 "libavcodec/avcodec.h"
 #define AV_CODEC_FLAG_UNALIGNED (1 << 0)
 
 
@@ -11434,9 +11151,17 @@ typedef struct RcOverride{
 
 
 #define AV_CODEC_FLAG_QPEL (1 << 4)
-# 244 "libavcodec/avcodec.h"
+
+
+
+
+
+
+
+#define AV_CODEC_FLAG_DROPCHANGED (1 << 5)
+# 264 "libavcodec/avcodec.h"
 #define AV_CODEC_FLAG_RECON_FRAME (1 << 6)
-# 279 "libavcodec/avcodec.h"
+# 299 "libavcodec/avcodec.h"
 #define AV_CODEC_FLAG_COPY_OPAQUE (1 << 7)
 
 
@@ -11575,7 +11300,7 @@ typedef struct RcOverride{
 
 
 #define AV_GET_ENCODE_BUFFER_FLAG_REF (1 << 0)
-# 431 "libavcodec/avcodec.h"
+# 451 "libavcodec/avcodec.h"
 typedef struct AVCodecContext {
 
 
@@ -11587,7 +11312,7 @@ typedef struct AVCodecContext {
     enum AVMediaType codec_type;
     const struct AVCodec *codec;
     enum AVCodecID codec_id;
-# 456 "libavcodec/avcodec.h"
+# 476 "libavcodec/avcodec.h"
     unsigned int codec_tag;
 
     void *priv_data;
@@ -11628,10 +11353,10 @@ typedef struct AVCodecContext {
 
 
     int flags2;
-# 514 "libavcodec/avcodec.h"
+# 529 "libavcodec/avcodec.h"
     uint8_t *extradata;
     int extradata_size;
-# 535 "libavcodec/avcodec.h"
+# 550 "libavcodec/avcodec.h"
     AVRational time_base;
 
 
@@ -11640,17 +11365,20 @@ typedef struct AVCodecContext {
 
 
     AVRational pkt_timebase;
-# 551 "libavcodec/avcodec.h"
+# 566 "libavcodec/avcodec.h"
     AVRational framerate;
-# 575 "libavcodec/avcodec.h"
-    int delay;
-# 592 "libavcodec/avcodec.h"
-    int width, height;
+# 581 "libavcodec/avcodec.h"
+    __attribute__((deprecated))
+    int ticks_per_frame;
 # 607 "libavcodec/avcodec.h"
+    int delay;
+# 624 "libavcodec/avcodec.h"
+    int width, height;
+# 639 "libavcodec/avcodec.h"
     int coded_width, coded_height;
-# 616 "libavcodec/avcodec.h"
+# 648 "libavcodec/avcodec.h"
     AVRational sample_aspect_ratio;
-# 631 "libavcodec/avcodec.h"
+# 663 "libavcodec/avcodec.h"
     enum AVPixelFormat pix_fmt;
 
 
@@ -11680,7 +11408,7 @@ typedef struct AVCodecContext {
 
 
     enum AVColorSpace colorspace;
-# 669 "libavcodec/avcodec.h"
+# 701 "libavcodec/avcodec.h"
     enum AVColorRange color_range;
 
 
@@ -11720,11 +11448,11 @@ typedef struct AVCodecContext {
 #define SLICE_FLAG_CODED_ORDER 0x0001
 #define SLICE_FLAG_ALLOW_FIELD 0x0002
 #define SLICE_FLAG_ALLOW_PLANE 0x0004
-# 732 "libavcodec/avcodec.h"
+# 764 "libavcodec/avcodec.h"
     void (*draw_horiz_band)(struct AVCodecContext *s,
                             const AVFrame *src, int offset[8],
                             int y, int type, int height);
-# 761 "libavcodec/avcodec.h"
+# 793 "libavcodec/avcodec.h"
     enum AVPixelFormat (*get_format)(struct AVCodecContext *s, const enum AVPixelFormat * fmt);
 
 
@@ -11734,7 +11462,7 @@ typedef struct AVCodecContext {
 
 
     int max_b_frames;
-# 778 "libavcodec/avcodec.h"
+# 810 "libavcodec/avcodec.h"
     float b_quant_factor;
 
 
@@ -11743,7 +11471,7 @@ typedef struct AVCodecContext {
 
 
     float b_quant_offset;
-# 794 "libavcodec/avcodec.h"
+# 826 "libavcodec/avcodec.h"
     float i_quant_factor;
 
 
@@ -11871,7 +11599,7 @@ typedef struct AVCodecContext {
 
 
     int me_subpel_quality;
-# 929 "libavcodec/avcodec.h"
+# 961 "libavcodec/avcodec.h"
     int me_range;
 
 
@@ -11883,9 +11611,9 @@ typedef struct AVCodecContext {
 #define FF_MB_DECISION_SIMPLE 0
 #define FF_MB_DECISION_BITS 1
 #define FF_MB_DECISION_RD 2
-# 948 "libavcodec/avcodec.h"
+# 980 "libavcodec/avcodec.h"
     uint16_t *intra_matrix;
-# 957 "libavcodec/avcodec.h"
+# 989 "libavcodec/avcodec.h"
     uint16_t *inter_matrix;
 
 
@@ -11942,7 +11670,7 @@ typedef struct AVCodecContext {
 
 
     int mv0_threshold;
-# 1021 "libavcodec/avcodec.h"
+# 1053 "libavcodec/avcodec.h"
     int slices;
 
 
@@ -11962,7 +11690,7 @@ typedef struct AVCodecContext {
 
 
     AVChannelLayout ch_layout;
-# 1051 "libavcodec/avcodec.h"
+# 1083 "libavcodec/avcodec.h"
     int frame_size;
 
 
@@ -11992,9 +11720,9 @@ typedef struct AVCodecContext {
 
 
     enum AVSampleFormat request_sample_fmt;
-# 1096 "libavcodec/avcodec.h"
+# 1128 "libavcodec/avcodec.h"
     int initial_padding;
-# 1107 "libavcodec/avcodec.h"
+# 1139 "libavcodec/avcodec.h"
     int trailing_padding;
 
 
@@ -12003,9 +11731,9 @@ typedef struct AVCodecContext {
 
 
     int seek_preroll;
-# 1200 "libavcodec/avcodec.h"
+# 1232 "libavcodec/avcodec.h"
     int (*get_buffer2)(struct AVCodecContext *s, AVFrame *frame, int flags);
-# 1209 "libavcodec/avcodec.h"
+# 1241 "libavcodec/avcodec.h"
     int bit_rate_tolerance;
 
 
@@ -12140,7 +11868,7 @@ typedef struct AVCodecContext {
 #define FF_BUG_MS 8192
 #define FF_BUG_TRUNCATED 16384
 #define FF_BUG_IEDGE 32768
-# 1357 "libavcodec/avcodec.h"
+# 1389 "libavcodec/avcodec.h"
     int strict_std_compliance;
 
 
@@ -12174,7 +11902,7 @@ typedef struct AVCodecContext {
 #define FF_DEBUG_THREADS 0x00010000
 #define FF_DEBUG_GREEN_MD 0x00800000
 #define FF_DEBUG_NOMC 0x01000000
-# 1398 "libavcodec/avcodec.h"
+# 1430 "libavcodec/avcodec.h"
     int err_recognition;
 
 
@@ -12183,15 +11911,15 @@ typedef struct AVCodecContext {
 
 
     const struct AVHWAccel *hwaccel;
-# 1429 "libavcodec/avcodec.h"
+# 1461 "libavcodec/avcodec.h"
     void *hwaccel_context;
-# 1453 "libavcodec/avcodec.h"
+# 1485 "libavcodec/avcodec.h"
     AVBufferRef *hw_frames_ctx;
-# 1475 "libavcodec/avcodec.h"
+# 1507 "libavcodec/avcodec.h"
     AVBufferRef *hw_device_ctx;
-# 1484 "libavcodec/avcodec.h"
+# 1516 "libavcodec/avcodec.h"
     int hwaccel_flags;
-# 1498 "libavcodec/avcodec.h"
+# 1530 "libavcodec/avcodec.h"
     int extra_hw_frames;
 
 
@@ -12256,7 +11984,7 @@ typedef struct AVCodecContext {
 
 
     int thread_count;
-# 1571 "libavcodec/avcodec.h"
+# 1603 "libavcodec/avcodec.h"
     int thread_type;
 #define FF_THREAD_FRAME 1
 #define FF_THREAD_SLICE 2
@@ -12267,9 +11995,9 @@ typedef struct AVCodecContext {
 
 
     int active_thread_type;
-# 1591 "libavcodec/avcodec.h"
+# 1623 "libavcodec/avcodec.h"
     int (*execute)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg), void *arg2, int *ret, int count, int size);
-# 1610 "libavcodec/avcodec.h"
+# 1642 "libavcodec/avcodec.h"
     int (*execute2)(struct AVCodecContext *c, int (*func)(struct AVCodecContext *c2, void *arg, int jobnr, int threadnr), void *arg2, int *ret, int count);
 
 
@@ -12279,21 +12007,156 @@ typedef struct AVCodecContext {
 
 
      int profile;
-# 1628 "libavcodec/avcodec.h"
+
+
+
+#define FF_PROFILE_UNKNOWN -99
+#define FF_PROFILE_RESERVED -100
+
+#define FF_PROFILE_AAC_MAIN 0
+#define FF_PROFILE_AAC_LOW 1
+#define FF_PROFILE_AAC_SSR 2
+#define FF_PROFILE_AAC_LTP 3
+#define FF_PROFILE_AAC_HE 4
+#define FF_PROFILE_AAC_HE_V2 28
+#define FF_PROFILE_AAC_LD 22
+#define FF_PROFILE_AAC_ELD 38
+#define FF_PROFILE_MPEG2_AAC_LOW 128
+#define FF_PROFILE_MPEG2_AAC_HE 131
+
+#define FF_PROFILE_DNXHD 0
+#define FF_PROFILE_DNXHR_LB 1
+#define FF_PROFILE_DNXHR_SQ 2
+#define FF_PROFILE_DNXHR_HQ 3
+#define FF_PROFILE_DNXHR_HQX 4
+#define FF_PROFILE_DNXHR_444 5
+
+#define FF_PROFILE_DTS 20
+#define FF_PROFILE_DTS_ES 30
+#define FF_PROFILE_DTS_96_24 40
+#define FF_PROFILE_DTS_HD_HRA 50
+#define FF_PROFILE_DTS_HD_MA 60
+#define FF_PROFILE_DTS_EXPRESS 70
+#define FF_PROFILE_DTS_HD_MA_X 61
+#define FF_PROFILE_DTS_HD_MA_X_IMAX 62
+
+
+#define FF_PROFILE_EAC3_DDP_ATMOS 30
+
+#define FF_PROFILE_TRUEHD_ATMOS 30
+
+#define FF_PROFILE_MPEG2_422 0
+#define FF_PROFILE_MPEG2_HIGH 1
+#define FF_PROFILE_MPEG2_SS 2
+#define FF_PROFILE_MPEG2_SNR_SCALABLE 3
+#define FF_PROFILE_MPEG2_MAIN 4
+#define FF_PROFILE_MPEG2_SIMPLE 5
+
+#define FF_PROFILE_H264_CONSTRAINED (1<<9)
+#define FF_PROFILE_H264_INTRA (1<<11)
+
+#define FF_PROFILE_H264_BASELINE 66
+#define FF_PROFILE_H264_CONSTRAINED_BASELINE (66|FF_PROFILE_H264_CONSTRAINED)
+#define FF_PROFILE_H264_MAIN 77
+#define FF_PROFILE_H264_EXTENDED 88
+#define FF_PROFILE_H264_HIGH 100
+#define FF_PROFILE_H264_HIGH_10 110
+#define FF_PROFILE_H264_HIGH_10_INTRA (110|FF_PROFILE_H264_INTRA)
+#define FF_PROFILE_H264_MULTIVIEW_HIGH 118
+#define FF_PROFILE_H264_HIGH_422 122
+#define FF_PROFILE_H264_HIGH_422_INTRA (122|FF_PROFILE_H264_INTRA)
+#define FF_PROFILE_H264_STEREO_HIGH 128
+#define FF_PROFILE_H264_HIGH_444 144
+#define FF_PROFILE_H264_HIGH_444_PREDICTIVE 244
+#define FF_PROFILE_H264_HIGH_444_INTRA (244|FF_PROFILE_H264_INTRA)
+#define FF_PROFILE_H264_CAVLC_444 44
+
+#define FF_PROFILE_VC1_SIMPLE 0
+#define FF_PROFILE_VC1_MAIN 1
+#define FF_PROFILE_VC1_COMPLEX 2
+#define FF_PROFILE_VC1_ADVANCED 3
+
+#define FF_PROFILE_MPEG4_SIMPLE 0
+#define FF_PROFILE_MPEG4_SIMPLE_SCALABLE 1
+#define FF_PROFILE_MPEG4_CORE 2
+#define FF_PROFILE_MPEG4_MAIN 3
+#define FF_PROFILE_MPEG4_N_BIT 4
+#define FF_PROFILE_MPEG4_SCALABLE_TEXTURE 5
+#define FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION 6
+#define FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE 7
+#define FF_PROFILE_MPEG4_HYBRID 8
+#define FF_PROFILE_MPEG4_ADVANCED_REAL_TIME 9
+#define FF_PROFILE_MPEG4_CORE_SCALABLE 10
+#define FF_PROFILE_MPEG4_ADVANCED_CODING 11
+#define FF_PROFILE_MPEG4_ADVANCED_CORE 12
+#define FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE 13
+#define FF_PROFILE_MPEG4_SIMPLE_STUDIO 14
+#define FF_PROFILE_MPEG4_ADVANCED_SIMPLE 15
+
+#define FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0 1
+#define FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1 2
+#define FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION 32768
+#define FF_PROFILE_JPEG2000_DCINEMA_2K 3
+#define FF_PROFILE_JPEG2000_DCINEMA_4K 4
+
+#define FF_PROFILE_VP9_0 0
+#define FF_PROFILE_VP9_1 1
+#define FF_PROFILE_VP9_2 2
+#define FF_PROFILE_VP9_3 3
+
+#define FF_PROFILE_HEVC_MAIN 1
+#define FF_PROFILE_HEVC_MAIN_10 2
+#define FF_PROFILE_HEVC_MAIN_STILL_PICTURE 3
+#define FF_PROFILE_HEVC_REXT 4
+#define FF_PROFILE_HEVC_SCC 9
+
+#define FF_PROFILE_VVC_MAIN_10 1
+#define FF_PROFILE_VVC_MAIN_10_444 33
+
+#define FF_PROFILE_AV1_MAIN 0
+#define FF_PROFILE_AV1_HIGH 1
+#define FF_PROFILE_AV1_PROFESSIONAL 2
+
+#define FF_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT 0xc0
+#define FF_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT 0xc1
+#define FF_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT 0xc2
+#define FF_PROFILE_MJPEG_HUFFMAN_LOSSLESS 0xc3
+#define FF_PROFILE_MJPEG_JPEG_LS 0xf7
+
+#define FF_PROFILE_SBC_MSBC 1
+
+#define FF_PROFILE_PRORES_PROXY 0
+#define FF_PROFILE_PRORES_LT 1
+#define FF_PROFILE_PRORES_STANDARD 2
+#define FF_PROFILE_PRORES_HQ 3
+#define FF_PROFILE_PRORES_4444 4
+#define FF_PROFILE_PRORES_XQ 5
+
+#define FF_PROFILE_ARIB_PROFILE_A 0
+#define FF_PROFILE_ARIB_PROFILE_C 1
+
+#define FF_PROFILE_KLVA_SYNC 0
+#define FF_PROFILE_KLVA_ASYNC 1
+
+#define FF_PROFILE_EVC_BASELINE 0
+#define FF_PROFILE_EVC_MAIN 1
+# 1794 "libavcodec/avcodec.h"
      int level;
 
 
 
+#define FF_LEVEL_UNKNOWN -99
 
 
 
 
-    [[deprecated]]
+
+
+
     unsigned properties;
 #define FF_CODEC_PROPERTY_LOSSLESS 0x00000001
 #define FF_CODEC_PROPERTY_CLOSED_CAPTIONS 0x00000002
 #define FF_CODEC_PROPERTY_FILM_GRAIN 0x00000004
-
 
 
 
@@ -12315,7 +12178,7 @@ typedef struct AVCodecContext {
 
 
     enum AVDiscard skip_frame;
-# 1676 "libavcodec/avcodec.h"
+# 1844 "libavcodec/avcodec.h"
     int skip_alpha;
 
 
@@ -12364,7 +12227,7 @@ typedef struct AVCodecContext {
 #define FF_SUB_CHARENC_MODE_AUTOMATIC 0
 #define FF_SUB_CHARENC_MODE_PRE_DECODER 1
 #define FF_SUB_CHARENC_MODE_IGNORE 2
-# 1738 "libavcodec/avcodec.h"
+# 1901 "libavcodec/avcodec.h"
     int subtitle_header_size;
     uint8_t *subtitle_header;
 
@@ -12392,7 +12255,7 @@ typedef struct AVCodecContext {
 
     AVPacketSideData *coded_side_data;
     int nb_coded_side_data;
-# 1774 "libavcodec/avcodec.h"
+# 1937 "libavcodec/avcodec.h"
     int export_side_data;
 
 
@@ -12402,7 +12265,7 @@ typedef struct AVCodecContext {
 
 
     int64_t max_pixels;
-# 1809 "libavcodec/avcodec.h"
+# 1972 "libavcodec/avcodec.h"
     int apply_cropping;
 
 
@@ -12420,28 +12283,21 @@ typedef struct AVCodecContext {
 
 
     int64_t max_samples;
-# 1867 "libavcodec/avcodec.h"
+# 2030 "libavcodec/avcodec.h"
     int (*get_encode_buffer)(struct AVCodecContext *s, AVPacket *pkt, int flags);
-# 1878 "libavcodec/avcodec.h"
+# 2041 "libavcodec/avcodec.h"
     int64_t frame_num;
-# 1908 "libavcodec/avcodec.h"
+# 2071 "libavcodec/avcodec.h"
     int *side_data_prefer_packet;
 
 
 
     unsigned nb_side_data_prefer_packet;
-# 1924 "libavcodec/avcodec.h"
+# 2087 "libavcodec/avcodec.h"
     AVFrameSideData **decoded_side_data;
     int nb_decoded_side_data;
-
-
-
-
-
-
-    enum AVAlphaMode alpha_mode;
 } AVCodecContext;
-# 1943 "libavcodec/avcodec.h"
+# 2099 "libavcodec/avcodec.h"
 typedef struct AVHWAccel {
 
 
@@ -12483,7 +12339,7 @@ typedef struct AVHWAccel {
 
 
 #define AV_HWACCEL_CODEC_CAP_EXPERIMENTAL 0x0200
-# 1993 "libavcodec/avcodec.h"
+# 2149 "libavcodec/avcodec.h"
 #define AV_HWACCEL_FLAG_IGNORE_LEVEL (1 << 0)
 
 
@@ -12491,9 +12347,9 @@ typedef struct AVHWAccel {
 
 
 #define AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH (1 << 1)
-# 2013 "libavcodec/avcodec.h"
+# 2169 "libavcodec/avcodec.h"
 #define AV_HWACCEL_FLAG_ALLOW_PROFILE_MISMATCH (1 << 2)
-# 2029 "libavcodec/avcodec.h"
+# 2185 "libavcodec/avcodec.h"
 #define AV_HWACCEL_FLAG_UNSAFE_OUTPUT (1 << 3)
 
 
@@ -12570,7 +12426,7 @@ const char *avcodec_configuration(void);
 
 
 const char *avcodec_license(void);
-# 2119 "libavcodec/avcodec.h"
+# 2275 "libavcodec/avcodec.h"
 AVCodecContext *avcodec_alloc_context3(const AVCodec *codec);
 
 
@@ -12594,14 +12450,18 @@ const AVClass *avcodec_get_class(void);
 
 
 const AVClass *avcodec_get_subtitle_rect_class(void);
-# 2150 "libavcodec/avcodec.h"
+# 2306 "libavcodec/avcodec.h"
 int avcodec_parameters_from_context(struct AVCodecParameters *par,
                                     const AVCodecContext *codec);
-# 2161 "libavcodec/avcodec.h"
+# 2317 "libavcodec/avcodec.h"
 int avcodec_parameters_to_context(AVCodecContext *codec,
                                   const struct AVCodecParameters *par);
-# 2225 "libavcodec/avcodec.h"
+# 2381 "libavcodec/avcodec.h"
 int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options);
+# 2397 "libavcodec/avcodec.h"
+__attribute__((deprecated))
+int avcodec_close(AVCodecContext *avctx);
+
 
 
 
@@ -12609,7 +12469,7 @@ int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **op
 
 
 void avsubtitle_free(AVSubtitle *sub);
-# 2248 "libavcodec/avcodec.h"
+# 2422 "libavcodec/avcodec.h"
 int avcodec_default_get_buffer2(AVCodecContext *s, AVFrame *frame, int flags);
 
 
@@ -12618,23 +12478,23 @@ int avcodec_default_get_buffer2(AVCodecContext *s, AVFrame *frame, int flags);
 
 
 int avcodec_default_get_encode_buffer(AVCodecContext *s, AVPacket *pkt, int flags);
-# 2264 "libavcodec/avcodec.h"
+# 2438 "libavcodec/avcodec.h"
 void avcodec_align_dimensions(AVCodecContext *s, int *width, int *height);
-# 2273 "libavcodec/avcodec.h"
+# 2447 "libavcodec/avcodec.h"
 void avcodec_align_dimensions2(AVCodecContext *s, int *width, int *height,
                                int linesize_align[8]);
-# 2303 "libavcodec/avcodec.h"
+# 2477 "libavcodec/avcodec.h"
 int avcodec_decode_subtitle2(AVCodecContext *avctx, AVSubtitle *sub,
                              int *got_sub_ptr, const AVPacket *avpkt);
-# 2352 "libavcodec/avcodec.h"
+# 2526 "libavcodec/avcodec.h"
 int avcodec_send_packet(AVCodecContext *avctx, const AVPacket *avpkt);
-# 2373 "libavcodec/avcodec.h"
+# 2547 "libavcodec/avcodec.h"
 int avcodec_receive_frame(AVCodecContext *avctx, AVFrame *frame);
-# 2409 "libavcodec/avcodec.h"
+# 2583 "libavcodec/avcodec.h"
 int avcodec_send_frame(AVCodecContext *avctx, const AVFrame *frame);
-# 2426 "libavcodec/avcodec.h"
+# 2600 "libavcodec/avcodec.h"
 int avcodec_receive_packet(AVCodecContext *avctx, AVPacket *avpkt);
-# 2525 "libavcodec/avcodec.h"
+# 2699 "libavcodec/avcodec.h"
 int avcodec_get_hw_frames_parameters(AVCodecContext *avctx,
                                      AVBufferRef *device_ref,
                                      enum AVPixelFormat hw_pix_fmt,
@@ -12648,14 +12508,13 @@ enum AVCodecConfig {
     AV_CODEC_CONFIG_CHANNEL_LAYOUT,
     AV_CODEC_CONFIG_COLOR_RANGE,
     AV_CODEC_CONFIG_COLOR_SPACE,
-    AV_CODEC_CONFIG_ALPHA_MODE,
 };
-# 2556 "libavcodec/avcodec.h"
+# 2729 "libavcodec/avcodec.h"
 int avcodec_get_supported_config(const AVCodecContext *avctx,
                                  const AVCodec *codec, enum AVCodecConfig config,
                                  unsigned flags, const void **out_configs,
                                  int *out_num_configs);
-# 2568 "libavcodec/avcodec.h"
+# 2741 "libavcodec/avcodec.h"
 enum AVPictureStructure {
     AV_PICTURE_STRUCTURE_UNKNOWN,
     AV_PICTURE_STRUCTURE_TOP_FIELD,
@@ -12672,7 +12531,7 @@ typedef struct AVCodecParserContext {
     int64_t next_frame_offset;
 
     int pict_type;
-# 2593 "libavcodec/avcodec.h"
+# 2766 "libavcodec/avcodec.h"
     int repeat_pict;
     int64_t pts;
     int64_t dts;
@@ -12705,11 +12564,11 @@ typedef struct AVCodecParserContext {
 
 
     int key_frame;
-# 2636 "libavcodec/avcodec.h"
+# 2809 "libavcodec/avcodec.h"
     int dts_sync_point;
-# 2651 "libavcodec/avcodec.h"
+# 2824 "libavcodec/avcodec.h"
     int dts_ref_dts_delta;
-# 2665 "libavcodec/avcodec.h"
+# 2838 "libavcodec/avcodec.h"
     int pts_dts_delta;
 
 
@@ -12737,7 +12596,7 @@ typedef struct AVCodecParserContext {
     int duration;
 
     enum AVFieldOrder field_order;
-# 2701 "libavcodec/avcodec.h"
+# 2874 "libavcodec/avcodec.h"
     enum AVPictureStructure picture_structure;
 
 
@@ -12759,37 +12618,28 @@ typedef struct AVCodecParserContext {
 
     int coded_width;
     int coded_height;
-# 2731 "libavcodec/avcodec.h"
+# 2904 "libavcodec/avcodec.h"
     int format;
 } AVCodecParserContext;
 
 typedef struct AVCodecParser {
-
     int codec_ids[7];
-# 2748 "libavcodec/avcodec.h"
-    [[deprecated]]
     int priv_data_size;
-    [[deprecated]]
     int (*parser_init)(AVCodecParserContext *s);
 
 
-    [[deprecated]]
     int (*parser_parse)(AVCodecParserContext *s,
                         AVCodecContext *avctx,
                         const uint8_t **poutbuf, int *poutbuf_size,
                         const uint8_t *buf, int buf_size);
-    [[deprecated]]
     void (*parser_close)(AVCodecParserContext *s);
-    [[deprecated]]
     int (*split)(AVCodecContext *avctx, const uint8_t *buf, int buf_size);
-
 } AVCodecParser;
-# 2775 "libavcodec/avcodec.h"
+# 2930 "libavcodec/avcodec.h"
 const AVCodecParser *av_parser_iterate(void **opaque);
 
-
 AVCodecParserContext *av_parser_init(int codec_id);
-# 2814 "libavcodec/avcodec.h"
+# 2965 "libavcodec/avcodec.h"
 int av_parser_parse2(AVCodecParserContext *s,
                      AVCodecContext *avctx,
                      uint8_t **poutbuf, int *poutbuf_size,
@@ -12798,12 +12648,12 @@ int av_parser_parse2(AVCodecParserContext *s,
                      int64_t pos);
 
 void av_parser_close(AVCodecParserContext *s);
-# 2833 "libavcodec/avcodec.h"
+# 2984 "libavcodec/avcodec.h"
 int avcodec_encode_subtitle(AVCodecContext *avctx, uint8_t *buf, int buf_size,
                             const AVSubtitle *sub);
-# 2862 "libavcodec/avcodec.h"
+# 3013 "libavcodec/avcodec.h"
 unsigned int avcodec_pix_fmt_to_codec_tag(enum AVPixelFormat pix_fmt);
-# 2881 "libavcodec/avcodec.h"
+# 3032 "libavcodec/avcodec.h"
 enum AVPixelFormat avcodec_find_best_pix_fmt_of_list(const enum AVPixelFormat *pix_fmt_list,
                                             enum AVPixelFormat src_pix_fmt,
                                             int has_alpha, int *loss_ptr);
@@ -12818,15 +12668,15 @@ void avcodec_string(char *buf, int buf_size, AVCodecContext *enc, int encode);
 
 int avcodec_default_execute(AVCodecContext *c, int (*func)(AVCodecContext *c2, void *arg2),void *arg, int *ret, int count, int size);
 int avcodec_default_execute2(AVCodecContext *c, int (*func)(AVCodecContext *c2, void *arg2, int, int),void *arg, int *ret, int count);
-# 2920 "libavcodec/avcodec.h"
+# 3071 "libavcodec/avcodec.h"
 int avcodec_fill_audio_frame(AVFrame *frame, int nb_channels,
                              enum AVSampleFormat sample_fmt, const uint8_t *buf,
                              int buf_size, int align);
-# 2938 "libavcodec/avcodec.h"
+# 3089 "libavcodec/avcodec.h"
 void avcodec_flush_buffers(AVCodecContext *avctx);
-# 2948 "libavcodec/avcodec.h"
+# 3099 "libavcodec/avcodec.h"
 int av_get_audio_frame_duration(AVCodecContext *avctx, int frame_bytes);
-# 2959 "libavcodec/avcodec.h"
+# 3110 "libavcodec/avcodec.h"
 void av_fast_padded_malloc(void *ptr, unsigned int *size, size_t min_size);
 
 
@@ -12840,7 +12690,2390 @@ void av_fast_padded_mallocz(void *ptr, unsigned int *size, size_t min_size);
 
 
 int avcodec_is_open(AVCodecContext *s);
-# 2 "MyHeader.h" 2
+# 2 "libav.h" 2
+# 1 "libavfilter/avfilter.h" 1
+# 23 "libavfilter/avfilter.h"
+#define AVFILTER_AVFILTER_H 
+# 38 "libavfilter/avfilter.h"
+# 1 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
+# 1 "C:/Program Files/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
+# 2 "C:/Program Files/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
+# 39 "libavfilter/avfilter.h" 2
+# 50 "libavfilter/avfilter.h"
+# 1 "./libavfilter/version_major.h" 1
+# 22 "./libavfilter/version_major.h"
+#define AVFILTER_VERSION_MAJOR_H 
+
+
+
+
+
+
+
+#define LIBAVFILTER_VERSION_MAJOR 10
+
+
+
+
+
+
+
+#define FF_API_LINK_PUBLIC (LIBAVFILTER_VERSION_MAJOR < 11)
+# 51 "libavfilter/avfilter.h" 2
+
+
+
+
+# 1 "./libavfilter/version.h" 1
+# 22 "./libavfilter/version.h"
+#define AVFILTER_VERSION_H 
+# 32 "./libavfilter/version.h"
+# 1 "./libavfilter/version_major.h" 1
+# 33 "./libavfilter/version.h" 2
+
+#define LIBAVFILTER_VERSION_MINOR 5
+#define LIBAVFILTER_VERSION_MICRO 100
+
+
+#define LIBAVFILTER_VERSION_INT AV_VERSION_INT(LIBAVFILTER_VERSION_MAJOR, LIBAVFILTER_VERSION_MINOR, LIBAVFILTER_VERSION_MICRO)
+
+
+#define LIBAVFILTER_VERSION AV_VERSION(LIBAVFILTER_VERSION_MAJOR, LIBAVFILTER_VERSION_MINOR, LIBAVFILTER_VERSION_MICRO)
+
+
+#define LIBAVFILTER_BUILD LIBAVFILTER_VERSION_INT
+
+#define LIBAVFILTER_IDENT "Lavfi" AV_STRINGIFY(LIBAVFILTER_VERSION)
+# 56 "libavfilter/avfilter.h" 2
+
+
+
+
+
+unsigned avfilter_version(void);
+
+
+
+
+const char *avfilter_configuration(void);
+
+
+
+
+const char *avfilter_license(void);
+
+typedef struct AVFilterContext AVFilterContext;
+typedef struct AVFilterLink AVFilterLink;
+typedef struct AVFilterPad AVFilterPad;
+typedef struct AVFilterFormats AVFilterFormats;
+typedef struct AVFilterChannelLayouts AVFilterChannelLayouts;
+# 88 "libavfilter/avfilter.h"
+const char *avfilter_pad_get_name(const AVFilterPad *pads, int pad_idx);
+# 99 "libavfilter/avfilter.h"
+enum AVMediaType avfilter_pad_get_type(const AVFilterPad *pads, int pad_idx);
+# 111 "libavfilter/avfilter.h"
+typedef struct AVFilterFormatsConfig {
+
+
+
+
+    AVFilterFormats *formats;
+
+
+
+
+    AVFilterFormats *samplerates;
+
+
+
+
+    AVFilterChannelLayouts *channel_layouts;
+
+
+
+
+    AVFilterFormats *color_spaces;
+    AVFilterFormats *color_ranges;
+
+} AVFilterFormatsConfig;
+
+
+
+
+
+
+#define AVFILTER_FLAG_DYNAMIC_INPUTS (1 << 0)
+
+
+
+
+
+#define AVFILTER_FLAG_DYNAMIC_OUTPUTS (1 << 1)
+
+
+
+
+#define AVFILTER_FLAG_SLICE_THREADS (1 << 2)
+# 168 "libavfilter/avfilter.h"
+#define AVFILTER_FLAG_METADATA_ONLY (1 << 3)
+
+
+
+
+#define AVFILTER_FLAG_HWDEVICE (1 << 4)
+# 182 "libavfilter/avfilter.h"
+#define AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC (1 << 16)
+
+
+
+
+
+
+
+#define AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL (1 << 17)
+
+
+
+
+#define AVFILTER_FLAG_SUPPORT_TIMELINE (AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC | AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL)
+
+
+
+
+
+typedef struct AVFilter {
+
+
+
+    const char *name;
+
+
+
+
+
+
+    const char *description;
+# 221 "libavfilter/avfilter.h"
+    const AVFilterPad *inputs;
+# 230 "libavfilter/avfilter.h"
+    const AVFilterPad *outputs;
+# 240 "libavfilter/avfilter.h"
+    const AVClass *priv_class;
+
+
+
+
+    int flags;
+# 258 "libavfilter/avfilter.h"
+    uint8_t nb_inputs;
+
+
+
+
+    uint8_t nb_outputs;
+
+
+
+
+
+    uint8_t formats_state;
+# 284 "libavfilter/avfilter.h"
+    int (*preinit)(AVFilterContext *ctx);
+# 307 "libavfilter/avfilter.h"
+    int (*init)(AVFilterContext *ctx);
+# 319 "libavfilter/avfilter.h"
+    void (*uninit)(AVFilterContext *ctx);
+
+
+
+
+
+    union {
+# 361 "libavfilter/avfilter.h"
+        int (*query_func)(AVFilterContext *);
+# 374 "libavfilter/avfilter.h"
+        int (*query_func2)(const AVFilterContext *,
+                           struct AVFilterFormatsConfig **cfg_in,
+                           struct AVFilterFormatsConfig **cfg_out);
+# 391 "libavfilter/avfilter.h"
+        const enum AVPixelFormat *pixels_list;
+# 402 "libavfilter/avfilter.h"
+        const enum AVSampleFormat *samples_list;
+
+
+
+        enum AVPixelFormat pix_fmt;
+
+
+
+        enum AVSampleFormat sample_fmt;
+    } formats;
+
+    int priv_size;
+
+    int flags_internal;
+# 429 "libavfilter/avfilter.h"
+    int (*process_command)(AVFilterContext *, const char *cmd, const char *arg, char *res, int res_len, int flags);
+# 443 "libavfilter/avfilter.h"
+    int (*activate)(AVFilterContext *ctx);
+} AVFilter;
+
+
+
+
+unsigned avfilter_filter_pad_count(const AVFilter *filter, int is_output);
+
+
+
+
+#define AVFILTER_THREAD_SLICE (1 << 0)
+
+
+struct AVFilterContext {
+    const AVClass *av_class;
+
+    const AVFilter *filter;
+
+    char *name;
+
+    AVFilterPad *input_pads;
+    AVFilterLink **inputs;
+    unsigned nb_inputs;
+
+    AVFilterPad *output_pads;
+    AVFilterLink **outputs;
+    unsigned nb_outputs;
+
+    void *priv;
+
+    struct AVFilterGraph *graph;
+# 492 "libavfilter/avfilter.h"
+    int thread_type;
+
+
+
+
+
+
+    int nb_threads;
+
+    struct AVFilterCommand *command_queue;
+
+    char *enable_str;
+    void *enable;
+    double *var_values;
+    int is_disabled;
+# 519 "libavfilter/avfilter.h"
+    AVBufferRef *hw_device_ctx;
+
+
+
+
+
+
+    unsigned ready;
+# 542 "libavfilter/avfilter.h"
+    int extra_hw_frames;
+};
+# 557 "libavfilter/avfilter.h"
+struct AVFilterLink {
+    AVFilterContext *src;
+    AVFilterPad *srcpad;
+
+    AVFilterContext *dst;
+    AVFilterPad *dstpad;
+
+    enum AVMediaType type;
+
+    int format;
+
+
+    int w;
+    int h;
+    AVRational sample_aspect_ratio;
+
+
+
+
+
+
+
+    enum AVColorSpace colorspace;
+    enum AVColorRange color_range;
+
+
+    int sample_rate;
+    AVChannelLayout ch_layout;
+# 593 "libavfilter/avfilter.h"
+    AVRational time_base;
+# 606 "libavfilter/avfilter.h"
+    AVFilterFormatsConfig incfg;
+
+
+
+
+    AVFilterFormatsConfig outcfg;
+};
+# 623 "libavfilter/avfilter.h"
+int avfilter_link(AVFilterContext *src, unsigned srcpad,
+                  AVFilterContext *dst, unsigned dstpad);
+
+
+
+
+
+__attribute__((deprecated))
+void avfilter_link_free(AVFilterLink **link);
+
+
+
+
+__attribute__((deprecated))
+int avfilter_config_links(AVFilterContext *filter);
+
+
+#define AVFILTER_CMD_FLAG_ONE 1
+#define AVFILTER_CMD_FLAG_FAST 2
+
+
+
+
+
+int avfilter_process_command(AVFilterContext *filter, const char *cmd, const char *arg, char *res, int res_len, int flags);
+# 658 "libavfilter/avfilter.h"
+const AVFilter *av_filter_iterate(void **opaque);
+# 667 "libavfilter/avfilter.h"
+const AVFilter *avfilter_get_by_name(const char *name);
+# 680 "libavfilter/avfilter.h"
+int avfilter_init_str(AVFilterContext *ctx, const char *args);
+# 702 "libavfilter/avfilter.h"
+int avfilter_init_dict(AVFilterContext *ctx, AVDictionary **options);
+
+
+
+
+
+
+
+void avfilter_free(AVFilterContext *filter);
+# 721 "libavfilter/avfilter.h"
+int avfilter_insert_filter(AVFilterLink *link, AVFilterContext *filt,
+                           unsigned filt_srcpad_idx, unsigned filt_dstpad_idx);
+
+
+
+
+
+
+const AVClass *avfilter_get_class(void);
+# 743 "libavfilter/avfilter.h"
+typedef int (avfilter_action_func)(AVFilterContext *ctx, void *arg, int jobnr, int nb_jobs);
+# 757 "libavfilter/avfilter.h"
+typedef int (avfilter_execute_func)(AVFilterContext *ctx, avfilter_action_func *func,
+                                    void *arg, int *ret, int nb_jobs);
+
+typedef struct AVFilterGraph {
+    const AVClass *av_class;
+    AVFilterContext **filters;
+    unsigned nb_filters;
+
+    char *scale_sws_opts;
+# 779 "libavfilter/avfilter.h"
+    int thread_type;
+
+
+
+
+
+
+    int nb_threads;
+
+
+
+
+
+
+    void *opaque;
+# 807 "libavfilter/avfilter.h"
+    avfilter_execute_func *execute;
+
+    char *aresample_swr_opts;
+} AVFilterGraph;
+
+
+
+
+
+
+AVFilterGraph *avfilter_graph_alloc(void);
+# 833 "libavfilter/avfilter.h"
+AVFilterContext *avfilter_graph_alloc_filter(AVFilterGraph *graph,
+                                             const AVFilter *filter,
+                                             const char *name);
+# 845 "libavfilter/avfilter.h"
+AVFilterContext *avfilter_graph_get_filter(AVFilterGraph *graph, const char *name);
+# 860 "libavfilter/avfilter.h"
+int avfilter_graph_create_filter(AVFilterContext **filt_ctx, const AVFilter *filt,
+                                 const char *name, const char *args, void *opaque,
+                                 AVFilterGraph *graph_ctx);
+# 872 "libavfilter/avfilter.h"
+void avfilter_graph_set_auto_convert(AVFilterGraph *graph, unsigned flags);
+
+enum {
+    AVFILTER_AUTO_CONVERT_ALL = 0,
+    AVFILTER_AUTO_CONVERT_NONE = -1,
+};
+# 886 "libavfilter/avfilter.h"
+int avfilter_graph_config(AVFilterGraph *graphctx, void *log_ctx);
+
+
+
+
+
+void avfilter_graph_free(AVFilterGraph **graph);
+# 903 "libavfilter/avfilter.h"
+typedef struct AVFilterInOut {
+
+    char *name;
+
+
+    AVFilterContext *filter_ctx;
+
+
+    int pad_idx;
+
+
+    struct AVFilterInOut *next;
+} AVFilterInOut;
+
+
+
+
+
+
+AVFilterInOut *avfilter_inout_alloc(void);
+
+
+
+
+
+void avfilter_inout_free(AVFilterInOut **inout);
+# 948 "libavfilter/avfilter.h"
+int avfilter_graph_parse(AVFilterGraph *graph, const char *filters,
+                         AVFilterInOut *inputs, AVFilterInOut *outputs,
+                         void *log_ctx);
+# 969 "libavfilter/avfilter.h"
+int avfilter_graph_parse_ptr(AVFilterGraph *graph, const char *filters,
+                             AVFilterInOut **inputs, AVFilterInOut **outputs,
+                             void *log_ctx);
+# 995 "libavfilter/avfilter.h"
+int avfilter_graph_parse2(AVFilterGraph *graph, const char *filters,
+                          AVFilterInOut **inputs,
+                          AVFilterInOut **outputs);
+
+
+
+
+
+
+
+typedef struct AVFilterPadParams {
+
+
+
+
+
+
+
+    char *label;
+} AVFilterPadParams;
+
+
+
+
+
+
+
+typedef struct AVFilterParams {
+# 1033 "libavfilter/avfilter.h"
+    AVFilterContext *filter;
+# 1050 "libavfilter/avfilter.h"
+    char *filter_name;
+# 1062 "libavfilter/avfilter.h"
+    char *instance_name;
+# 1074 "libavfilter/avfilter.h"
+    AVDictionary *opts;
+
+    AVFilterPadParams **inputs;
+    unsigned nb_inputs;
+
+    AVFilterPadParams **outputs;
+    unsigned nb_outputs;
+} AVFilterParams;
+
+
+
+
+
+
+
+typedef struct AVFilterChain {
+    AVFilterParams **filters;
+    size_t nb_filters;
+} AVFilterChain;
+# 1103 "libavfilter/avfilter.h"
+typedef struct AVFilterGraphSegment {
+
+
+
+
+    AVFilterGraph *graph;
+
+
+
+
+
+    AVFilterChain **chains;
+    size_t nb_chains;
+# 1125 "libavfilter/avfilter.h"
+    char *scale_sws_opts;
+} AVFilterGraphSegment;
+# 1152 "libavfilter/avfilter.h"
+int avfilter_graph_segment_parse(AVFilterGraph *graph, const char *graph_str,
+                                 int flags, AVFilterGraphSegment **seg);
+# 1180 "libavfilter/avfilter.h"
+int avfilter_graph_segment_create_filters(AVFilterGraphSegment *seg, int flags);
+# 1209 "libavfilter/avfilter.h"
+int avfilter_graph_segment_apply_opts(AVFilterGraphSegment *seg, int flags);
+# 1231 "libavfilter/avfilter.h"
+int avfilter_graph_segment_init(AVFilterGraphSegment *seg, int flags);
+# 1266 "libavfilter/avfilter.h"
+int avfilter_graph_segment_link(AVFilterGraphSegment *seg, int flags,
+                                AVFilterInOut **inputs,
+                                AVFilterInOut **outputs);
+# 1294 "libavfilter/avfilter.h"
+int avfilter_graph_segment_apply(AVFilterGraphSegment *seg, int flags,
+                                 AVFilterInOut **inputs,
+                                 AVFilterInOut **outputs);
+# 1308 "libavfilter/avfilter.h"
+void avfilter_graph_segment_free(AVFilterGraphSegment **seg);
+# 1325 "libavfilter/avfilter.h"
+int avfilter_graph_send_command(AVFilterGraph *graph, const char *target, const char *cmd, const char *arg, char *res, int res_len, int flags);
+# 1342 "libavfilter/avfilter.h"
+int avfilter_graph_queue_command(AVFilterGraph *graph, const char *target, const char *cmd, const char *arg, int flags, double ts);
+# 1353 "libavfilter/avfilter.h"
+char *avfilter_graph_dump(AVFilterGraph *graph, const char *options);
+# 1373 "libavfilter/avfilter.h"
+int avfilter_graph_request_oldest(AVFilterGraph *graph);
+# 3 "libav.h" 2
+# 1 "libavformat/avformat.h" 1
+# 22 "libavformat/avformat.h"
+#define AVFORMAT_AVFORMAT_H 
+# 312 "libavformat/avformat.h"
+# 1 "./libavcodec/codec_par.h" 1
+# 313 "libavformat/avformat.h" 2
+# 1 "./libavcodec/defs.h" 1
+# 314 "libavformat/avformat.h" 2
+# 1 "./libavcodec/packet.h" 1
+# 315 "libavformat/avformat.h" 2
+
+
+
+
+# 1 "libavformat/avio.h" 1
+# 21 "libavformat/avio.h"
+#define AVFORMAT_AVIO_H 
+# 36 "libavformat/avio.h"
+# 1 "./libavformat/version_major.h" 1
+# 22 "./libavformat/version_major.h"
+#define AVFORMAT_VERSION_MAJOR_H 
+# 32 "./libavformat/version_major.h"
+#define LIBAVFORMAT_VERSION_MAJOR 61
+# 44 "./libavformat/version_major.h"
+#define FF_API_COMPUTE_PKT_FIELDS2 (LIBAVFORMAT_VERSION_MAJOR < 62)
+#define FF_API_LAVF_SHORTEST (LIBAVFORMAT_VERSION_MAJOR < 62)
+#define FF_API_ALLOW_FLUSH (LIBAVFORMAT_VERSION_MAJOR < 62)
+#define FF_API_AVSTREAM_SIDE_DATA (LIBAVFORMAT_VERSION_MAJOR < 62)
+
+#define FF_API_GET_DUR_ESTIMATE_METHOD (LIBAVFORMAT_VERSION_MAJOR < 62)
+#define FF_API_INTERNAL_TIMING (LIBAVFORMAT_VERSION_MAJOR < 62)
+
+#define FF_API_R_FRAME_RATE 1
+# 37 "libavformat/avio.h" 2
+
+
+
+
+#define AVIO_SEEKABLE_NORMAL (1 << 0)
+
+
+
+
+#define AVIO_SEEKABLE_TIME (1 << 1)
+# 59 "libavformat/avio.h"
+typedef struct AVIOInterruptCB {
+    int (*callback)(void*);
+    void *opaque;
+} AVIOInterruptCB;
+
+
+
+
+enum AVIODirEntryType {
+    AVIO_ENTRY_UNKNOWN,
+    AVIO_ENTRY_BLOCK_DEVICE,
+    AVIO_ENTRY_CHARACTER_DEVICE,
+    AVIO_ENTRY_DIRECTORY,
+    AVIO_ENTRY_NAMED_PIPE,
+    AVIO_ENTRY_SYMBOLIC_LINK,
+    AVIO_ENTRY_SOCKET,
+    AVIO_ENTRY_FILE,
+    AVIO_ENTRY_SERVER,
+    AVIO_ENTRY_SHARE,
+    AVIO_ENTRY_WORKGROUP,
+};
+
+
+
+
+
+
+
+typedef struct AVIODirEntry {
+    char *name;
+    int type;
+    int utf8;
+
+    int64_t size;
+    int64_t modification_timestamp;
+
+    int64_t access_timestamp;
+
+    int64_t status_change_timestamp;
+
+    int64_t user_id;
+    int64_t group_id;
+    int64_t filemode;
+} AVIODirEntry;
+
+typedef struct AVIODirContext AVIODirContext;
+
+
+
+
+
+enum AVIODataMarkerType {
+
+
+
+    AVIO_DATA_MARKER_HEADER,
+
+
+
+
+
+
+    AVIO_DATA_MARKER_SYNC_POINT,
+
+
+
+
+
+    AVIO_DATA_MARKER_BOUNDARY_POINT,
+
+
+
+
+
+
+    AVIO_DATA_MARKER_UNKNOWN,
+
+
+
+
+    AVIO_DATA_MARKER_TRAILER,
+
+
+
+
+
+    AVIO_DATA_MARKER_FLUSH_POINT,
+};
+# 160 "libavformat/avio.h"
+typedef struct AVIOContext {
+# 173 "libavformat/avio.h"
+    const AVClass *av_class;
+# 225 "libavformat/avio.h"
+    unsigned char *buffer;
+    int buffer_size;
+    unsigned char *buf_ptr;
+    unsigned char *buf_end;
+
+
+
+    void *opaque;
+
+    int (*read_packet)(void *opaque, uint8_t *buf, int buf_size);
+    int (*write_packet)(void *opaque, const uint8_t *buf, int buf_size);
+    int64_t (*seek)(void *opaque, int64_t offset, int whence);
+    int64_t pos;
+    int eof_reached;
+    int error;
+    int write_flag;
+    int max_packet_size;
+    int min_packet_size;
+
+    unsigned long checksum;
+    unsigned char *checksum_ptr;
+    unsigned long (*update_checksum)(unsigned long checksum, const uint8_t *buf, unsigned int size);
+
+
+
+    int (*read_pause)(void *opaque, int pause);
+
+
+
+
+
+    int64_t (*read_seek)(void *opaque, int stream_index,
+                         int64_t timestamp, int flags);
+
+
+
+    int seekable;
+
+
+
+
+
+
+    int direct;
+
+
+
+
+    const char *protocol_whitelist;
+
+
+
+
+    const char *protocol_blacklist;
+
+
+
+
+    int (*write_data_type)(void *opaque, const uint8_t *buf, int buf_size,
+                           enum AVIODataMarkerType type, int64_t time);
+
+
+
+
+
+    int ignore_boundary_point;
+
+
+
+
+
+    unsigned char *buf_ptr_max;
+
+
+
+
+    int64_t bytes_read;
+
+
+
+
+    int64_t bytes_written;
+} AVIOContext;
+# 316 "libavformat/avio.h"
+const char *avio_find_protocol_name(const char *url);
+# 330 "libavformat/avio.h"
+int avio_check(const char *url, int flags);
+# 342 "libavformat/avio.h"
+int avio_open_dir(AVIODirContext **s, const char *url, AVDictionary **options);
+# 355 "libavformat/avio.h"
+int avio_read_dir(AVIODirContext *s, AVIODirEntry **next);
+# 366 "libavformat/avio.h"
+int avio_close_dir(AVIODirContext **s);
+
+
+
+
+
+
+void avio_free_directory_entry(AVIODirEntry **entry);
+# 398 "libavformat/avio.h"
+AVIOContext *avio_alloc_context(
+                  unsigned char *buffer,
+                  int buffer_size,
+                  int write_flag,
+                  void *opaque,
+                  int (*read_packet)(void *opaque, uint8_t *buf, int buf_size),
+                  int (*write_packet)(void *opaque, const uint8_t *buf, int buf_size),
+                  int64_t (*seek)(void *opaque, int64_t offset, int whence));
+
+
+
+
+
+
+
+void avio_context_free(AVIOContext **s);
+
+void avio_w8(AVIOContext *s, int b);
+void avio_write(AVIOContext *s, const unsigned char *buf, int size);
+void avio_wl64(AVIOContext *s, uint64_t val);
+void avio_wb64(AVIOContext *s, uint64_t val);
+void avio_wl32(AVIOContext *s, unsigned int val);
+void avio_wb32(AVIOContext *s, unsigned int val);
+void avio_wl24(AVIOContext *s, unsigned int val);
+void avio_wb24(AVIOContext *s, unsigned int val);
+void avio_wl16(AVIOContext *s, unsigned int val);
+void avio_wb16(AVIOContext *s, unsigned int val);
+
+
+
+
+
+int avio_put_str(AVIOContext *s, const char *str);
+# 439 "libavformat/avio.h"
+int avio_put_str16le(AVIOContext *s, const char *str);
+# 448 "libavformat/avio.h"
+int avio_put_str16be(AVIOContext *s, const char *str);
+# 461 "libavformat/avio.h"
+void avio_write_marker(AVIOContext *s, int64_t time, enum AVIODataMarkerType type);
+
+
+
+
+
+
+#define AVSEEK_SIZE 0x10000
+
+
+
+
+
+
+
+#define AVSEEK_FORCE 0x20000
+
+
+
+
+
+int64_t avio_seek(AVIOContext *s, int64_t offset, int whence);
+
+
+
+
+
+int64_t avio_skip(AVIOContext *s, int64_t offset);
+
+
+
+
+
+static __attribute__((always_inline)) inline int64_t avio_tell(AVIOContext *s)
+{
+    return avio_seek(s, 0, 
+# 496 "libavformat/avio.h" 3
+                          1
+# 496 "libavformat/avio.h"
+                                  );
+}
+
+
+
+
+
+int64_t avio_size(AVIOContext *s);
+
+
+
+
+
+int avio_feof(AVIOContext *s);
+
+
+
+
+
+int avio_vprintf(AVIOContext *s, const char *fmt, va_list ap);
+
+
+
+
+
+int avio_printf(AVIOContext *s, const char *fmt, ...) __attribute__((__format__(__printf__, 2, 3)));
+
+
+
+
+
+
+void avio_print_string_array(AVIOContext *s, const char * const strings[]);
+# 537 "libavformat/avio.h"
+#define avio_print(s,...) avio_print_string_array(s, (const char*[]){__VA_ARGS__, NULL})
+# 550 "libavformat/avio.h"
+void avio_flush(AVIOContext *s);
+
+
+
+
+
+int avio_read(AVIOContext *s, unsigned char *buf, int size);
+# 565 "libavformat/avio.h"
+int avio_read_partial(AVIOContext *s, unsigned char *buf, int size);
+# 574 "libavformat/avio.h"
+int avio_r8 (AVIOContext *s);
+unsigned int avio_rl16(AVIOContext *s);
+unsigned int avio_rl24(AVIOContext *s);
+unsigned int avio_rl32(AVIOContext *s);
+uint64_t avio_rl64(AVIOContext *s);
+unsigned int avio_rb16(AVIOContext *s);
+unsigned int avio_rb24(AVIOContext *s);
+unsigned int avio_rb32(AVIOContext *s);
+uint64_t avio_rb64(AVIOContext *s);
+# 599 "libavformat/avio.h"
+int avio_get_str(AVIOContext *pb, int maxlen, char *buf, int buflen);
+
+
+
+
+
+
+
+int avio_get_str16le(AVIOContext *pb, int maxlen, char *buf, int buflen);
+int avio_get_str16be(AVIOContext *pb, int maxlen, char *buf, int buflen);
+# 617 "libavformat/avio.h"
+#define AVIO_FLAG_READ 1
+#define AVIO_FLAG_WRITE 2
+#define AVIO_FLAG_READ_WRITE (AVIO_FLAG_READ|AVIO_FLAG_WRITE)
+# 636 "libavformat/avio.h"
+#define AVIO_FLAG_NONBLOCK 8
+
+
+
+
+
+
+
+#define AVIO_FLAG_DIRECT 0x8000
+# 660 "libavformat/avio.h"
+int avio_open(AVIOContext **s, const char *url, int flags);
+# 680 "libavformat/avio.h"
+int avio_open2(AVIOContext **s, const char *url, int flags,
+               const AVIOInterruptCB *int_cb, AVDictionary **options);
+# 693 "libavformat/avio.h"
+int avio_close(AVIOContext *s);
+# 706 "libavformat/avio.h"
+int avio_closep(AVIOContext **s);
+# 715 "libavformat/avio.h"
+int avio_open_dyn_buf(AVIOContext **s);
+# 727 "libavformat/avio.h"
+int avio_get_dyn_buf(AVIOContext *s, uint8_t **pbuffer);
+# 738 "libavformat/avio.h"
+int avio_close_dyn_buf(AVIOContext *s, uint8_t **pbuffer);
+# 751 "libavformat/avio.h"
+const char *avio_enum_protocols(void **opaque, int output);
+
+
+
+
+
+
+const AVClass *avio_protocol_get_class(const char *name);
+# 767 "libavformat/avio.h"
+int avio_pause(AVIOContext *h, int pause);
+# 788 "libavformat/avio.h"
+int64_t avio_seek_time(AVIOContext *h, int stream_index,
+                       int64_t timestamp, int flags);
+
+
+struct AVBPrint;
+
+
+
+
+
+
+
+int avio_read_to_bprint(AVIOContext *h, struct AVBPrint *pb, size_t max_size);
+# 809 "libavformat/avio.h"
+int avio_accept(AVIOContext *s, AVIOContext **c);
+# 830 "libavformat/avio.h"
+int avio_handshake(AVIOContext *c);
+# 320 "libavformat/avformat.h" 2
+
+
+
+
+
+# 1 "./libavformat/version.h" 1
+# 22 "./libavformat/version.h"
+#define AVFORMAT_VERSION_H 
+# 32 "./libavformat/version.h"
+# 1 "./libavformat/version_major.h" 1
+# 33 "./libavformat/version.h" 2
+
+#define LIBAVFORMAT_VERSION_MINOR 7
+#define LIBAVFORMAT_VERSION_MICRO 100
+
+#define LIBAVFORMAT_VERSION_INT AV_VERSION_INT(LIBAVFORMAT_VERSION_MAJOR, LIBAVFORMAT_VERSION_MINOR, LIBAVFORMAT_VERSION_MICRO)
+
+
+#define LIBAVFORMAT_VERSION AV_VERSION(LIBAVFORMAT_VERSION_MAJOR, LIBAVFORMAT_VERSION_MINOR, LIBAVFORMAT_VERSION_MICRO)
+
+
+#define LIBAVFORMAT_BUILD LIBAVFORMAT_VERSION_INT
+
+#define LIBAVFORMAT_IDENT "Lavf" AV_STRINGIFY(LIBAVFORMAT_VERSION)
+# 326 "libavformat/avformat.h" 2
+
+
+# 1 "./libavcodec/codec.h" 1
+# 329 "libavformat/avformat.h" 2
+
+
+struct AVFormatContext;
+struct AVFrame;
+# 424 "libavformat/avformat.h"
+int av_get_packet(AVIOContext *s, AVPacket *pkt, int size);
+# 441 "libavformat/avformat.h"
+int av_append_packet(AVIOContext *s, AVPacket *pkt, int size);
+
+
+
+
+struct AVCodecTag;
+
+
+
+
+typedef struct AVProbeData {
+    const char *filename;
+    unsigned char *buf;
+    int buf_size;
+    const char *mime_type;
+} AVProbeData;
+
+#define AVPROBE_SCORE_RETRY (AVPROBE_SCORE_MAX/4)
+#define AVPROBE_SCORE_STREAM_RETRY (AVPROBE_SCORE_MAX/4-1)
+
+#define AVPROBE_SCORE_EXTENSION 50
+#define AVPROBE_SCORE_MIME 75
+#define AVPROBE_SCORE_MAX 100
+
+#define AVPROBE_PADDING_SIZE 32
+
+
+#define AVFMT_NOFILE 0x0001
+#define AVFMT_NEEDNUMBER 0x0002
+
+
+
+
+
+
+#define AVFMT_EXPERIMENTAL 0x0004
+#define AVFMT_SHOW_IDS 0x0008
+#define AVFMT_GLOBALHEADER 0x0040
+#define AVFMT_NOTIMESTAMPS 0x0080
+#define AVFMT_GENERIC_INDEX 0x0100
+#define AVFMT_TS_DISCONT 0x0200
+#define AVFMT_VARIABLE_FPS 0x0400
+#define AVFMT_NODIMENSIONS 0x0800
+#define AVFMT_NOSTREAMS 0x1000
+#define AVFMT_NOBINSEARCH 0x2000
+#define AVFMT_NOGENSEARCH 0x4000
+#define AVFMT_NO_BYTE_SEEK 0x8000
+
+#define AVFMT_ALLOW_FLUSH 0x10000
+
+#define AVFMT_TS_NONSTRICT 0x20000
+
+
+#define AVFMT_TS_NEGATIVE 0x40000
+# 503 "libavformat/avformat.h"
+#define AVFMT_SEEK_TO_PTS 0x4000000
+
+
+
+
+
+typedef struct AVOutputFormat {
+    const char *name;
+
+
+
+
+
+    const char *long_name;
+    const char *mime_type;
+    const char *extensions;
+
+    enum AVCodecID audio_codec;
+    enum AVCodecID video_codec;
+    enum AVCodecID subtitle_codec;
+
+
+
+
+
+
+    int flags;
+
+
+
+
+
+    const struct AVCodecTag * const *codec_tag;
+
+
+    const AVClass *priv_class;
+} AVOutputFormat;
+# 548 "libavformat/avformat.h"
+typedef struct AVInputFormat {
+
+
+
+
+    const char *name;
+
+
+
+
+
+
+    const char *long_name;
+
+
+
+
+
+
+    int flags;
+
+
+
+
+
+
+    const char *extensions;
+
+    const struct AVCodecTag * const *codec_tag;
+
+    const AVClass *priv_class;
+
+
+
+
+
+
+    const char *mime_type;
+} AVInputFormat;
+
+
+
+
+enum AVStreamParseType {
+    AVSTREAM_PARSE_NONE,
+    AVSTREAM_PARSE_FULL,
+    AVSTREAM_PARSE_HEADERS,
+    AVSTREAM_PARSE_TIMESTAMPS,
+    AVSTREAM_PARSE_FULL_ONCE,
+    AVSTREAM_PARSE_FULL_RAW,
+
+
+};
+
+typedef struct AVIndexEntry {
+    int64_t pos;
+    int64_t timestamp;
+
+
+
+
+
+#define AVINDEX_KEYFRAME 0x0001
+#define AVINDEX_DISCARD_FRAME 0x0002
+
+
+    int flags:2;
+    int size:30;
+    int min_distance;
+} AVIndexEntry;
+
+
+
+
+
+#define AV_DISPOSITION_DEFAULT (1 << 0)
+
+
+
+
+
+
+
+#define AV_DISPOSITION_DUB (1 << 1)
+
+
+
+
+
+#define AV_DISPOSITION_ORIGINAL (1 << 2)
+
+
+
+#define AV_DISPOSITION_COMMENT (1 << 3)
+
+
+
+#define AV_DISPOSITION_LYRICS (1 << 4)
+
+
+
+#define AV_DISPOSITION_KARAOKE (1 << 5)
+
+
+
+
+
+
+#define AV_DISPOSITION_FORCED (1 << 6)
+
+
+
+#define AV_DISPOSITION_HEARING_IMPAIRED (1 << 7)
+
+
+
+#define AV_DISPOSITION_VISUAL_IMPAIRED (1 << 8)
+
+
+
+#define AV_DISPOSITION_CLEAN_EFFECTS (1 << 9)
+
+
+
+
+
+
+
+#define AV_DISPOSITION_ATTACHED_PIC (1 << 10)
+
+
+
+
+#define AV_DISPOSITION_TIMED_THUMBNAILS (1 << 11)
+
+
+
+
+
+
+#define AV_DISPOSITION_NON_DIEGETIC (1 << 12)
+
+
+
+
+
+#define AV_DISPOSITION_CAPTIONS (1 << 16)
+
+
+
+
+
+#define AV_DISPOSITION_DESCRIPTIONS (1 << 17)
+
+
+
+
+#define AV_DISPOSITION_METADATA (1 << 18)
+
+
+
+
+
+#define AV_DISPOSITION_DEPENDENT (1 << 19)
+
+
+
+#define AV_DISPOSITION_STILL_IMAGE (1 << 20)
+
+
+
+
+#define AV_DISPOSITION_MULTILAYER (1 << 21)
+
+
+
+
+
+int av_disposition_from_string(const char *disp);
+
+
+
+
+
+
+
+const char *av_disposition_to_string(int disposition);
+
+
+
+
+#define AV_PTS_WRAP_IGNORE 0
+#define AV_PTS_WRAP_ADD_OFFSET 1
+#define AV_PTS_WRAP_SUB_OFFSET -1
+# 750 "libavformat/avformat.h"
+typedef struct AVStream {
+
+
+
+    const AVClass *av_class;
+
+    int index;
+
+
+
+
+
+    int id;
+# 773 "libavformat/avformat.h"
+    AVCodecParameters *codecpar;
+
+    void *priv_data;
+# 789 "libavformat/avformat.h"
+    AVRational time_base;
+# 799 "libavformat/avformat.h"
+    int64_t start_time;
+# 809 "libavformat/avformat.h"
+    int64_t duration;
+
+    int64_t nb_frames;
+
+
+
+
+
+
+
+    int disposition;
+
+    enum AVDiscard discard;
+
+
+
+
+
+
+    AVRational sample_aspect_ratio;
+
+    AVDictionary *metadata;
+# 839 "libavformat/avformat.h"
+    AVRational avg_frame_rate;
+# 848 "libavformat/avformat.h"
+    AVPacket attached_pic;
+# 870 "libavformat/avformat.h"
+    __attribute__((deprecated))
+    AVPacketSideData *side_data;
+
+
+
+
+
+
+    __attribute__((deprecated))
+    int nb_side_data;
+# 893 "libavformat/avformat.h"
+    int event_flags;
+
+
+
+
+
+
+#define AVSTREAM_EVENT_FLAG_METADATA_UPDATED 0x0001
+
+
+
+
+
+#define AVSTREAM_EVENT_FLAG_NEW_PACKETS (1 << 1)
+# 916 "libavformat/avformat.h"
+    AVRational r_frame_rate;
+# 925 "libavformat/avformat.h"
+    int pts_wrap_bits;
+} AVStream;
+# 989 "libavformat/avformat.h"
+typedef struct AVStreamGroupTileGrid {
+    const AVClass *av_class;
+
+
+
+
+
+
+    unsigned int nb_tiles;
+
+
+
+
+
+
+    int coded_width;
+
+
+
+
+
+    int coded_height;
+# 1022 "libavformat/avformat.h"
+    struct {
+
+
+
+
+
+        unsigned int idx;
+
+
+
+
+        int horizontal;
+
+
+
+
+        int vertical;
+    } *offsets;
+# 1048 "libavformat/avformat.h"
+    uint8_t background[4];
+
+
+
+
+
+
+
+    int horizontal_offset;
+
+
+
+
+
+
+    int vertical_offset;
+# 1074 "libavformat/avformat.h"
+    int width;
+# 1084 "libavformat/avformat.h"
+    int height;
+} AVStreamGroupTileGrid;
+# 1095 "libavformat/avformat.h"
+typedef struct AVStreamGroupLCEVC {
+    const AVClass *av_class;
+
+
+
+
+    unsigned int lcevc_index;
+
+
+
+    int width;
+
+
+
+    int height;
+} AVStreamGroupLCEVC;
+
+enum AVStreamGroupParamsType {
+    AV_STREAM_GROUP_PARAMS_NONE,
+    AV_STREAM_GROUP_PARAMS_IAMF_AUDIO_ELEMENT,
+    AV_STREAM_GROUP_PARAMS_IAMF_MIX_PRESENTATION,
+    AV_STREAM_GROUP_PARAMS_TILE_GRID,
+    AV_STREAM_GROUP_PARAMS_LCEVC,
+};
+
+struct AVIAMFAudioElement;
+struct AVIAMFMixPresentation;
+
+typedef struct AVStreamGroup {
+
+
+
+    const AVClass *av_class;
+
+    void *priv_data;
+
+
+
+
+    unsigned int index;
+
+
+
+
+
+
+
+    int64_t id;
+
+
+
+
+
+
+
+    enum AVStreamGroupParamsType type;
+
+
+
+
+    union {
+        struct AVIAMFAudioElement *iamf_audio_element;
+        struct AVIAMFMixPresentation *iamf_mix_presentation;
+        struct AVStreamGroupTileGrid *tile_grid;
+        struct AVStreamGroupLCEVC *lcevc;
+    } params;
+# 1170 "libavformat/avformat.h"
+    AVDictionary *metadata;
+
+
+
+
+
+
+    unsigned int nb_streams;
+# 1190 "libavformat/avformat.h"
+    AVStream **streams;
+# 1200 "libavformat/avformat.h"
+    int disposition;
+} AVStreamGroup;
+
+struct AVCodecParserContext *av_stream_get_parser(const AVStream *s);
+
+#define AV_PROGRAM_RUNNING 1
+
+
+
+
+
+
+
+typedef struct AVProgram {
+    int id;
+    int flags;
+    enum AVDiscard discard;
+    unsigned int *stream_index;
+    unsigned int nb_stream_indexes;
+    AVDictionary *metadata;
+
+    int program_num;
+    int pmt_pid;
+    int pcr_pid;
+    int pmt_version;
+# 1233 "libavformat/avformat.h"
+    int64_t start_time;
+    int64_t end_time;
+
+    int64_t pts_wrap_reference;
+    int pts_wrap_behavior;
+} AVProgram;
+
+#define AVFMTCTX_NOHEADER 0x0001
+
+#define AVFMTCTX_UNSEEKABLE 0x0002
+
+
+
+
+
+typedef struct AVChapter {
+    int64_t id;
+    AVRational time_base;
+    int64_t start, end;
+    AVDictionary *metadata;
+} AVChapter;
+
+
+
+
+
+typedef int (*av_format_control_message)(struct AVFormatContext *s, int type,
+                                         void *data, size_t data_size);
+
+typedef int (*AVOpenCallback)(struct AVFormatContext *s, AVIOContext **pb, const char *url, int flags,
+                              const AVIOInterruptCB *int_cb, AVDictionary **options);
+
+
+
+
+
+enum AVDurationEstimationMethod {
+    AVFMT_DURATION_FROM_PTS,
+    AVFMT_DURATION_FROM_STREAM,
+    AVFMT_DURATION_FROM_BITRATE
+};
+# 1289 "libavformat/avformat.h"
+typedef struct AVFormatContext {
+
+
+
+
+    const AVClass *av_class;
+
+
+
+
+
+
+    const struct AVInputFormat *iformat;
+
+
+
+
+
+
+    const struct AVOutputFormat *oformat;
+# 1317 "libavformat/avformat.h"
+    void *priv_data;
+# 1331 "libavformat/avformat.h"
+    AVIOContext *pb;
+
+
+
+
+
+
+    int ctx_flags;
+
+
+
+
+
+
+    unsigned int nb_streams;
+# 1357 "libavformat/avformat.h"
+    AVStream **streams;
+
+
+
+
+
+
+    unsigned int nb_stream_groups;
+# 1376 "libavformat/avformat.h"
+    AVStreamGroup **stream_groups;
+# 1389 "libavformat/avformat.h"
+    unsigned int nb_chapters;
+    AVChapter **chapters;
+# 1405 "libavformat/avformat.h"
+    char *url;
+# 1414 "libavformat/avformat.h"
+    int64_t start_time;
+# 1424 "libavformat/avformat.h"
+    int64_t duration;
+
+
+
+
+
+
+    int64_t bit_rate;
+
+    unsigned int packet_size;
+    int max_delay;
+
+
+
+
+
+    int flags;
+#define AVFMT_FLAG_GENPTS 0x0001
+#define AVFMT_FLAG_IGNIDX 0x0002
+#define AVFMT_FLAG_NONBLOCK 0x0004
+#define AVFMT_FLAG_IGNDTS 0x0008
+#define AVFMT_FLAG_NOFILLIN 0x0010
+#define AVFMT_FLAG_NOPARSE 0x0020
+#define AVFMT_FLAG_NOBUFFER 0x0040
+#define AVFMT_FLAG_CUSTOM_IO 0x0080
+#define AVFMT_FLAG_DISCARD_CORRUPT 0x0100
+#define AVFMT_FLAG_FLUSH_PACKETS 0x0200
+
+
+
+
+
+
+#define AVFMT_FLAG_BITEXACT 0x0400
+#define AVFMT_FLAG_SORT_DTS 0x10000
+#define AVFMT_FLAG_FAST_SEEK 0x80000
+
+#define AVFMT_FLAG_SHORTEST 0x100000
+
+#define AVFMT_FLAG_AUTO_BSF 0x200000
+# 1476 "libavformat/avformat.h"
+    int64_t probesize;
+
+
+
+
+
+
+
+    int64_t max_analyze_duration;
+
+    const uint8_t *key;
+    int keylen;
+
+    unsigned int nb_programs;
+    AVProgram **programs;
+
+
+
+
+
+    enum AVCodecID video_codec_id;
+
+
+
+
+
+    enum AVCodecID audio_codec_id;
+
+
+
+
+
+    enum AVCodecID subtitle_codec_id;
+
+
+
+
+
+    enum AVCodecID data_codec_id;
+# 1524 "libavformat/avformat.h"
+    AVDictionary *metadata;
+# 1537 "libavformat/avformat.h"
+    int64_t start_time_realtime;
+
+
+
+
+
+
+    int fps_probe_size;
+
+
+
+
+
+
+    int error_recognition;
+# 1562 "libavformat/avformat.h"
+    AVIOInterruptCB interrupt_callback;
+
+
+
+
+    int debug;
+#define FF_FDEBUG_TS 0x0001
+
+
+
+
+
+
+    int max_streams;
+# 1587 "libavformat/avformat.h"
+    unsigned int max_index_size;
+
+
+
+
+
+    unsigned int max_picture_buffer;
+# 1611 "libavformat/avformat.h"
+    int64_t max_interleave_delta;
+
+
+
+
+
+    int max_ts_probe;
+
+
+
+
+
+
+
+    int max_chunk_duration;
+
+
+
+
+
+
+
+    int max_chunk_size;
+
+
+
+
+
+
+    int max_probe_packets;
+
+
+
+
+
+    int strict_std_compliance;
+# 1659 "libavformat/avformat.h"
+    int event_flags;
+
+
+
+
+
+
+#define AVFMT_EVENT_FLAG_METADATA_UPDATED 0x0001
+# 1676 "libavformat/avformat.h"
+    int avoid_negative_ts;
+#define AVFMT_AVOID_NEG_TS_AUTO -1
+#define AVFMT_AVOID_NEG_TS_DISABLED 0
+#define AVFMT_AVOID_NEG_TS_MAKE_NON_NEGATIVE 1
+#define AVFMT_AVOID_NEG_TS_MAKE_ZERO 2
+
+
+
+
+
+
+
+    int audio_preload;
+
+
+
+
+
+
+
+    int use_wallclock_as_timestamps;
+# 1705 "libavformat/avformat.h"
+    int skip_estimate_duration_from_pts;
+
+
+
+
+
+
+    int avio_flags;
+
+
+
+
+
+
+
+    enum AVDurationEstimationMethod duration_estimation_method;
+
+
+
+
+
+
+    int64_t skip_initial_bytes;
+
+
+
+
+
+
+    unsigned int correct_ts_overflow;
+
+
+
+
+
+
+    int seek2any;
+
+
+
+
+
+
+    int flush_packets;
+# 1757 "libavformat/avformat.h"
+    int probe_score;
+# 1768 "libavformat/avformat.h"
+    int format_probesize;
+
+
+
+
+
+
+
+    char *codec_whitelist;
+
+
+
+
+
+
+
+    char *format_whitelist;
+
+
+
+
+
+
+    char *protocol_whitelist;
+
+
+
+
+
+
+    char *protocol_blacklist;
+
+
+
+
+
+
+
+    int io_repositioned;
+
+
+
+
+
+
+
+    const struct AVCodec *video_codec;
+
+
+
+
+
+
+
+    const struct AVCodec *audio_codec;
+
+
+
+
+
+
+
+    const struct AVCodec *subtitle_codec;
+
+
+
+
+
+
+
+    const struct AVCodec *data_codec;
+
+
+
+
+
+
+    int metadata_header_padding;
+
+
+
+
+
+    void *opaque;
+
+
+
+
+    av_format_control_message control_message_cb;
+
+
+
+
+
+    int64_t output_ts_offset;
+
+
+
+
+
+
+
+    uint8_t *dump_separator;
+# 1892 "libavformat/avformat.h"
+    int (*io_open)(struct AVFormatContext *s, AVIOContext **pb, const char *url,
+                   int flags, AVDictionary **options);
+# 1906 "libavformat/avformat.h"
+    int (*io_close2)(struct AVFormatContext *s, AVIOContext *pb);
+# 1916 "libavformat/avformat.h"
+    int64_t duration_probesize;
+} AVFormatContext;
+# 1929 "libavformat/avformat.h"
+void av_format_inject_global_side_data(AVFormatContext *s);
+# 1938 "libavformat/avformat.h"
+__attribute__((deprecated))
+enum AVDurationEstimationMethod av_fmt_ctx_get_duration_estimation_method(const AVFormatContext* ctx);
+# 1954 "libavformat/avformat.h"
+unsigned avformat_version(void);
+
+
+
+
+const char *avformat_configuration(void);
+
+
+
+
+const char *avformat_license(void);
+# 1980 "libavformat/avformat.h"
+int avformat_network_init(void);
+
+
+
+
+
+int avformat_network_deinit(void);
+# 1997 "libavformat/avformat.h"
+const AVOutputFormat *av_muxer_iterate(void **opaque);
+# 2008 "libavformat/avformat.h"
+const AVInputFormat *av_demuxer_iterate(void **opaque);
+
+
+
+
+
+
+AVFormatContext *avformat_alloc_context(void);
+
+
+
+
+
+void avformat_free_context(AVFormatContext *s);
+
+
+
+
+
+
+
+const AVClass *avformat_get_class(void);
+
+
+
+
+
+
+
+const AVClass *av_stream_get_class(void);
+
+
+
+
+
+
+
+const AVClass *av_stream_group_get_class(void);
+
+
+
+
+const char *avformat_stream_group_name(enum AVStreamGroupParamsType type);
+# 2071 "libavformat/avformat.h"
+AVStreamGroup *avformat_stream_group_create(AVFormatContext *s,
+                                            enum AVStreamGroupParamsType type,
+                                            AVDictionary **options);
+# 2092 "libavformat/avformat.h"
+AVStream *avformat_new_stream(AVFormatContext *s, const struct AVCodec *c);
+# 2117 "libavformat/avformat.h"
+int avformat_stream_group_add_stream(AVStreamGroup *stg, AVStream *st);
+# 2135 "libavformat/avformat.h"
+__attribute__((deprecated))
+int av_stream_add_side_data(AVStream *st, enum AVPacketSideDataType type,
+                            uint8_t *data, size_t size);
+# 2150 "libavformat/avformat.h"
+__attribute__((deprecated))
+uint8_t *av_stream_new_side_data(AVStream *stream,
+                                 enum AVPacketSideDataType type, size_t size);
+# 2165 "libavformat/avformat.h"
+__attribute__((deprecated))
+uint8_t *av_stream_get_side_data(const AVStream *stream,
+                                 enum AVPacketSideDataType type, size_t *size);
+
+
+AVProgram *av_new_program(AVFormatContext *s, int id);
+# 2194 "libavformat/avformat.h"
+int avformat_alloc_output_context2(AVFormatContext **ctx, const AVOutputFormat *oformat,
+                                   const char *format_name, const char *filename);
+# 2205 "libavformat/avformat.h"
+const AVInputFormat *av_find_input_format(const char *short_name);
+# 2214 "libavformat/avformat.h"
+const AVInputFormat *av_probe_input_format(const AVProbeData *pd, int is_opened);
+# 2228 "libavformat/avformat.h"
+const AVInputFormat *av_probe_input_format2(const AVProbeData *pd,
+                                            int is_opened, int *score_max);
+# 2238 "libavformat/avformat.h"
+const AVInputFormat *av_probe_input_format3(const AVProbeData *pd,
+                                            int is_opened, int *score_ret);
+# 2258 "libavformat/avformat.h"
+int av_probe_input_buffer2(AVIOContext *pb, const AVInputFormat **fmt,
+                           const char *url, void *logctx,
+                           unsigned int offset, unsigned int max_probe_size);
+
+
+
+
+int av_probe_input_buffer(AVIOContext *pb, const AVInputFormat **fmt,
+                          const char *url, void *logctx,
+                          unsigned int offset, unsigned int max_probe_size);
+# 2291 "libavformat/avformat.h"
+int avformat_open_input(AVFormatContext **ps, const char *url,
+                        const AVInputFormat *fmt, AVDictionary **options);
+# 2315 "libavformat/avformat.h"
+int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options);
+# 2328 "libavformat/avformat.h"
+AVProgram *av_find_program_from_stream(AVFormatContext *ic, AVProgram *last, int s);
+
+void av_program_add_stream_index(AVFormatContext *ac, int progid, unsigned int idx);
+# 2358 "libavformat/avformat.h"
+int av_find_best_stream(AVFormatContext *ic,
+                        enum AVMediaType type,
+                        int wanted_stream_nb,
+                        int related_stream,
+                        const struct AVCodec **decoder_ret,
+                        int flags);
+# 2392 "libavformat/avformat.h"
+int av_read_frame(AVFormatContext *s, AVPacket *pkt);
+# 2408 "libavformat/avformat.h"
+int av_seek_frame(AVFormatContext *s, int stream_index, int64_t timestamp,
+                  int flags);
+# 2437 "libavformat/avformat.h"
+int avformat_seek_file(AVFormatContext *s, int stream_index, int64_t min_ts, int64_t ts, int64_t max_ts, int flags);
+# 2455 "libavformat/avformat.h"
+int avformat_flush(AVFormatContext *s);
+
+
+
+
+
+int av_read_play(AVFormatContext *s);
+
+
+
+
+
+
+int av_read_pause(AVFormatContext *s);
+
+
+
+
+
+void avformat_close_input(AVFormatContext **s);
+
+
+
+
+#define AVSEEK_FLAG_BACKWARD 1
+#define AVSEEK_FLAG_BYTE 2
+#define AVSEEK_FLAG_ANY 4
+#define AVSEEK_FLAG_FRAME 8
+
+
+
+
+
+
+#define AVSTREAM_INIT_IN_WRITE_HEADER 0
+#define AVSTREAM_INIT_IN_INIT_OUTPUT 1
+# 2515 "libavformat/avformat.h"
+__attribute__((warn_unused_result))
+int avformat_write_header(AVFormatContext *s, AVDictionary **options);
+# 2543 "libavformat/avformat.h"
+__attribute__((warn_unused_result))
+int avformat_init_output(AVFormatContext *s, AVDictionary **options);
+# 2583 "libavformat/avformat.h"
+int av_write_frame(AVFormatContext *s, AVPacket *pkt);
+# 2627 "libavformat/avformat.h"
+int av_interleaved_write_frame(AVFormatContext *s, AVPacket *pkt);
+# 2637 "libavformat/avformat.h"
+int av_write_uncoded_frame(AVFormatContext *s, int stream_index,
+                           struct AVFrame *frame);
+# 2656 "libavformat/avformat.h"
+int av_interleaved_write_uncoded_frame(AVFormatContext *s, int stream_index,
+                                       struct AVFrame *frame);
+
+
+
+
+
+
+
+int av_write_uncoded_frame_query(AVFormatContext *s, int stream_index);
+# 2676 "libavformat/avformat.h"
+int av_write_trailer(AVFormatContext *s);
+# 2690 "libavformat/avformat.h"
+const AVOutputFormat *av_guess_format(const char *short_name,
+                                      const char *filename,
+                                      const char *mime_type);
+
+
+
+
+enum AVCodecID av_guess_codec(const AVOutputFormat *fmt, const char *short_name,
+                              const char *filename, const char *mime_type,
+                              enum AVMediaType type);
+# 2718 "libavformat/avformat.h"
+int av_get_output_timestamp(struct AVFormatContext *s, int stream,
+                            int64_t *dts, int64_t *wall);
+# 2745 "libavformat/avformat.h"
+void av_hex_dump(FILE *f, const uint8_t *buf, int size);
+# 2759 "libavformat/avformat.h"
+void av_hex_dump_log(void *avcl, int level, const uint8_t *buf, int size);
+# 2769 "libavformat/avformat.h"
+void av_pkt_dump2(FILE *f, const AVPacket *pkt, int dump_payload, const AVStream *st);
+# 2783 "libavformat/avformat.h"
+void av_pkt_dump_log2(void *avcl, int level, const AVPacket *pkt, int dump_payload,
+                      const AVStream *st);
+# 2794 "libavformat/avformat.h"
+enum AVCodecID av_codec_get_id(const struct AVCodecTag * const *tags, unsigned int tag);
+# 2804 "libavformat/avformat.h"
+unsigned int av_codec_get_tag(const struct AVCodecTag * const *tags, enum AVCodecID id);
+# 2815 "libavformat/avformat.h"
+int av_codec_get_tag2(const struct AVCodecTag * const *tags, enum AVCodecID id,
+                      unsigned int *tag);
+
+int av_find_default_stream_index(AVFormatContext *s);
+# 2831 "libavformat/avformat.h"
+int av_index_search_timestamp(AVStream *st, int64_t timestamp, int flags);
+
+
+
+
+
+
+
+int avformat_index_get_entries_count(const AVStream *st);
+# 2852 "libavformat/avformat.h"
+const AVIndexEntry *avformat_index_get_entry(AVStream *st, int idx);
+# 2869 "libavformat/avformat.h"
+const AVIndexEntry *avformat_index_get_entry_from_timestamp(AVStream *st,
+                                                            int64_t wanted_timestamp,
+                                                            int flags);
+
+
+
+
+
+
+int av_add_index_entry(AVStream *st, int64_t pos, int64_t timestamp,
+                       int size, int distance, int flags);
+# 2901 "libavformat/avformat.h"
+void av_url_split(char *proto, int proto_size,
+                  char *authorization, int authorization_size,
+                  char *hostname, int hostname_size,
+                  int *port_ptr,
+                  char *path, int path_size,
+                  const char *url);
+# 2919 "libavformat/avformat.h"
+void av_dump_format(AVFormatContext *ic,
+                    int index,
+                    const char *url,
+                    int is_output);
+
+
+#define AV_FRAME_FILENAME_FLAGS_MULTIPLE 1
+# 2940 "libavformat/avformat.h"
+int av_get_frame_filename2(char *buf, int buf_size,
+                          const char *path, int number, int flags);
+
+int av_get_frame_filename(char *buf, int buf_size,
+                          const char *path, int number);
+
+
+
+
+
+
+
+int av_filename_number_test(const char *filename);
+# 2971 "libavformat/avformat.h"
+int av_sdp_create(AVFormatContext *ac[], int n_files, char *buf, int size);
+# 2980 "libavformat/avformat.h"
+int av_match_ext(const char *filename, const char *extensions);
+# 2992 "libavformat/avformat.h"
+int avformat_query_codec(const AVOutputFormat *ofmt, enum AVCodecID codec_id,
+                         int std_compliance);
+# 3010 "libavformat/avformat.h"
+const struct AVCodecTag *avformat_get_riff_video_tags(void);
+
+
+
+const struct AVCodecTag *avformat_get_riff_audio_tags(void);
+
+
+
+const struct AVCodecTag *avformat_get_mov_video_tags(void);
+
+
+
+const struct AVCodecTag *avformat_get_mov_audio_tags(void);
+# 3045 "libavformat/avformat.h"
+AVRational av_guess_sample_aspect_ratio(AVFormatContext *format, AVStream *stream,
+                                        struct AVFrame *frame);
+# 3056 "libavformat/avformat.h"
+AVRational av_guess_frame_rate(AVFormatContext *ctx, AVStream *stream,
+                               struct AVFrame *frame);
+# 3072 "libavformat/avformat.h"
+int avformat_match_stream_specifier(AVFormatContext *s, AVStream *st,
+                                    const char *spec);
+
+int avformat_queue_attached_pictures(AVFormatContext *s);
+
+
+enum AVTimebaseSource {
+    AVFMT_TBCF_AUTO = -1,
+    AVFMT_TBCF_DECODER,
+    AVFMT_TBCF_DEMUXER,
+
+    AVFMT_TBCF_R_FRAMERATE,
+
+};
+
+
+
+
+__attribute__((deprecated))
+int avformat_transfer_internal_stream_timing_info(const AVOutputFormat *ofmt,
+                                                  AVStream *ost, const AVStream *ist,
+                                                  enum AVTimebaseSource copy_tb);
+
+
+
+
+__attribute__((deprecated))
+AVRational av_stream_get_codec_timebase(const AVStream *st);
+# 4 "libav.h" 2
+# 1 "libavutil/avutil.h" 1
+# 5 "libav.h" 2
 # 1 "libavdevice/avdevice.h" 1
 # 20 "libavdevice/avdevice.h"
 #define AVDEVICE_AVDEVICE_H 
@@ -12855,15 +15088,13 @@ int avcodec_is_open(AVCodecContext *s);
 
 
 
-#define LIBAVDEVICE_VERSION_MAJOR 62
+#define LIBAVDEVICE_VERSION_MAJOR 61
+# 37 "libavdevice/version_major.h"
+#define FF_API_BKTR_DEVICE (LIBAVDEVICE_VERSION_MAJOR < 62)
 
+#define FF_API_OPENGL_DEVICE (LIBAVDEVICE_VERSION_MAJOR < 62)
 
-
-
-
-
-
-#define FF_API_ALSA_CHANNELS (LIBAVDEVICE_VERSION_MAJOR < 63)
+#define FF_API_SDL2_DEVICE (LIBAVDEVICE_VERSION_MAJOR < 62)
 # 23 "libavdevice/avdevice.h" 2
 
 
@@ -12873,7 +15104,7 @@ int avcodec_is_open(AVCodecContext *s);
 # 20 "libavdevice/version.h"
 #define AVDEVICE_VERSION_H 
 # 32 "libavdevice/version.h"
-#define LIBAVDEVICE_VERSION_MINOR 2
+#define LIBAVDEVICE_VERSION_MINOR 3
 #define LIBAVDEVICE_VERSION_MICRO 100
 
 #define LIBAVDEVICE_VERSION_INT AV_VERSION_INT(LIBAVDEVICE_VERSION_MAJOR, LIBAVDEVICE_VERSION_MINOR, LIBAVDEVICE_VERSION_MICRO)
@@ -13253,13 +15484,13 @@ int av_opt_set_chlayout(void *obj, const char *name, const AVChannelLayout *layo
 
 
 int av_opt_set_dict_val(void *obj, const char *name, const AVDictionary *val, int search_flags);
-# 900 "./libavutil/opt.h"
+# 899 "./libavutil/opt.h"
 #define av_opt_set_int_list(obj,name,val,term,flags) (av_int_list_length(val, term) > INT_MAX / sizeof(*(val)) ? AVERROR(EINVAL) : av_opt_set_bin(obj, name, (const uint8_t *)(val), av_int_list_length(val, term) * sizeof(*(val)), flags))
-# 953 "./libavutil/opt.h"
+# 951 "./libavutil/opt.h"
 int av_opt_set_array(void *obj, const char *name, int search_flags,
                      unsigned int start_elem, unsigned int nb_elems,
                      enum AVOptionType val_type, const void *val);
-# 987 "./libavutil/opt.h"
+# 985 "./libavutil/opt.h"
 int av_opt_get (void *obj, const char *name, int search_flags, uint8_t **out_val);
 int av_opt_get_int (void *obj, const char *name, int search_flags, int64_t *out_val);
 int av_opt_get_double (void *obj, const char *name, int search_flags, double *out_val);
@@ -13284,11 +15515,11 @@ int av_opt_get_dict_val(void *obj, const char *name, int search_flags, AVDiction
 
 int av_opt_get_array_size(void *obj, const char *name, int search_flags,
                           unsigned int *out_val);
-# 1042 "./libavutil/opt.h"
+# 1040 "./libavutil/opt.h"
 int av_opt_get_array(void *obj, const char *name, int search_flags,
                      unsigned int start_elem, unsigned int nb_elems,
                      enum AVOptionType out_type, void *out_val);
-# 1063 "./libavutil/opt.h"
+# 1061 "./libavutil/opt.h"
 int av_opt_eval_flags (void *obj, const AVOption *o, const char *val, int *flags_out);
 int av_opt_eval_int (void *obj, const AVOption *o, const char *val, int *int_out);
 int av_opt_eval_uint (void *obj, const AVOption *o, const char *val, unsigned *uint_out);
@@ -13296,1815 +15527,30 @@ int av_opt_eval_int64 (void *obj, const AVOption *o, const char *val, int64_t *i
 int av_opt_eval_float (void *obj, const AVOption *o, const char *val, float *float_out);
 int av_opt_eval_double(void *obj, const AVOption *o, const char *val, double *double_out);
 int av_opt_eval_q (void *obj, const AVOption *o, const char *val, AVRational *q_out);
-# 1085 "./libavutil/opt.h"
-[[deprecated]]
+# 1080 "./libavutil/opt.h"
 void *av_opt_ptr(const AVClass *avclass, void *obj, const char *name);
-# 1101 "./libavutil/opt.h"
+# 1094 "./libavutil/opt.h"
 int av_opt_is_set_to_default(void *obj, const AVOption *o);
-# 1113 "./libavutil/opt.h"
+# 1106 "./libavutil/opt.h"
 int av_opt_is_set_to_default_by_name(void *obj, const char *name, int search_flags);
-# 1123 "./libavutil/opt.h"
+# 1116 "./libavutil/opt.h"
 int av_opt_flag_is_set(void *obj, const char *field_name, const char *flag_name);
 
 #define AV_OPT_SERIALIZE_SKIP_DEFAULTS 0x00000001
 #define AV_OPT_SERIALIZE_OPT_FLAGS_EXACT 0x00000002
 #define AV_OPT_SERIALIZE_SEARCH_CHILDREN 0x00000004
-# 1147 "./libavutil/opt.h"
+# 1140 "./libavutil/opt.h"
 int av_opt_serialize(void *obj, int opt_flags, int flags, char **buffer,
                      const char key_val_sep, const char pairs_sep);
-# 1157 "./libavutil/opt.h"
+# 1150 "./libavutil/opt.h"
 void av_opt_freep_ranges(AVOptionRanges **ranges);
-# 1172 "./libavutil/opt.h"
+# 1165 "./libavutil/opt.h"
 int av_opt_query_ranges(AVOptionRanges **, void *obj, const char *key, int flags);
-# 1188 "./libavutil/opt.h"
+# 1181 "./libavutil/opt.h"
 int av_opt_query_ranges_default(AVOptionRanges **, void *obj, const char *key, int flags);
 # 56 "libavdevice/avdevice.h" 2
 
 # 1 "./libavformat/avformat.h" 1
-# 22 "./libavformat/avformat.h"
-#define AVFORMAT_AVFORMAT_H 
-# 312 "./libavformat/avformat.h"
-# 1 "./libavcodec/codec_par.h" 1
-# 313 "./libavformat/avformat.h" 2
-# 1 "./libavcodec/defs.h" 1
-# 314 "./libavformat/avformat.h" 2
-# 1 "./libavcodec/packet.h" 1
-# 315 "./libavformat/avformat.h" 2
-
-
-
-
-# 1 "./libavformat/avio.h" 1
-# 21 "./libavformat/avio.h"
-#define AVFORMAT_AVIO_H 
-# 36 "./libavformat/avio.h"
-# 1 "./libavformat/version_major.h" 1
-# 22 "./libavformat/version_major.h"
-#define AVFORMAT_VERSION_MAJOR_H 
-# 32 "./libavformat/version_major.h"
-#define LIBAVFORMAT_VERSION_MAJOR 62
-# 44 "./libavformat/version_major.h"
-#define FF_API_COMPUTE_PKT_FIELDS2 (LIBAVFORMAT_VERSION_MAJOR < 63)
-
-#define FF_API_INTERNAL_TIMING (LIBAVFORMAT_VERSION_MAJOR < 63)
-
-#define FF_API_NO_DEFAULT_TLS_VERIFY (LIBAVFORMAT_VERSION_MAJOR < 63)
-
-#define FF_API_R_FRAME_RATE 1
-# 37 "./libavformat/avio.h" 2
-
-
-
-
-#define AVIO_SEEKABLE_NORMAL (1 << 0)
-
-
-
-
-#define AVIO_SEEKABLE_TIME (1 << 1)
-# 59 "./libavformat/avio.h"
-typedef struct AVIOInterruptCB {
-    int (*callback)(void*);
-    void *opaque;
-} AVIOInterruptCB;
-
-
-
-
-enum AVIODirEntryType {
-    AVIO_ENTRY_UNKNOWN,
-    AVIO_ENTRY_BLOCK_DEVICE,
-    AVIO_ENTRY_CHARACTER_DEVICE,
-    AVIO_ENTRY_DIRECTORY,
-    AVIO_ENTRY_NAMED_PIPE,
-    AVIO_ENTRY_SYMBOLIC_LINK,
-    AVIO_ENTRY_SOCKET,
-    AVIO_ENTRY_FILE,
-    AVIO_ENTRY_SERVER,
-    AVIO_ENTRY_SHARE,
-    AVIO_ENTRY_WORKGROUP,
-};
-
-
-
-
-
-
-
-typedef struct AVIODirEntry {
-    char *name;
-    int type;
-    int utf8;
-
-    int64_t size;
-    int64_t modification_timestamp;
-
-    int64_t access_timestamp;
-
-    int64_t status_change_timestamp;
-
-    int64_t user_id;
-    int64_t group_id;
-    int64_t filemode;
-} AVIODirEntry;
-
-typedef struct AVIODirContext AVIODirContext;
-
-
-
-
-
-enum AVIODataMarkerType {
-
-
-
-    AVIO_DATA_MARKER_HEADER,
-
-
-
-
-
-
-    AVIO_DATA_MARKER_SYNC_POINT,
-
-
-
-
-
-    AVIO_DATA_MARKER_BOUNDARY_POINT,
-
-
-
-
-
-
-    AVIO_DATA_MARKER_UNKNOWN,
-
-
-
-
-    AVIO_DATA_MARKER_TRAILER,
-
-
-
-
-
-    AVIO_DATA_MARKER_FLUSH_POINT,
-};
-# 160 "./libavformat/avio.h"
-typedef struct AVIOContext {
-# 173 "./libavformat/avio.h"
-    const AVClass *av_class;
-# 225 "./libavformat/avio.h"
-    unsigned char *buffer;
-    int buffer_size;
-    unsigned char *buf_ptr;
-    unsigned char *buf_end;
-
-
-
-    void *opaque;
-
-    int (*read_packet)(void *opaque, uint8_t *buf, int buf_size);
-    int (*write_packet)(void *opaque, const uint8_t *buf, int buf_size);
-    int64_t (*seek)(void *opaque, int64_t offset, int whence);
-    int64_t pos;
-    int eof_reached;
-    int error;
-    int write_flag;
-    int max_packet_size;
-    int min_packet_size;
-
-    unsigned long checksum;
-    unsigned char *checksum_ptr;
-    unsigned long (*update_checksum)(unsigned long checksum, const uint8_t *buf, unsigned int size);
-
-
-
-    int (*read_pause)(void *opaque, int pause);
-
-
-
-
-
-    int64_t (*read_seek)(void *opaque, int stream_index,
-                         int64_t timestamp, int flags);
-
-
-
-    int seekable;
-
-
-
-
-
-
-    int direct;
-
-
-
-
-    const char *protocol_whitelist;
-
-
-
-
-    const char *protocol_blacklist;
-
-
-
-
-    int (*write_data_type)(void *opaque, const uint8_t *buf, int buf_size,
-                           enum AVIODataMarkerType type, int64_t time);
-
-
-
-
-
-    int ignore_boundary_point;
-
-
-
-
-
-    unsigned char *buf_ptr_max;
-
-
-
-
-    int64_t bytes_read;
-
-
-
-
-    int64_t bytes_written;
-} AVIOContext;
-# 316 "./libavformat/avio.h"
-const char *avio_find_protocol_name(const char *url);
-# 330 "./libavformat/avio.h"
-int avio_check(const char *url, int flags);
-# 342 "./libavformat/avio.h"
-int avio_open_dir(AVIODirContext **s, const char *url, AVDictionary **options);
-# 355 "./libavformat/avio.h"
-int avio_read_dir(AVIODirContext *s, AVIODirEntry **next);
-# 366 "./libavformat/avio.h"
-int avio_close_dir(AVIODirContext **s);
-
-
-
-
-
-
-void avio_free_directory_entry(AVIODirEntry **entry);
-# 398 "./libavformat/avio.h"
-AVIOContext *avio_alloc_context(
-                  unsigned char *buffer,
-                  int buffer_size,
-                  int write_flag,
-                  void *opaque,
-                  int (*read_packet)(void *opaque, uint8_t *buf, int buf_size),
-                  int (*write_packet)(void *opaque, const uint8_t *buf, int buf_size),
-                  int64_t (*seek)(void *opaque, int64_t offset, int whence));
-
-
-
-
-
-
-
-void avio_context_free(AVIOContext **s);
-
-void avio_w8(AVIOContext *s, int b);
-void avio_write(AVIOContext *s, const unsigned char *buf, int size);
-void avio_wl64(AVIOContext *s, uint64_t val);
-void avio_wb64(AVIOContext *s, uint64_t val);
-void avio_wl32(AVIOContext *s, unsigned int val);
-void avio_wb32(AVIOContext *s, unsigned int val);
-void avio_wl24(AVIOContext *s, unsigned int val);
-void avio_wb24(AVIOContext *s, unsigned int val);
-void avio_wl16(AVIOContext *s, unsigned int val);
-void avio_wb16(AVIOContext *s, unsigned int val);
-
-
-
-
-
-int avio_put_str(AVIOContext *s, const char *str);
-# 439 "./libavformat/avio.h"
-int avio_put_str16le(AVIOContext *s, const char *str);
-# 448 "./libavformat/avio.h"
-int avio_put_str16be(AVIOContext *s, const char *str);
-# 461 "./libavformat/avio.h"
-void avio_write_marker(AVIOContext *s, int64_t time, enum AVIODataMarkerType type);
-
-
-
-
-
-
-#define AVSEEK_SIZE 0x10000
-
-
-
-
-
-
-
-#define AVSEEK_FORCE 0x20000
-
-
-
-
-
-int64_t avio_seek(AVIOContext *s, int64_t offset, int whence);
-
-
-
-
-
-int64_t avio_skip(AVIOContext *s, int64_t offset);
-
-
-
-
-
-static __attribute__((always_inline)) inline int64_t avio_tell(AVIOContext *s)
-{
-    return avio_seek(s, 0, 
-# 496 "./libavformat/avio.h" 3
-                          1
-# 496 "./libavformat/avio.h"
-                                  );
-}
-
-
-
-
-
-int64_t avio_size(AVIOContext *s);
-
-
-
-
-
-int avio_feof(AVIOContext *s);
-
-
-
-
-
-int avio_vprintf(AVIOContext *s, const char *fmt, va_list ap);
-
-
-
-
-
-int avio_printf(AVIOContext *s, const char *fmt, ...) __attribute__((format(
-# 521 "./libavformat/avio.h" 3
-                                                     __gnu_printf__
-# 521 "./libavformat/avio.h"
-                                                     , 2, 3)));
-
-
-
-
-
-
-void avio_print_string_array(AVIOContext *s, const char * const strings[]);
-# 537 "./libavformat/avio.h"
-#define avio_print(s,...) avio_print_string_array(s, (const char*[]){__VA_ARGS__, NULL})
-# 550 "./libavformat/avio.h"
-void avio_flush(AVIOContext *s);
-
-
-
-
-
-int avio_read(AVIOContext *s, unsigned char *buf, int size);
-# 565 "./libavformat/avio.h"
-int avio_read_partial(AVIOContext *s, unsigned char *buf, int size);
-# 574 "./libavformat/avio.h"
-int avio_r8 (AVIOContext *s);
-unsigned int avio_rl16(AVIOContext *s);
-unsigned int avio_rl24(AVIOContext *s);
-unsigned int avio_rl32(AVIOContext *s);
-uint64_t avio_rl64(AVIOContext *s);
-unsigned int avio_rb16(AVIOContext *s);
-unsigned int avio_rb24(AVIOContext *s);
-unsigned int avio_rb32(AVIOContext *s);
-uint64_t avio_rb64(AVIOContext *s);
-# 599 "./libavformat/avio.h"
-int avio_get_str(AVIOContext *pb, int maxlen, char *buf, int buflen);
-
-
-
-
-
-
-
-int avio_get_str16le(AVIOContext *pb, int maxlen, char *buf, int buflen);
-int avio_get_str16be(AVIOContext *pb, int maxlen, char *buf, int buflen);
-# 617 "./libavformat/avio.h"
-#define AVIO_FLAG_READ 1
-#define AVIO_FLAG_WRITE 2
-#define AVIO_FLAG_READ_WRITE (AVIO_FLAG_READ|AVIO_FLAG_WRITE)
-# 636 "./libavformat/avio.h"
-#define AVIO_FLAG_NONBLOCK 8
-
-
-
-
-
-
-
-#define AVIO_FLAG_DIRECT 0x8000
-# 660 "./libavformat/avio.h"
-int avio_open(AVIOContext **s, const char *url, int flags);
-# 680 "./libavformat/avio.h"
-int avio_open2(AVIOContext **s, const char *url, int flags,
-               const AVIOInterruptCB *int_cb, AVDictionary **options);
-# 693 "./libavformat/avio.h"
-int avio_close(AVIOContext *s);
-# 706 "./libavformat/avio.h"
-int avio_closep(AVIOContext **s);
-# 715 "./libavformat/avio.h"
-int avio_open_dyn_buf(AVIOContext **s);
-# 727 "./libavformat/avio.h"
-int avio_get_dyn_buf(AVIOContext *s, uint8_t **pbuffer);
-# 738 "./libavformat/avio.h"
-int avio_close_dyn_buf(AVIOContext *s, uint8_t **pbuffer);
-# 751 "./libavformat/avio.h"
-const char *avio_enum_protocols(void **opaque, int output);
-
-
-
-
-
-
-const AVClass *avio_protocol_get_class(const char *name);
-# 767 "./libavformat/avio.h"
-int avio_pause(AVIOContext *h, int pause);
-# 788 "./libavformat/avio.h"
-int64_t avio_seek_time(AVIOContext *h, int stream_index,
-                       int64_t timestamp, int flags);
-
-
-struct AVBPrint;
-
-
-
-
-
-
-
-int avio_read_to_bprint(AVIOContext *h, struct AVBPrint *pb, size_t max_size);
-# 809 "./libavformat/avio.h"
-int avio_accept(AVIOContext *s, AVIOContext **c);
-# 830 "./libavformat/avio.h"
-int avio_handshake(AVIOContext *c);
-# 320 "./libavformat/avformat.h" 2
-
-
-
-
-
-# 1 "./libavformat/version.h" 1
-# 22 "./libavformat/version.h"
-#define AVFORMAT_VERSION_H 
-# 32 "./libavformat/version.h"
-# 1 "./libavformat/version_major.h" 1
-# 33 "./libavformat/version.h" 2
-
-#define LIBAVFORMAT_VERSION_MINOR 6
-#define LIBAVFORMAT_VERSION_MICRO 101
-
-#define LIBAVFORMAT_VERSION_INT AV_VERSION_INT(LIBAVFORMAT_VERSION_MAJOR, LIBAVFORMAT_VERSION_MINOR, LIBAVFORMAT_VERSION_MICRO)
-
-
-#define LIBAVFORMAT_VERSION AV_VERSION(LIBAVFORMAT_VERSION_MAJOR, LIBAVFORMAT_VERSION_MINOR, LIBAVFORMAT_VERSION_MICRO)
-
-
-#define LIBAVFORMAT_BUILD LIBAVFORMAT_VERSION_INT
-
-#define LIBAVFORMAT_IDENT "Lavf" AV_STRINGIFY(LIBAVFORMAT_VERSION)
-# 326 "./libavformat/avformat.h" 2
-
-
-# 1 "./libavcodec/codec.h" 1
-# 329 "./libavformat/avformat.h" 2
-
-
-struct AVFormatContext;
-struct AVFrame;
-# 424 "./libavformat/avformat.h"
-int av_get_packet(AVIOContext *s, AVPacket *pkt, int size);
-# 441 "./libavformat/avformat.h"
-int av_append_packet(AVIOContext *s, AVPacket *pkt, int size);
-
-
-
-
-struct AVCodecTag;
-
-
-
-
-typedef struct AVProbeData {
-    const char *filename;
-    unsigned char *buf;
-    int buf_size;
-    const char *mime_type;
-} AVProbeData;
-
-#define AVPROBE_SCORE_RETRY (AVPROBE_SCORE_MAX/4)
-#define AVPROBE_SCORE_STREAM_RETRY (AVPROBE_SCORE_MAX/4-1)
-
-#define AVPROBE_SCORE_EXTENSION 50
-#define AVPROBE_SCORE_MIME_BONUS 30
-#define AVPROBE_SCORE_MAX 100
-
-#define AVPROBE_PADDING_SIZE 32
-
-
-#define AVFMT_NOFILE 0x0001
-#define AVFMT_NEEDNUMBER 0x0002
-
-
-
-
-
-#define AVFMT_EXPERIMENTAL 0x0004
-#define AVFMT_SHOW_IDS 0x0008
-#define AVFMT_GLOBALHEADER 0x0040
-#define AVFMT_NOTIMESTAMPS 0x0080
-#define AVFMT_GENERIC_INDEX 0x0100
-#define AVFMT_TS_DISCONT 0x0200
-#define AVFMT_VARIABLE_FPS 0x0400
-#define AVFMT_NODIMENSIONS 0x0800
-#define AVFMT_NOSTREAMS 0x1000
-#define AVFMT_NOBINSEARCH 0x2000
-#define AVFMT_NOGENSEARCH 0x4000
-#define AVFMT_NO_BYTE_SEEK 0x8000
-#define AVFMT_TS_NONSTRICT 0x20000
-
-
-#define AVFMT_TS_NEGATIVE 0x40000
-# 499 "./libavformat/avformat.h"
-#define AVFMT_SEEK_TO_PTS 0x4000000
-
-
-
-
-
-typedef struct AVOutputFormat {
-    const char *name;
-
-
-
-
-
-    const char *long_name;
-    const char *mime_type;
-    const char *extensions;
-
-    enum AVCodecID audio_codec;
-    enum AVCodecID video_codec;
-    enum AVCodecID subtitle_codec;
-
-
-
-
-
-
-    int flags;
-
-
-
-
-
-    const struct AVCodecTag * const *codec_tag;
-
-
-    const AVClass *priv_class;
-} AVOutputFormat;
-# 544 "./libavformat/avformat.h"
-typedef struct AVInputFormat {
-
-
-
-
-    const char *name;
-
-
-
-
-
-
-    const char *long_name;
-
-
-
-
-
-
-    int flags;
-
-
-
-
-
-
-    const char *extensions;
-
-    const struct AVCodecTag * const *codec_tag;
-
-    const AVClass *priv_class;
-
-
-
-
-
-
-    const char *mime_type;
-} AVInputFormat;
-
-
-
-
-enum AVStreamParseType {
-    AVSTREAM_PARSE_NONE,
-    AVSTREAM_PARSE_FULL,
-    AVSTREAM_PARSE_HEADERS,
-    AVSTREAM_PARSE_TIMESTAMPS,
-    AVSTREAM_PARSE_FULL_ONCE,
-    AVSTREAM_PARSE_FULL_RAW,
-
-
-};
-
-typedef struct AVIndexEntry {
-    int64_t pos;
-    int64_t timestamp;
-
-
-
-
-
-#define AVINDEX_KEYFRAME 0x0001
-#define AVINDEX_DISCARD_FRAME 0x0002
-
-
-    int flags:2;
-    int size:30;
-    int min_distance;
-} AVIndexEntry;
-
-
-
-
-
-#define AV_DISPOSITION_DEFAULT (1 << 0)
-
-
-
-
-
-
-
-#define AV_DISPOSITION_DUB (1 << 1)
-
-
-
-
-
-#define AV_DISPOSITION_ORIGINAL (1 << 2)
-
-
-
-#define AV_DISPOSITION_COMMENT (1 << 3)
-
-
-
-#define AV_DISPOSITION_LYRICS (1 << 4)
-
-
-
-#define AV_DISPOSITION_KARAOKE (1 << 5)
-
-
-
-
-
-
-#define AV_DISPOSITION_FORCED (1 << 6)
-
-
-
-#define AV_DISPOSITION_HEARING_IMPAIRED (1 << 7)
-
-
-
-#define AV_DISPOSITION_VISUAL_IMPAIRED (1 << 8)
-
-
-
-#define AV_DISPOSITION_CLEAN_EFFECTS (1 << 9)
-
-
-
-
-
-
-
-#define AV_DISPOSITION_ATTACHED_PIC (1 << 10)
-
-
-
-
-#define AV_DISPOSITION_TIMED_THUMBNAILS (1 << 11)
-
-
-
-
-
-
-#define AV_DISPOSITION_NON_DIEGETIC (1 << 12)
-
-
-
-
-
-#define AV_DISPOSITION_CAPTIONS (1 << 16)
-
-
-
-
-
-#define AV_DISPOSITION_DESCRIPTIONS (1 << 17)
-
-
-
-
-#define AV_DISPOSITION_METADATA (1 << 18)
-
-
-
-
-
-#define AV_DISPOSITION_DEPENDENT (1 << 19)
-
-
-
-#define AV_DISPOSITION_STILL_IMAGE (1 << 20)
-
-
-
-
-#define AV_DISPOSITION_MULTILAYER (1 << 21)
-
-
-
-
-
-int av_disposition_from_string(const char *disp);
-
-
-
-
-
-
-
-const char *av_disposition_to_string(int disposition);
-
-
-
-
-#define AV_PTS_WRAP_IGNORE 0
-#define AV_PTS_WRAP_ADD_OFFSET 1
-#define AV_PTS_WRAP_SUB_OFFSET -1
-# 746 "./libavformat/avformat.h"
-typedef struct AVStream {
-
-
-
-    const AVClass *av_class;
-
-    int index;
-
-
-
-
-
-    int id;
-# 769 "./libavformat/avformat.h"
-    AVCodecParameters *codecpar;
-
-    void *priv_data;
-# 785 "./libavformat/avformat.h"
-    AVRational time_base;
-# 795 "./libavformat/avformat.h"
-    int64_t start_time;
-# 805 "./libavformat/avformat.h"
-    int64_t duration;
-
-    int64_t nb_frames;
-
-
-
-
-
-
-
-    int disposition;
-
-    enum AVDiscard discard;
-
-
-
-
-
-
-    AVRational sample_aspect_ratio;
-
-    AVDictionary *metadata;
-# 835 "./libavformat/avformat.h"
-    AVRational avg_frame_rate;
-# 844 "./libavformat/avformat.h"
-    AVPacket attached_pic;
-# 857 "./libavformat/avformat.h"
-    int event_flags;
-
-
-
-
-
-
-#define AVSTREAM_EVENT_FLAG_METADATA_UPDATED 0x0001
-
-
-
-
-
-#define AVSTREAM_EVENT_FLAG_NEW_PACKETS (1 << 1)
-# 880 "./libavformat/avformat.h"
-    AVRational r_frame_rate;
-# 889 "./libavformat/avformat.h"
-    int pts_wrap_bits;
-} AVStream;
-# 953 "./libavformat/avformat.h"
-typedef struct AVStreamGroupTileGrid {
-    const AVClass *av_class;
-
-
-
-
-
-
-    unsigned int nb_tiles;
-
-
-
-
-
-
-    int coded_width;
-
-
-
-
-
-    int coded_height;
-# 986 "./libavformat/avformat.h"
-    struct {
-
-
-
-
-
-        unsigned int idx;
-
-
-
-
-        int horizontal;
-
-
-
-
-        int vertical;
-    } *offsets;
-# 1012 "./libavformat/avformat.h"
-    uint8_t background[4];
-
-
-
-
-
-
-
-    int horizontal_offset;
-
-
-
-
-
-
-    int vertical_offset;
-# 1038 "./libavformat/avformat.h"
-    int width;
-# 1048 "./libavformat/avformat.h"
-    int height;
-
-
-
-
-
-
-
-    AVPacketSideData *coded_side_data;
-
-
-
-
-    int nb_coded_side_data;
-} AVStreamGroupTileGrid;
-# 1072 "./libavformat/avformat.h"
-typedef struct AVStreamGroupLCEVC {
-    const AVClass *av_class;
-
-
-
-
-    unsigned int lcevc_index;
-
-
-
-    int width;
-
-
-
-    int height;
-} AVStreamGroupLCEVC;
-
-enum AVStreamGroupParamsType {
-    AV_STREAM_GROUP_PARAMS_NONE,
-    AV_STREAM_GROUP_PARAMS_IAMF_AUDIO_ELEMENT,
-    AV_STREAM_GROUP_PARAMS_IAMF_MIX_PRESENTATION,
-    AV_STREAM_GROUP_PARAMS_TILE_GRID,
-    AV_STREAM_GROUP_PARAMS_LCEVC,
-};
-
-struct AVIAMFAudioElement;
-struct AVIAMFMixPresentation;
-
-typedef struct AVStreamGroup {
-
-
-
-    const AVClass *av_class;
-
-    void *priv_data;
-
-
-
-
-    unsigned int index;
-
-
-
-
-
-
-
-    int64_t id;
-
-
-
-
-
-
-
-    enum AVStreamGroupParamsType type;
-
-
-
-
-    union {
-        struct AVIAMFAudioElement *iamf_audio_element;
-        struct AVIAMFMixPresentation *iamf_mix_presentation;
-        struct AVStreamGroupTileGrid *tile_grid;
-        struct AVStreamGroupLCEVC *lcevc;
-    } params;
-# 1147 "./libavformat/avformat.h"
-    AVDictionary *metadata;
-
-
-
-
-
-
-    unsigned int nb_streams;
-# 1167 "./libavformat/avformat.h"
-    AVStream **streams;
-# 1177 "./libavformat/avformat.h"
-    int disposition;
-} AVStreamGroup;
-
-struct AVCodecParserContext *av_stream_get_parser(const AVStream *s);
-
-#define AV_PROGRAM_RUNNING 1
-
-
-
-
-
-
-
-typedef struct AVProgram {
-    int id;
-    int flags;
-    enum AVDiscard discard;
-    unsigned int *stream_index;
-    unsigned int nb_stream_indexes;
-    AVDictionary *metadata;
-
-    int program_num;
-    int pmt_pid;
-    int pcr_pid;
-    int pmt_version;
-# 1210 "./libavformat/avformat.h"
-    int64_t start_time;
-    int64_t end_time;
-
-    int64_t pts_wrap_reference;
-    int pts_wrap_behavior;
-} AVProgram;
-
-#define AVFMTCTX_NOHEADER 0x0001
-
-#define AVFMTCTX_UNSEEKABLE 0x0002
-
-
-
-
-
-typedef struct AVChapter {
-    int64_t id;
-    AVRational time_base;
-    int64_t start, end;
-    AVDictionary *metadata;
-} AVChapter;
-
-
-
-
-
-typedef int (*av_format_control_message)(struct AVFormatContext *s, int type,
-                                         void *data, size_t data_size);
-
-typedef int (*AVOpenCallback)(struct AVFormatContext *s, AVIOContext **pb, const char *url, int flags,
-                              const AVIOInterruptCB *int_cb, AVDictionary **options);
-
-
-
-
-
-enum AVDurationEstimationMethod {
-    AVFMT_DURATION_FROM_PTS,
-    AVFMT_DURATION_FROM_STREAM,
-    AVFMT_DURATION_FROM_BITRATE
-};
-# 1266 "./libavformat/avformat.h"
-typedef struct AVFormatContext {
-
-
-
-
-    const AVClass *av_class;
-
-
-
-
-
-
-    const struct AVInputFormat *iformat;
-
-
-
-
-
-
-    const struct AVOutputFormat *oformat;
-# 1294 "./libavformat/avformat.h"
-    void *priv_data;
-# 1308 "./libavformat/avformat.h"
-    AVIOContext *pb;
-
-
-
-
-
-
-    int ctx_flags;
-
-
-
-
-
-
-    unsigned int nb_streams;
-# 1334 "./libavformat/avformat.h"
-    AVStream **streams;
-
-
-
-
-
-
-    unsigned int nb_stream_groups;
-# 1353 "./libavformat/avformat.h"
-    AVStreamGroup **stream_groups;
-# 1366 "./libavformat/avformat.h"
-    unsigned int nb_chapters;
-    AVChapter **chapters;
-# 1382 "./libavformat/avformat.h"
-    char *url;
-# 1391 "./libavformat/avformat.h"
-    int64_t start_time;
-# 1401 "./libavformat/avformat.h"
-    int64_t duration;
-
-
-
-
-
-
-    int64_t bit_rate;
-
-    unsigned int packet_size;
-    int max_delay;
-
-
-
-
-
-    int flags;
-#define AVFMT_FLAG_GENPTS 0x0001
-#define AVFMT_FLAG_IGNIDX 0x0002
-#define AVFMT_FLAG_NONBLOCK 0x0004
-#define AVFMT_FLAG_IGNDTS 0x0008
-#define AVFMT_FLAG_NOFILLIN 0x0010
-#define AVFMT_FLAG_NOPARSE 0x0020
-#define AVFMT_FLAG_NOBUFFER 0x0040
-#define AVFMT_FLAG_CUSTOM_IO 0x0080
-#define AVFMT_FLAG_DISCARD_CORRUPT 0x0100
-#define AVFMT_FLAG_FLUSH_PACKETS 0x0200
-
-
-
-
-
-
-#define AVFMT_FLAG_BITEXACT 0x0400
-#define AVFMT_FLAG_SORT_DTS 0x10000
-#define AVFMT_FLAG_FAST_SEEK 0x80000
-#define AVFMT_FLAG_AUTO_BSF 0x200000
-# 1450 "./libavformat/avformat.h"
-    int64_t probesize;
-
-
-
-
-
-
-
-    int64_t max_analyze_duration;
-
-    const uint8_t *key;
-    int keylen;
-
-    unsigned int nb_programs;
-    AVProgram **programs;
-
-
-
-
-
-    enum AVCodecID video_codec_id;
-
-
-
-
-
-    enum AVCodecID audio_codec_id;
-
-
-
-
-
-    enum AVCodecID subtitle_codec_id;
-
-
-
-
-
-    enum AVCodecID data_codec_id;
-# 1498 "./libavformat/avformat.h"
-    AVDictionary *metadata;
-# 1511 "./libavformat/avformat.h"
-    int64_t start_time_realtime;
-
-
-
-
-
-
-    int fps_probe_size;
-
-
-
-
-
-
-    int error_recognition;
-# 1536 "./libavformat/avformat.h"
-    AVIOInterruptCB interrupt_callback;
-
-
-
-
-    int debug;
-#define FF_FDEBUG_TS 0x0001
-
-
-
-
-
-
-    int max_streams;
-# 1561 "./libavformat/avformat.h"
-    unsigned int max_index_size;
-
-
-
-
-
-    unsigned int max_picture_buffer;
-# 1585 "./libavformat/avformat.h"
-    int64_t max_interleave_delta;
-
-
-
-
-
-    int max_ts_probe;
-
-
-
-
-
-
-
-    int max_chunk_duration;
-
-
-
-
-
-
-
-    int max_chunk_size;
-
-
-
-
-
-
-    int max_probe_packets;
-
-
-
-
-
-    int strict_std_compliance;
-# 1633 "./libavformat/avformat.h"
-    int event_flags;
-
-
-
-
-
-
-#define AVFMT_EVENT_FLAG_METADATA_UPDATED 0x0001
-# 1650 "./libavformat/avformat.h"
-    int avoid_negative_ts;
-#define AVFMT_AVOID_NEG_TS_AUTO -1
-#define AVFMT_AVOID_NEG_TS_DISABLED 0
-#define AVFMT_AVOID_NEG_TS_MAKE_NON_NEGATIVE 1
-#define AVFMT_AVOID_NEG_TS_MAKE_ZERO 2
-
-
-
-
-
-
-
-    int audio_preload;
-
-
-
-
-
-
-
-    int use_wallclock_as_timestamps;
-# 1679 "./libavformat/avformat.h"
-    int skip_estimate_duration_from_pts;
-
-
-
-
-
-
-    int avio_flags;
-
-
-
-
-
-
-
-    enum AVDurationEstimationMethod duration_estimation_method;
-
-
-
-
-
-
-    int64_t skip_initial_bytes;
-
-
-
-
-
-
-    unsigned int correct_ts_overflow;
-
-
-
-
-
-
-    int seek2any;
-
-
-
-
-
-
-    int flush_packets;
-# 1731 "./libavformat/avformat.h"
-    int probe_score;
-# 1742 "./libavformat/avformat.h"
-    int format_probesize;
-
-
-
-
-
-
-
-    char *codec_whitelist;
-
-
-
-
-
-
-
-    char *format_whitelist;
-
-
-
-
-
-
-    char *protocol_whitelist;
-
-
-
-
-
-
-    char *protocol_blacklist;
-
-
-
-
-
-
-
-    int io_repositioned;
-
-
-
-
-
-
-
-    const struct AVCodec *video_codec;
-
-
-
-
-
-
-
-    const struct AVCodec *audio_codec;
-
-
-
-
-
-
-
-    const struct AVCodec *subtitle_codec;
-
-
-
-
-
-
-
-    const struct AVCodec *data_codec;
-
-
-
-
-
-
-    int metadata_header_padding;
-
-
-
-
-
-    void *opaque;
-
-
-
-
-    av_format_control_message control_message_cb;
-
-
-
-
-
-    int64_t output_ts_offset;
-
-
-
-
-
-
-
-    uint8_t *dump_separator;
-# 1866 "./libavformat/avformat.h"
-    int (*io_open)(struct AVFormatContext *s, AVIOContext **pb, const char *url,
-                   int flags, AVDictionary **options);
-# 1876 "./libavformat/avformat.h"
-    int (*io_close2)(struct AVFormatContext *s, AVIOContext *pb);
-# 1886 "./libavformat/avformat.h"
-    int64_t duration_probesize;
-} AVFormatContext;
-# 1901 "./libavformat/avformat.h"
-unsigned avformat_version(void);
-
-
-
-
-const char *avformat_configuration(void);
-
-
-
-
-const char *avformat_license(void);
-# 1927 "./libavformat/avformat.h"
-int avformat_network_init(void);
-
-
-
-
-
-int avformat_network_deinit(void);
-# 1944 "./libavformat/avformat.h"
-const AVOutputFormat *av_muxer_iterate(void **opaque);
-# 1955 "./libavformat/avformat.h"
-const AVInputFormat *av_demuxer_iterate(void **opaque);
-
-
-
-
-
-
-AVFormatContext *avformat_alloc_context(void);
-
-
-
-
-
-void avformat_free_context(AVFormatContext *s);
-
-
-
-
-
-
-
-const AVClass *avformat_get_class(void);
-
-
-
-
-
-
-
-const AVClass *av_stream_get_class(void);
-
-
-
-
-
-
-
-const AVClass *av_stream_group_get_class(void);
-
-
-
-
-const char *avformat_stream_group_name(enum AVStreamGroupParamsType type);
-# 2018 "./libavformat/avformat.h"
-AVStreamGroup *avformat_stream_group_create(AVFormatContext *s,
-                                            enum AVStreamGroupParamsType type,
-                                            AVDictionary **options);
-# 2039 "./libavformat/avformat.h"
-AVStream *avformat_new_stream(AVFormatContext *s, const struct AVCodec *c);
-# 2064 "./libavformat/avformat.h"
-int avformat_stream_group_add_stream(AVStreamGroup *stg, AVStream *st);
-
-AVProgram *av_new_program(AVFormatContext *s, int id);
-# 2090 "./libavformat/avformat.h"
-int avformat_alloc_output_context2(AVFormatContext **ctx, const AVOutputFormat *oformat,
-                                   const char *format_name, const char *filename);
-# 2101 "./libavformat/avformat.h"
-const AVInputFormat *av_find_input_format(const char *short_name);
-# 2110 "./libavformat/avformat.h"
-const AVInputFormat *av_probe_input_format(const AVProbeData *pd, int is_opened);
-# 2124 "./libavformat/avformat.h"
-const AVInputFormat *av_probe_input_format2(const AVProbeData *pd,
-                                            int is_opened, int *score_max);
-# 2134 "./libavformat/avformat.h"
-const AVInputFormat *av_probe_input_format3(const AVProbeData *pd,
-                                            int is_opened, int *score_ret);
-# 2154 "./libavformat/avformat.h"
-int av_probe_input_buffer2(AVIOContext *pb, const AVInputFormat **fmt,
-                           const char *url, void *logctx,
-                           unsigned int offset, unsigned int max_probe_size);
-
-
-
-
-int av_probe_input_buffer(AVIOContext *pb, const AVInputFormat **fmt,
-                          const char *url, void *logctx,
-                          unsigned int offset, unsigned int max_probe_size);
-# 2188 "./libavformat/avformat.h"
-int avformat_open_input(AVFormatContext **ps, const char *url,
-                        const AVInputFormat *fmt, AVDictionary **options);
-# 2212 "./libavformat/avformat.h"
-int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options);
-# 2225 "./libavformat/avformat.h"
-AVProgram *av_find_program_from_stream(AVFormatContext *ic, AVProgram *last, int s);
-
-void av_program_add_stream_index(AVFormatContext *ac, int progid, unsigned int idx);
-# 2255 "./libavformat/avformat.h"
-int av_find_best_stream(AVFormatContext *ic,
-                        enum AVMediaType type,
-                        int wanted_stream_nb,
-                        int related_stream,
-                        const struct AVCodec **decoder_ret,
-                        int flags);
-# 2289 "./libavformat/avformat.h"
-int av_read_frame(AVFormatContext *s, AVPacket *pkt);
-# 2305 "./libavformat/avformat.h"
-int av_seek_frame(AVFormatContext *s, int stream_index, int64_t timestamp,
-                  int flags);
-# 2334 "./libavformat/avformat.h"
-int avformat_seek_file(AVFormatContext *s, int stream_index, int64_t min_ts, int64_t ts, int64_t max_ts, int flags);
-# 2352 "./libavformat/avformat.h"
-int avformat_flush(AVFormatContext *s);
-
-
-
-
-
-int av_read_play(AVFormatContext *s);
-
-
-
-
-
-
-int av_read_pause(AVFormatContext *s);
-
-
-
-
-
-void avformat_close_input(AVFormatContext **s);
-
-
-
-
-#define AVSEEK_FLAG_BACKWARD 1
-#define AVSEEK_FLAG_BYTE 2
-#define AVSEEK_FLAG_ANY 4
-#define AVSEEK_FLAG_FRAME 8
-
-
-
-
-
-
-#define AVSTREAM_INIT_IN_WRITE_HEADER 0
-#define AVSTREAM_INIT_IN_INIT_OUTPUT 1
-# 2412 "./libavformat/avformat.h"
-[[nodiscard]]
-int avformat_write_header(AVFormatContext *s, AVDictionary **options);
-# 2440 "./libavformat/avformat.h"
-[[nodiscard]]
-int avformat_init_output(AVFormatContext *s, AVDictionary **options);
-# 2480 "./libavformat/avformat.h"
-int av_write_frame(AVFormatContext *s, AVPacket *pkt);
-# 2524 "./libavformat/avformat.h"
-int av_interleaved_write_frame(AVFormatContext *s, AVPacket *pkt);
-# 2534 "./libavformat/avformat.h"
-int av_write_uncoded_frame(AVFormatContext *s, int stream_index,
-                           struct AVFrame *frame);
-# 2553 "./libavformat/avformat.h"
-int av_interleaved_write_uncoded_frame(AVFormatContext *s, int stream_index,
-                                       struct AVFrame *frame);
-
-
-
-
-
-
-
-int av_write_uncoded_frame_query(AVFormatContext *s, int stream_index);
-# 2573 "./libavformat/avformat.h"
-int av_write_trailer(AVFormatContext *s);
-# 2587 "./libavformat/avformat.h"
-const AVOutputFormat *av_guess_format(const char *short_name,
-                                      const char *filename,
-                                      const char *mime_type);
-
-
-
-
-enum AVCodecID av_guess_codec(const AVOutputFormat *fmt, const char *short_name,
-                              const char *filename, const char *mime_type,
-                              enum AVMediaType type);
-# 2615 "./libavformat/avformat.h"
-int av_get_output_timestamp(struct AVFormatContext *s, int stream,
-                            int64_t *dts, int64_t *wall);
-# 2642 "./libavformat/avformat.h"
-void av_hex_dump(FILE *f, const uint8_t *buf, int size);
-# 2656 "./libavformat/avformat.h"
-void av_hex_dump_log(void *avcl, int level, const uint8_t *buf, int size);
-# 2666 "./libavformat/avformat.h"
-void av_pkt_dump2(FILE *f, const AVPacket *pkt, int dump_payload, const AVStream *st);
-# 2680 "./libavformat/avformat.h"
-void av_pkt_dump_log2(void *avcl, int level, const AVPacket *pkt, int dump_payload,
-                      const AVStream *st);
-# 2691 "./libavformat/avformat.h"
-enum AVCodecID av_codec_get_id(const struct AVCodecTag * const *tags, unsigned int tag);
-# 2701 "./libavformat/avformat.h"
-unsigned int av_codec_get_tag(const struct AVCodecTag * const *tags, enum AVCodecID id);
-# 2712 "./libavformat/avformat.h"
-int av_codec_get_tag2(const struct AVCodecTag * const *tags, enum AVCodecID id,
-                      unsigned int *tag);
-
-int av_find_default_stream_index(AVFormatContext *s);
-# 2728 "./libavformat/avformat.h"
-int av_index_search_timestamp(AVStream *st, int64_t timestamp, int flags);
-
-
-
-
-
-
-
-int avformat_index_get_entries_count(const AVStream *st);
-# 2749 "./libavformat/avformat.h"
-const AVIndexEntry *avformat_index_get_entry(AVStream *st, int idx);
-# 2766 "./libavformat/avformat.h"
-const AVIndexEntry *avformat_index_get_entry_from_timestamp(AVStream *st,
-                                                            int64_t wanted_timestamp,
-                                                            int flags);
-
-
-
-
-
-
-int av_add_index_entry(AVStream *st, int64_t pos, int64_t timestamp,
-                       int size, int distance, int flags);
-# 2798 "./libavformat/avformat.h"
-void av_url_split(char *proto, int proto_size,
-                  char *authorization, int authorization_size,
-                  char *hostname, int hostname_size,
-                  int *port_ptr,
-                  char *path, int path_size,
-                  const char *url);
-# 2816 "./libavformat/avformat.h"
-void av_dump_format(AVFormatContext *ic,
-                    int index,
-                    const char *url,
-                    int is_output);
-
-
-#define AV_FRAME_FILENAME_FLAGS_MULTIPLE 1
-#define AV_FRAME_FILENAME_FLAGS_IGNORE_TRUNCATION 2
-# 2838 "./libavformat/avformat.h"
-int av_get_frame_filename2(char *buf, int buf_size,
-                          const char *path, int number, int flags);
-
-int av_get_frame_filename(char *buf, int buf_size,
-                          const char *path, int number);
-
-
-
-
-
-
-
-int av_filename_number_test(const char *filename);
-# 2869 "./libavformat/avformat.h"
-int av_sdp_create(AVFormatContext *ac[], int n_files, char *buf, int size);
-# 2878 "./libavformat/avformat.h"
-int av_match_ext(const char *filename, const char *extensions);
-# 2890 "./libavformat/avformat.h"
-int avformat_query_codec(const AVOutputFormat *ofmt, enum AVCodecID codec_id,
-                         int std_compliance);
-# 2908 "./libavformat/avformat.h"
-const struct AVCodecTag *avformat_get_riff_video_tags(void);
-
-
-
-const struct AVCodecTag *avformat_get_riff_audio_tags(void);
-
-
-
-const struct AVCodecTag *avformat_get_mov_video_tags(void);
-
-
-
-const struct AVCodecTag *avformat_get_mov_audio_tags(void);
-# 2943 "./libavformat/avformat.h"
-AVRational av_guess_sample_aspect_ratio(AVFormatContext *format, AVStream *stream,
-                                        struct AVFrame *frame);
-# 2954 "./libavformat/avformat.h"
-AVRational av_guess_frame_rate(AVFormatContext *ctx, AVStream *stream,
-                               struct AVFrame *frame);
-# 2970 "./libavformat/avformat.h"
-int avformat_match_stream_specifier(AVFormatContext *s, AVStream *st,
-                                    const char *spec);
-
-int avformat_queue_attached_pictures(AVFormatContext *s);
-
-
-enum AVTimebaseSource {
-    AVFMT_TBCF_AUTO = -1,
-    AVFMT_TBCF_DECODER,
-    AVFMT_TBCF_DEMUXER,
-
-    AVFMT_TBCF_R_FRAMERATE,
-
-};
-
-
-
-
-[[deprecated]]
-int avformat_transfer_internal_stream_timing_info(const AVOutputFormat *ofmt,
-                                                  AVStream *ost, const AVStream *ist,
-                                                  enum AVTimebaseSource copy_tb);
-
-
-
-
-[[deprecated]]
-AVRational av_stream_get_codec_timebase(const AVStream *st);
 # 58 "libavdevice/avdevice.h" 2
 
 
@@ -15237,565 +15683,11 @@ int avdevice_list_input_sources(const AVInputFormat *device, const char *device_
                                 AVDictionary *device_options, AVDeviceInfoList **device_list);
 int avdevice_list_output_sinks(const AVOutputFormat *device, const char *device_name,
                                AVDictionary *device_options, AVDeviceInfoList **device_list);
-# 3 "MyHeader.h" 2
-# 1 "libavfilter/avfilter.h" 1
-# 23 "libavfilter/avfilter.h"
-#define AVFILTER_AVFILTER_H 
-# 38 "libavfilter/avfilter.h"
-# 1 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 1 3 4
-# 1 "D:/mingw64/x86_64-w64-mingw32/include/stddef.h" 1 3 4
-# 2 "D:/mingw64/lib/gcc/x86_64-w64-mingw32/15.2.0/include/stddef.h" 2 3 4
-# 39 "libavfilter/avfilter.h" 2
-# 49 "libavfilter/avfilter.h"
-# 1 "./libavfilter/version_major.h" 1
-# 22 "./libavfilter/version_major.h"
-#define AVFILTER_VERSION_MAJOR_H 
-
-
-
-
-
-
-
-#define LIBAVFILTER_VERSION_MAJOR 11
-
-
-
-
-
-
-
-#define FF_API_BUFFERSINK_OPTS (LIBAVFILTER_VERSION_MAJOR < 12)
-#define FF_API_CONTEXT_PUBLIC (LIBAVFILTER_VERSION_MAJOR < 12)
-#define FF_API_LIBNPP_SUPPORT (LIBAVFILTER_VERSION_MAJOR < 12)
-# 50 "libavfilter/avfilter.h" 2
-
-
-
-
-# 1 "./libavfilter/version.h" 1
-# 22 "./libavfilter/version.h"
-#define AVFILTER_VERSION_H 
-# 32 "./libavfilter/version.h"
-# 1 "./libavfilter/version_major.h" 1
-# 33 "./libavfilter/version.h" 2
-
-#define LIBAVFILTER_VERSION_MINOR 9
-#define LIBAVFILTER_VERSION_MICRO 100
-
-
-#define LIBAVFILTER_VERSION_INT AV_VERSION_INT(LIBAVFILTER_VERSION_MAJOR, LIBAVFILTER_VERSION_MINOR, LIBAVFILTER_VERSION_MICRO)
-
-
-#define LIBAVFILTER_VERSION AV_VERSION(LIBAVFILTER_VERSION_MAJOR, LIBAVFILTER_VERSION_MINOR, LIBAVFILTER_VERSION_MICRO)
-
-
-#define LIBAVFILTER_BUILD LIBAVFILTER_VERSION_INT
-
-#define LIBAVFILTER_IDENT "Lavfi" AV_STRINGIFY(LIBAVFILTER_VERSION)
-# 55 "libavfilter/avfilter.h" 2
-
-
-
-
-
-unsigned avfilter_version(void);
-
-
-
-
-const char *avfilter_configuration(void);
-
-
-
-
-const char *avfilter_license(void);
-
-typedef struct AVFilterLink AVFilterLink;
-typedef struct AVFilterPad AVFilterPad;
-typedef struct AVFilterFormats AVFilterFormats;
-typedef struct AVFilterChannelLayouts AVFilterChannelLayouts;
-# 86 "libavfilter/avfilter.h"
-const char *avfilter_pad_get_name(const AVFilterPad *pads, int pad_idx);
-# 97 "libavfilter/avfilter.h"
-enum AVMediaType avfilter_pad_get_type(const AVFilterPad *pads, int pad_idx);
-# 109 "libavfilter/avfilter.h"
-AVBufferRef* avfilter_link_get_hw_frames_ctx(AVFilterLink *link);
-# 121 "libavfilter/avfilter.h"
-typedef struct AVFilterFormatsConfig {
-
-
-
-
-    AVFilterFormats *formats;
-
-
-
-
-    AVFilterFormats *samplerates;
-
-
-
-
-    AVFilterChannelLayouts *channel_layouts;
-
-
-
-
-    AVFilterFormats *color_spaces;
-    AVFilterFormats *color_ranges;
-
-
-
-
-    AVFilterFormats *alpha_modes;
-
-} AVFilterFormatsConfig;
-
-
-
-
-
-
-#define AVFILTER_FLAG_DYNAMIC_INPUTS (1 << 0)
-
-
-
-
-
-#define AVFILTER_FLAG_DYNAMIC_OUTPUTS (1 << 1)
-
-
-
-
-#define AVFILTER_FLAG_SLICE_THREADS (1 << 2)
-# 183 "libavfilter/avfilter.h"
-#define AVFILTER_FLAG_METADATA_ONLY (1 << 3)
-
-
-
-
-#define AVFILTER_FLAG_HWDEVICE (1 << 4)
-# 197 "libavfilter/avfilter.h"
-#define AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC (1 << 16)
-
-
-
-
-
-
-
-#define AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL (1 << 17)
-
-
-
-
-#define AVFILTER_FLAG_SUPPORT_TIMELINE (AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC | AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL)
-
-
-
-
-
-typedef struct AVFilter {
-
-
-
-    const char *name;
-
-
-
-
-
-
-    const char *description;
-# 236 "libavfilter/avfilter.h"
-    const AVFilterPad *inputs;
-# 245 "libavfilter/avfilter.h"
-    const AVFilterPad *outputs;
-# 255 "libavfilter/avfilter.h"
-    const AVClass *priv_class;
-
-
-
-
-    int flags;
-} AVFilter;
-
-
-
-
-unsigned avfilter_filter_pad_count(const AVFilter *filter, int is_output);
-
-
-
-
-#define AVFILTER_THREAD_SLICE (1 << 0)
-
-
-typedef struct AVFilterContext {
-    const AVClass *av_class;
-
-    const AVFilter *filter;
-
-    char *name;
-
-    AVFilterPad *input_pads;
-    AVFilterLink **inputs;
-    unsigned nb_inputs;
-
-    AVFilterPad *output_pads;
-    AVFilterLink **outputs;
-    unsigned nb_outputs;
-
-    void *priv;
-
-    struct AVFilterGraph *graph;
-# 309 "libavfilter/avfilter.h"
-    int thread_type;
-
-
-
-
-
-
-    int nb_threads;
-
-
-
-
-
-    [[deprecated]]
-    struct AVFilterCommand *command_queue;
-
-
-    char *enable_str;
-
-
-
-
-    [[deprecated]]
-    void *enable;
-
-
-
-    double *var_values;
-
-
-
-
-
-
-    int is_disabled;
-# 356 "libavfilter/avfilter.h"
-    AVBufferRef *hw_device_ctx;
-
-
-
-
-
-    [[deprecated]]
-    unsigned ready;
-# 380 "libavfilter/avfilter.h"
-    int extra_hw_frames;
-} AVFilterContext;
-# 395 "libavfilter/avfilter.h"
-struct AVFilterLink {
-    AVFilterContext *src;
-    AVFilterPad *srcpad;
-
-    AVFilterContext *dst;
-    AVFilterPad *dstpad;
-
-    enum AVMediaType type;
-
-    int format;
-
-
-    int w;
-    int h;
-    AVRational sample_aspect_ratio;
-
-
-
-
-
-
-
-    enum AVColorSpace colorspace;
-    enum AVColorRange color_range;
-
-
-    int sample_rate;
-    AVChannelLayout ch_layout;
-# 431 "libavfilter/avfilter.h"
-    AVRational time_base;
-
-    AVFrameSideData **side_data;
-    int nb_side_data;
-
-    enum AVAlphaMode alpha_mode;
-# 449 "libavfilter/avfilter.h"
-    AVFilterFormatsConfig incfg;
-
-
-
-
-    AVFilterFormatsConfig outcfg;
-};
-# 466 "libavfilter/avfilter.h"
-int avfilter_link(AVFilterContext *src, unsigned srcpad,
-                  AVFilterContext *dst, unsigned dstpad);
-
-#define AVFILTER_CMD_FLAG_ONE 1
-#define AVFILTER_CMD_FLAG_FAST 2
-
-
-
-
-
-int avfilter_process_command(AVFilterContext *filter, const char *cmd, const char *arg, char *res, int res_len, int flags);
-# 487 "libavfilter/avfilter.h"
-const AVFilter *av_filter_iterate(void **opaque);
-# 496 "libavfilter/avfilter.h"
-const AVFilter *avfilter_get_by_name(const char *name);
-# 509 "libavfilter/avfilter.h"
-int avfilter_init_str(AVFilterContext *ctx, const char *args);
-# 531 "libavfilter/avfilter.h"
-int avfilter_init_dict(AVFilterContext *ctx, AVDictionary **options);
-
-
-
-
-
-
-
-void avfilter_free(AVFilterContext *filter);
-# 550 "libavfilter/avfilter.h"
-int avfilter_insert_filter(AVFilterLink *link, AVFilterContext *filt,
-                           unsigned filt_srcpad_idx, unsigned filt_dstpad_idx);
-
-
-
-
-
-
-const AVClass *avfilter_get_class(void);
-# 572 "libavfilter/avfilter.h"
-typedef int (avfilter_action_func)(AVFilterContext *ctx, void *arg, int jobnr, int nb_jobs);
-# 586 "libavfilter/avfilter.h"
-typedef int (avfilter_execute_func)(AVFilterContext *ctx, avfilter_action_func *func,
-                                    void *arg, int *ret, int nb_jobs);
-
-typedef struct AVFilterGraph {
-    const AVClass *av_class;
-    AVFilterContext **filters;
-    unsigned nb_filters;
-
-    char *scale_sws_opts;
-# 608 "libavfilter/avfilter.h"
-    int thread_type;
-
-
-
-
-
-
-    int nb_threads;
-
-
-
-
-
-
-    void *opaque;
-# 636 "libavfilter/avfilter.h"
-    avfilter_execute_func *execute;
-
-    char *aresample_swr_opts;
-
-
-
-
-
-
-
-    unsigned max_buffered_frames;
-} AVFilterGraph;
-
-
-
-
-
-
-AVFilterGraph *avfilter_graph_alloc(void);
-# 670 "libavfilter/avfilter.h"
-AVFilterContext *avfilter_graph_alloc_filter(AVFilterGraph *graph,
-                                             const AVFilter *filter,
-                                             const char *name);
-# 682 "libavfilter/avfilter.h"
-AVFilterContext *avfilter_graph_get_filter(AVFilterGraph *graph, const char *name);
-# 703 "libavfilter/avfilter.h"
-int avfilter_graph_create_filter(AVFilterContext **filt_ctx, const AVFilter *filt,
-                                 const char *name, const char *args, void *opaque,
-                                 AVFilterGraph *graph_ctx);
-# 715 "libavfilter/avfilter.h"
-void avfilter_graph_set_auto_convert(AVFilterGraph *graph, unsigned flags);
-
-enum {
-    AVFILTER_AUTO_CONVERT_ALL = 0,
-    AVFILTER_AUTO_CONVERT_NONE = -1,
-};
-# 729 "libavfilter/avfilter.h"
-int avfilter_graph_config(AVFilterGraph *graphctx, void *log_ctx);
-
-
-
-
-
-void avfilter_graph_free(AVFilterGraph **graph);
-# 746 "libavfilter/avfilter.h"
-typedef struct AVFilterInOut {
-
-    char *name;
-
-
-    AVFilterContext *filter_ctx;
-
-
-    int pad_idx;
-
-
-    struct AVFilterInOut *next;
-} AVFilterInOut;
-
-
-
-
-
-
-AVFilterInOut *avfilter_inout_alloc(void);
-
-
-
-
-
-void avfilter_inout_free(AVFilterInOut **inout);
-# 791 "libavfilter/avfilter.h"
-int avfilter_graph_parse(AVFilterGraph *graph, const char *filters,
-                         AVFilterInOut *inputs, AVFilterInOut *outputs,
-                         void *log_ctx);
-# 812 "libavfilter/avfilter.h"
-int avfilter_graph_parse_ptr(AVFilterGraph *graph, const char *filters,
-                             AVFilterInOut **inputs, AVFilterInOut **outputs,
-                             void *log_ctx);
-# 838 "libavfilter/avfilter.h"
-int avfilter_graph_parse2(AVFilterGraph *graph, const char *filters,
-                          AVFilterInOut **inputs,
-                          AVFilterInOut **outputs);
-
-
-
-
-
-
-
-typedef struct AVFilterPadParams {
-
-
-
-
-
-
-
-    char *label;
-} AVFilterPadParams;
-
-
-
-
-
-
-
-typedef struct AVFilterParams {
-# 876 "libavfilter/avfilter.h"
-    AVFilterContext *filter;
-# 893 "libavfilter/avfilter.h"
-    char *filter_name;
-# 905 "libavfilter/avfilter.h"
-    char *instance_name;
-# 917 "libavfilter/avfilter.h"
-    AVDictionary *opts;
-
-    AVFilterPadParams **inputs;
-    unsigned nb_inputs;
-
-    AVFilterPadParams **outputs;
-    unsigned nb_outputs;
-} AVFilterParams;
-
-
-
-
-
-
-
-typedef struct AVFilterChain {
-    AVFilterParams **filters;
-    size_t nb_filters;
-} AVFilterChain;
-# 946 "libavfilter/avfilter.h"
-typedef struct AVFilterGraphSegment {
-
-
-
-
-    AVFilterGraph *graph;
-
-
-
-
-
-    AVFilterChain **chains;
-    size_t nb_chains;
-# 968 "libavfilter/avfilter.h"
-    char *scale_sws_opts;
-} AVFilterGraphSegment;
-# 995 "libavfilter/avfilter.h"
-int avfilter_graph_segment_parse(AVFilterGraph *graph, const char *graph_str,
-                                 int flags, AVFilterGraphSegment **seg);
-# 1023 "libavfilter/avfilter.h"
-int avfilter_graph_segment_create_filters(AVFilterGraphSegment *seg, int flags);
-# 1052 "libavfilter/avfilter.h"
-int avfilter_graph_segment_apply_opts(AVFilterGraphSegment *seg, int flags);
-# 1074 "libavfilter/avfilter.h"
-int avfilter_graph_segment_init(AVFilterGraphSegment *seg, int flags);
-# 1109 "libavfilter/avfilter.h"
-int avfilter_graph_segment_link(AVFilterGraphSegment *seg, int flags,
-                                AVFilterInOut **inputs,
-                                AVFilterInOut **outputs);
-# 1137 "libavfilter/avfilter.h"
-int avfilter_graph_segment_apply(AVFilterGraphSegment *seg, int flags,
-                                 AVFilterInOut **inputs,
-                                 AVFilterInOut **outputs);
-# 1151 "libavfilter/avfilter.h"
-void avfilter_graph_segment_free(AVFilterGraphSegment **seg);
-# 1168 "libavfilter/avfilter.h"
-int avfilter_graph_send_command(AVFilterGraph *graph, const char *target, const char *cmd, const char *arg, char *res, int res_len, int flags);
-# 1185 "libavfilter/avfilter.h"
-int avfilter_graph_queue_command(AVFilterGraph *graph, const char *target, const char *cmd, const char *arg, int flags, double ts);
-# 1196 "libavfilter/avfilter.h"
-char *avfilter_graph_dump(AVFilterGraph *graph, const char *options);
-# 1216 "libavfilter/avfilter.h"
-int avfilter_graph_request_oldest(AVFilterGraph *graph);
-# 4 "MyHeader.h" 2
-# 1 "libavformat/avformat.h" 1
-# 5 "MyHeader.h" 2
-# 1 "libavutil/avutil.h" 1
-# 6 "MyHeader.h" 2
+# 6 "libav.h" 2
 # 1 "libswscale/swscale.h" 1
-# 23 "libswscale/swscale.h"
+# 22 "libswscale/swscale.h"
 #define SWSCALE_SWSCALE_H 
-# 37 "libswscale/swscale.h"
+# 36 "libswscale/swscale.h"
 # 1 "libswscale/version_major.h" 1
 # 20 "libswscale/version_major.h"
 #define SWSCALE_VERSION_MAJOR_H 
@@ -15805,8 +15697,8 @@ int avfilter_graph_request_oldest(AVFilterGraph *graph);
 
 
 
-#define LIBSWSCALE_VERSION_MAJOR 9
-# 38 "libswscale/swscale.h" 2
+#define LIBSWSCALE_VERSION_MAJOR 8
+# 37 "libswscale/swscale.h" 2
 
 
 
@@ -15827,8 +15719,8 @@ int avfilter_graph_request_oldest(AVFilterGraph *graph);
 #define LIBSWSCALE_BUILD LIBSWSCALE_VERSION_INT
 
 #define LIBSWSCALE_IDENT "SwS" AV_STRINGIFY(LIBSWSCALE_VERSION)
-# 43 "libswscale/swscale.h" 2
-# 53 "libswscale/swscale.h"
+# 42 "libswscale/swscale.h" 2
+# 52 "libswscale/swscale.h"
 unsigned swscale_version(void);
 
 
@@ -15842,193 +15734,34 @@ const char *swscale_configuration(void);
 const char *swscale_license(void);
 
 
-
-
-
-
-
-const AVClass *sws_get_class(void);
-
-
-
-
-
-typedef enum SwsDither {
-    SWS_DITHER_NONE = 0,
-    SWS_DITHER_AUTO,
-    SWS_DITHER_BAYER,
-    SWS_DITHER_ED,
-    SWS_DITHER_A_DITHER,
-    SWS_DITHER_X_DITHER,
-    SWS_DITHER_NB,
-} SwsDither;
-
-typedef enum SwsAlphaBlend {
-    SWS_ALPHA_BLEND_NONE = 0,
-    SWS_ALPHA_BLEND_UNIFORM,
-    SWS_ALPHA_BLEND_CHECKERBOARD,
-    SWS_ALPHA_BLEND_NB,
-} SwsAlphaBlend;
-
-typedef enum SwsFlags {
-
-
-
-    SWS_FAST_BILINEAR = 1 << 0,
-    SWS_BILINEAR = 1 << 1,
-    SWS_BICUBIC = 1 << 2,
-    SWS_X = 1 << 3,
-    SWS_POINT = 1 << 4,
-    SWS_AREA = 1 << 5,
-    SWS_BICUBLIN = 1 << 6,
-    SWS_GAUSS = 1 << 7,
-    SWS_SINC = 1 << 8,
-    SWS_LANCZOS = 1 << 9,
-    SWS_SPLINE = 1 << 10,
-
-
-
-
-
-    SWS_STRICT = 1 << 11,
-
-
-
-
-    SWS_PRINT_INFO = 1 << 12,
-# 132 "libswscale/swscale.h"
-    SWS_FULL_CHR_H_INT = 1 << 13,
-# 145 "libswscale/swscale.h"
-    SWS_FULL_CHR_H_INP = 1 << 14,
-# 155 "libswscale/swscale.h"
-    SWS_ACCURATE_RND = 1 << 18,
-    SWS_BITEXACT = 1 << 19,
-
-
-
-
-
-
-    SWS_UNSTABLE = 1 << 20,
-
-
-
-
-    SWS_DIRECT_BGR = 1 << 15,
-    SWS_ERROR_DIFFUSION = 1 << 23,
-} SwsFlags;
-
-typedef enum SwsIntent {
-    SWS_INTENT_PERCEPTUAL = 0,
-    SWS_INTENT_RELATIVE_COLORIMETRIC = 1,
-    SWS_INTENT_SATURATION = 2,
-    SWS_INTENT_ABSOLUTE_COLORIMETRIC = 3,
-    SWS_INTENT_NB,
-} SwsIntent;
-# 189 "libswscale/swscale.h"
-typedef struct SwsContext {
-    const AVClass *av_class;
-
-
-
-
-    void *opaque;
-
-
-
-
-    unsigned flags;
-
-
-
-
-    double scaler_params[2];
-
-
-
-
-    int threads;
-
-
-
-
-    SwsDither dither;
-
-
-
-
-    SwsAlphaBlend alpha_blend;
-
-
-
-
-    int gamma_flag;
-
-
-
-
-
-
-
-    int src_w, src_h;
-    int dst_w, dst_h;
-    int src_format;
-    int dst_format;
-    int src_range;
-    int dst_range;
-    int src_v_chr_pos;
-    int src_h_chr_pos;
-    int dst_v_chr_pos;
-    int dst_h_chr_pos;
-
-
-
-
-    int intent;
-
-
-} SwsContext;
-
-
-
-
-SwsContext *sws_alloc_context(void);
-
-
-
-
-
-void sws_free_context(SwsContext **ctx);
-# 276 "libswscale/swscale.h"
-int sws_test_format(enum AVPixelFormat format, int output);
-# 287 "libswscale/swscale.h"
-int sws_test_colorspace(enum AVColorSpace colorspace, int output);
-# 298 "libswscale/swscale.h"
-int sws_test_primaries(enum AVColorPrimaries primaries, int output);
-# 309 "libswscale/swscale.h"
-int sws_test_transfer(enum AVColorTransferCharacteristic trc, int output);
-
-
-
-
-
-
-int sws_test_frame(const AVFrame *frame, int output);
-# 329 "libswscale/swscale.h"
-int sws_frame_setup(SwsContext *ctx, const AVFrame *dst, const AVFrame *src);
-# 339 "libswscale/swscale.h"
-int sws_is_noop(const AVFrame *dst, const AVFrame *src);
-# 363 "libswscale/swscale.h"
-int sws_scale_frame(SwsContext *c, AVFrame *dst, const AVFrame *src);
-
-
-
-
+#define SWS_FAST_BILINEAR 1
+#define SWS_BILINEAR 2
+#define SWS_BICUBIC 4
+#define SWS_X 8
+#define SWS_POINT 0x10
+#define SWS_AREA 0x20
+#define SWS_BICUBLIN 0x40
+#define SWS_GAUSS 0x80
+#define SWS_SINC 0x100
+#define SWS_LANCZOS 0x200
+#define SWS_SPLINE 0x400
 
 #define SWS_SRC_V_CHR_DROP_MASK 0x30000
 #define SWS_SRC_V_CHR_DROP_SHIFT 16
 
 #define SWS_PARAM_DEFAULT 123456
+
+#define SWS_PRINT_INFO 0x1000
+# 97 "libswscale/swscale.h"
+#define SWS_FULL_CHR_H_INT 0x2000
+# 110 "libswscale/swscale.h"
+#define SWS_FULL_CHR_H_INP 0x4000
+
+#define SWS_DIRECT_BGR 0x8000
+
+#define SWS_ACCURATE_RND 0x40000
+#define SWS_BITEXACT 0x80000
+#define SWS_ERROR_DIFFUSION 0x800000
 
 #define SWS_MAX_REDUCE_CUTOFF 0.002
 
@@ -16040,7 +15773,7 @@ int sws_scale_frame(SwsContext *c, AVFrame *dst, const AVFrame *src);
 #define SWS_CS_SMPTE240M 7
 #define SWS_CS_DEFAULT 5
 #define SWS_CS_BT2020 9
-# 392 "libswscale/swscale.h"
+# 136 "libswscale/swscale.h"
 const int *sws_getCoefficients(int colorspace);
 
 
@@ -16057,6 +15790,8 @@ typedef struct SwsFilter {
     SwsVector *chrH;
     SwsVector *chrV;
 } SwsFilter;
+
+struct SwsContext;
 
 
 
@@ -16076,38 +15811,53 @@ int sws_isSupportedOutput(enum AVPixelFormat pix_fmt);
 
 
 int sws_isSupportedEndiannessConversion(enum AVPixelFormat pix_fmt);
-# 439 "libswscale/swscale.h"
-[[nodiscard]]
-int sws_init_context(SwsContext *sws_context, SwsFilter *srcFilter, SwsFilter *dstFilter);
 
 
 
 
 
-void sws_freeContext(SwsContext *swsContext);
-# 469 "libswscale/swscale.h"
-SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcFormat,
-                           int dstW, int dstH, enum AVPixelFormat dstFormat,
-                           int flags, SwsFilter *srcFilter,
-                           SwsFilter *dstFilter, const double *param);
-# 501 "libswscale/swscale.h"
-int sws_scale(SwsContext *c, const uint8_t *const srcSlice[],
+
+struct SwsContext *sws_alloc_context(void);
+
+
+
+
+
+
+
+__attribute__((warn_unused_result))
+int sws_init_context(struct SwsContext *sws_context, SwsFilter *srcFilter, SwsFilter *dstFilter);
+
+
+
+
+
+void sws_freeContext(struct SwsContext *swsContext);
+# 217 "libswscale/swscale.h"
+struct SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcFormat,
+                                  int dstW, int dstH, enum AVPixelFormat dstFormat,
+                                  int flags, SwsFilter *srcFilter,
+                                  SwsFilter *dstFilter, const double *param);
+# 248 "libswscale/swscale.h"
+int sws_scale(struct SwsContext *c, const uint8_t *const srcSlice[],
               const int srcStride[], int srcSliceY, int srcSliceH,
               uint8_t *const dst[], const int dstStride[]);
-# 532 "libswscale/swscale.h"
-int sws_frame_start(SwsContext *c, AVFrame *dst, const AVFrame *src);
-# 542 "libswscale/swscale.h"
-void sws_frame_end(SwsContext *c);
-# 556 "libswscale/swscale.h"
-int sws_send_slice(SwsContext *c, unsigned int slice_start,
+# 268 "libswscale/swscale.h"
+int sws_scale_frame(struct SwsContext *c, AVFrame *dst, const AVFrame *src);
+# 295 "libswscale/swscale.h"
+int sws_frame_start(struct SwsContext *c, AVFrame *dst, const AVFrame *src);
+# 305 "libswscale/swscale.h"
+void sws_frame_end(struct SwsContext *c);
+# 319 "libswscale/swscale.h"
+int sws_send_slice(struct SwsContext *c, unsigned int slice_start,
                    unsigned int slice_height);
-# 576 "libswscale/swscale.h"
-int sws_receive_slice(SwsContext *c, unsigned int slice_start,
+# 339 "libswscale/swscale.h"
+int sws_receive_slice(struct SwsContext *c, unsigned int slice_start,
                       unsigned int slice_height);
-# 588 "libswscale/swscale.h"
-unsigned int sws_receive_slice_alignment(const SwsContext *c);
-# 603 "libswscale/swscale.h"
-int sws_setColorspaceDetails(SwsContext *c, const int inv_table[4],
+# 350 "libswscale/swscale.h"
+unsigned int sws_receive_slice_alignment(const struct SwsContext *c);
+# 365 "libswscale/swscale.h"
+int sws_setColorspaceDetails(struct SwsContext *c, const int inv_table[4],
                              int srcRange, const int table[4], int dstRange,
                              int brightness, int contrast, int saturation);
 
@@ -16115,7 +15865,7 @@ int sws_setColorspaceDetails(SwsContext *c, const int inv_table[4],
 
 
 
-int sws_getColorspaceDetails(SwsContext *c, int **inv_table,
+int sws_getColorspaceDetails(struct SwsContext *c, int **inv_table,
                              int *srcRange, int **table, int *dstRange,
                              int *brightness, int *contrast, int *saturation);
 
@@ -16147,14 +15897,22 @@ SwsFilter *sws_getDefaultFilter(float lumaGBlur, float chromaGBlur,
                                 float chromaHShift, float chromaVShift,
                                 int verbose);
 void sws_freeFilter(SwsFilter *filter);
-# 656 "libswscale/swscale.h"
-SwsContext *sws_getCachedContext(SwsContext *context, int srcW, int srcH,
-                                 enum AVPixelFormat srcFormat, int dstW, int dstH,
-                                 enum AVPixelFormat dstFormat, int flags,
-                                 SwsFilter *srcFilter, SwsFilter *dstFilter,
-                                 const double *param);
-# 672 "libswscale/swscale.h"
+# 418 "libswscale/swscale.h"
+struct SwsContext *sws_getCachedContext(struct SwsContext *context,
+                                        int srcW, int srcH, enum AVPixelFormat srcFormat,
+                                        int dstW, int dstH, enum AVPixelFormat dstFormat,
+                                        int flags, SwsFilter *srcFilter,
+                                        SwsFilter *dstFilter, const double *param);
+# 434 "libswscale/swscale.h"
 void sws_convertPalette8ToPacked32(const uint8_t *src, uint8_t *dst, int num_pixels, const uint8_t *palette);
-# 684 "libswscale/swscale.h"
+# 446 "libswscale/swscale.h"
 void sws_convertPalette8ToPacked24(const uint8_t *src, uint8_t *dst, int num_pixels, const uint8_t *palette);
-# 7 "MyHeader.h" 2
+
+
+
+
+
+
+
+const AVClass *sws_get_class(void);
+# 7 "libav.h" 2

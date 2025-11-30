@@ -68,7 +68,8 @@ local function BuildClient()
 		end
 	else
 		System.Execute(
-			"zip -9 -r Client.zip ClientApplication/main.lua ClientApplication/conf.lua Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			"zip -9 -r -j Client.zip ClientApplication/main.lua ClientApplication/conf.lua && "..
+			"zip -9 -r Client.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
 			Enum.ExecutionMode.Execute
 		)
 		

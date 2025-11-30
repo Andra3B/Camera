@@ -21,12 +21,12 @@ local defines = FFILoader.LoadDefinitions(
 defines.AVERROR_EAGAIN = -11
 
 local libav = {
-	avutil = FFILoader.CreateLibrary("avutil-60", defines, true),
-	avcodec = FFILoader.CreateLibrary("avcodec-62", defines, true),
-	avformat = FFILoader.CreateLibrary("avformat-62", defines, true),
-	avdevice = FFILoader.CreateLibrary("avdevice-62", defines, true),
-	avfilter = FFILoader.CreateLibrary("avfilter-11", defines, true),
-	swscale = FFILoader.CreateLibrary("swscale-9", defines, true)
+	avutil = FFILoader.CreateLibrary("avutil-"..tostring(defines.LIBAVUTIL_VERSION_MAJOR), defines, true),
+	avcodec = FFILoader.CreateLibrary("avcodec-"..tostring(defines.LIBAVCODEC_VERSION_MAJOR, defines), true),
+	avformat = FFILoader.CreateLibrary("avformat-"..tostring(defines.LIBAVFORMAT_VERSION_MAJOR), defines, true),
+	avdevice = FFILoader.CreateLibrary("avdevice-"..tostring(defines.LIBAVDEVICE_VERSION_MAJOR), defines, true),
+	avfilter = FFILoader.CreateLibrary("avfilter-"..tostring(defines.LIBAVFILTER_VERSION_MAJOR), defines, true),
+	swscale = FFILoader.CreateLibrary("swscale-"..tostring(defines.LIBSWSCALE_VERSION_MAJOR), defines, true)
 }
 
 return libav

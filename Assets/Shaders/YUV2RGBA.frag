@@ -1,5 +1,3 @@
-#pragma language glsl3
-
 uniform Image uvImage;
 
 vec4 effect(vec4 colour, Image yImage, vec2 imagePosition, vec2 screenPosition) {	

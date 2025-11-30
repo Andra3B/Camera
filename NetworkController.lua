@@ -130,7 +130,13 @@ function NetworkController.GetCommandsFromString(commandsString)
 end
 
 function NetworkController.GetPrivateIP()
-	return socket.dns.toip(socket.dns.gethostname())
+	local udpSocket = socket.udp()
+	udpSocket:setpeername("8.8.8.8", 80) -- Google DNS
+
+	local privateIP = udpSocket:getsockname()
+	udpSocket:close()
+
+	return privateIP
 end
 
 function NetworkController.GetFreePort()
