@@ -1,5 +1,7 @@
 require("SetupEnvironment")
 
+local libav = require("libav.init")
+
 System.Options = {
 	["Target"] = {
 		DataType = Enum.OptionDataType.String,
@@ -37,21 +39,21 @@ local function BuildClient()
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
-						System.Copy(loveFolder.."/SDL2.dll", "ClientBuild") and
-						System.Copy(loveFolder.."/OpenAL32.dll", "ClientBuild") and
-						System.Copy(loveFolder.."/license.txt", "ClientBuild") and
-						System.Copy(loveFolder.."/love.dll", "ClientBuild") and
-						System.Copy(loveFolder.."/lua51.dll", "ClientBuild") and
-						System.Copy(loveFolder.."/mpg123.dll", "ClientBuild") and
-						System.Copy(loveFolder.."/msvcp120.dll", "ClientBuild") and
-						System.Copy(loveFolder.."/msvcr120.dll", "ClientBuild") and
+						System.Copy(loveFolder.."SDL2.dll", "ClientBuild") and
+						System.Copy(loveFolder.."OpenAL32.dll", "ClientBuild") and
+						System.Copy(loveFolder.."license.txt", "ClientBuild") and
+						System.Copy(loveFolder.."love.dll", "ClientBuild") and
+						System.Copy(loveFolder.."lua51.dll", "ClientBuild") and
+						System.Copy(loveFolder.."mpg123.dll", "ClientBuild") and
+						System.Copy(loveFolder.."msvcp120.dll", "ClientBuild") and
+						System.Copy(loveFolder.."msvcr120.dll", "ClientBuild") and
 
-						System.Copy(libAVFolder.."/avutil-60.dll", "ClientBuild") and
-						System.Copy(libAVFolder.."/avcodec-62.dll", "ClientBuild") and
-						System.Copy(libAVFolder.."/avformat-62.dll", "ClientBuild") and
-						System.Copy(libAVFolder.."/avdevice-62.dll", "ClientBuild") and
-						System.Copy(libAVFolder.."/avfilter-11.dll", "ClientBuild") and
-						System.Copy(libAVFolder.."/swscale-9.dll", "ClientBuild")
+						System.Copy(libAVFolder.."avutil-"..tostring(libav.avutil.LIBAVUTIL_VERSION_MAJOR)..".dll", "ClientBuild") and
+						System.Copy(libAVFolder.."avcodec-"..tostring(libav.avcodec.LIBAVCODEC_VERSION_MAJOR)..".dll", "ClientBuild") and
+						System.Copy(libAVFolder.."avformat-"..tostring(libav.avformat.LIBAVFORMAT_VERSION_MAJOR)..".dll", "ClientBuild") and
+						System.Copy(libAVFolder.."avdevice-"..tostring(libav.avdevice.LIBAVDEVICE_VERSION_MAJOR)..".dll", "ClientBuild") and
+						System.Copy(libAVFolder.."avfilter-"..tostring(libav.avfilter.LIBAVFILTER_VERSION_MAJOR)..".dll", "ClientBuild") and
+						System.Copy(libAVFolder.."swscale-"..tostring(libav.swscale.LIBSWSCALE_VERSION_MAJOR)..".dll", "ClientBuild")
 					) then
 						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the ClientBuild folder!")
 					end
@@ -126,12 +128,12 @@ local function BuildCamera()
 						System.Copy(loveFolder.."/msvcp120.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/msvcr120.dll", "CameraBuild") and
 
-						System.Copy(libAVFolder.."/avutil-60.dll", "CameraBuild") and
-						System.Copy(libAVFolder.."/avcodec-62.dll", "CameraBuild") and
-						System.Copy(libAVFolder.."/avformat-62.dll", "CameraBuild") and
-						System.Copy(libAVFolder.."/avdevice-62.dll", "CameraBuild") and
-						System.Copy(libAVFolder.."/avfilter-11.dll", "CameraBuild") and
-						System.Copy(libAVFolder.."/swscale-9.dll", "CameraBuild")
+						System.Copy(libAVFolder.."avutil-"..tostring(libav.avutil.LIBAVUTIL_VERSION_MAJOR)..".dll", "CameraBuild") and
+						System.Copy(libAVFolder.."avcodec-"..tostring(libav.avcodec.LIBAVCODEC_VERSION_MAJOR)..".dll", "CameraBuild") and
+						System.Copy(libAVFolder.."avformat-"..tostring(libav.avformat.LIBAVFORMAT_VERSION_MAJOR)..".dll", "CameraBuild") and
+						System.Copy(libAVFolder.."avdevice-"..tostring(libav.avdevice.LIBAVDEVICE_VERSION_MAJOR)..".dll", "CameraBuild") and
+						System.Copy(libAVFolder.."avfilter-"..tostring(libav.avfilter.LIBAVFILTER_VERSION_MAJOR)..".dll", "CameraBuild") and
+						System.Copy(libAVFolder.."swscale-"..tostring(libav.swscale.LIBSWSCALE_VERSION_MAJOR)..".dll", "CameraBuild")
 					) then
 						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the CameraBuild folder!")
 					end
@@ -144,7 +146,7 @@ local function BuildCamera()
 				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
 			end
 		else
-			Log.Critical(Enum.LogCategory.Build, "Failed to create ClientBuild folder!")
+			Log.Critical(Enum.LogCategory.Build, "Failed to create CameraBuild folder!")
 		end
 	else
 		System.Execute(

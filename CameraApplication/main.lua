@@ -114,7 +114,7 @@ function love.load(args)
 	SettingsVideoSourceTextBox.RelativePosition = Vector2.Create(0, 0.08)
 	SettingsVideoSourceTextBox.PixelPosition = Vector2.Create(10, 20)
 	SettingsVideoSourceTextBox.PlaceholderText = "Enter video source..."
-	SettingsVideoSourceTextBox.Text = "Assets/Videos/WateringCan.mp4"
+	SettingsVideoSourceTextBox.Text = "Assets/Videos/Ocean.mp4"
 
 	NetworkViewFrame:AddChild(NetworkCommandLabel)
 

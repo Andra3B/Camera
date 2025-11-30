@@ -25,7 +25,7 @@ local libav
 if jit.os == "Windows" then
 	libav = {
 		avutil = FFILoader.CreateLibrary("avutil-"..tostring(defines.LIBAVUTIL_VERSION_MAJOR), defines, true),
-		avcodec = FFILoader.CreateLibrary("avcodec-"..tostring(defines.LIBAVCODEC_VERSION_MAJOR, defines), true),
+		avcodec = FFILoader.CreateLibrary("avcodec-"..tostring(defines.LIBAVCODEC_VERSION_MAJOR), defines, true),
 		avformat = FFILoader.CreateLibrary("avformat-"..tostring(defines.LIBAVFORMAT_VERSION_MAJOR), defines, true),
 		avdevice = FFILoader.CreateLibrary("avdevice-"..tostring(defines.LIBAVDEVICE_VERSION_MAJOR), defines, true),
 		avfilter = FFILoader.CreateLibrary("avfilter-"..tostring(defines.LIBAVFILTER_VERSION_MAJOR), defines, true),
