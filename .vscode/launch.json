@@ -68,13 +68,13 @@
 			"id": "LoveFolderInput",
 			"type": "promptString",
 			"description": "Enter path to the Love2D folder",
-			"default": "C:/Program Files/Love2D"
+			"default": "D:/Love2D"
 		},
 		{
 			"id": "LibAVFolderInput",
 			"type": "promptString",
 			"description": "Enter path to the LibAV folder",
-			"default": "C:/Program Files/ffmpeg/bin"
+			"default": "D:/ffmpeg/bin"
 		}
 	],
 

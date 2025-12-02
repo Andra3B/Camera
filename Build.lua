@@ -39,6 +39,8 @@ local function BuildClient()
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
+						System.Copy("Assets", "ClientBuild") and
+
 						System.Copy(loveFolder.."SDL2.dll", "ClientBuild") and
 						System.Copy(loveFolder.."OpenAL32.dll", "ClientBuild") and
 						System.Copy(loveFolder.."license.txt", "ClientBuild") and
@@ -86,15 +88,13 @@ local function BuildClient()
 					]])
 
 					executableFile:close()
+					System.Execute("chmod a+x ClientBuild/Client", Enum.ExecutionMode.Execute)
 
-					if System.Execute(
-						"chmod a+x ClientBuild/Client",
-						Enum.ExecutionMode.Execute
-					) ~= 0 then
+					if not System.Copy("Assets", "ClientBuild") then
 						Log.Critical(Enum.LogCategory.Build, "Failed to make Client executable!")
 					end
 				else
-					Log.Critical(Enum.LogCategory.Build, "Failed to create Client!")
+					Log.Critical(Enum.LogCategory.Build, "Failed to create Client executable!")
 				end
 			else
 				Log.Critical(Enum.LogCategory.Build, "Failed to create Client.love!")
@@ -119,6 +119,8 @@ local function BuildCamera()
 					Enum.ExecutionMode.Execute
 				) == 0 then
 					if not (
+						System.Copy("Assets", "CameraBuild") and
+
 						System.Copy(loveFolder.."/SDL2.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/OpenAL32.dll", "CameraBuild") and
 						System.Copy(loveFolder.."/license.txt", "CameraBuild") and
@@ -158,22 +160,20 @@ local function BuildCamera()
 		if System.Create("CameraBuild/") then
 			if System.Execute("mv Camera.zip CameraBuild/Camera.love", Enum.ExecutionMode.Execute) == 0 then
 				local executableFile = io.open("CameraBuild/Camera", "w+")
-
+				
 				if executableFile then
 					executableFile:write(
 						"#!/bin/sh\nexec love \"$(dirname \"$0\")/Camera.love\"\n"
 					)
 					
 					executableFile:close()
+					System.Execute("chmod a+x CameraBuild/Camera", Enum.ExecutionMode.Execute)
 
-					if System.Execute(
-						"chmod a+x CameraBuild/Camera",
-						Enum.ExecutionMode.Execute
-					) ~= 0 then
-						Log.Critical(Enum.LogCategory.Build, "Failed to make Camera executable!")
+					if not System.Copy("Assets", "CameraBuild") then
+						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the CameraBuild folder!")
 					end
 				else
-					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera!")
+					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera executable!")
 				end
 			else
 				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
