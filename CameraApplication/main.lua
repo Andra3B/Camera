@@ -159,7 +159,7 @@ function love.load(args)
 		NetworkCommandLabel.Text = "Received message \""..message.."\" from ("..IPAddress..", "..port..")"
 	end)
 
-	libav.avdevice_register_all()
+	libav.avdevice.avdevice_register_all()
 
 	ApplicationNetworkServer:Listen()
 

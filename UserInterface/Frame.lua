@@ -164,8 +164,8 @@ function Frame:RecursiveRefresh()
 	self._ChildBottomRightBoundingCorner = childBottomRightBoundingCorner
 end
 
-function Frame:RecursiveUpdate()
-	Hierarchy.RecursiveUpdate(self)
+function Frame:RecursiveUpdate(deltaTime)
+	Hierarchy.RecursiveUpdate(self, deltaTime)
 end
 
 function Frame:GetDrawnChildren()
