@@ -1,6 +1,8 @@
 local BASE_CLASS = ...
 if not BASE_CLASS then error("Failed to create interative widget! BASE_CLASS not defined.", 2) end
 
+local Frame = require("UserInterface.Frame")
+
 local Interactive = {}
 
 function Interactive.Create()
@@ -9,19 +11,19 @@ function Interactive.Create()
 	self._Active = true
 	self._AbsoluteActive = true
 	
-	self._Focused = false
 	self._CanFocus = true
 
-	self._PressedBackgroundColour = nil
-	self._PressedColourMultiplier = 2
+	self._FocusedBackgroundColour = Vector4.Create(1, 0, 0, 1)
+	self._PressedBackgroundColour = Vector4.Create(0, 1, 0, 1)
+	self._HoveringBackgroundColour = Vector4.Create(0, 0, 1, 1)
 
-	self._InactiveOverlayColour = Vector4.Create(0.8, 0.8, 0.8, 0.75)
-	
-	self._FocusedBackgroundColour = nil
-	self._FocusedColourMultiplier = 1.5
-	
-	self._HoveringBackgroundColour = nil
-	self._HoveringColourMultiplier = 1.5
+	local inactiveOverlay = Frame.Create()
+	inactiveOverlay.RelativeSize = Vector2.Create(1, 1)
+	inactiveOverlay.BackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.75)
+
+	inactiveOverlay.Visible = false
+
+	self:AddChild(inactiveOverlay, 0)
 
 	return self
 end
@@ -36,44 +38,22 @@ function Interactive:Refresh()
 	else
 		self._AbsoluteActive = self._Active
 	end
-end
 
-function Interactive:PostDraw()
-	if not self._AbsoluteActive then
-		local absolutePosition = self._AbsolutePosition
-		local absoluteSize = self._AbsoluteSize
-		local cornerRadius = self:GetCornerRadius()
-
-		love.graphics.setColor(self:GetInactiveOverlayColour():Unpack())
-		love.graphics.rectangle(
-			"fill",
-			absolutePosition.X, absolutePosition.Y,
-			absoluteSize.X, absoluteSize.Y,
-			cornerRadius, cornerRadius
-		)
-	end
+	self:GetChildren()[0].Visible = not self._AbsoluteActive
 end
 
 function Interactive:GetBackgroundColour()
-	local backgroundColour = BASE_CLASS.GetBackgroundColour(self)
-
 	if self._AbsoluteActive then
 		if self:IsPressed() then
-			return
-				self:GetPressedBackgroundColour() or
-				backgroundColour * self:GetPressedColourMultiplier()
+			return self:GetPressedBackgroundColour()
 		elseif self:IsHovering() then
-			return
-				self:GetHoveringBackgroundColour() or
-				backgroundColour * self:GetHoveringColourMultiplier()
+			return self:GetHoveringBackgroundColour()
 		elseif self:IsFocused() then
-			return
-				self:GetFocusedBackgroundColour() or
-				backgroundColour * self:GetFocusedColourMultiplier()
+			return self:GetFocusedBackgroundColour()
 		end
 	end
 	
-	return backgroundColour
+	return BASE_CLASS.GetBackgroundColour(self)
 end
 
 function Interactive:IsActive()
@@ -90,6 +70,8 @@ end
 
 function Interactive:SetActive(active)
 	self._Active = active
+
+	self:RecursiveRefresh()
 
 	if self:IsPressed() and not active then
 		self._Events:Push("Pressed", false)
@@ -116,16 +98,8 @@ function Interactive:GetFocusedBackgroundColour()
 	return self._FocusedBackgroundColour
 end
 
-function Interactive:GetFocusedColourMultiplier()
-	return self._FocusedColourMultiplier
-end
-
 function Interactive:SetFocusedBackgroundColour(colour)
 	self._FocusedBackgroundColour = colour
-end
-
-function Interactive:SetFocusedColourMultiplier(multiplier)
-	self._FocusedColourMultiplier = multiplier
 end
 
 function Interactive:IsHovering()
@@ -136,16 +110,8 @@ function Interactive:GetHoveringBackgroundColour()
 	return self._HoveringBackgroundColour
 end
 
-function Interactive:GetHoveringColourMultiplier()
-	return self._HoveringColourMultiplier
-end
-
 function Interactive:SetHoveringBackgroundColour(colour)
 	self._HoveringBackgroundColour = colour
-end
-
-function Interactive:SetHoveringColourMultiplier(multiplier)
-	self._HoveringColourMultiplier = multiplier
 end
 
 function Interactive:IsPressed()
@@ -156,16 +122,8 @@ function Interactive:GetPressedBackgroundColour()
 	return self._PressedBackgroundColour
 end
 
-function Interactive:GetPressedColourMultiplier()
-	return self._PressedColourMultiplier
-end
-
 function Interactive:SetPressedBackgroundColour(colour)
 	self._PressedBackgroundColour = colour
-end
-
-function Interactive:SetPressedColourMultiplier(multiplier)
-	self._PressedColourMultiplier = multiplier
 end
 
 function Interactive:Destroy()

@@ -40,8 +40,6 @@ function TextBox:Draw()
 			absolutePosition.Y + absoluteTextOffset.Y
 		)
 	end
-
-	Interactive.PostDraw(self)
 end
 
 function TextBox:SetText(text)

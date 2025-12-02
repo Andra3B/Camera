@@ -12,12 +12,11 @@ end
 
 function ViewSelectorFrame:GetChildren(all)
 	local children = Frame.GetChildren(self)
-
 	
 	if all then
 		return children
 	else
-		return {children[self._VisibleChildIndex]}
+		return {[0] = children[0], children[self._VisibleChildIndex]}
 	end
 end
 

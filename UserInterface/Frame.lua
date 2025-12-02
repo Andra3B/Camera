@@ -13,12 +13,15 @@ function Frame.Create()
 	self._PixelSize = Vector2.Zero
 	self._AbsoluteSize = Vector2.Zero
 
-	self._ChildOffset = Vector2.Zero
+	self._ChildTopLeftBoundingCorner = Vector2.Zero
+	self._ChildBottomRightBoundingCorner = Vector2.Zero
 
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
 
 	self._CornerRadius = 0
+
+	self._Visible = true
 
 	return self
 end
@@ -58,43 +61,56 @@ function Frame:Draw()
 end
 
 function Frame:RecursiveDraw()
-	local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
-	
-	if not scissorTopLeftX then
-		scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = 0, 0, love.graphics.getDimensions()
-	end
-
-	local scissorBottomRightX, scissorBottomRightY = scissorTopLeftX + scissorWidth, scissorTopLeftY + scissorHeight
-
-	local newScissorTopLeft = self._AbsolutePosition
-	local newScissorBottomRight = self._AbsolutePosition + self._AbsoluteSize
-
-	if not (
-		newScissorBottomRight.X < scissorTopLeftX or
-		newScissorTopLeft.X > scissorBottomRightX or
-		newScissorBottomRight.Y < scissorTopLeftY or
-		newScissorTopLeft.Y > scissorBottomRightY
-	) then
-		love.graphics.setScissor(
-			math.max(newScissorTopLeft.X, scissorTopLeftX),
-			math.max(newScissorTopLeft.Y, scissorTopLeftY),
-			math.min(newScissorBottomRight.X - newScissorTopLeft.X, scissorWidth),
-			math.min(newScissorBottomRight.Y - newScissorTopLeft.Y, scissorHeight)
-		)
-
-		self:Draw()
-
-		for _, child in ipairs(self:GetChildren()) do
-			if Class.IsA(child, "Frame") then
-				love.graphics.push("all")
-
-				child:RecursiveDraw()
-
-				love.graphics.pop()
-			end
+	if self:IsVisible() then
+		local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
+		
+		if not scissorTopLeftX then
+			scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = 0, 0, love.graphics.getDimensions()
 		end
 
-		love.graphics.setScissor()
+		local scissorBottomRightX, scissorBottomRightY = scissorTopLeftX + scissorWidth, scissorTopLeftY + scissorHeight
+
+		local newScissorTopLeft = self._AbsolutePosition
+		local newScissorBottomRight = self._AbsolutePosition + self._AbsoluteSize
+
+		if not (
+			newScissorBottomRight.X < scissorTopLeftX or
+			newScissorTopLeft.X > scissorBottomRightX or
+			newScissorBottomRight.Y < scissorTopLeftY or
+			newScissorTopLeft.Y > scissorBottomRightY
+		) then
+			love.graphics.push("all")
+
+			love.graphics.setScissor(
+				math.max(newScissorTopLeft.X, scissorTopLeftX),
+				math.max(newScissorTopLeft.Y, scissorTopLeftY),
+				math.min(newScissorBottomRight.X - newScissorTopLeft.X, scissorWidth),
+				math.min(newScissorBottomRight.Y - newScissorTopLeft.Y, scissorHeight)
+			)
+
+			love.graphics.push("all")
+
+			self:Draw()
+
+			local children = self:GetChildren()
+			for _, child in ipairs(children) do
+				if Class.IsA(child, "Frame") then
+					love.graphics.push("all")
+
+					child:RecursiveDraw()
+
+					love.graphics.pop()
+				end
+			end
+
+			love.graphics.pop()
+
+			if children[0] then
+				children[0]:RecursiveDraw()
+			end
+
+			love.graphics.pop()
+		end
 	end
 end
 
@@ -102,24 +118,54 @@ function Frame:Refresh()
 	Hierarchy.Refresh(self)
 
 	local parentAbsolutePosition = nil
-	local parentChildOffset = nil
 	local parentAbsoluteSize = nil
 	local parent = self._Parent
 
 	if parent then
 		parentAbsolutePosition = parent._AbsolutePosition
-		parentChildOffset = parent:GetChildOffset()
 		parentAbsoluteSize = parent._AbsoluteSize
 	else
 		parentAbsolutePosition = Vector2.Zero
-		parentChildOffset = Vector2.Zero
 		parentAbsoluteSize = Vector2.Create(love.graphics.getDimensions())
 	end
 
-	self._AbsolutePosition =
-		parentAbsoluteSize * self._RelativePosition + parentAbsolutePosition + parentChildOffset + self._PixelPosition
-		
+	self._AbsolutePosition = parentAbsoluteSize * self._RelativePosition + parentAbsolutePosition + self._PixelPosition
 	self._AbsoluteSize = parentAbsoluteSize * self._RelativeSize + self._PixelSize
+end
+
+function Frame:RecursiveRefresh()
+	Hierarchy.RecursiveRefresh(self)
+	
+	local childTopLeftBoundingCorner
+	local childBottomRightBoundingCorner
+
+	local children = self:GetChildren()
+	if #children > 0 then
+		childTopLeftBoundingCorner = Vector2.Create(math.huge, math.huge)
+		childBottomRightBoundingCorner = Vector2.Create(-math.huge, -math.huge)
+
+		for _, child in pairs(children) do
+			childTopLeftBoundingCorner = Vector2.Create(
+				math.min(child._AbsolutePosition.X, childTopLeftBoundingCorner.X),
+				math.min(child._AbsolutePosition.Y, childTopLeftBoundingCorner.Y)
+			)
+
+			childBottomRightBoundingCorner = Vector2.Create(
+				math.max(child._AbsolutePosition.X + child._AbsoluteSize.X, childBottomRightBoundingCorner.X),
+				math.max(child._AbsolutePosition.Y + child._AbsoluteSize.Y, childBottomRightBoundingCorner.Y)
+			)
+		end
+	else
+		childTopLeftBoundingCorner = Vector2.Zero
+		childBottomRightBoundingCorner = Vector2.Zero
+	end
+
+	self._ChildTopLeftBoundingCorner = childTopLeftBoundingCorner
+	self._ChildBottomRightBoundingCorner = childBottomRightBoundingCorner
+end
+
+function Frame:RecursiveUpdate()
+	Hierarchy.RecursiveUpdate(self)
 end
 
 function Frame:GetRelativePosition()
@@ -178,18 +224,6 @@ function Frame:GetAbsoluteSize()
 	return self._AbsoluteSize
 end
 
-function Frame:GetChildOffset()
-	return self._ChildOffset
-end
-
-function Frame:SetChildOffset(offset)
-	if self._ChildOffset ~= offset then
-		self._ChildOffset = offset
-
-		self:RecursiveRefresh()
-	end
-end
-
 function Frame:GetBackgroundColour()
 	return self._BackgroundColour
 end
@@ -214,6 +248,14 @@ function Frame:SetCornerRadius(radius)
 	self._CornerRadius = radius
 end
 
+function Frame:IsVisible()
+	return self._Visible
+end
+
+function Frame:SetVisible(visible)
+	self._Visible = visible
+end
+
 function Frame:Destroy()
 	if not self._Destroyed then
 		self._RelativePosition = nil
@@ -224,8 +266,9 @@ function Frame:Destroy()
 
 		self._AbsolutePosition = nil
 		self._AbsoluteSize = nil
-
-		self._ChildOffset = nil
+		
+		self._ChildTopLeftBoundingCorner = nil
+		self._ChildBottomRightBoundingCorner = nil
 
 		self._BackgroundColour = nil
 

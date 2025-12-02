@@ -7,6 +7,8 @@ local ScrollFrame = {}
 function ScrollFrame.Create()
 	local self = Class.CreateInstance(Interactive.Create(), ScrollFrame)
 
+	self._ViewPosition = Vector2.Zero
+
 	return self
 end
 

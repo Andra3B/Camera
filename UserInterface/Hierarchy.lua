@@ -22,8 +22,13 @@ end
 function Hierarchy:RecursiveUpdate(deltaTime)
 	self:Update(deltaTime)
 
-	for _, child in ipairs(self._Children) do
+	local children = self:GetChildren()
+	for _, child in ipairs(children) do
 		child:RecursiveUpdate(deltaTime)
+	end
+
+	if children[0] then
+		children[0]:RecursiveUpdate(deltaTime)
 	end
 end
 
@@ -33,8 +38,13 @@ end
 function Hierarchy:RecursiveRefresh()
 	self:Refresh()
 
-	for _, child in ipairs(self._Children) do
+	local children = self:GetChildren()
+	for _, child in ipairs(children) do
 		child:RecursiveRefresh()
+	end
+
+	if children[0] then
+		children[0]:RecursiveRefresh()
 	end
 end
 
@@ -54,7 +64,7 @@ function Hierarchy:GetChildCount()
 	return #self._Children
 end
 
-local function AcenstorIterator(parent)
+local function AncestorIterator(parent)
 	while parent do
 		coroutine.yield(parent)
 
@@ -63,7 +73,7 @@ local function AcenstorIterator(parent)
 end
 
 function Hierarchy:IterateAncestors()
-	return coroutine.wrap(AcenstorIterator), self._Parent, nil
+	return coroutine.wrap(AncestorIterator), self._Parent, nil
 end
 
 function Hierarchy:GetAncestorWithName(name)
@@ -82,32 +92,43 @@ function Hierarchy:GetAncestorWithType(ancestorType)
 	end
 end
 
-function Hierarchy:SetParent(parent)
-	if self._Parent == parent then return true end
+function Hierarchy:SetParent(parent, where)
+	if self._Parent then
+		local parentChildren = self._Parent._Children
 
-	if self._Parent then	
-		for index, child in ipairs(self._Parent._Children) do
-			if child == self then
-				table.remove(self._Children, index)
-
-				break
+		if parentChildren[0] == self then
+			parentChildren[0] = nil
+		else
+			for index, child in ipairs(parentChildren) do
+				if child == self then
+					table.remove(parentChildren, index)
+	
+					break
+				end
 			end
 		end
-		
-		self._Parent = nil
 	end
+
+	self._Parent = parent
 
 	if parent then
 		if parent ~= self and Class.IsA(parent, "Hierarchy") then
-			self._Parent = parent
+			local parentChildren = parent._Children
 
-			table.insert(parent._Children, self)
+			if where == 0 then
+				if parentChildren[0] then
+					parentChildren[0]:SetParent(nil)
+				end
+
+				parentChildren[0] = self
+			else
+				table.insert(parentChildren, math.clamp(where or (#parentChildren + 1), 0, #parentChildren + 1), self)
+			end
+
 			self:RecursiveRefresh()
 		else
 			return false
 		end
-	else
-		self._Parent = nil
 	end
 	
 	return true
@@ -121,6 +142,10 @@ end
 
 function Hierarchy:GetChildren()
 	return self._Children
+end
+
+function Hierarchy:GetChildWithIndex(index)
+	return self._Children[index]
 end
 
 function Hierarchy:GetChildWithName(name)
@@ -139,8 +164,8 @@ function Hierarchy:GetChildWithType(childType)
 	end
 end
 
-function Hierarchy:AddChild(child)
-	return child:SetParent(self)
+function Hierarchy:AddChild(child, where)
+	return child:SetParent(self, where)
 end
 
 local function DescendantIterator(children)
@@ -213,6 +238,10 @@ end
 
 function Hierarchy:Destroy()
 	if not self._Destroyed then
+		if self._Children[0] then
+			self._Children[0]:Destroy()
+		end
+
 		for _, child in ipairs(self._Children) do
 			child:Destroy()
 		end
