@@ -26,6 +26,13 @@ function love.load(args)
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
+	local MyScrollFrame = UserInterface.ScrollFrame.Create()
+	MyScrollFrame.RelativeSize = Vector2.Create(0.9, 0.9)
+	MyScrollFrame.RelativePosition = Vector2.Create(0.05, 0.05)
+	MyScrollFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
+
+	Root:AddChild(MyScrollFrame)
+
 	UserInterface.SetRoot(Root)
 end
 

@@ -22,13 +22,12 @@ end
 function Hierarchy:RecursiveUpdate(deltaTime)
 	self:Update(deltaTime)
 
-	local children = self:GetChildren()
-	for _, child in ipairs(children) do
+	for _, child in ipairs(self._Children) do
 		child:RecursiveUpdate(deltaTime)
 	end
 
-	if children[0] then
-		children[0]:RecursiveUpdate(deltaTime)
+	if self._Children[0] then
+		self._Children[0]:RecursiveUpdate(deltaTime)
 	end
 end
 
@@ -37,14 +36,13 @@ end
 
 function Hierarchy:RecursiveRefresh()
 	self:Refresh()
-
-	local children = self:GetChildren()
-	for _, child in ipairs(children) do
+	
+	for _, child in ipairs(self._Children) do
 		child:RecursiveRefresh()
 	end
 
-	if children[0] then
-		children[0]:RecursiveRefresh()
+	if self._Children[0] then
+		self._Children[0]:RecursiveRefresh()
 	end
 end
 

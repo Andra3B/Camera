@@ -43,7 +43,7 @@ function love.load(args)
 	NetworkTestingViewButton.Text = "Network Testing"
 	NetworkTestingViewButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
-			ContentFrame.VisibleChildIndex = 1
+			ContentFrame.DrawnChildIndex = 1
 		end
 	end)
 
@@ -54,7 +54,7 @@ function love.load(args)
 	LivestreamTestingViewButton.Text = "Livestream Testing"
 	LivestreamTestingViewButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
-			ContentFrame.VisibleChildIndex = 2
+			ContentFrame.DrawnChildIndex = 2
 		end
 	end)
 
@@ -65,7 +65,7 @@ function love.load(args)
 	SettingsViewButton.Text = "Settings"
 	SettingsViewButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
-			ContentFrame.VisibleChildIndex = 3
+			ContentFrame.DrawnChildIndex = 3
 		end
 	end)
 

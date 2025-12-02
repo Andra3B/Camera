@@ -5,27 +5,23 @@ local ViewSelectorFrame = {}
 function ViewSelectorFrame.Create()
 	local self = Class.CreateInstance(Frame.Create(), ViewSelectorFrame)
 
-	self._VisibleChildIndex = 1
+	self._DrawnChildIndex = 1
 
 	return self
 end
 
-function ViewSelectorFrame:GetChildren(all)
+function ViewSelectorFrame:GetDrawnChildren()
 	local children = Frame.GetChildren(self)
 	
-	if all then
-		return children
-	else
-		return {[0] = children[0], children[self._VisibleChildIndex]}
-	end
+	return {[0] = children[0], children[self._DrawnChildIndex]}
 end
 
-function ViewSelectorFrame:GetVisibleChildIndex()
-	return self._VisibleChildIndex
+function ViewSelectorFrame:GetDrawnChildIndex()
+	return self._DrawnChildIndex
 end
 
-function ViewSelectorFrame:SetVisibleChildIndex(index)
-	self._VisibleChildIndex = index
+function ViewSelectorFrame:SetDrawnChildIndex(index)
+	self._DrawnChildIndex = index
 end
 
 return Class.CreateClass(ViewSelectorFrame, "ViewSelectorFrame", Frame)

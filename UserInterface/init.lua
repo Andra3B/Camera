@@ -7,6 +7,7 @@ UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
+UserInterface.ScrollFrame = require("UserInterface.ScrollFrame")
 UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
@@ -117,19 +118,33 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 				containingFrame = frame
 			end
 
-			local children = frame:GetChildren()
-			for childIndex = #children, 1, -1 do
-				local childContainingFrame = UserInterface.GetFrameContainingPoint(
+			local childContainingFrame = nil
+			local children = frame:GetDrawnChildren()
+
+			if children[0] then
+				childContainingFrame = UserInterface.GetFrameContainingPoint(
 					x, y,
-					children[childIndex],
+					children[0],
 					frameType
 				)
+			end
 
-				if childContainingFrame then
-					containingFrame = childContainingFrame
+			if not childContainingFrame then
+				for childIndex = #children, 1, -1 do
+					childContainingFrame = UserInterface.GetFrameContainingPoint(
+						x, y,
+						children[childIndex],
+						frameType
+					)
 
-					break
+					if childContainingFrame then
+						break
+					end
 				end
+			end
+
+			if childContainingFrame then
+				containingFrame = childContainingFrame
 			end
 		end
 	end
