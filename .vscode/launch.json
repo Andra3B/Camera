@@ -29,6 +29,18 @@
 			]
 		},
 		{
+			"name": "Debug Sandbox",
+			"type": "lua-local",
+			"request": "launch",
+			"program": {
+				"command": "love"
+			},
+			"args": [
+				"${workspaceFolder}",
+				"SandboxApplication"
+			]
+		},
+		{
 			"name": "Debug Build",
 			"type": "lua-local",
 			"request": "launch",

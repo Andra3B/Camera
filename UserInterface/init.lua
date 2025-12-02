@@ -7,7 +7,6 @@ UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
-UserInterface.ScrollFrame = require("UserInterface.ScrollFrame")
 UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
@@ -75,18 +74,16 @@ function UserInterface.Input(inputType, scancode, state)
 			UserInterface.Hovering = interactiveFrame
 		elseif scancode == "leftmousebutton" then
 			if state.Z < 0 then
-				if interactiveFrame then
+				if interactiveFrame and interactiveFrame.AbsoluteActive then
 					UserInterface.CurrentlyPressed = interactiveFrame
 					UserInterface.LastPressed = interactiveFrame
-
+					UserInterface.Focus = interactiveFrame.CanFocus and interactiveFrame or nil
+					
 					interactiveFrame.Events:Push("Pressed", true)
+				else
+					UserInterface.CurrentlyPressed = nil
+					UserInterface.Focus = nil
 				end
-
-				UserInterface.Focus = (
-					interactiveFrame and
-					interactiveFrame.AbsoluteActive and
-					interactiveFrame.CanFocus
-				) and interactiveFrame or nil
 			else
 				if UserInterface.CurrentlyPressed then
 					UserInterface.CurrentlyPressed.Events:Push("Pressed", false)
@@ -121,7 +118,6 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 			end
 
 			local children = frame:GetChildren()
-
 			for childIndex = #children, 1, -1 do
 				local childContainingFrame = UserInterface.GetFrameContainingPoint(
 					x, y,
