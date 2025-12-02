@@ -17,14 +17,6 @@ function Interactive.Create()
 	self._PressedBackgroundColour = Vector4.Create(0, 1, 0, 1)
 	self._HoveringBackgroundColour = Vector4.Create(0, 0, 1, 1)
 
-	local inactiveOverlay = Frame.Create()
-	inactiveOverlay.RelativeSize = Vector2.Create(1, 1)
-	inactiveOverlay.BackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.75)
-
-	inactiveOverlay.Visible = false
-
-	self:AddChild(inactiveOverlay, 0)
-
 	return self
 end
 
@@ -38,8 +30,6 @@ function Interactive:Refresh()
 	else
 		self._AbsoluteActive = self._Active
 	end
-
-	self:GetChildren()[0].Visible = not self._AbsoluteActive
 end
 
 function Interactive:GetBackgroundColour()
@@ -64,10 +54,6 @@ function Interactive:GetAbsoluteActive()
 	return self._AbsoluteActive
 end
 
-function Interactive:GetInactiveOverlayColour()
-	return self._InactiveOverlayColour
-end
-
 function Interactive:SetActive(active)
 	self._Active = active
 
@@ -76,10 +62,6 @@ function Interactive:SetActive(active)
 	if self:IsPressed() and not active then
 		self._Events:Push("Pressed", false)
 	end
-end
-
-function Interactive:SetInactiveOverlayColour(colour)
-	self._InactiveOverlayColour = colour
 end
 
 function Interactive:GetCanFocus()
@@ -128,7 +110,6 @@ end
 
 function Interactive:Destroy()
 	if not self._Destroyed then
-		self._InactiveOverlayColour = nil
 		self._FocusedBackgroundColour = nil
 		self._HoveringBackgroundColour = nil
 		self._PressedBackgroundColour = nil

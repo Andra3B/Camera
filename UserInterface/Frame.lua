@@ -92,7 +92,7 @@ function Frame:RecursiveDraw()
 
 			self:Draw()
 
-			local children = self:GetChildren()
+			local children = self:GetDrawnChildren()
 			for _, child in ipairs(children) do
 				if Class.IsA(child, "Frame") then
 					love.graphics.push("all")
@@ -164,8 +164,12 @@ function Frame:RecursiveRefresh()
 	self._ChildBottomRightBoundingCorner = childBottomRightBoundingCorner
 end
 
-function Frame:RecursiveUpdate()
-	Hierarchy.RecursiveUpdate(self)
+function Frame:RecursiveUpdate(deltaTime)
+	Hierarchy.RecursiveUpdate(self, deltaTime)
+end
+
+function Frame:GetDrawnChildren()
+	return self:GetChildren()
 end
 
 function Frame:GetRelativePosition()
