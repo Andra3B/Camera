@@ -34,7 +34,7 @@ if jit.os == "Windows" then
 else
 	libav = {
 		avutil = FFILoader.CreateLibrary("avutil.so."..tostring(defines.LIBAVUTIL_VERSION_MAJOR), defines, true),
-		avcodec = FFILoader.CreateLibrary("avcodec.so."..tostring(defines.LIBAVCODEC_VERSION_MAJOR, defines), true),
+		avcodec = FFILoader.CreateLibrary("avcodec.so."..tostring(defines.LIBAVCODEC_VERSION_MAJOR), defines, true),
 		avformat = FFILoader.CreateLibrary("avformat.so."..tostring(defines.LIBAVFORMAT_VERSION_MAJOR), defines, true),
 		avdevice = FFILoader.CreateLibrary("avdevice.so."..tostring(defines.LIBAVDEVICE_VERSION_MAJOR), defines, true),
 		avfilter = FFILoader.CreateLibrary("avfilter.so."..tostring(defines.LIBAVFILTER_VERSION_MAJOR), defines, true),
