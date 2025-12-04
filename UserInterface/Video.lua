@@ -1,6 +1,6 @@
 local Video = {}
 
-local function GetAVErrorString(errorCode)
+local function GetLibAVErrorString(errorCode)
 	local errorDescriptionHandle = ffi.new("char[256]")
 	libav.avutil.av_strerror(errorCode, errorDescriptionHandle, 256)
 

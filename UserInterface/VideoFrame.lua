@@ -10,6 +10,11 @@ function VideoFrame.Create()
 	self._Playing = false
 	self._Time = 0
 
+	self._VideoImageBuffer = nil
+	self._VideoImageBufferHandle = nil
+
+	self._VideoImage = nil
+
 	return self
 end
 
@@ -19,46 +24,29 @@ function VideoFrame:Update(deltaTime)
 	if self._Playing then
 		local video = self:GetVideo()
 
-		if video then
-			self._Time = self._Time + deltaTime
+		self._Time = self._Time + deltaTime
+		if video.FrameTime - self._Time < 0 then
+			while true do
+				local packetHandle = video:ReadPacket()
+				local frameHandle, needsAnotherPacket, endOfFrames = video:ReadFrame(packetHandle, self._VideoImageBufferHandle)
 
-			if video.FrameTime - self._Time < 0 then
-				local success, needsAnotherPacket, endOfFrames
-
-				while true do
-					success = video:GetNextPacket()
-
-					if not success or video.EndOfStream then
-						self:SetPlaying(false)
-
-						break
-					else
-						if video.Livestreaming then
-							video:SendPacketToLivestream()
-						end
-
-						success, needsAnotherPacket, endOfFrames = video:GetNextFrame()
-						
-						if success and not needsAnotherPacket then
-							break
-						end
-					end
+				if packetHandle then
+					libav.avcodec.av_packet_free(ffi.new("AVPacket*[1]", packetHandle))
 				end
 
-				video:RefreshYUVImages()
+				if frameHandle then
+					self._VideoImage:replacePixels(self._VideoImageBuffer)
+
+					libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", frameHandle))
+					break
+				elseif not needsAnotherPacket then
+					self:SetPlaying(false)
+
+					break
+				end
 			end
 		end
 	end
-end
-
-function VideoFrame:Draw()
-	local video = self:GetVideo()
-
-	if video then
-		video:RefreshRGBAImage()
-	end
-	
-	Frame.Draw(self)
 end
 
 function VideoFrame:GetVideo()
@@ -66,15 +54,28 @@ function VideoFrame:GetVideo()
 end
 
 function VideoFrame:GetBackgroundImage()
-	return self._Video and self._Video:GetRGBAImage() or Frame.GetBackgroundImage(self)
+	return self._Video and self._VideoImage or Frame.GetBackgroundImage(self)
 end
 
 function VideoFrame:SetVideo(video)
-	self._Video = video
-	self._Time = 0
+	if self._Video then
+		self._VideoImageBuffer:release()
+		self._VideoImageBuffer = nil
+		self._VideoImageBufferHandle = nil
 
-	if not video then
-		self._Playing = false
+		self._VideoImage:release()
+		self._VideoImage = nil
+	end
+
+	self._Video = video
+
+	if video then
+		self._VideoImageBuffer = love.image.newImageData(video.Width, video.Height, "rgba8")
+		self._VideoImageBufferHandle = ffi.cast("uint8_t*", self._VideoImageBuffer:getFFIPointer())
+		
+		self._VideoImage = love.graphics.newImage(self._VideoImageBuffer)
+	else
+		self:SetPlaying(false)
 	end
 end
 
@@ -88,11 +89,13 @@ end
 
 function VideoFrame:Destroy()
 	if not self._Destroyed then
-		if self._Video then
-			self._Video:Destroy()
-		end
+		local video = self._Video
 
-		self._Video = nil
+		if video then
+			self:SetVideo(nil)
+
+			video:Destroy()
+		end
 
 		Frame.Destroy(self)
 	end
