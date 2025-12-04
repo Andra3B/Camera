@@ -11,7 +11,6 @@ UserInterface.ScrollFrame = require("UserInterface.ScrollFrame")
 UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
-UserInterface.Video = require("UserInterface.Video")
 
 UserInterface.Shaders = {}
 

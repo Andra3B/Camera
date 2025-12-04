@@ -6,6 +6,9 @@ utf8 = require("utf8")
 UserInterface = require("UserInterface")
 libav = require("libav")
 
+VideoReader = require("VideoReader")
+VideoWriter = require("VideoWriter")
+
 NetworkClient = require("NetworkClient")
 NetworkServer = require("NetworkServer")
 
@@ -20,20 +23,23 @@ function love.load(args)
 		["display"] = 1
 	})
 
-	UserInterface.Initialise()
-
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	local MyScrollFrame = UserInterface.ScrollFrame.Create()
-	MyScrollFrame.RelativeSize = Vector2.Create(0.9, 0.9)
-	MyScrollFrame.RelativePosition = Vector2.Create(0.05, 0.05)
-	MyScrollFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
+	local MyVideo = VideoReader.CreateFromURL("file:Assets/Videos/Ocean.mp4")
 
-	Root:AddChild(MyScrollFrame)
+	local MyVideoFrame = UserInterface.VideoFrame.Create()
+	MyVideoFrame.RelativeSize = Vector2.Create(0.9, 0.9)
+	MyVideoFrame.RelativePosition = Vector2.Create(0.05, 0.05)
+	MyVideoFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
+	MyVideoFrame.Video = MyVideo
+	MyVideoFrame.Playing = true
+
+	Root:AddChild(MyVideoFrame)
 
 	UserInterface.SetRoot(Root)
+	UserInterface.Initialise()
 end
 
 function love.quit(exitCode)
