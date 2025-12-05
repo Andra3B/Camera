@@ -7,7 +7,7 @@ local function GetLibAVErrorString(errorCode)
 	return ffi.string(errorDescriptionHandle)
 end
 
-function VideoWriter.CreateFromURL(url, outputFormat, width, height, timeBase)
+function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps)
 	local outputFormatHandle = libav.avformat.av_guess_format(outputFormat, url, nil)
 
 	if outputFormatHandle ~= nil then
@@ -26,8 +26,8 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, timeBase)
 			encoderHandle.codec_id = outputFormatHandle.video_codec
 			encoderHandle.width = width
 			encoderHandle.height = height
-			encoderHandle.time_base = timeBase
-			--encoderHandle.framerate = ffi.new("AVRational", {fps, 1})
+			encoderHandle.time_base = ffi.new("AVRational", {1, fps})
+			encoderHandle.framerate = ffi.new("AVRational", {fps, 1})
 			encoderHandle.pix_fmt = libav.avutil.AV_PIX_FMT_YUV420P
 			encoderHandle.gop_size = 12
 			encoderHandle.max_b_frames = 2
@@ -128,15 +128,7 @@ function VideoWriter:WriteFrame(frameHandle, frameTimeBase)
 		readyFrameHandle = frameHandle
 	end
 	
-	if frameHandle.pts == libav.avutil.AV_NOPTS_VALUE then
-		readyFrameHandle.pts = self._FrameIndex
-	else
-		readyFrameHandle.pts = libav.avutil.av_rescale_q(
-			frameHandle.pts, frameTimeBase,
-			self._VideoStreamEncoderHandle.time_base
-		)
-	end
-
+	readyFrameHandle.pts = self._FrameIndex
 	self._FrameIndex = self._FrameIndex + 1
 
 	local code = libav.avcodec.avcodec_send_frame(self._VideoStreamEncoderHandle, readyFrameHandle)

@@ -56,8 +56,17 @@ function VideoReader.CreateFromURL(url, inputFormat)
 						self._DecoderParametersHandle = decoderParametersHandle
 
 						self._FrameTime = 0
-						self._TimeBaseMultiplier = videoStreamHandle.time_base.num / videoStreamHandle.time_base.den
-						self._TimeBase = videoStreamHandle.time_base
+						self._FrameIndex = 0
+
+						self._VideoStreamTimeBase = videoStreamHandle.time_base
+
+						if videoStreamHandle.avg_frame_rate.num ~= 0 and videoStreamHandle.avg_frame_rate.den ~= 0 then
+							self._VideoStreamFPS = videoStreamHandle.avg_frame_rate.num / videoStreamHandle.avg_frame_rate.den
+						elseif videoStreamHandle.r_frame_rate.num ~= 0 and videoStreamHandle.r_frame_rate.den ~= 0 then
+							self._VideoStreamFPS = videoStreamHandle.r_frame_rate.num / videoStreamHandle.r_frame_rate.den
+						else
+							self._VideoStreamFPS = 30
+						end
 
 						self._ConversionContextHandle = libav.swscale.sws_getContext(
 							decoderParametersHandle.width, decoderParametersHandle.height, decoderParametersHandle.format,
@@ -92,6 +101,10 @@ end
 
 function VideoReader:GetHeight()
 	return self._DecoderParametersHandle.height
+end
+
+function VideoReader:GetFPS()
+	return self._VideoStreamFPS
 end
 
 function VideoReader:GetFrameTime()
@@ -136,7 +149,6 @@ function VideoReader:ReadFrame(packetHandle, rgbaBufferHandle)
 			rgbaFrameHandle.format = libav.avutil.AV_PIX_FMT_RGBA
 			rgbaFrameHandle.width = frameHandle.width
 			rgbaFrameHandle.height = frameHandle.height
-
 			
 			if rgbaBufferHandle == nil then
 				libav.avutil.av_frame_get_buffer(rgbaFrameHandle, 0)
@@ -150,10 +162,10 @@ function VideoReader:ReadFrame(packetHandle, rgbaBufferHandle)
 				ffi.cast("const uint8_t* const*", frameHandle.data), frameHandle.linesize, 0, frameHandle.height,
 				rgbaFrameHandle.data, rgbaFrameHandle.linesize
 			)
-			
-			rgbaFrameHandle.pts = frameHandle.pts
-			
-			self._FrameTime = tonumber(rgbaFrameHandle.pts) * self._TimeBaseMultiplier
+
+			self._FrameTime = self._FrameIndex * (1 / self._VideoStreamFPS)
+			self._FrameIndex = self._FrameIndex + 1
+
 		elseif code == libav.avutil.AVERROR_EAGAIN then
 			needAnotherPacket = true
 		elseif code == libav.avutil.AVERROR_EOF then
@@ -187,7 +199,7 @@ function VideoReader:Destroy()
 		libav.swscale.sws_freeContext(self._ConversionContextHandle)
 		self._ConversionContextHandle = nil
 		
-		self._TimeBase = nil
+		self._VideoStreamTimeBase = nil
 
 		self._Destroyed = true
 	end
