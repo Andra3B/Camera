@@ -13,8 +13,6 @@ NetworkServer = require("NetworkServer")
 
 local ApplicationNetworkServer = nil
 
-local livestreamWriter = nil
-
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
 	love.window.setTitle("Camera")
@@ -96,11 +94,6 @@ function love.load(args)
 	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
 	LivestreamVideoFrame.Video = VideoReader.CreateFromURL(nil, "dshow")
 	LivestreamVideoFrame.Playing = true
-	LivestreamVideoFrame.Events:Listen("FrameUpdated", function()
-		if livestreamWriter then
-			livestreamWriter:WriteFrame(LivestreamVideoFrame.FrameHandle)
-		end
-	end)
 
 	local SettingsViewFrame = UserInterface.Frame.Create()
 	SettingsViewFrame.RelativeSize = Vector2.One
@@ -136,8 +129,8 @@ function love.load(args)
 	Root:AddChild(ContentFrame)
 
 	ApplicationNetworkServer.Events:Listen("StartLivestream", function(from, port)
-		if not livestreamWriter then
-			livestreamWriter = VideoWriter.CreateFromURL(
+		if not LivestreamVideoFrame.VideoWriter then
+			LivestreamVideoFrame.VideoWriter = VideoWriter.CreateFromURL(
 				"udp://"..from:GetRemoteDetails()..":"..port,
 				"mpegts",
 				LivestreamVideoFrame.Video.Width,
@@ -148,9 +141,9 @@ function love.load(args)
 	end)
 
 	ApplicationNetworkServer.Events:Listen("StopLivestream", function()
-		if livestreamWriter then
-			livestreamWriter:Destroy()
-			livestreamWriter = nil
+		if LivestreamVideoFrame.VideoWriter then
+			LivestreamVideoFrame.VideoWriter:Destroy()
+			LivestreamVideoFrame.VideoWriter = nil
 		end
 	end)
 
@@ -166,11 +159,9 @@ function love.load(args)
 end
 
 function love.quit(exitCode)
-	if livestreaming then
-		ApplicationNetworkServer:GetClient(1):Send({{
-			"StopLivestream"
-		}})
-	end
+	ApplicationNetworkServer:GetClient(1):Send({{
+		"StopLivestream"
+	}})
 
 	UserInterface.Deinitialise()
 	ApplicationNetworkServer:Destroy()

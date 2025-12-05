@@ -6,6 +6,7 @@ function VideoFrame.Create()
 	local self = Class.CreateInstance(Frame.Create(), VideoFrame)
 
 	self._Video = nil
+	self._VideoWriter = nil
 
 	self._Playing = false
 	self._Time = 0
@@ -45,7 +46,9 @@ function VideoFrame:Update(deltaTime)
 
 					self._FrameHandle = frameHandle
 
-					self._Events:Push("FrameUpdated", self._FrameHandle)
+					if self._VideoWriter then
+						self._VideoWriter:WriteFrame(frameHandle)
+					end
 
 					break
 				elseif not needsAnotherPacket then
@@ -60,6 +63,14 @@ end
 
 function VideoFrame:GetVideo()
 	return self._Video
+end
+
+function VideoFrame:GetVideoWriter()
+	return self._VideoWriter
+end
+
+function VideoFrame:SetVideoWriter(writer)
+	self._VideoWriter = writer
 end
 
 function VideoFrame:GetBackgroundImage()
@@ -78,8 +89,6 @@ function VideoFrame:SetVideo(video)
 		if self._FrameHandle then
 			libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", self._FrameHandle))
 			self._FrameHandle = nil
-
-			self._Events:Push("FrameUpdated")
 		end
 	end
 	
@@ -116,6 +125,8 @@ function VideoFrame:Destroy()
 
 			video:Destroy()
 		end
+		
+		self._VideoWriter = nil
 
 		Frame.Destroy(self)
 	end
