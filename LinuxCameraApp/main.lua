@@ -6,16 +6,37 @@ utf8 = require("utf8")
 UserInterface = require("UserInterface")
 libav = require("libav")
 
+VideoReader = require("VideoReader")
+VideoWriter = require("VideoWriter")
+
 NetworkServer = require("NetworkServer")
 
-local ApplicationNetworkServer = nil
+local AppNetworkServer = nil
 
-local livestreaming = false
-local LivestreamVideoFrame = nil
+local livestreamPID = -1
+
+local function StartLivestream(from, port)
+	if livestreamPID < 0 then
+		local livestreamProcess = io.popen(
+			"rpicam-vid -t 0 --codec h264 --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
+			"r"
+		)
+
+		livestreamPID = livestreamProcess:read("*l")
+		livestreamProcess:close()
+	end
+end
+
+local function StopLivestream()
+	if livestreamPID > 0 then
+		livestreamPID = os.execute("kill "..livestreamPID)
+		livestreamPID = -1
+	end
+end
 
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
-	love.window.setTitle("Camera")
+	love.window.setTitle("Linux Camera")
 	love.window.setMode(width * 0.5, height * 0.5, {
 		["fullscreen"] = false,
 		["stencil"] = false,
@@ -23,13 +44,14 @@ function love.load(args)
 		["centered"] = true,
 		["display"] = 1
 	})
-
+	
+	libav.avdevice.avdevice_register_all()
 	UserInterface.Initialise()
 
-	ApplicationNetworkServer = NetworkServer.Create()
-	
-	ApplicationNetworkServer:Bind()
-	local IPAddress, port = ApplicationNetworkServer:GetLocalDetails()
+	AppNetworkServer = NetworkServer.Create()
+	AppNetworkServer:Bind()
+
+	local IPAddress, port = AppNetworkServer:GetLocalDetails()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -40,53 +62,33 @@ function love.load(args)
 	ContentFrame.RelativePosition = Vector2.Create(0.025, 0.105)
 	ContentFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
 
-	local NetworkTestingViewButton = UserInterface.Button.Create()
-	NetworkTestingViewButton.RelativeSize = Vector2.Create(1/3, 0.08)
-	NetworkTestingViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
-	NetworkTestingViewButton.Text = "Network Testing"
-	NetworkTestingViewButton.Events:Listen("Pressed", function(pressed)
+	local LivestreamViewButton = UserInterface.Button.Create()
+	LivestreamViewButton.RelativeSize = Vector2.Create(0.5, 0.08)
+	LivestreamViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
+	LivestreamViewButton.Text = "Livestream"
+	LivestreamViewButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
 			ContentFrame.DrawnChildIndex = 1
 		end
 	end)
 
-	local LivestreamTestingViewButton = UserInterface.Button.Create()
-	LivestreamTestingViewButton.RelativeSize = Vector2.Create(1/3, 0.08)
-	LivestreamTestingViewButton.RelativePosition = Vector2.Create(1/3, 0)
-	LivestreamTestingViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
-	LivestreamTestingViewButton.Text = "Livestream Testing"
-	LivestreamTestingViewButton.Events:Listen("Pressed", function(pressed)
-		if pressed then
-			ContentFrame.DrawnChildIndex = 2
-		end
-	end)
-
 	local SettingsViewButton = UserInterface.Button.Create()
-	SettingsViewButton.RelativeSize = Vector2.Create(1/3, 0.08)
-	SettingsViewButton.RelativePosition = Vector2.Create(2/3, 0)
+	SettingsViewButton.RelativeSize = Vector2.Create(0.5, 0.08)
+	SettingsViewButton.RelativePosition = Vector2.Create(0.5, 0)
 	SettingsViewButton.TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
 	SettingsViewButton.Text = "Settings"
 	SettingsViewButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
-			ContentFrame.DrawnChildIndex = 3
+			ContentFrame.DrawnChildIndex = 2
 		end
 	end)
-
-	local NetworkViewFrame = UserInterface.Frame.Create()
-	NetworkViewFrame.RelativeSize = Vector2.One
-	NetworkViewFrame.BackgroundColour = Vector4.Zero
-
-	local NetworkCommandLabel = UserInterface.Label.Create()
-	NetworkCommandLabel.RelativeSize = Vector2.Create(1.0, 0.08)
-	NetworkCommandLabel.PixelSize = Vector2.Create(-20, 0)
-	NetworkCommandLabel.PixelPosition = Vector2.Create(10, 10)
 
 	local LivestreamViewFrame = UserInterface.Frame.Create()
 	LivestreamViewFrame.RelativeSize = Vector2.One
 	LivestreamViewFrame.BackgroundColour = Vector4.Zero
 
 	LivestreamVideoFrame = UserInterface.VideoFrame.Create()
-	LivestreamVideoFrame.RelativeSize = Vector2.Create(1, 1)
+	LivestreamVideoFrame.RelativeSize = Vector2.One
 	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	LivestreamVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
@@ -108,90 +110,44 @@ function love.load(args)
 	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
 	SettingsPortLabel.Text = port
 
-	local SettingsVideoSourceTextBox = UserInterface.TextBox.Create()
-	SettingsVideoSourceTextBox.RelativeSize = Vector2.Create(1, 0.08)
-	SettingsVideoSourceTextBox.PixelSize = Vector2.Create(-20, 0)
-	SettingsVideoSourceTextBox.RelativePosition = Vector2.Create(0, 0.08)
-	SettingsVideoSourceTextBox.PixelPosition = Vector2.Create(10, 20)
-	SettingsVideoSourceTextBox.PlaceholderText = "Enter video source..."
-	SettingsVideoSourceTextBox.Text = "Assets/Videos/Ocean.mp4"
-
-	NetworkViewFrame:AddChild(NetworkCommandLabel)
-
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
 
 	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
 	SettingsViewFrame:AddChild(SettingsPortLabel)
-	SettingsViewFrame:AddChild(SettingsVideoSourceTextBox)
 
-	ContentFrame:AddChild(NetworkViewFrame)
 	ContentFrame:AddChild(LivestreamViewFrame)
 	ContentFrame:AddChild(SettingsViewFrame)
 
-	Root:AddChild(NetworkTestingViewButton)
-	Root:AddChild(LivestreamTestingViewButton)
+	Root:AddChild(LivestreamViewButton)
 	Root:AddChild(SettingsViewButton)
 	Root:AddChild(ContentFrame)
 
-	ApplicationNetworkServer.Events:Listen("StartLivestream", function(from, port)
-		if livestreaming then return end
-		
-		local video = UserInterface.Video.CreateFromURL(SettingsVideoSourceTextBox.Text)
+	AppNetworkServer.Events:Listen("StartLivestream", StartLivestream)
+	AppNetworkServer.Events:Listen("StopLivestream", StopLivestream)
 
-		if video then
-			LivestreamVideoFrame.Video = video
-			video:StartLivestream("udp://"..from:GetRemoteDetails()..":"..port)
-		
-			LivestreamVideoFrame.Playing = true
-			livestreaming = true
-		else
-			love.window.showMessageBox("Couldn't Find Video Source", "Couldn't find video source!", "error")
-		end
-	end)
-
-	ApplicationNetworkServer.Events:Listen("StopLivestream", function()
-		LivestreamVideoFrame.Playing = false
-	end)
-
-	ApplicationNetworkServer.Events:Listen("SendMessage", function(from, message)
-		local IPAddress, port = from:GetRemoteDetails()
-		
-		NetworkCommandLabel.Text = "Received message \""..message.."\" from ("..IPAddress..", "..port..")"
-	end)
-
-	libav.avdevice.avdevice_register_all()
-
-	ApplicationNetworkServer:Listen()
-
+	AppNetworkServer:Listen()
 	UserInterface.SetRoot(Root)
 end
 
 function love.quit(exitCode)
-	if livestreaming then
-		ApplicationNetworkServer:GetClient(1):Send({{
+	local client = AppNetworkServer:GetClient(1)
+
+	StopLivestream()
+
+	if client then
+		client:Send({{
 			"StopLivestream"
 		}})
 	end
 
 	UserInterface.Deinitialise()
-	ApplicationNetworkServer:Destroy()
+	AppNetworkServer:Destroy()
 end
 
 function love.update(deltaTime)
-	ApplicationNetworkServer:Update()
+	AppNetworkServer:Update()
 
 	UserInterface.Update(deltaTime)
-
-	if livestreaming and not LivestreamVideoFrame.Playing then
-		ApplicationNetworkServer:GetClient(1):Send({{
-			"StopLivestream"
-		}})
-
-		LivestreamVideoFrame.Video:Destroy()
-		LivestreamVideoFrame.Video = nil
-
-		livestreaming = false
-	end
 end
 
 function love.draw()
@@ -240,7 +196,7 @@ function love.mousereleased(x, y, button, isTouch, presses)
 	UserInterface.Input(Enum.InputType.Mouse, button, Vector4.Create(x, y, 0, 0))
 end
 
-local function ApplicationStep()
+local function AppStep()
 	love.event.pump()
 
 	for name, a, b, c, d, e, f in love.event.poll() do
@@ -271,5 +227,5 @@ function love.run()
 	love.load(arg)
 
 	love.timer.step()
-	return ApplicationStep
+	return AppStep
 end

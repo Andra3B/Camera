@@ -23,11 +23,13 @@ function love.load(args)
 		["display"] = 1
 	})
 
+	libav.avdevice.avdevice_register_all()
+
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	local MyVideo = VideoReader.CreateFromURL("file:Assets/Videos/Ocean.mp4")
+	local MyVideo = VideoReader.CreateFromURL(nil, "dshow")
 
 	local MyVideoFrame = UserInterface.VideoFrame.Create()
 	MyVideoFrame.RelativeSize = Vector2.Create(0.9, 0.9)
@@ -96,7 +98,7 @@ function love.mousereleased(x, y, button, isTouch, presses)
 	UserInterface.Input(Enum.InputType.Mouse, button, Vector4.Create(x, y, 0, 0))
 end
 
-local function ApplicationStep()
+local function AppStep()
 	love.event.pump()
 
 	for name, a, b, c, d, e, f in love.event.poll() do
@@ -127,5 +129,5 @@ function love.run()
 	love.load(arg)
 
 	love.timer.step()
-	return ApplicationStep
+	return AppStep
 end
