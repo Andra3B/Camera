@@ -10,6 +10,8 @@ function VideoFrame.Create()
 	self._Playing = false
 	self._Time = 0
 
+	self._FrameHandle = nil
+
 	self._VideoImageBuffer = nil
 	self._VideoImageBufferHandle = nil
 
@@ -37,7 +39,14 @@ function VideoFrame:Update(deltaTime)
 				if frameHandle then
 					self._VideoImage:replacePixels(self._VideoImageBuffer)
 
-					libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", frameHandle))
+					if self._FrameHandle then
+						libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", self._FrameHandle))
+					end
+
+					self._FrameHandle = frameHandle
+
+					self._Events:Push("FrameUpdated", self._FrameHandle)
+
 					break
 				elseif not needsAnotherPacket then
 					self:SetPlaying(false)
@@ -65,8 +74,15 @@ function VideoFrame:SetVideo(video)
 
 		self._VideoImage:release()
 		self._VideoImage = nil
-	end
 
+		if self._FrameHandle then
+			libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", self._FrameHandle))
+			self._FrameHandle = nil
+
+			self._Events:Push("FrameUpdated")
+		end
+	end
+	
 	self._Video = video
 
 	if video then
@@ -85,6 +101,10 @@ end
 
 function VideoFrame:SetPlaying(playing)
 	self._Playing = playing
+end
+
+function VideoFrame:GetFrameHandle()
+	return self._FrameHandle
 end
 
 function VideoFrame:Destroy()

@@ -6,12 +6,14 @@ utf8 = require("utf8")
 UserInterface = require("UserInterface")
 libav = require("libav")
 
+VideoReader = require("VideoReader")
+VideoWriter = require("VideoWriter")
+
 NetworkServer = require("NetworkServer")
 
 local ApplicationNetworkServer = nil
 
-local livestreaming = false
-local LivestreamVideoFrame = nil
+local livestreamWriter = nil
 
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
@@ -23,6 +25,8 @@ function love.load(args)
 		["centered"] = true,
 		["display"] = 1
 	})
+
+	libav.avdevice.avdevice_register_all()
 
 	UserInterface.Initialise()
 
@@ -90,6 +94,13 @@ function love.load(args)
 	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	LivestreamVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
+	LivestreamVideoFrame.Video = VideoReader.CreateFromURL(nil, "dshow")
+	LivestreamVideoFrame.Playing = true
+	LivestreamVideoFrame.Events:Listen("FrameUpdated", function()
+		if livestreamWriter then
+			livestreamWriter:WriteFrame(LivestreamVideoFrame.FrameHandle)
+		end
+	end)
 
 	local SettingsViewFrame = UserInterface.Frame.Create()
 	SettingsViewFrame.RelativeSize = Vector2.One
@@ -108,21 +119,12 @@ function love.load(args)
 	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
 	SettingsPortLabel.Text = port
 
-	local SettingsVideoSourceTextBox = UserInterface.TextBox.Create()
-	SettingsVideoSourceTextBox.RelativeSize = Vector2.Create(1, 0.08)
-	SettingsVideoSourceTextBox.PixelSize = Vector2.Create(-20, 0)
-	SettingsVideoSourceTextBox.RelativePosition = Vector2.Create(0, 0.08)
-	SettingsVideoSourceTextBox.PixelPosition = Vector2.Create(10, 20)
-	SettingsVideoSourceTextBox.PlaceholderText = "Enter video source..."
-	SettingsVideoSourceTextBox.Text = "Assets/Videos/Ocean.mp4"
-
 	NetworkViewFrame:AddChild(NetworkCommandLabel)
 
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
 
 	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
 	SettingsViewFrame:AddChild(SettingsPortLabel)
-	SettingsViewFrame:AddChild(SettingsVideoSourceTextBox)
 
 	ContentFrame:AddChild(NetworkViewFrame)
 	ContentFrame:AddChild(LivestreamViewFrame)
@@ -134,23 +136,22 @@ function love.load(args)
 	Root:AddChild(ContentFrame)
 
 	ApplicationNetworkServer.Events:Listen("StartLivestream", function(from, port)
-		if livestreaming then return end
-		
-		local video = UserInterface.Video.CreateFromURL(SettingsVideoSourceTextBox.Text)
-
-		if video then
-			LivestreamVideoFrame.Video = video
-			video:StartLivestream("udp://"..from:GetRemoteDetails()..":"..port)
-		
-			LivestreamVideoFrame.Playing = true
-			livestreaming = true
-		else
-			love.window.showMessageBox("Couldn't Find Video Source", "Couldn't find video source!", "error")
+		if not livestreamWriter then
+			livestreamWriter = VideoWriter.CreateFromURL(
+				"udp://"..from:GetRemoteDetails()..":"..port,
+				"mpegts",
+				LivestreamVideoFrame.Video.Width,
+				LivestreamVideoFrame.Video.Height,
+				LivestreamVideoFrame.Video.FPS
+			)
 		end
 	end)
 
 	ApplicationNetworkServer.Events:Listen("StopLivestream", function()
-		LivestreamVideoFrame.Playing = false
+		if livestreamWriter then
+			livestreamWriter:Destroy()
+			livestreamWriter = nil
+		end
 	end)
 
 	ApplicationNetworkServer.Events:Listen("SendMessage", function(from, message)
@@ -158,8 +159,6 @@ function love.load(args)
 		
 		NetworkCommandLabel.Text = "Received message \""..message.."\" from ("..IPAddress..", "..port..")"
 	end)
-
-	libav.avdevice.avdevice_register_all()
 
 	ApplicationNetworkServer:Listen()
 
@@ -181,17 +180,6 @@ function love.update(deltaTime)
 	ApplicationNetworkServer:Update()
 
 	UserInterface.Update(deltaTime)
-
-	if livestreaming and not LivestreamVideoFrame.Playing then
-		ApplicationNetworkServer:GetClient(1):Send({{
-			"StopLivestream"
-		}})
-
-		LivestreamVideoFrame.Video:Destroy()
-		LivestreamVideoFrame.Video = nil
-
-		livestreaming = false
-	end
 end
 
 function love.draw()

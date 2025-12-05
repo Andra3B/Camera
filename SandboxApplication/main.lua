@@ -23,11 +23,13 @@ function love.load(args)
 		["display"] = 1
 	})
 
+	libav.avdevice.avdevice_register_all()
+
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	local MyVideo = VideoReader.CreateFromURL("file:Assets/Videos/Ocean.mp4")
+	local MyVideo = VideoReader.CreateFromURL(nil, "dshow")
 
 	local MyVideoFrame = UserInterface.VideoFrame.Create()
 	MyVideoFrame.RelativeSize = Vector2.Create(0.9, 0.9)

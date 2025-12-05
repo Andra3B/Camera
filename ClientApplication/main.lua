@@ -6,6 +6,9 @@ utf8 = require("utf8")
 UserInterface = require("UserInterface")
 libav = require("libav")
 
+VideoReader = require("VideoReader")
+VideoWriter = require("VideoWriter")
+
 NetworkClient = require("NetworkClient")
 
 local ApplicationNetworkClient = nil
@@ -22,6 +25,8 @@ function love.load(args)
 		["centered"] = true,
 		["display"] = 1
 	})
+
+	libav.avdevice.avdevice_register_all()
 
 	UserInterface.Initialise()
 
@@ -91,7 +96,7 @@ function love.load(args)
 		}}
 
 		local commandString = NetworkClient.GetStringFromCommands(command)
-		NetworkCommandLabel.Text = "Command: "..(commandString and commandString or "Invalid command")
+		NetworkCommandLabel.Text = "Command: "..commandString
 
 		ApplicationNetworkClient:Send(command)
 	end)
@@ -135,9 +140,11 @@ function love.load(args)
 					freePort
 				}})
 
-				LivestreamVideoFrame.Video = UserInterface.Video.CreateFromURL(
-					"udp://"..ApplicationNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=1000000"
+				LivestreamVideoFrame.Video = VideoReader.CreateFromURL(
+					"udp://"..ApplicationNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=1000000",
+					"mpegts"
 				)
+
 				LivestreamVideoFrame.Playing = true
 				livestreaming = true
 
@@ -196,7 +203,6 @@ function love.load(args)
 				else
 					love.window.showMessageBox("Connection Failed", "Connection failed! "..errorMessage, "error")
 				end
-
 			end
 		end
 	end)

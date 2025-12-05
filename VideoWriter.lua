@@ -7,7 +7,7 @@ local function GetLibAVErrorString(errorCode)
 	return ffi.string(errorDescriptionHandle)
 end
 
-function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps)
+function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps, options)
 	local outputFormatHandle = libav.avformat.av_guess_format(outputFormat, url, nil)
 
 	if outputFormatHandle ~= nil then
@@ -56,7 +56,16 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps)
 					formatHandle.pb = ioHandle[0]
 				end
 
-				code = libav.avformat.avformat_write_header(formatHandle, nil)
+				local formatOptionsHandleHandle = ffi.new("AVDictionary*[1]")
+
+				if options then
+					for key, value in pairs(options) do
+						libav.avutil.av_dict_set(formatOptionsHandleHandle, key, value, 0)
+					end
+				end
+
+				code = libav.avformat.avformat_write_header(formatHandle, formatOptionsHandleHandle)
+				libav.avutil.av_dict_free(formatOptionsHandleHandle)
 
 				if code >= 0 then
 					local self = Class.CreateInstance(nil, VideoWriter)
