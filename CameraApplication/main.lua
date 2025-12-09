@@ -92,7 +92,13 @@ function love.load(args)
 	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	LivestreamVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
-	LivestreamVideoFrame.Video = VideoReader.CreateFromURL(nil, jit.os == "Windows" and "dshow" or "v4l2")
+
+	if jit.os == "Windows" then
+		LivestreamVideoFrame.Video = VideoReader.CreateFromURL(nil, "dshow")
+	else
+		LivestreamVideoFrame.Video = VideoReader.CreateFromURL("/dev/video0", "v4l2")
+	end
+	
 	LivestreamVideoFrame.Playing = true
 
 	local SettingsViewFrame = UserInterface.Frame.Create()
