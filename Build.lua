@@ -28,7 +28,7 @@ local libAVFolder = System.Options.LibAVFolder.Value
 local function BuildClient()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua -DestinationPath Client.zip",
+			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Client.zip",
 			Enum.ExecutionMode.Execute
 		)
 
@@ -73,7 +73,7 @@ local function BuildClient()
 	else
 		System.Execute(
 			"zip -9 -r -j Client.zip ClientApplication/main.lua ClientApplication/conf.lua && "..
-			"zip -9 -r Client.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			"zip -9 -r Client.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
 			Enum.ExecutionMode.Execute
 		)
 		
@@ -108,7 +108,7 @@ end
 local function BuildCamera()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkServer.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua -DestinationPath Camera.zip",
+			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkServer.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Camera.zip",
 			Enum.ExecutionMode.Execute
 		)
 
@@ -153,7 +153,7 @@ local function BuildCamera()
 	else
 		System.Execute(
 			"zip -9 -r -j Camera.zip CameraApplication/main.lua CameraApplication/conf.lua && "..
-			"zip -9 -r Camera.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua",
+			"zip -9 -r Camera.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
 			Enum.ExecutionMode.Execute
 		)
 		
