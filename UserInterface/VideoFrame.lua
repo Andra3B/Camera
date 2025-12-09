@@ -23,11 +23,11 @@ end
 
 function VideoFrame:Update(deltaTime)
 	Frame.Update(self, deltaTime)
+	local video = self:GetVideo()
 
-	if self._Playing then
-		local video = self:GetVideo()
-
+	if video and self._Playing then
 		self._Time = self._Time + deltaTime
+		
 		if video.FrameTime - self._Time < 0 then
 			while true do
 				local packetHandle = video:ReadPacket()

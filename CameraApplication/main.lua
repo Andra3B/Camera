@@ -92,7 +92,7 @@ function love.load(args)
 	LivestreamVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	LivestreamVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	LivestreamVideoFrame.BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
-	LivestreamVideoFrame.Video = VideoReader.CreateFromURL(nil, "dshow")
+	LivestreamVideoFrame.Video = VideoReader.CreateFromURL(nil, jit.os == "Windows" and "dshow" or "v4l2")
 	LivestreamVideoFrame.Playing = true
 
 	local SettingsViewFrame = UserInterface.Frame.Create()
@@ -159,9 +159,13 @@ function love.load(args)
 end
 
 function love.quit(exitCode)
-	ApplicationNetworkServer:GetClient(1):Send({{
-		"StopLivestream"
-	}})
+	local client = ApplicationNetworkServer:GetClient(1)
+
+	if client then
+		client:Send({{
+			"StopLivestream"
+		}})
+	end
 
 	UserInterface.Deinitialise()
 	ApplicationNetworkServer:Destroy()
