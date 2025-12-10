@@ -108,7 +108,7 @@ end
 local function BuildLinuxCamera()
 	System.Execute(
 		"zip -9 -r -j LinuxCamera.zip LinuxCameraApp/main.lua LinuxCameraApp/conf.lua && "..
-		"zip -9 -r LinuxCamera.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
+		"zip -9 -r LinuxCamera.zip Assets libav pigpio UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
 		Enum.ExecutionMode.Execute
 	)
 		
@@ -232,7 +232,7 @@ local function BuildSandbox()
 	else
 		System.Execute(
 			"zip -9 -r -j Sandbox.zip SandboxApp/main.lua SandboxApp/conf.lua && "..
-			"zip -9 -r Sandbox.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
+			"zip -9 -r Sandbox.zip Assets libav pigpio UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
 			Enum.ExecutionMode.Execute
 		)
 		
