@@ -11,9 +11,15 @@ function NetworkClient.Create(clientSocket, owner)
 end
 
 function NetworkClient:ConnectUsingIPAddress(ipAddress, port, timeout)
-	self._Socket:settimeout(timeout)
-	local success, errorMessage = self._Socket:connect(ipAddress, port)
-	self._Socket:settimeout(0)
+	timeout = timeout or 0
+
+	local success, errorMessage = false, "No IP address or port given"
+
+	if ipAddress and port then
+		self._Socket:settimeout(timeout)
+		success, errorMessage = self._Socket:connect(ipAddress, port)
+		self._Socket:settimeout(0)
+	end
 
 	if success == 1 then
 		return true
@@ -22,13 +28,26 @@ function NetworkClient:ConnectUsingIPAddress(ipAddress, port, timeout)
 	end
 end
 
-function NetworkClient:ConnectUsingMACAddress(macAddress)
+function NetworkClient:ConnectUsingHostname(hostname, port, timeout)
+	local ipAddress = socket.dns.toip(hostname)
+
+	if ipAddress then
+		return self:ConnectUsingIPAddress(ipAddress, port, timeout)
+	else
+		return false, "Failed to resolve hostname"
+	end
 end
 
 function NetworkClient:Disconnect()
-	self._Socket:close()
-	self._Socket = socket.tcp()
-	self._Socket:settimeout(0)
+	if self:IsConnected() then
+		self:Send({{
+			"Disconnect"
+		}})
+
+		self._Socket:close()
+		self._Socket = socket.tcp()
+		self._Socket:settimeout(0)
+	end
 end
 
 function NetworkClient:IsConnected()
@@ -122,6 +141,7 @@ end
 
 function NetworkClient:Destroy()
 	if not self._Destroyed then
+		self:Disconnect()
 		self._Owner = nil
 
 		NetworkController.Destroy(self)

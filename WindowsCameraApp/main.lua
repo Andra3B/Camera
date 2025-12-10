@@ -28,9 +28,7 @@ function love.load(args)
 	UserInterface.Initialise()
 
 	AppNetworkServer = NetworkServer.Create()
-	AppNetworkServer:Bind()
-
-	local IPAddress, port = AppNetworkServer:GetLocalDetails()
+	AppNetworkServer:Bind(nil, 64641)
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -78,23 +76,7 @@ function love.load(args)
 	SettingsViewFrame.RelativeSize = Vector2.One
 	SettingsViewFrame.BackgroundColour = Vector4.Zero
 
-	local SettingsIPAddressLabel = UserInterface.Label.Create()
-	SettingsIPAddressLabel.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsIPAddressLabel.PixelSize = Vector2.Create(-15, 0)
-	SettingsIPAddressLabel.PixelPosition = Vector2.Create(10, 10)
-	SettingsIPAddressLabel.Text = IPAddress
-
-	local SettingsPortLabel = UserInterface.Label.Create()
-	SettingsPortLabel.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsPortLabel.PixelSize = Vector2.Create(-15, 0)
-	SettingsPortLabel.RelativePosition = Vector2.Create(0.5, 0)
-	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
-	SettingsPortLabel.Text = port
-
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
-
-	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
-	SettingsViewFrame:AddChild(SettingsPortLabel)
 
 	ContentFrame:AddChild(LivestreamViewFrame)
 	ContentFrame:AddChild(SettingsViewFrame)
@@ -127,14 +109,6 @@ function love.load(args)
 end
 
 function love.quit(exitCode)
-	local client = AppNetworkServer:GetClient(1)
-
-	if client then
-		client:Send({{
-			"StopLivestream"
-		}})
-	end
-
 	UserInterface.Deinitialise()
 	AppNetworkServer:Destroy()
 end
@@ -146,7 +120,7 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	love.graphics.clear(0, 0, 0, 0)
+	--love.graphics.clear(0, 0, 0, 0)
 
 	UserInterface.Draw()
 
