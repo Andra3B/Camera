@@ -42,7 +42,7 @@ function love.load(args)
 		pigpio.gpioServo(18, tonumber(text))
 	end)
 
-	Root:AddChild(MyVideoFrame)
+	Root:AddChild(ServoPWMNumberTextBox)
 
 	UserInterface.SetRoot(Root)
 	UserInterface.Initialise()
