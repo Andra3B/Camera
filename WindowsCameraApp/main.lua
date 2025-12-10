@@ -104,12 +104,20 @@ function love.load(args)
 		end
 	end)
 
+	AppNetworkServer.Events:Listen("Disconnect", function(from)
+		if LivestreamVideoFrame.VideoWriter then
+			LivestreamVideoFrame.VideoWriter:Destroy()
+			LivestreamVideoFrame.VideoWriter = nil
+		end
+	end)
+
 	AppNetworkServer:Listen()
 	UserInterface.SetRoot(Root)
 end
 
 function love.quit(exitCode)
 	UserInterface.Deinitialise()
+	
 	AppNetworkServer:Destroy()
 end
 

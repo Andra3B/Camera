@@ -100,7 +100,7 @@ function love.load(args)
 
 				local livestreamVideoReader = VideoReader.CreateFromURL(
 					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000",
-					"h264"
+					"mpegts"
 				)
 
 				if livestreamVideoReader then
@@ -145,6 +145,12 @@ function love.load(args)
 			if AppNetworkClient.Connected then
 				AppNetworkClient:Disconnect()
 
+				if LivestreamVideoFrame.Video then
+					LivestreamVideoFrame.Video:Destroy()
+					LivestreamVideoFrame.Video = nil
+				end
+
+				LivestreamStartButton.Text = "Start Livestream"
 				SettingsConnectButton.Text = "Connect"
 			else
 				local success, errorMessage = false, "Port is not a number"
