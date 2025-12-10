@@ -103,6 +103,12 @@ function NetworkClient:Update()
 					if self._Owner then
 						self._Owner.Events:Push(command[1], self, select(2, unpack(command)))
 					end
+
+					if command[1] == "Disconnect" then
+						self:Disconnect()
+
+						break
+					end
 				end
 			else
 				local sourceIPAddress, sourcePort = self:GetLocalDetails()

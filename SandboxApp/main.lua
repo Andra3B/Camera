@@ -12,6 +12,8 @@ VideoWriter = require("VideoWriter")
 NetworkClient = require("NetworkClient")
 NetworkServer = require("NetworkServer")
 
+pigpio = require("pigpio")
+
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
 	love.window.setTitle("Sandbox")
@@ -25,20 +27,22 @@ function love.load(args)
 
 	libav.avdevice.avdevice_register_all()
 
+	pigpio.gpioInitialise()
+
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	local MyVideo = VideoReader.CreateFromURL(nil, "dshow")
+	local ServoPWMNumberTextBox = UserInterface.TextBox.Create()
+	ServoPWMNumberTextBox.RelativeSize = Vector2.Create(0.5, 0.08)
+	ServoPWMNumberTextBox.RelativePosition = Vector2.Create(0.25, 0.46)
+	ServoPWMNumberTextBox.PlaceholderText = "Enter Servo PWM Number (1000-2000)..."
+	ServoPWMNumberTextBox.Text = "1500"
+	ServoPWMNumberTextBox.Events:Listen("Submit", function(text)
+		pigpio.gpioServo(18, tonumber(text))
+	end)
 
-	local MyVideoFrame = UserInterface.VideoFrame.Create()
-	MyVideoFrame.RelativeSize = Vector2.Create(0.9, 0.9)
-	MyVideoFrame.RelativePosition = Vector2.Create(0.05, 0.05)
-	MyVideoFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
-	MyVideoFrame.Video = MyVideo
-	MyVideoFrame.Playing = true
-
-	Root:AddChild(MyVideoFrame)
+	Root:AddChild(ServoPWMNumberTextBox)
 
 	UserInterface.SetRoot(Root)
 	UserInterface.Initialise()
@@ -46,6 +50,8 @@ end
 
 function love.quit(exitCode)
 	UserInterface.Deinitialise()
+
+	pigpio.gpioTerminate()
 end
 
 function love.update(deltaTime)
@@ -53,8 +59,6 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	--love.graphics.clear(0, 0, 0, 0)
-
 	UserInterface.Draw()
 
 	love.graphics.present()

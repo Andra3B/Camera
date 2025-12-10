@@ -100,7 +100,7 @@ function love.load(args)
 
 				local livestreamVideoReader = VideoReader.CreateFromURL(
 					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000",
-					"mpegts"
+					"h264"
 				)
 
 				if livestreamVideoReader then
@@ -122,7 +122,7 @@ function love.load(args)
 	SettingsHostnameTextBox.PixelSize = Vector2.Create(-15, 0)
 	SettingsHostnameTextBox.PixelPosition = Vector2.Create(10, 10)
 	SettingsHostnameTextBox.PlaceholderText = "Enter devices hostname..."
-	SettingsHostnameTextBox.Text = "LAPTOP-UISV0CCS"
+	SettingsHostnameTextBox.Text = "AndraeBanwosCamera"--"LAPTOP-UISV0CCS"
 
 	local SettingsPortTextBox = UserInterface.TextBox.Create()
 	SettingsPortTextBox.RelativeSize = Vector2.Create(0.5, 0.08)
@@ -175,12 +175,25 @@ function love.load(args)
 		end
 	end)
 
+	local SettingsServoAngleTextBox = UserInterface.TextBox.Create()
+	SettingsServoAngleTextBox.RelativeSize = Vector2.Create(1.0, 0.08)
+	SettingsServoAngleTextBox.PixelSize = Vector2.Create(-20, 0)
+	SettingsServoAngleTextBox.RelativePosition = Vector2.Create(0.0, 0.16)
+	SettingsServoAngleTextBox.PixelPosition = Vector2.Create(10, 30)
+	SettingsServoAngleTextBox.PlaceholderText = "Enter servo angle (-90 to 90)..."
+	SettingsServoAngleTextBox.Events:Listen("Submit", function(servoAngle)
+		AppNetworkClient:Send({{
+			"SetServoAngle", servoAngle
+		}})
+	end)
+
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
 	LivestreamViewFrame:AddChild(LivestreamStartButton)
 
 	SettingsViewFrame:AddChild(SettingsHostnameTextBox)
 	SettingsViewFrame:AddChild(SettingsPortTextBox)
 	SettingsViewFrame:AddChild(SettingsConnectButton)
+	SettingsViewFrame:AddChild(SettingsServoAngleTextBox)
 
 	ContentFrame:AddChild(LivestreamViewFrame)
 	ContentFrame:AddChild(SettingsViewFrame)
@@ -205,6 +218,7 @@ function love.load(args)
 		end
 
 		LivestreamStartButton.Text = "Start Livestream"
+		SettingsConnectButton.Text = "Connect"
 	end)
 
 	UserInterface.SetRoot(Root)
@@ -224,8 +238,6 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	--love.graphics.clear(0, 0, 0, 0)
-
 	UserInterface.Draw()
 
 	love.graphics.present()

@@ -11,19 +11,22 @@ VideoWriter = require("VideoWriter")
 
 NetworkServer = require("NetworkServer")
 
+pigpio = require("pigpio")
+
 local AppNetworkServer = nil
 
 local livestreamPID = -1
 
 local function StartLivestream(from, port)
 	if livestreamPID < 0 then
-		local livestreamProcess = io.popen(
-			"rpicam-vid -t 0 --codec h264 --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
-			"r"
+		os.execute(
+			"rpicam-vid -t 0 --codec h264 --nopreview --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $! > LivestreamPID.txt"
 		)
 
-		livestreamPID = livestreamProcess:read("*l")
-		livestreamProcess:close()
+		local livestreamFile = io.open("LivestreamPID.txt", "r")
+		livestreamPID = tonumber(livestreamFile:read("*a"):match("^%s*(%d+)%s*$"))
+		livestreamFile:close()
+		os.remove("LivestreamPID.txt")
 	end
 end
 
@@ -46,12 +49,11 @@ function love.load(args)
 	})
 	
 	libav.avdevice.avdevice_register_all()
+	pigpio.gpioInitialise()
 	UserInterface.Initialise()
 
 	AppNetworkServer = NetworkServer.Create()
-	AppNetworkServer:Bind()
-
-	local IPAddress, port = AppNetworkServer:GetLocalDetails()
+	AppNetworkServer:Bind(nil, 64641)
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -97,23 +99,7 @@ function love.load(args)
 	SettingsViewFrame.RelativeSize = Vector2.One
 	SettingsViewFrame.BackgroundColour = Vector4.Zero
 
-	local SettingsIPAddressLabel = UserInterface.Label.Create()
-	SettingsIPAddressLabel.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsIPAddressLabel.PixelSize = Vector2.Create(-15, 0)
-	SettingsIPAddressLabel.PixelPosition = Vector2.Create(10, 10)
-	SettingsIPAddressLabel.Text = IPAddress
-
-	local SettingsPortLabel = UserInterface.Label.Create()
-	SettingsPortLabel.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsPortLabel.PixelSize = Vector2.Create(-15, 0)
-	SettingsPortLabel.RelativePosition = Vector2.Create(0.5, 0)
-	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
-	SettingsPortLabel.Text = port
-
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
-
-	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
-	SettingsViewFrame:AddChild(SettingsPortLabel)
 
 	ContentFrame:AddChild(LivestreamViewFrame)
 	ContentFrame:AddChild(SettingsViewFrame)
@@ -124,6 +110,13 @@ function love.load(args)
 
 	AppNetworkServer.Events:Listen("StartLivestream", StartLivestream)
 	AppNetworkServer.Events:Listen("StopLivestream", StopLivestream)
+	AppNetworkServer.Events:Listen("SetServoAngle", function(from, angle)
+		angle = tonumber(angle)
+
+		if angle then
+			pigpio.gpioServo(18, 1500 + (math.clamp(angle, -90, 90) / 90) * 800)
+		end
+	end)
 
 	AppNetworkServer:Listen()
 	UserInterface.SetRoot(Root)
@@ -141,6 +134,7 @@ function love.quit(exitCode)
 	end
 
 	UserInterface.Deinitialise()
+	pigpio.gpioTerminate()
 	AppNetworkServer:Destroy()
 end
 
@@ -151,8 +145,6 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	love.graphics.clear(0, 0, 0, 0)
-
 	UserInterface.Draw()
 
 	love.graphics.present()
