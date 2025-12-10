@@ -142,7 +142,7 @@ function love.load(args)
 
 				LivestreamVideoFrame.Video = VideoReader.CreateFromURL(
 					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=1000000",
-					"mpegts"
+					"h264"
 				)
 
 				LivestreamVideoFrame.Playing = true

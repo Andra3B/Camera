@@ -13,12 +13,12 @@ NetworkServer = require("NetworkServer")
 
 local AppNetworkServer = nil
 
-local livestreamPID = 0
+local livestreamPID = -1
 
 local function StartLivestream(from, port)
 	if livestreamPID < 0 then
 		local livestreamProcess = io.popen(
-			"rpicam-vid -t 0 --codec h264 --inline --libav-format mpegts --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
+			"rpicam-vid -t 0 --codec h264 --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
 			"r"
 		)
 
@@ -30,7 +30,7 @@ end
 local function StopLivestream()
 	if livestreamPID > 0 then
 		livestreamPID = os.execute("kill "..livestreamPID)
-		livestreamPID = 0
+		livestreamPID = -1
 	end
 end
 
