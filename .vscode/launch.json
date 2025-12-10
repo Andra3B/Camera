@@ -13,7 +13,7 @@
 			},
 			"args": [
 				"${workspaceFolder}",
-				"ClientApplication"
+				"ClientApp"
 			]
 		},
 		{
@@ -25,7 +25,7 @@
 			},
 			"args": [
 				"${workspaceFolder}",
-				"CameraApplication"
+				"WindowsCameraApp"
 			]
 		},
 		{
@@ -37,7 +37,7 @@
 			},
 			"args": [
 				"${workspaceFolder}",
-				"SandboxApplication"
+				"SandboxApp"
 			]
 		},
 		{
@@ -82,6 +82,6 @@
 		{
 			"name": "Debug Camera And Client",
 			"configurations": ["Debug Client", "Debug Camera"]
-		}
+		},
 	]
 }

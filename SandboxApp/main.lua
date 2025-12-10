@@ -98,7 +98,7 @@ function love.mousereleased(x, y, button, isTouch, presses)
 	UserInterface.Input(Enum.InputType.Mouse, button, Vector4.Create(x, y, 0, 0))
 end
 
-local function ApplicationStep()
+local function AppStep()
 	love.event.pump()
 
 	for name, a, b, c, d, e, f in love.event.poll() do
@@ -129,5 +129,5 @@ function love.run()
 	love.load(arg)
 
 	love.timer.step()
-	return ApplicationStep
+	return AppStep
 end

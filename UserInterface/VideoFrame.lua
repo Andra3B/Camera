@@ -119,14 +119,19 @@ end
 function VideoFrame:Destroy()
 	if not self._Destroyed then
 		local video = self._Video
+		local videoWriter = self._VideoWriter
 
 		if video then
 			self:SetVideo(nil)
 
 			video:Destroy()
 		end
-		
-		self._VideoWriter = nil
+
+		if videoWriter then
+			self:SetVideoWriter(nil)
+
+			videoWriter:Destroy()
+		end
 
 		Frame.Destroy(self)
 	end

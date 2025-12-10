@@ -1,5 +1,5 @@
 Enum.LogCategory = Enum.Create({
-    Application = 1,
+    App = 1,
 	Video = 2,
 	UserInterface = 3,
 	Network = 4,

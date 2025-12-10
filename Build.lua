@@ -28,7 +28,7 @@ local libAVFolder = System.Options.LibAVFolder.Value
 local function BuildClient()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path ClientApplication/main.lua, ClientApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Client.zip",
+			"powershell.exe Compress-Archive -Path ClientApp/main.lua, ClientApp/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Client.zip",
 			Enum.ExecutionMode.Execute
 		)
 
@@ -72,7 +72,7 @@ local function BuildClient()
 		end
 	else
 		System.Execute(
-			"zip -9 -r -j Client.zip ClientApplication/main.lua ClientApplication/conf.lua && "..
+			"zip -9 -r -j Client.zip ClientApp/main.lua ClientApp/conf.lua && "..
 			"zip -9 -r Client.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
 			Enum.ExecutionMode.Execute
 		)
@@ -105,87 +105,91 @@ local function BuildClient()
 	end
 end
 
-local function BuildCamera()
-	if jit.os == "Windows" then
-		System.Execute(
-			"powershell.exe Compress-Archive -Path CameraApplication/main.lua, CameraApplication/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkServer.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Camera.zip",
-			Enum.ExecutionMode.Execute
-		)
+local function BuildLinuxCamera()
+	System.Execute(
+		"zip -9 -r -j LinuxCamera.zip LinuxCameraApp/main.lua LinuxCameraApp/conf.lua && "..
+		"zip -9 -r LinuxCamera.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
+		Enum.ExecutionMode.Execute
+	)
+		
+	if System.Create("LinuxCameraBuild/") then
+		if System.Execute("mv LinuxCamera.zip LinuxCameraBuild/LinuxCamera.love", Enum.ExecutionMode.Execute) == 0 then
+			local executableFile = io.open("LinuxCameraBuild/LinuxCamera", "w+")
+				
+			if executableFile then
+				executableFile:write(
+					"#!/bin/sh\nexec love \"$(dirname \"$0\")/LinuxCamera.love\"\n"
+				)
+					
+				executableFile:close()
+				System.Execute("chmod a+x LinuxCameraBuild/LinuxCamera", Enum.ExecutionMode.Execute)
 
-		if System.Create("CameraBuild/") then
-			if System.Execute("mv Camera.zip Camera.love", Enum.ExecutionMode.Execute) == 0 then
-				if System.Execute(
-					"cat \""..loveFolder.."love.exe\" Camera.love > CameraBuild/Camera.exe ",
-					Enum.ExecutionMode.Execute
-				) == 0 then
-					if not (
-						System.Copy("Assets", "CameraBuild") and
-
-						System.Copy(loveFolder.."/SDL2.dll", "CameraBuild") and
-						System.Copy(loveFolder.."/OpenAL32.dll", "CameraBuild") and
-						System.Copy(loveFolder.."/license.txt", "CameraBuild") and
-						System.Copy(loveFolder.."/love.dll", "CameraBuild") and
-						System.Copy(loveFolder.."/lua51.dll", "CameraBuild") and
-						System.Copy(loveFolder.."/mpg123.dll", "CameraBuild") and
-						System.Copy(loveFolder.."/msvcp120.dll", "CameraBuild") and
-						System.Copy(loveFolder.."/msvcr120.dll", "CameraBuild") and
-
-						System.Copy(libAVFolder.."avutil-"..tostring(libav.avutil.LIBAVUTIL_VERSION_MAJOR)..".dll", "CameraBuild") and
-						System.Copy(libAVFolder.."avcodec-"..tostring(libav.avcodec.LIBAVCODEC_VERSION_MAJOR)..".dll", "CameraBuild") and
-						System.Copy(libAVFolder.."avformat-"..tostring(libav.avformat.LIBAVFORMAT_VERSION_MAJOR)..".dll", "CameraBuild") and
-						System.Copy(libAVFolder.."avdevice-"..tostring(libav.avdevice.LIBAVDEVICE_VERSION_MAJOR)..".dll", "CameraBuild") and
-						System.Copy(libAVFolder.."avfilter-"..tostring(libav.avfilter.LIBAVFILTER_VERSION_MAJOR)..".dll", "CameraBuild") and
-						System.Copy(libAVFolder.."swscale-"..tostring(libav.swscale.LIBSWSCALE_VERSION_MAJOR)..".dll", "CameraBuild")
-					) then
-						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the CameraBuild folder!")
-					end
-				else
-					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.exe!")
+				if not System.Copy("Assets", "LinuxCameraBuild") then
+					Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the CameraBuild folder!")
 				end
-
-				System.Destroy("Camera.love")
 			else
-				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera executable!")
 			end
 		else
-			Log.Critical(Enum.LogCategory.Build, "Failed to create CameraBuild folder!")
-		end
+			Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
+		end	
 	else
-		System.Execute(
-			"zip -9 -r -j Camera.zip CameraApplication/main.lua CameraApplication/conf.lua && "..
-			"zip -9 -r Camera.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkServer.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
-			Enum.ExecutionMode.Execute
-		)
-		
-		if System.Create("CameraBuild/") then
-			if System.Execute("mv Camera.zip CameraBuild/Camera.love", Enum.ExecutionMode.Execute) == 0 then
-				local executableFile = io.open("CameraBuild/Camera", "w+")
-				
-				if executableFile then
-					executableFile:write(
-						"#!/bin/sh\nexec love \"$(dirname \"$0\")/Camera.love\"\n"
-					)
-					
-					executableFile:close()
-					System.Execute("chmod a+x CameraBuild/Camera", Enum.ExecutionMode.Execute)
+		Log.Critical(Enum.LogCategory.Build, "Failed to create CameraBuild folder!")
+	end
+end
 
-					if not System.Copy("Assets", "CameraBuild") then
-						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the CameraBuild folder!")
-					end
-				else
-					Log.Critical(Enum.LogCategory.Build, "Failed to create Camera executable!")
+local function BuildWindowsCamera()
+	System.Execute(
+		"powershell.exe Compress-Archive -Path WindowsCameraApp/main.lua, WindowsCameraApp/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkServer.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath WindowsCamera.zip",
+		Enum.ExecutionMode.Execute
+	)
+
+	if System.Create("WindowsCameraBuild/") then
+		if System.Execute("mv WindowsCamera.zip WindowsCamera.love", Enum.ExecutionMode.Execute) == 0 then
+			if System.Execute(
+				"cat \""..loveFolder.."love.exe\" WindowsCamera.love > WindowsCameraBuild/WindowsCamera.exe ",
+				Enum.ExecutionMode.Execute
+			) == 0 then
+				if not (
+					System.Copy("Assets", "WindowsCameraBuild") and
+
+					System.Copy(loveFolder.."/SDL2.dll", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/OpenAL32.dll", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/license.txt", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/love.dll", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/lua51.dll", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/mpg123.dll", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/msvcp120.dll", "WindowsCameraBuild") and
+					System.Copy(loveFolder.."/msvcr120.dll", "WindowsCameraBuild") and
+
+					System.Copy(libAVFolder.."avutil-"..tostring(libav.avutil.LIBAVUTIL_VERSION_MAJOR)..".dll", "WindowsCameraBuild") and
+					System.Copy(libAVFolder.."avcodec-"..tostring(libav.avcodec.LIBAVCODEC_VERSION_MAJOR)..".dll", "WindowsCameraBuild") and
+					System.Copy(libAVFolder.."avformat-"..tostring(libav.avformat.LIBAVFORMAT_VERSION_MAJOR)..".dll", "WindowsCameraBuild") and
+					System.Copy(libAVFolder.."avdevice-"..tostring(libav.avdevice.LIBAVDEVICE_VERSION_MAJOR)..".dll", "WindowsCameraBuild") and
+					System.Copy(libAVFolder.."avfilter-"..tostring(libav.avfilter.LIBAVFILTER_VERSION_MAJOR)..".dll", "WindowsCameraBuild") and
+					System.Copy(libAVFolder.."swscale-"..tostring(libav.swscale.LIBSWSCALE_VERSION_MAJOR)..".dll", "WindowsCameraBuild")
+				) then
+					Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the WindowsCameraBuild folder!")
 				end
 			else
-				Log.Critical(Enum.LogCategory.Build, "Failed to create Camera.love!")
-			end	
+				Log.Critical(Enum.LogCategory.Build, "Failed to create WindowsCamera.exe!")
+			end
+
+			System.Destroy("WindowsCamera.love")
 		else
-			Log.Critical(Enum.LogCategory.Build, "Failed to create CameraBuild folder!")
+			Log.Critical(Enum.LogCategory.Build, "Failed to create WindowsCamera.love!")
 		end
+	else
+		Log.Critical(Enum.LogCategory.Build, "Failed to create WindowsCameraBuild folder!")
 	end
 end
 
 if target ~= "Client" then
-	BuildCamera()
+	if jit.os == "Windows" then
+		BuildWindowsCamera()
+	else
+		BuildLinuxCamera()
+	end
 end
 
 if target ~= "Camera" then

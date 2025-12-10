@@ -11,7 +11,7 @@ VideoWriter = require("VideoWriter")
 
 NetworkClient = require("NetworkClient")
 
-local ApplicationNetworkClient = nil
+local AppNetworkClient = nil
 
 local livestreaming = false
 
@@ -30,8 +30,8 @@ function love.load(args)
 
 	UserInterface.Initialise()
 
-	ApplicationNetworkClient = NetworkClient.Create()
-	ApplicationNetworkClient:Bind()
+	AppNetworkClient = NetworkClient.Create()
+	AppNetworkClient:Bind()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -98,7 +98,7 @@ function love.load(args)
 		local commandString = NetworkClient.GetStringFromCommands(command)
 		NetworkCommandLabel.Text = "Command: "..commandString
 
-		ApplicationNetworkClient:Send(command)
+		AppNetworkClient:Send(command)
 	end)
 
 	local LivestreamViewFrame = UserInterface.Frame.Create()
@@ -122,7 +122,7 @@ function love.load(args)
 	LivestreamStartButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
 			if livestreaming then
-				ApplicationNetworkClient:Send({{
+				AppNetworkClient:Send({{
 					"StopLivestream"
 				}})
 
@@ -135,13 +135,13 @@ function love.load(args)
 			else
 				local freePort = NetworkClient.GetFreePort()
 
-				ApplicationNetworkClient:Send({{
+				AppNetworkClient:Send({{
 					"StartLivestream",
 					freePort
 				}})
 
 				LivestreamVideoFrame.Video = VideoReader.CreateFromURL(
-					"udp://"..ApplicationNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=1000000",
+					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=1000000",
 					"mpegts"
 				)
 
@@ -180,8 +180,8 @@ function love.load(args)
 	SettingsConnectButton.Text = "Connect"
 	SettingsConnectButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
-			if ApplicationNetworkClient.Connected then
-				ApplicationNetworkClient:Disconnect()
+			if AppNetworkClient.Connected then
+				AppNetworkClient:Disconnect()
 
 				SettingsConnectButton.Text = "Connect"
 			else
@@ -189,7 +189,7 @@ function love.load(args)
 				local port = tonumber(SettingsPortTextBox.Text)
 
 				if port then
-					success, errorMessage = ApplicationNetworkClient:ConnectUsingIPAddress(
+					success, errorMessage = AppNetworkClient:ConnectUsingIPAddress(
 						SettingsIPAddressTextBox.Text,
 						port,
 						3
@@ -226,7 +226,7 @@ function love.load(args)
 	Root:AddChild(SettingsViewButton)
 	Root:AddChild(ContentFrame)
 
-	ApplicationNetworkClient.Events:Listen("StopLivestream", function()
+	AppNetworkClient.Events:Listen("StopLivestream", function()
 		if LivestreamVideoFrame.Video then
 			LivestreamVideoFrame.Video:Destroy()
 			LivestreamVideoFrame.Video = nil
@@ -243,12 +243,12 @@ end
 function love.quit(exitCode)
 	UserInterface.Deinitialise()
 	
-	ApplicationNetworkClient:Destroy()
-	ApplicationNetworkClient = nil
+	AppNetworkClient:Destroy()
+	AppNetworkClient = nil
 end
 
 function love.update(deltaTime)
-	ApplicationNetworkClient:Update()
+	AppNetworkClient:Update()
 
 	UserInterface.Update(deltaTime)
 end
@@ -299,7 +299,7 @@ function love.mousereleased(x, y, button, isTouch, presses)
 	UserInterface.Input(Enum.InputType.Mouse, button, Vector4.Create(x, y, 0, 0))
 end
 
-local function ApplicationStep()
+local function AppStep()
 	love.event.pump()
 
 	for name, a, b, c, d, e, f in love.event.poll() do
@@ -330,5 +330,5 @@ function love.run()
 	love.load(arg)
 
 	love.timer.step()
-	return ApplicationStep
+	return AppStep
 end
