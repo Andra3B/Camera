@@ -187,7 +187,7 @@ end
 local function BuildSandbox()
 	if jit.os == "Windows" then
 		System.Execute(
-			"powershell.exe Compress-Archive -Path SandboxApp/main.lua, SandboxApp/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Sandbox.zip",
+			"powershell.exe Compress-Archive -Path SandboxApp/main.lua, SandboxApp/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkServer.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Sandbox.zip",
 			Enum.ExecutionMode.Execute
 		)
 
@@ -232,7 +232,7 @@ local function BuildSandbox()
 	else
 		System.Execute(
 			"zip -9 -r -j Sandbox.zip SandboxApp/main.lua SandboxApp/conf.lua && "..
-			"zip -9 -r Sandbox.zip Assets libav pigpio UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
+			"zip -9 -r Sandbox.zip Assets libav pigpio UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkServer.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
 			Enum.ExecutionMode.Execute
 		)
 		
