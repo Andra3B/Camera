@@ -99,7 +99,7 @@ function love.load(args)
 				}})
 
 				local livestreamVideoReader = VideoReader.CreateFromURL(
-					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000",
+					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=3000000",
 					"mpegts"
 				)
 
@@ -205,6 +205,7 @@ function love.load(args)
 		end
 
 		LivestreamStartButton.Text = "Start Livestream"
+		SettingsConnectButton.Text = "Connect"
 	end)
 
 	UserInterface.SetRoot(Root)

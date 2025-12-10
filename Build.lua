@@ -184,14 +184,104 @@ local function BuildWindowsCamera()
 	end
 end
 
-if target ~= "Client" then
+local function BuildSandbox()
+	if jit.os == "Windows" then
+		System.Execute(
+			"powershell.exe Compress-Archive -Path SandboxApp/main.lua, SandboxApp/conf.lua, Assets, libav, UserInterface, Class.lua, Enum.lua, Enums.lua, EventDirector.lua, EventListener.lua, FFILoader.lua, Log.lua, NetworkClient.lua, NetworkController.lua, SetupEnvironment.lua, System.lua, Vector2.lua, Vector3.lua, Vector4.lua, VideoReader.lua, VideoWriter.lua -DestinationPath Sandbox.zip",
+			Enum.ExecutionMode.Execute
+		)
+
+		if System.Create("SandboxBuild/") then
+			if System.Execute("mv Sandbox.zip Sandbox.love", Enum.ExecutionMode.Execute) == 0 then
+				if System.Execute(
+					"cat \""..loveFolder.."love.exe\" Sandbox.love > SandboxBuild/Sandbox.exe ",
+					Enum.ExecutionMode.Execute
+				) == 0 then
+					if not (
+						System.Copy("Assets", "SandboxBuild") and
+
+						System.Copy(loveFolder.."SDL2.dll", "SandboxBuild") and
+						System.Copy(loveFolder.."OpenAL32.dll", "SandboxBuild") and
+						System.Copy(loveFolder.."license.txt", "SandboxBuild") and
+						System.Copy(loveFolder.."love.dll", "SandboxBuild") and
+						System.Copy(loveFolder.."lua51.dll", "SandboxBuild") and
+						System.Copy(loveFolder.."mpg123.dll", "SandboxBuild") and
+						System.Copy(loveFolder.."msvcp120.dll", "SandboxBuild") and
+						System.Copy(loveFolder.."msvcr120.dll", "SandboxBuild") and
+
+						System.Copy(libAVFolder.."avutil-"..tostring(libav.avutil.LIBAVUTIL_VERSION_MAJOR)..".dll", "SandboxBuild") and
+						System.Copy(libAVFolder.."avcodec-"..tostring(libav.avcodec.LIBAVCODEC_VERSION_MAJOR)..".dll", "SandboxBuild") and
+						System.Copy(libAVFolder.."avformat-"..tostring(libav.avformat.LIBAVFORMAT_VERSION_MAJOR)..".dll", "SandboxBuild") and
+						System.Copy(libAVFolder.."avdevice-"..tostring(libav.avdevice.LIBAVDEVICE_VERSION_MAJOR)..".dll", "SandboxBuild") and
+						System.Copy(libAVFolder.."avfilter-"..tostring(libav.avfilter.LIBAVFILTER_VERSION_MAJOR)..".dll", "SandboxBuild") and
+						System.Copy(libAVFolder.."swscale-"..tostring(libav.swscale.LIBSWSCALE_VERSION_MAJOR)..".dll", "SandboxBuild")
+					) then
+						Log.Critical(Enum.LogCategory.Build, "Failed to copy required files to the SandboxBuild folder!")
+					end
+				else
+					Log.Critical(Enum.LogCategory.Build, "Failed to create Sandbox.exe!")
+				end
+
+				System.Destroy("Sandbox.love")
+			else
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Sandbox.love!")
+			end
+		else
+			Log.Critical(Enum.LogCategory.Build, "Failed to create SandboxBuild folder!")
+		end
+	else
+		System.Execute(
+			"zip -9 -r -j Sandbox.zip SandboxApp/main.lua SandboxApp/conf.lua && "..
+			"zip -9 -r Sandbox.zip Assets libav UserInterface Class.lua Enum.lua Enums.lua EventDirector.lua EventListener.lua FFILoader.lua Log.lua NetworkClient.lua NetworkController.lua SetupEnvironment.lua System.lua Vector2.lua Vector3.lua Vector4.lua VideoReader.lua VideoWriter.lua",
+			Enum.ExecutionMode.Execute
+		)
+		
+		if System.Create("SandboxBuild/") then
+			if System.Execute("mv Sandbox.zip SandboxBuild/Sandbox.love", Enum.ExecutionMode.Execute) == 0 then
+				local executableFile = io.open("SandboxBuild/Sandbox", "w+")
+
+				if executableFile then
+					executableFile:write([[
+						#!/bin/sh
+						exec love "$(dirname "$0")/Sandbox.love"
+					]])
+
+					executableFile:close()
+					System.Execute("chmod a+x SandboxBuild/Sandbox", Enum.ExecutionMode.Execute)
+
+					if not System.Copy("Assets", "SandboxBuild") then
+						Log.Critical(Enum.LogCategory.Build, "Failed to make Sandbox executable!")
+					end
+				else
+					Log.Critical(Enum.LogCategory.Build, "Failed to create Sandbox executable!")
+				end
+			else
+				Log.Critical(Enum.LogCategory.Build, "Failed to create Sandbox.love!")
+			end	
+		else
+			Log.Critical(Enum.LogCategory.Build, "Failed to create SandboxBuild folder!")
+		end
+	end
+end
+
+if target == "Client" then
+	BuildClient()
+elseif target == "Camera" then
 	if jit.os == "Windows" then
 		BuildWindowsCamera()
 	else
 		BuildLinuxCamera()
 	end
-end
-
-if target ~= "Camera" then
+elseif target == "Sandbox" then
+	BuildSandbox()
+else
 	BuildClient()
+
+	if jit.os == "Windows" then
+		BuildWindowsCamera()
+	else
+		BuildLinuxCamera()
+	end
+
+	BuildSandbox()
 end
