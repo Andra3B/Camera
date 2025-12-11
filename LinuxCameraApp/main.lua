@@ -11,6 +11,8 @@ VideoWriter = require("VideoWriter")
 
 NetworkServer = require("NetworkServer")
 
+pigpio = require("pigpio")
+
 local AppNetworkServer = nil
 
 local livestreamPID = -1
@@ -46,6 +48,7 @@ function love.load(args)
 	})
 	
 	libav.avdevice.avdevice_register_all()
+	pigpio.gpioInitialise()
 	UserInterface.Initialise()
 
 	AppNetworkServer = NetworkServer.Create()
@@ -124,6 +127,13 @@ function love.load(args)
 
 	AppNetworkServer.Events:Listen("StartLivestream", StartLivestream)
 	AppNetworkServer.Events:Listen("StopLivestream", StopLivestream)
+	AppNetworkServer.Events:Listen("SetServoAngle", function(from, angle)
+		angle = tonumber(angle)
+
+		if angle then
+			pigpio.gpioServo(18, 1500 + (math.clamp(angle, -90, 90) / 90) * 800)
+		end
+	end)
 
 	AppNetworkServer:Listen()
 	UserInterface.SetRoot(Root)
@@ -141,6 +151,7 @@ function love.quit(exitCode)
 	end
 
 	UserInterface.Deinitialise()
+	pigpio.gpioTerminate()
 	AppNetworkServer:Destroy()
 end
 
@@ -151,8 +162,6 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	love.graphics.clear(0, 0, 0, 0)
-
 	UserInterface.Draw()
 
 	love.graphics.present()

@@ -27,7 +27,7 @@ function love.load(args)
 
 	libav.avdevice.avdevice_register_all()
 
-	print(pigpio.gpioInitialise())
+	pigpio.gpioInitialise()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -59,8 +59,6 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	--love.graphics.clear(0, 0, 0, 0)
-
 	UserInterface.Draw()
 
 	love.graphics.present()
