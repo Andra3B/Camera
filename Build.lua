@@ -84,7 +84,7 @@ local function BuildClient()
 				if executableFile then
 					executableFile:write([[
 						#!/bin/sh
-						sudo exec love "$(dirname "$0")/Client.love"
+						sudo love "$(dirname "$0")/Client.love"
 					]])
 
 					executableFile:close()
@@ -119,7 +119,7 @@ local function BuildLinuxCamera()
 			if executableFile then
 				executableFile:write([[
 					#!/bin/sh
-					sudo exec love "$(dirname "$0")/LinuxCamera.love""
+					sudo love "$(dirname "$0")/LinuxCamera.love"
 				]])
 					
 				executableFile:close()
@@ -244,7 +244,7 @@ local function BuildSandbox()
 				if executableFile then
 					executableFile:write([[
 						#!/bin/sh
-						sudo exec love "$(dirname "$0")/Sandbox.love"
+						sudo love "$(dirname "$0")/Sandbox.love"
 					]])
 
 					executableFile:close()
