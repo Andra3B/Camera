@@ -19,13 +19,14 @@ local livestreamPID = -1
 
 local function StartLivestream(from, port)
 	if livestreamPID < 0 then
-		local livestreamProcess = io.popen(
-			"rpicam-vid -t 0 --codec h264 --nopreview --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
-			"r"
+		os.execute(
+			"rpicam-vid -t 0 --codec h264 --nopreview --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $! > LivestreamPID.txt",
 		)
 
-		livestreamPID = livestreamProcess:read("*l")
-		livestreamProcess:close()
+		local livestreamFile = io.open("LivestreamPID.txt", "r")
+		livestreamPID = tonumber(livestreamFile:read("*a"):match("^%s*(%d+)%s*$"))
+		livestreamFile:close()
+		os.remove("LivestreamPID.txt")
 	end
 end
 

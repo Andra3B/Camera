@@ -99,7 +99,7 @@ function love.load(args)
 				}})
 
 				local livestreamVideoReader = VideoReader.CreateFromURL(
-					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=3000000",
+					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000",
 					"h264"
 				)
 
@@ -122,7 +122,7 @@ function love.load(args)
 	SettingsHostnameTextBox.PixelSize = Vector2.Create(-15, 0)
 	SettingsHostnameTextBox.PixelPosition = Vector2.Create(10, 10)
 	SettingsHostnameTextBox.PlaceholderText = "Enter devices hostname..."
-	SettingsHostnameTextBox.Text = "LAPTOP-UISV0CCS"
+	SettingsHostnameTextBox.Text = "AndraeBanwosCamera"--"LAPTOP-UISV0CCS"
 
 	local SettingsPortTextBox = UserInterface.TextBox.Create()
 	SettingsPortTextBox.RelativeSize = Vector2.Create(0.5, 0.08)
