@@ -100,7 +100,7 @@ function love.load(args)
 
 				local livestreamVideoReader = VideoReader.CreateFromURL(
 					"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=3000000",
-					"mpegts"
+					"h264"
 				)
 
 				if livestreamVideoReader then

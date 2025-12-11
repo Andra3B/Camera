@@ -20,7 +20,7 @@ local livestreamPID = -1
 local function StartLivestream(from, port)
 	if livestreamPID < 0 then
 		local livestreamProcess = io.popen(
-			"rpicam-vid -t 0 --codec h264 --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
+			"rpicam-vid -t 0 --codec h264 --nopreview --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $!",
 			"r"
 		)
 
@@ -52,9 +52,7 @@ function love.load(args)
 	UserInterface.Initialise()
 
 	AppNetworkServer = NetworkServer.Create()
-	AppNetworkServer:Bind()
-
-	local IPAddress, port = AppNetworkServer:GetLocalDetails()
+	AppNetworkServer:Bind(nil, 64641)
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -100,23 +98,7 @@ function love.load(args)
 	SettingsViewFrame.RelativeSize = Vector2.One
 	SettingsViewFrame.BackgroundColour = Vector4.Zero
 
-	local SettingsIPAddressLabel = UserInterface.Label.Create()
-	SettingsIPAddressLabel.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsIPAddressLabel.PixelSize = Vector2.Create(-15, 0)
-	SettingsIPAddressLabel.PixelPosition = Vector2.Create(10, 10)
-	SettingsIPAddressLabel.Text = IPAddress
-
-	local SettingsPortLabel = UserInterface.Label.Create()
-	SettingsPortLabel.RelativeSize = Vector2.Create(0.5, 0.08)
-	SettingsPortLabel.PixelSize = Vector2.Create(-15, 0)
-	SettingsPortLabel.RelativePosition = Vector2.Create(0.5, 0)
-	SettingsPortLabel.PixelPosition = Vector2.Create(5, 10)
-	SettingsPortLabel.Text = port
-
 	LivestreamViewFrame:AddChild(LivestreamVideoFrame)
-
-	SettingsViewFrame:AddChild(SettingsIPAddressLabel)
-	SettingsViewFrame:AddChild(SettingsPortLabel)
 
 	ContentFrame:AddChild(LivestreamViewFrame)
 	ContentFrame:AddChild(SettingsViewFrame)
