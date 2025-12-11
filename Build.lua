@@ -117,9 +117,10 @@ local function BuildLinuxCamera()
 			local executableFile = io.open("LinuxCameraBuild/LinuxCamera", "w+")
 				
 			if executableFile then
-				executableFile:write(
-					"#!/bin/sh\nexec love \"$(dirname \"$0\")/LinuxCamera.love\"\n"
-				)
+				executableFile:write([[
+					#!/bin/sh
+					sudo exec love "$(dirname "$0")/LinuxCamera.love""
+				]])
 					
 				executableFile:close()
 				System.Execute("chmod a+x LinuxCameraBuild/LinuxCamera", Enum.ExecutionMode.Execute)
