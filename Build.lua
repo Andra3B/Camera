@@ -84,7 +84,7 @@ local function BuildClient()
 				if executableFile then
 					executableFile:write([[
 						#!/bin/sh
-						exec love "$(dirname "$0")/Client.love"
+						sudo exec love "$(dirname "$0")/Client.love"
 					]])
 
 					executableFile:close()
@@ -243,7 +243,7 @@ local function BuildSandbox()
 				if executableFile then
 					executableFile:write([[
 						#!/bin/sh
-						exec love "$(dirname "$0")/Sandbox.love"
+						sudo exec love "$(dirname "$0")/Sandbox.love"
 					]])
 
 					executableFile:close()
