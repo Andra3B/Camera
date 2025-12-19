@@ -10,8 +10,9 @@ function VideoFrame.Create()
 
 	self._Playing = false
 	self._Time = 0
-
+	
 	self._FrameHandle = nil
+	self._FrameChanged = false
 
 	self._VideoImageBuffer = nil
 	self._VideoImageBufferHandle = nil
@@ -45,6 +46,7 @@ function VideoFrame:Update(deltaTime)
 					end
 
 					self._FrameHandle = frameHandle
+					self._FrameChanged = true
 
 					if self._VideoWriter then
 						self._VideoWriter:WriteFrame(frameHandle)
@@ -114,6 +116,13 @@ end
 
 function VideoFrame:GetFrameHandle()
 	return self._FrameHandle
+end
+
+function VideoFrame:GetFrameChanged()
+	local frameChanged = self._FrameChanged
+	self._FrameChanged = false
+
+	return frameChanged
 end
 
 function VideoFrame:Destroy()

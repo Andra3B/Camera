@@ -10,7 +10,7 @@ function NetworkClient.Create(clientSocket, owner)
 	return self
 end
 
-function NetworkClient:ConnectUsingIPAddress(ipAddress, port, timeout)
+function NetworkClient:Connect(ipAddress, port, timeout)
 	timeout = timeout or 0
 
 	local success, errorMessage = false, "No IP address or port given"
@@ -25,16 +25,6 @@ function NetworkClient:ConnectUsingIPAddress(ipAddress, port, timeout)
 		return true
 	else
 		return false, errorMessage
-	end
-end
-
-function NetworkClient:ConnectUsingHostname(hostname, port, timeout)
-	local ipAddress = socket.dns.toip(hostname)
-
-	if ipAddress then
-		return self:ConnectUsingIPAddress(ipAddress, port, timeout)
-	else
-		return false, "Failed to resolve hostname"
 	end
 end
 
