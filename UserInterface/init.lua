@@ -12,8 +12,6 @@ UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
 
-UserInterface.Shaders = {}
-
 UserInterface.Events = nil
 
 UserInterface.Root = nil
@@ -33,11 +31,6 @@ local MOUSE_INPUT_STRINGS = {
 
 function UserInterface.Initialise()
 	if not UserInterface.Initialised then
-		UserInterface.Shaders.YUV2RGBA = love.graphics.newShader(
-			"Assets/Shaders/YUV2RGBA.frag",
-			"Assets/Shaders/Default.vert"
-		)
-
 		UserInterface.Events = EventDirector.Create()
 
 		UserInterface.Initialised = true
@@ -176,9 +169,6 @@ function UserInterface.Deinitialise()
 		UserInterface.Root = nil
 		UserInterface.PreFocus = nil
 		UserInterface.Focus = nil
-
-		UserInterface.Shaders.YUV2RGBA:release()
-		UserInterface.Shaders.YUV2RGBA = nil
 
 		UserInterface.Events:Destroy()
 		UserInterface.Events = nil

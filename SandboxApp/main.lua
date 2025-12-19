@@ -12,7 +12,11 @@ VideoWriter = require("VideoWriter")
 NetworkClient = require("NetworkClient")
 NetworkServer = require("NetworkServer")
 
-pigpio = require("pigpio")
+MotionTracker = require("MotionTracker")
+
+local sourceVideoFrame = nil
+
+local motionTracker = nil
 
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
@@ -25,33 +29,69 @@ function love.load(args)
 		["display"] = 1
 	})
 
+	Shaders = {
+		["MotionTrackingOne"] = love.graphics.newShader(
+			"Assets/Shaders/MotionTrackingOne.frag",
+			"Assets/Shaders/Default.vert"
+		),
+
+		["MotionTrackingTwo"] = love.graphics.newShader(
+			"Assets/Shaders/MotionTrackingTwo.frag",
+			"Assets/Shaders/Default.vert"
+		),
+
+		["MotionTrackingThree"] = love.graphics.newShader(
+			"Assets/Shaders/MotionTrackingThree.frag",
+			"Assets/Shaders/Default.vert"
+		),
+
+		["MotionTrackingFour"] = love.graphics.newShader(
+			"Assets/Shaders/MotionTrackingFour.frag",
+			"Assets/Shaders/Default.vert"
+		),
+
+		["MotionTrackingFive"] = love.graphics.newShader(
+			"Assets/Shaders/MotionTrackingFive.frag",
+			"Assets/Shaders/Default.vert"
+		)
+	}
+
 	libav.avdevice.avdevice_register_all()
 
-	pigpio.gpioInitialise()
+	UserInterface.Initialise()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	local ServoPWMNumberTextBox = UserInterface.TextBox.Create()
-	ServoPWMNumberTextBox.RelativeSize = Vector2.Create(0.5, 0.08)
-	ServoPWMNumberTextBox.RelativePosition = Vector2.Create(0.25, 0.46)
-	ServoPWMNumberTextBox.PlaceholderText = "Enter Servo PWM Number (1000-2000)..."
-	ServoPWMNumberTextBox.Text = "1500"
-	ServoPWMNumberTextBox.Events:Listen("Submit", function(text)
-		pigpio.gpioServo(18, tonumber(text))
-	end)
+	sourceVideoFrame = UserInterface.VideoFrame.Create()
+	sourceVideoFrame.RelativeSize = Vector2.Create(0.5, 1)
+	sourceVideoFrame.PixelSize = Vector2.Create(-20, -20)
+	sourceVideoFrame.PixelPosition = Vector2.Create(10, 10)
+	sourceVideoFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
+	sourceVideoFrame.Video = VideoReader.CreateFromURL("file:Assets/Videos/ManWalking.mp4", "mp4")
+	sourceVideoFrame.Playing = true
 
-	Root:AddChild(ServoPWMNumberTextBox)
+	motionTracker = MotionTracker.Create(sourceVideoFrame.Video.Width, sourceVideoFrame.Video.Height)
+
+	local MotionOutputFrame = UserInterface.Frame.Create()
+	MotionOutputFrame.Name = "MotionOutputFrame"
+	MotionOutputFrame.RelativeSize = Vector2.Create(0.5, 1)
+	MotionOutputFrame.PixelSize = Vector2.Create(-20, -20)
+	MotionOutputFrame.RelativePosition = Vector2.Create(0.5, 0)
+	MotionOutputFrame.PixelPosition = Vector2.Create(10, 10)
+	MotionOutputFrame.BackgroundImage = motionTracker._MotionCanvas
+
+	Root:AddChild(sourceVideoFrame)
+	Root:AddChild(MotionOutputFrame)
 
 	UserInterface.SetRoot(Root)
-	UserInterface.Initialise()
 end
 
 function love.quit(exitCode)
 	UserInterface.Deinitialise()
 
-	pigpio.gpioTerminate()
+	motionTracker:Destroy()
 end
 
 function love.update(deltaTime)
@@ -59,6 +99,10 @@ function love.update(deltaTime)
 end
 
 function love.draw()
+	if sourceVideoFrame.FrameChanged then
+		motionTracker:Update(sourceVideoFrame.BackgroundImage)
+	end
+
 	UserInterface.Draw()
 
 	love.graphics.present()

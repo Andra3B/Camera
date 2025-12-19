@@ -157,7 +157,7 @@ function love.load(args)
 				local port = tonumber(SettingsPortTextBox.Text)
 
 				if port then
-					success, errorMessage = AppNetworkClient:ConnectUsingHostname(
+					success, errorMessage = AppNetworkClient:Connect(
 						SettingsHostnameTextBox.Text,
 						port,
 						3
