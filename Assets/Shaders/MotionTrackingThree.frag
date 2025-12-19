@@ -12,7 +12,15 @@ vec4 effect(vec4 colour, Image currentMotion, vec2 imagePosition, vec2 screenPos
 	float currentMotionValue = Texel(currentMotion, imagePosition).r;
 	float previousMotionValue = Texel(PreviousMotion, imagePosition).r;
 
-	float motion = max(currentMotionValue, previousMotionValue * Decay);
+	float motion;
+
+	if (previousMotionValue > 0.0) {
+		motion = step(LowerThreshold, currentMotionValue);
+	} else {
+		motion = step(HigherThreshold, currentMotionValue);
+	}
+
+	motion = max(motion, previousMotionValue * Decay);
 
 	return vec4(motion, motion, motion, 1.0);
 }

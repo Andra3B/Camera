@@ -22,8 +22,10 @@ function MotionTracker.Create(width, height)
 	until width == 1 and height == 1
 
 	self._FilterFactor = 0.1
-	self._FilterGain = 2
-	self._Decay = 0.9
+	self._FilterGain = 1
+	self._LowerThreshold = 0.1
+	self._HigherThreshold = 0.3
+	self._Decay = 0.85
 
 	self._Destroyed = false
 
@@ -33,6 +35,10 @@ end
 function MotionTracker:Update(currentFrame)
 	love.graphics.push("all")
 	love.graphics.reset()
+
+	local differenceLuminanceCanvas = self._DifferenceLuminanceCanvas
+	self._DifferenceLuminanceCanvas = self._PreviousDifferenceLuminanceCanvas
+	self._PreviousDifferenceLuminanceCanvas = differenceLuminanceCanvas
 
 	-- Pass One
 	love.graphics.setCanvas(self._DifferenceLuminanceCanvas)
@@ -51,17 +57,20 @@ function MotionTracker:Update(currentFrame)
 	})
 	love.graphics.draw(self._DifferenceLuminanceCanvas)
 
-	local differenceLuminanceCanvas = self._DifferenceLuminanceCanvas
-	self._DifferenceLuminanceCanvas = self._PreviousDifferenceLuminanceCanvas
-	self._PreviousDifferenceLuminanceCanvas = differenceLuminanceCanvas	
+	local motionCanvas = self._MotionCanvas
+	self._MotionCanvas = self._PreviousMotionCanvas
+	self._PreviousMotionCanvas = motionCanvas
 
 	-- Pass Three
 	love.graphics.setCanvas(self._MotionCanvas)
 	love.graphics.setShader(Shaders.MotionTrackingThree)
 	Shaders.MotionTrackingThree:send("PreviousMotion", self._PreviousMotionCanvas)
+	Shaders.MotionTrackingThree:send("LowerThreshold", self._LowerThreshold)
+	Shaders.MotionTrackingThree:send("HigherThreshold", self._HigherThreshold)
 	Shaders.MotionTrackingThree:send("Decay", self._Decay)
 	love.graphics.draw(self._BlurredDifferenceCanvas)
 
+	--[[
 	-- Pass Four
 	love.graphics.setCanvas(self._MotionWeightedCanvas)
 	love.graphics.setShader(Shaders.MotionTrackingFour)
@@ -80,6 +89,7 @@ function MotionTracker:Update(currentFrame)
 		love.graphics.draw(sourceCanvas)
 		sourceCanvas = reductionCanvas
 	end
+	--]]
 
 	love.graphics.pop()
 end
