@@ -41,7 +41,7 @@ function love.load(args)
 		),
 
 		["MotionTrackingThree"] = love.graphics.newShader(
-			"Assets/Shaders/MotionTrackingThree.frag",
+			"Assets/Shaders/MotionTrackingThreeA.frag",
 			"Assets/Shaders/Default.vert"
 		),
 
@@ -69,7 +69,7 @@ function love.load(args)
 	sourceVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	sourceVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	sourceVideoFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
-	sourceVideoFrame.Video = VideoReader.CreateFromURL("file:Assets/Videos/ManWalking.mp4", "mp4")
+	sourceVideoFrame.Video = VideoReader.CreateFromURL("Assets/Videos/ManWalking.mp4", "mp4")
 	sourceVideoFrame.Playing = true
 
 	motionTracker = MotionTracker.Create(sourceVideoFrame.Video.Width, sourceVideoFrame.Video.Height)

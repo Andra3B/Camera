@@ -21,11 +21,11 @@ function MotionTracker.Create(width, height)
 		table.insert(self._ReductionCanvases, love.graphics.newCanvas(width, height, {format = "rgba32f"}))
 	until width == 1 and height == 1
 
-	self._FilterFactor = 0.1
-	self._FilterGain = 1
-	self._LowerThreshold = 0.1
-	self._HigherThreshold = 0.3
-	self._Decay = 0.85
+	self._FilterFactor = 0.25
+	self._FilterGain = 1.0
+	self._LowerThreshold = 0.04
+	self._HigherThreshold = 0.08
+	self._Decay = 0.0
 
 	self._Destroyed = false
 
