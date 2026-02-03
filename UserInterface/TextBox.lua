@@ -18,7 +18,7 @@ end
 function TextBox:Draw()
 	Interactive.Draw(self)
 
-	local absolutePosition = self._AbsolutePosition
+	local absolutePosition = self.AbsolutePosition
 	
 	if self._AbsoluteActive and self:IsFocused() then
 		local absoluteCursorOffset = self:GetAbsoluteCursorOffset()
@@ -28,14 +28,15 @@ function TextBox:Draw()
 			"fill",
 			absolutePosition.X + absoluteCursorOffset.X,
 			absolutePosition.Y + absoluteCursorOffset.Y,
-			absoluteCursorSize.X, absoluteCursorSize.Y
+			absoluteCursorSize.X,
+			absoluteCursorSize.Y
 		)
-	elseif #self:GetText() == 0 then
+	elseif #self._Text == 0 then
 		local absoluteTextOffset = self._AbsoluteTextOffset
 		
-		love.graphics.setColor(self:GetPlaceholderTextColour():Unpack())
+		love.graphics.setColor(self._PlaceholderTextColour:Unpack())
 		love.graphics.print(
-			self:GetPlaceholderText(),
+			self._PlaceholderText,
 			absolutePosition.X + absoluteTextOffset.X,
 			absolutePosition.Y + absoluteTextOffset.Y
 		)
@@ -45,14 +46,14 @@ end
 function TextBox:SetText(text)
 	Interactive.SetText(self, text)
 
-	self:SetCursorPosition(self:GetCursorPosition())
+	self:SetCursorPosition(self._CursorPosition)
 end
 
 function TextBox:InsertText(text)
 	if #text > 0 then
-		local cursorPosition = self:GetCursorPosition()
+		local cursorPosition = self._CursorPosition
 
-		local boxText = self:GetText(self)
+		local boxText = self._Text
 		local cursorByteOffset = utf8.offset(boxText, cursorPosition + 1)
 
 		self:SetText(
@@ -84,7 +85,7 @@ function TextBox:GetCursorPosition()
 end
 
 function TextBox:SetCursorPosition(position)
-	self._CursorPosition = math.clamp(position, 0, utf8.len(self:GetText()))
+	self._CursorPosition = math.clamp(position, 0, utf8.len(self._Text))
 end
 
 function TextBox:GetAbsoluteCursorOffset()
@@ -94,8 +95,8 @@ function TextBox:GetAbsoluteCursorOffset()
 	if cursorPosition == 0 then
 		return Vector2.Create(absoluteTextOffset.X, absoluteTextOffset.Y)
 	else
-		local text = self:GetText()
-		local textWidth = self:GetFont():GetFont(self:GetTextSize()):getWidth(
+		local text = self._Text
+		local textWidth = self:GetFont():GetFont(self._TextSize):getWidth(
 			string.sub(text, 1, utf8.offset(text, cursorPosition))
 		)
 
@@ -106,12 +107,12 @@ function TextBox:GetAbsoluteCursorOffset()
 end
 
 function TextBox:GetAbsoluteCursorSize()
-	return Vector2.Create(1, self:GetFont():GetFont(self:GetTextSize()):getHeight())
+	return Vector2.Create(1, self:GetFont():GetFont(self._TextSize):getHeight())
 end
 
 function TextBox:Submit()
 	if self._AbsoluteActive then
-		self._Events:Push("Submit", self:GetText())
+		self._Events:Push("Submit", self._Text)
 	end
 end
 
@@ -122,7 +123,7 @@ function TextBox:Input(inputType, scancode, state)
 		elseif scancode == "right" then
 			self:SetCursorPosition(self:GetCursorPosition() + 1)
 		elseif scancode == "backspace" then
-			local text = self:GetText()
+			local text = self._Text
 			local cursorPosition = self:GetCursorPosition()
 
 			if cursorPosition > 0 and #text > 0 then
@@ -132,12 +133,9 @@ function TextBox:Input(inputType, scancode, state)
 					utf8.offset(text, cursorPosition + 1) - 1,
 					""
 				))
-					
-				if cursorPosition < utf8.len(text) then
-					self:SetCursorPosition(cursorPosition - 1)
-				end
-			end
 
+				self:SetCursorPosition(cursorPosition - 1)
+			end
 		elseif scancode == "return" then
 			self:Submit()
 		end

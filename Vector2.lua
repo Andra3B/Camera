@@ -2,20 +2,27 @@ local Vector2 = {}
 
 function Vector2.Create(x, y)
 	local self = Class.CreateInstance(nil, Vector2)
-
-	if type(x) == "number" then
-		self.X = x
-		self.Y = y
-	else
-		self.X = x.X
-		self.Y = x.Y
-	end
-
+	
+	self.X = x
+	self.Y = y or 0
+	
 	return self
 end
 
+function Vector2:Rotate(angle)
+	local sine, cos = math.sin(angle), math.cos(angle)
+
+	return Vector2.Create(
+		self.X*cos - self.Y*sine,
+		self.X*sine + self.Y*cos
+	)
+end
+
 function Vector2:Lerp(otherVector, parameter)
-	return self * (1 - parameter) + otherVector * parameter
+	return Vector2.Create(
+		self.X + parameter * (otherVector.X - self.X),
+		self.Y + parameter * (otherVector.Y - self.Y)
+	)
 end
 
 function Vector2:Dot(otherVector)
@@ -33,13 +40,12 @@ function Vector2:Magnitude()
 end
 
 function Vector2:Normalise()
-	local magnitude = math.sqrt(self.X^2 + self.Y^2)
+	local inverseMagnitude = 1 / math.sqrt(self.X^2 + self.Y^2)
 
-	if magnitude == 0 then
-		return Vector2.Create(0, 0)
-	else
-		return self / magnitude
-	end
+	return Vector2.Create(
+		self.X * inverseMagnitude,
+		self.Y * inverseMagnitude
+	)
 end
 
 function Vector2:Unpack()
@@ -117,14 +123,10 @@ end
 function Vector2.__unm(vector)
 	local x, y = vector:Unpack()
 
-	return Vector2.Create(-x, -y)
+	return Vector3.Create(-x, -y)
 end
 
-function Vector2.__len(vector)
-	return vector:Magnitude()
-end
-
-function Vector2.__equ(leftVector, rightVector)
+function Vector2.__eq(leftVector, rightVector)
 	local leftX, leftY = leftVector:Unpack()
 	local rightX, rightY = rightVector:Unpack()
 
@@ -142,7 +144,7 @@ Vector2.One = Vector2.Create(1, 1)
 
 Vector2.Up = Vector2.Create(0, 1)
 Vector2.Down = Vector2.Create(0, -1)
-Vector2.Right = Vector2.Create(1, 0)
 Vector2.Left = Vector2.Create(-1, 0)
+Vector2.Right = Vector2.Create(1, 0)
 
-return Vector2
+return Class.CreateClass(Vector2, "Vector2")

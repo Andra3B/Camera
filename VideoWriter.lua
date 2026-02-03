@@ -68,7 +68,7 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps, option
 				libav.avutil.av_dict_free(formatOptionsHandleHandle)
 
 				if code >= 0 then
-					local self = Class.CreateInstance(nil, VideoWriter)
+					local self = Class.CreateInstance(Entity.Create(), VideoWriter)
 
 					self._FormatHandle = formatHandle
 
@@ -81,8 +81,6 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps, option
 
 					self._TempFrameHandle = nil
 					self._ConversionContextHandle = nil
-
-					self._Destroyed = false
 
 					return self
 				else
@@ -161,10 +159,6 @@ function VideoWriter:WriteFrame(frameHandle, frameTimeBase)
 	return false
 end
 
-function VideoWriter:IsDestroyed()
-	return self._Destroyed
-end
-
 function VideoWriter:Destroy()
 	if not self._Destroyed then
 		libav.avcodec.avcodec_send_frame(self._VideoStreamEncoderHandle, nil)
@@ -201,8 +195,8 @@ function VideoWriter:Destroy()
 			self._ConversionContextHandle = nil
 		end
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-return Class.CreateClass(VideoWriter, "VideoWriter")
+return Class.CreateClass(VideoWriter, "VideoWriter", Entity)

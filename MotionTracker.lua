@@ -1,7 +1,7 @@
 local MotionTracker = {}
 
 function MotionTracker.Create(width, height)
-	local self = Class.CreateInstance(nil, MotionTracker)
+	local self = Class.CreateInstance(Entity.Create(), MotionTracker)
 
 	self._DifferenceLuminanceCanvas = love.graphics.newCanvas(width, height)
 	self._PreviousDifferenceLuminanceCanvas = love.graphics.newCanvas(width, height)
@@ -26,8 +26,6 @@ function MotionTracker.Create(width, height)
 	self._LowerThreshold = 0.04
 	self._HigherThreshold = 0.08
 	self._Decay = 0.0
-
-	self._Destroyed = false
 
 	return self
 end
@@ -106,10 +104,6 @@ function MotionTracker:GetCenterOfMotion()
 	end
 end
 
-function MotionTracker:IsDestroyed()
-	return self._Destroyed
-end
-
 function MotionTracker:Destroy()
 	if not self._Destroyed then
 		self._DifferenceLuminanceCanvas:release()
@@ -136,8 +130,8 @@ function MotionTracker:Destroy()
 
 		self._ReductionCanvases = nil
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-return Class.CreateClass(MotionTracker, "MotionTracker")
+return Class.CreateClass(MotionTracker, "MotionTracker", Entity)

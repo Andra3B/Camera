@@ -7,7 +7,6 @@ UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
-UserInterface.ScrollFrame = require("UserInterface.ScrollFrame")
 UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
@@ -102,8 +101,8 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 	local containingFrame = nil
 
 	if frame then
-		local absoluteX, absoluteY = frame._AbsolutePosition:Unpack()
-		local absoluteWidth, absoluteHeight = frame._AbsoluteSize:Unpack()
+		local absoluteX, absoluteY = frame.AbsolutePosition:Unpack()
+		local absoluteWidth, absoluteHeight = frame.AbsoluteSize:Unpack()
 
 		if x >= absoluteX and y >= absoluteY and x <= (absoluteX + absoluteWidth) and y <= (absoluteY + absoluteHeight) then
 			if not frameType or Class.IsA(frame, frameType) then
@@ -167,7 +166,6 @@ function UserInterface.Deinitialise()
 		end
 
 		UserInterface.Root = nil
-		UserInterface.PreFocus = nil
 		UserInterface.Focus = nil
 
 		UserInterface.Events:Destroy()

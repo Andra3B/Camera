@@ -5,6 +5,9 @@ buffer = require("string.buffer")
 
 Class = require("Class")
 
+Entity = require("Entity")
+Object = require("Object")
+
 System = require("System")
 
 Enum = require("Enum")

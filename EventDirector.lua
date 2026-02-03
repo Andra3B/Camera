@@ -3,12 +3,10 @@ local EventListener = require("EventListener")
 local EventDirector = {}
 
 function EventDirector.Create()
-	local self = Class.CreateInstance(nil, EventDirector)
+	local self = Class.CreateInstance(Entity.Create(), EventDirector)
 
 	self._Queue = {}
     self._Listeners = {}
-
-	self._Destroyed = false
 
 	return self
 end
@@ -65,10 +63,6 @@ function EventDirector:ClearListeners()
     end
 end
 
-function EventDirector:IsDestroyed()
-	return self._Destroyed
-end
-
 function EventDirector:Destroy()
 	if not self._Destroyed then
 		self:ClearQueue()
@@ -77,8 +71,8 @@ function EventDirector:Destroy()
 		self:ClearListeners()
 		self._Listeners = nil
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-return Class.CreateClass(EventDirector, "EventDirector")
+return Class.CreateClass(EventDirector, "EventDirector", Entity)

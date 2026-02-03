@@ -1,9 +1,7 @@
-local Hierarchy = require("UserInterface.Hierarchy")
-
 local Frame = {}
 
 function Frame.Create()
-	local self = Class.CreateInstance(Hierarchy.Create(), Frame)
+	local self = Class.CreateInstance(Object.Create(), Frame)
 
 	self._RelativePosition = Vector2.Zero
 	self._PixelPosition = Vector2.Zero
@@ -12,9 +10,6 @@ function Frame.Create()
 	self._RelativeSize = Vector2.Zero
 	self._PixelSize = Vector2.Zero
 	self._AbsoluteSize = Vector2.Zero
-
-	self._ChildTopLeftBoundingCorner = Vector2.Zero
-	self._ChildBottomRightBoundingCorner = Vector2.Zero
 
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
@@ -27,8 +22,8 @@ function Frame.Create()
 end
 
 function Frame:Draw()
-	local absolutePosition = self._AbsolutePosition
-	local absoluteSize = self._AbsoluteSize
+	local absolutePosition = self.AbsolutePosition
+	local absoluteSize = self.AbsoluteSize
 	local backgroundImage = self:GetBackgroundImage()
 	local cornerRadius = self:GetCornerRadius()
 
@@ -61,7 +56,7 @@ function Frame:Draw()
 end
 
 function Frame:RecursiveDraw()
-	if self:IsVisible() then
+	if self._Visible then
 		local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
 		
 		if not scissorTopLeftX then
@@ -70,8 +65,8 @@ function Frame:RecursiveDraw()
 
 		local scissorBottomRightX, scissorBottomRightY = scissorTopLeftX + scissorWidth, scissorTopLeftY + scissorHeight
 
-		local newScissorTopLeft = self._AbsolutePosition
-		local newScissorBottomRight = self._AbsolutePosition + self._AbsoluteSize
+		local newScissorTopLeft = self.AbsolutePosition
+		local newScissorBottomRight = self.AbsolutePosition + self.AbsoluteSize
 
 		if not (
 			newScissorBottomRight.X < scissorTopLeftX or
@@ -104,68 +99,9 @@ function Frame:RecursiveDraw()
 			end
 
 			love.graphics.pop()
-
-			if children[0] then
-				children[0]:RecursiveDraw()
-			end
-
 			love.graphics.pop()
 		end
 	end
-end
-
-function Frame:Refresh()
-	Hierarchy.Refresh(self)
-
-	local parentAbsolutePosition = nil
-	local parentAbsoluteSize = nil
-	local parent = self._Parent
-
-	if parent then
-		parentAbsolutePosition = parent._AbsolutePosition
-		parentAbsoluteSize = parent._AbsoluteSize
-	else
-		parentAbsolutePosition = Vector2.Zero
-		parentAbsoluteSize = Vector2.Create(love.graphics.getDimensions())
-	end
-
-	self._AbsolutePosition = parentAbsoluteSize * self._RelativePosition + parentAbsolutePosition + self._PixelPosition
-	self._AbsoluteSize = parentAbsoluteSize * self._RelativeSize + self._PixelSize
-end
-
-function Frame:RecursiveRefresh()
-	Hierarchy.RecursiveRefresh(self)
-	
-	local childTopLeftBoundingCorner
-	local childBottomRightBoundingCorner
-
-	local children = self:GetChildren()
-	if #children > 0 then
-		childTopLeftBoundingCorner = Vector2.Create(math.huge, math.huge)
-		childBottomRightBoundingCorner = Vector2.Create(-math.huge, -math.huge)
-
-		for _, child in pairs(children) do
-			childTopLeftBoundingCorner = Vector2.Create(
-				math.min(child._AbsolutePosition.X, childTopLeftBoundingCorner.X),
-				math.min(child._AbsolutePosition.Y, childTopLeftBoundingCorner.Y)
-			)
-
-			childBottomRightBoundingCorner = Vector2.Create(
-				math.max(child._AbsolutePosition.X + child._AbsoluteSize.X, childBottomRightBoundingCorner.X),
-				math.max(child._AbsolutePosition.Y + child._AbsoluteSize.Y, childBottomRightBoundingCorner.Y)
-			)
-		end
-	else
-		childTopLeftBoundingCorner = Vector2.Zero
-		childBottomRightBoundingCorner = Vector2.Zero
-	end
-
-	self._ChildTopLeftBoundingCorner = childTopLeftBoundingCorner
-	self._ChildBottomRightBoundingCorner = childBottomRightBoundingCorner
-end
-
-function Frame:RecursiveUpdate(deltaTime)
-	Hierarchy.RecursiveUpdate(self, deltaTime)
 end
 
 function Frame:GetDrawnChildren()
@@ -179,6 +115,7 @@ end
 function Frame:SetRelativePosition(position)
 	if self._RelativePosition ~= position then
 		self._RelativePosition = position
+		self._AbsolutePosition = nil
 
 		self:RecursiveRefresh()
 	end
@@ -191,12 +128,29 @@ end
 function Frame:SetPixelPosition(position)
 	if self._PixelPosition ~= position then
 		self._PixelPosition = position
+		self._AbsolutePosition = nil
 
 		self:RecursiveRefresh()
 	end
 end
 
 function Frame:GetAbsolutePosition()
+	if not self._AbsolutePosition then
+		local parentAbsolutePosition = nil
+		local parentAbsoluteSize = nil
+		local parent = self._Parent
+
+		if parent then
+			parentAbsolutePosition = parent.AbsolutePosition
+			parentAbsoluteSize = parent.AbsoluteSize
+		else
+			parentAbsolutePosition = Vector2.Zero
+			parentAbsoluteSize = Vector2.Create(love.graphics.getDimensions())
+		end
+
+		self._AbsolutePosition = parentAbsoluteSize * self._RelativePosition + parentAbsolutePosition + self._PixelPosition
+	end
+
 	return self._AbsolutePosition
 end
 
@@ -207,6 +161,7 @@ end
 function Frame:SetRelativeSize(size)
 	if self._RelativeSize ~= size then
 		self._RelativeSize = size
+		self._AbsoluteSize = nil
 
 		self:RecursiveRefresh()
 	end
@@ -219,12 +174,20 @@ end
 function Frame:SetPixelSize(size)
 	if self._PixelSize ~= size then
 		self._PixelSize = size
+		self._AbsoluteSize = nil
 
 		self:RecursiveRefresh()
 	end
 end
 
 function Frame:GetAbsoluteSize()
+	if not self._AbsoluteSize then
+		local parent = self._Parent
+
+		self._AbsoluteSize = 
+			(parent and parent.AbsoluteSize or Vector2.Create(love.graphics.getDimensions())) * self._RelativeSize + self._PixelSize
+	end
+
 	return self._AbsoluteSize
 end
 
@@ -270,14 +233,12 @@ function Frame:Destroy()
 
 		self._AbsolutePosition = nil
 		self._AbsoluteSize = nil
-		
-		self._ChildTopLeftBoundingCorner = nil
-		self._ChildBottomRightBoundingCorner = nil
 
 		self._BackgroundColour = nil
+		self._BackgroundImage = nil
 
-		Hierarchy.Destroy(self)
+		Object.Destroy(self)
 	end
 end
 
-return Class.CreateClass(Frame, "Frame", Hierarchy)
+return Class.CreateClass(Frame, "Frame", Object)

@@ -24,12 +24,12 @@ end
 
 function VideoFrame:Update(deltaTime)
 	Frame.Update(self, deltaTime)
-	local video = self:GetVideo()
+	local video = self._Video
 
 	if video and self._Playing then
 		self._Time = self._Time + deltaTime
 		
-		if video.FrameTime - self._Time < 0 then
+		if self._Time > video.FrameTime then
 			while true do
 				local packetHandle = video:ReadPacket()
 				local frameHandle, needsAnotherPacket, endOfFrames = video:ReadFrame(packetHandle, self._VideoImageBufferHandle)
