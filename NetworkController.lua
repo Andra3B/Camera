@@ -1,7 +1,7 @@
 local NetworkController = {}
 
 function NetworkController.Create(controllerSocket)
-	local self = Class.CreateInstance(nil, NetworkController)
+	local self = Class.CreateInstance(Entity.Create(), NetworkController)
 
 	self._Socket = controllerSocket or socket.tcp()
 	self._Socket:settimeout(0)
@@ -9,8 +9,6 @@ function NetworkController.Create(controllerSocket)
 	self._Retries = 3
 
 	self._Events = EventDirector.Create()
-
-	self._Destroyed = false
 
 	return self
 end
@@ -58,9 +56,9 @@ function NetworkController.GetStringFromCommands(commands)
 end
 
 function NetworkController.GetCommandsFromString(commandsString)
-	local parsedCommands = {}
-
 	if string.sub(commandsString, -1) == "!" then
+		local parsedCommands = {}
+
 		local commandStart = nil
 		
 		local ignoreNext = false
@@ -178,10 +176,6 @@ function NetworkController:Bind(IPAddress, port)
 	end
 end
 
-function NetworkController:IsDestroyed()
-	return self._Destroyed
-end
-
 function NetworkController:Destroy()
 	if not self._Destroyed then
 		self._Socket:close()
@@ -190,8 +184,8 @@ function NetworkController:Destroy()
 		self._Events:Destroy()
 		self._Events = nil
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-return Class.CreateClass(NetworkController, "NetworkController")
+return Class.CreateClass(NetworkController, "NetworkController", Entity)

@@ -1,14 +1,12 @@
 local EventListener = {}
 
 function EventListener.Create(callback, userData, userDataCleanup)
-	local self = Class.CreateInstance(nil, EventListener)
+	local self = Class.CreateInstance(Entity.Create(), EventListener)
 
 	self._Callback = callback
     
     self._UserData = userData
     self._UserDataCleanup = userDataCleanup
-
-    self._Destroyed = false
 
 	return self
 end
@@ -31,10 +29,6 @@ function EventListener:Trigger(...)
 	return false
 end
 
-function EventListener:IsDestroyed()
-	return self._Destroyed
-end
-
 function EventListener:Destroy()
     if not self._Destroyed then
         self._Callback = nil
@@ -46,8 +40,8 @@ function EventListener:Destroy()
         self._UserData = nil
         self._UserDataCleanup = nil
 
-        self._Destroyed = true
+        Entity.Destroy(self)
     end
 end
 
-return Class.CreateClass(EventListener, "EventListener")
+return Class.CreateClass(EventListener, "EventListener", Entity)

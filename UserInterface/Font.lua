@@ -2,12 +2,10 @@ local Font = {}
 
 function Font.Create(fontPath)
 	if love.filesystem.getInfo(fontPath, "file") and string.match(fontPath, ".*%.ttf$") then
-		local self = Class.CreateInstance(nil, Font)
+		local self = Class.CreateInstance(Entity.Create(), Font)
 
 		self._FontPath = fontPath
 		self._Fonts = {}
-
-		self._Destroyed = false
 
 		return self
 	end
@@ -59,13 +57,13 @@ function Font:Destroy()
 	if not self._Destroyed then
 		self:RemoveAllFonts()
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-Class.CreateClass(Font, "Font")
+Class.CreateClass(Font, "Font", Entity)
 
-Font.FreeSans = Font.Create("Assets/Fonts/FreeSans/FreeSans.ttf")
+Font.FreeSans = Font.Create("Assets/Fonts/FreeSans.ttf")
 
 Font.Default = Font.FreeSans
 

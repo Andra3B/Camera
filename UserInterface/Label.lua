@@ -23,13 +23,13 @@ end
 function Label:Refresh()
 	Frame.Refresh(self)
 
-	self:SetText(self:GetText())
+	self:SetText(self._Text)
 end
 
 function Label:Draw()
 	Frame.Draw(self)
 
-	local absolutePosition = self._AbsolutePosition
+	local absolutePosition = self.AbsolutePosition
 	local absoluteTextOffset = self._AbsoluteTextOffset
 
 	love.graphics.setFont(self:GetFont():GetFont(self:GetTextSize()))
@@ -64,13 +64,13 @@ end
 function Label:SetText(text)
 	text = tostring(text)
 
-	local absolutePosition = self._AbsolutePosition
-	local absoluteSize = self._AbsoluteSize
+	local absolutePosition = self.AbsolutePosition
+	local absoluteSize = self.AbsoluteSize
 
-	local horizontalAlignment = self:GetTextHorizontalAlignment()
-	local verticalAlignment = self:GetTextVerticalAlignment()
+	local horizontalAlignment = self._TextHorizontalAlignment
+	local verticalAlignment = self._TextVerticalAlignment
 
-	local font = self:GetFont():GetFont(self:GetTextSize())
+	local font = self:GetFont():GetFont(self._TextSize)
 	
 	local absoluteTextSize = Vector2.Create(font:getWidth(text), font:getHeight())
 
@@ -136,6 +136,9 @@ function Label:Destroy()
 		self._Font = nil
 
 		self._TextColour = nil
+
+		self._AbsoluteTextOffset = nil
+		self._AbsoluteTextSize = nil
 
 		Frame.Destroy(self)
 	end

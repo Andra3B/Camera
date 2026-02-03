@@ -32,32 +32,31 @@ function Class.CreateClass(class, typeName, base)
 		end
 	end
 
-	class.Type = typeName
 	class.__index = class
+	class.Type = typeName
 	
-	class.InstanceMetatable = {}
+	class.INSTANCE_METATABLE = {}
 	class.CLASS_INDICATOR = true
 
 	for name, value in pairs(class) do
 		if string.sub(name, 1, 2) == "__" then
-			class.InstanceMetatable[name] = value
+			class.INSTANCE_METATABLE[name] = value
 		end
 	end
 
-	class.InstanceMetatable.__index = IndexMetamethod
-	class.InstanceMetatable.__newindex = NewIndexMetamethod
+	class.INSTANCE_METATABLE.__index = IndexMetamethod
+	class.INSTANCE_METATABLE.__newindex = NewIndexMetamethod
 	
 	return setmetatable(class, base)
 end
 
 function Class.CreateInstance(instance, class)
-	if instance then
-		instance.Class = class
-	else
-		instance = {Class = class, CLASS_INSTANCE_INDICATOR = true}
-	end
+	instance = instance or {}
+	
+	instance.Class = class
+	instance.CLASS_INSTANCE_INDICATOR = true
 
-	return setmetatable(instance, class.InstanceMetatable)
+	return setmetatable(instance, class.INSTANCE_METATABLE)
 end
 
 function Class:IsA(typeName)
@@ -67,16 +66,18 @@ function Class:IsA(typeName)
 				return true
 			end
 		end
+
+		return false
 	end
 	
-	return false
+	return Class.GetType(self) == typeName
 end
 
 function Class:GetType()
 	local luaType = type(self)
 
 	if luaType == "table" and self.CLASS_INDICATOR then
-		return self.Type
+		return self.CLASS_INSTANCE_INDICATOR and self.Class.Type or self.Type
 	end
 
 	return luaType
@@ -98,12 +99,8 @@ function Class:IterateInheritance(stopAt)
 	return InheritanceIterator, stopAt, self
 end
 
-function Class.__tostring(object)
-	if object.CLASS_INSTANCE_INDICATOR then
-		return object.Class.Type.." Instance"
-	else
-		return object.Type.." Class"
-	end
+function Class.__tostring(entity)
+	return entity.CLASS_INSTANCE_INDICATOR and entity.Class.Type.." Instance" or entity.Type.." Class"
 end
 
 return Class

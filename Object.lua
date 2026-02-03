@@ -1,7 +1,7 @@
-local Hierarchy = {}
+local Object = {}
 
-function Hierarchy.Create()
-	local self = Class.CreateInstance(nil, Hierarchy)
+function Object.Create()
+	local self = Class.CreateInstance(Entity.Create(), Object)
 
 	self._Name = ""
 
@@ -10,55 +10,45 @@ function Hierarchy.Create()
 
 	self._Events = EventDirector.Create()
 
-	self._Destroyed = false
-
 	return self
 end
 
-function Hierarchy:Update(deltaTime)
+function Object:Update(deltaTime)
 	self._Events:Update()
 end
 
-function Hierarchy:RecursiveUpdate(deltaTime)
+function Object:RecursiveUpdate(deltaTime)
 	self:Update(deltaTime)
 
 	for _, child in ipairs(self._Children) do
 		child:RecursiveUpdate(deltaTime)
 	end
-
-	if self._Children[0] then
-		self._Children[0]:RecursiveUpdate(deltaTime)
-	end
 end
 
-function Hierarchy:Refresh()
+function Object:Refresh()
 end
 
-function Hierarchy:RecursiveRefresh()
+function Object:RecursiveRefresh()
 	self:Refresh()
 	
 	for _, child in ipairs(self._Children) do
 		child:RecursiveRefresh()
 	end
-
-	if self._Children[0] then
-		self._Children[0]:RecursiveRefresh()
-	end
 end
 
-function Hierarchy:GetName()
+function Object:GetName()
 	return self._Name
 end
 
-function Hierarchy:SetName(name)
+function Object:SetName(name)
 	self._Name = tostring(name)
 end
 
-function Hierarchy:GetParent()
+function Object:GetParent()
 	return self._Parent
 end
 
-function Hierarchy:GetChildCount()
+function Object:GetChildCount()
 	return #self._Children
 end
 
@@ -70,11 +60,11 @@ local function AncestorIterator(parent)
 	end
 end
 
-function Hierarchy:IterateAncestors()
+function Object:IterateAncestors()
 	return coroutine.wrap(AncestorIterator), self._Parent, nil
 end
 
-function Hierarchy:GetAncestorWithName(name)
+function Object:GetAncestorWithName(name)
 	for ancestor in self:IterateAncestors() do
 		if ancestor._Name == name then
 			return ancestor
@@ -82,7 +72,7 @@ function Hierarchy:GetAncestorWithName(name)
 	end
 end
 
-function Hierarchy:GetAncestorWithType(ancestorType)
+function Object:GetAncestorWithType(ancestorType)
 	for ancestor in self:IterateAncestors() do
 		if Class.IsA(ancestor, ancestorType) then
 			return ancestor
@@ -90,19 +80,15 @@ function Hierarchy:GetAncestorWithType(ancestorType)
 	end
 end
 
-function Hierarchy:SetParent(parent, where)
+function Object:SetParent(parent, where)
 	if self._Parent then
 		local parentChildren = self._Parent._Children
 
-		if parentChildren[0] == self then
-			parentChildren[0] = nil
-		else
-			for index, child in ipairs(parentChildren) do
-				if child == self then
-					table.remove(parentChildren, index)
+		for index, child in ipairs(parentChildren) do
+			if child == self then
+				table.remove(parentChildren, index)
 	
-					break
-				end
+				break
 			end
 		end
 	end
@@ -110,18 +96,10 @@ function Hierarchy:SetParent(parent, where)
 	self._Parent = parent
 
 	if parent then
-		if parent ~= self and Class.IsA(parent, "Hierarchy") then
+		if parent ~= self and Class.IsA(parent, "Object") then
 			local parentChildren = parent._Children
 
-			if where == 0 then
-				if parentChildren[0] then
-					parentChildren[0]:SetParent(nil)
-				end
-
-				parentChildren[0] = self
-			else
-				table.insert(parentChildren, math.clamp(where or (#parentChildren + 1), 0, #parentChildren + 1), self)
-			end
+			table.insert(parentChildren, math.clamp(where or (#parentChildren + 1), 1, #parentChildren + 1), self)
 
 			self:RecursiveRefresh()
 		else
@@ -138,15 +116,11 @@ local function ChildIterator(children)
 	end
 end
 
-function Hierarchy:GetChildren()
+function Object:GetChildren()
 	return self._Children
 end
 
-function Hierarchy:GetChildWithIndex(index)
-	return self._Children[index]
-end
-
-function Hierarchy:GetChildWithName(name)
+function Object:GetChildWithName(name)
 	for _, child in ipairs(self._Children) do
 		if child._Name == name then
 			return child
@@ -154,7 +128,7 @@ function Hierarchy:GetChildWithName(name)
 	end
 end
 
-function Hierarchy:GetChildWithType(childType)
+function Object:GetChildWithType(childType)
 	for _, child in ipairs(self._Children) do
 		if Class.IsA(child, childType) then
 			return child
@@ -162,7 +136,7 @@ function Hierarchy:GetChildWithType(childType)
 	end
 end
 
-function Hierarchy:AddChild(child, where)
+function Object:AddChild(child, where)
 	return child:SetParent(self, where)
 end
 
@@ -176,11 +150,11 @@ local function DescendantIterator(children)
 	end
 end
 
-function Hierarchy:IterateDescendants()
+function Object:IterateDescendants()
 	return coroutine.wrap(DescendantIterator), self, nil
 end
 
-function Hierarchy:GetDescendantWithName(name)
+function Object:GetDescendantWithName(name)
 	for descendant in self:IterateDescendants() do
 		if descendant._Name == name then
 			return descendant
@@ -188,7 +162,7 @@ function Hierarchy:GetDescendantWithName(name)
 	end
 end
 
-function Hierarchy:GetDescendantWithType(descendantType)
+function Object:GetDescendantWithType(descendantType)
 	for descendant in self:IterateDescendants() do
 		if Class.IsA(descendant, descendantType) then
 			return descendant
@@ -196,17 +170,17 @@ function Hierarchy:GetDescendantWithType(descendantType)
 	end
 end
 
-function Hierarchy:RemoveAllChildren()
+function Object:RemoveAllChildren()
 	while #self._Children > 0 do
 		self._Children[1]:SetParent(nil)
 	end
 end
 
-function Hierarchy:RemoveChild(child)
+function Object:RemoveChild(child)
 	return child:SetParent(nil)
 end
 
-function Hierarchy:RemoveChildWithName(name)
+function Object:RemoveChildWithName(name)
 	for _, child in ipairs(self._Children) do
 		if child._Name == name then
 			child:SetParent(nil)
@@ -216,7 +190,7 @@ function Hierarchy:RemoveChildWithName(name)
 	end
 end
 
-function Hierarchy:RemoveChildWithType(childType)
+function Object:RemoveChildWithType(childType)
 	for _, child in ipairs(self._Children) do
 		if Class.IsA(child, childType) then
 			child:SetParent(nil)
@@ -226,20 +200,12 @@ function Hierarchy:RemoveChildWithType(childType)
 	end
 end
 
-function Hierarchy:GetEvents()
+function Object:GetEvents()
 	return self._Events
 end
 
-function Hierarchy:IsDestroyed()
-	return self._Destroyed
-end
-
-function Hierarchy:Destroy()
+function Object:Destroy()
 	if not self._Destroyed then
-		if self._Children[0] then
-			self._Children[0]:Destroy()
-		end
-
 		for _, child in ipairs(self._Children) do
 			child:Destroy()
 		end
@@ -249,8 +215,8 @@ function Hierarchy:Destroy()
 		self._Events:Trigger("Destroyed")
 		self._Events:Destroy()
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-return Class.CreateClass(Hierarchy, "Hierarchy")
+return Class.CreateClass(Object, "Object", Entity)

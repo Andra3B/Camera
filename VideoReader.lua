@@ -85,7 +85,7 @@ function VideoReader.CreateFromURL(url, inputFormat, options)
 					code = libav.avcodec.avcodec_open2(decoderHandle, decoderDetailsHandleHandle[0], nil)
 
 					if code >= 0 then
-						local self = Class.CreateInstance(nil, VideoReader)
+						local self = Class.CreateInstance(Entity.Create(), VideoReader)
 
 						self._FormatHandle = formatHandle
 
@@ -113,8 +113,6 @@ function VideoReader.CreateFromURL(url, inputFormat, options)
 							libav.swscale.SWS_BILINEAR,
 							nil, nil, nil
 						)
-
-						self._Destroyed = false
 
 						return self
 					else
@@ -221,10 +219,6 @@ function VideoReader:ReadFrame(packetHandle, rgbaBufferHandle)
 	return rgbaFrameHandle, needAnotherPacket, endOfFrames
 end
 
-function VideoReader:IsDestroyed()
-	return self._Destroyed
-end
-
 function VideoReader:Destroy()
 	if not self._Destroyed then
 		libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", self._FormatHandle))
@@ -240,8 +234,8 @@ function VideoReader:Destroy()
 		
 		self._VideoStreamTimeBase = nil
 
-		self._Destroyed = true
+		Entity.Destroy(self)
 	end
 end
 
-return Class.CreateClass(VideoReader, "VideoReader")
+return Class.CreateClass(VideoReader, "VideoReader", Entity)

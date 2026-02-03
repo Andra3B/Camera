@@ -13,7 +13,7 @@ end
 function ViewSelectorFrame:GetDrawnChildren()
 	local children = Frame.GetChildren(self)
 	
-	return {[0] = children[0], children[self._DrawnChildIndex]}
+	return {children[self._DrawnChildIndex]}
 end
 
 function ViewSelectorFrame:GetDrawnChildIndex()
