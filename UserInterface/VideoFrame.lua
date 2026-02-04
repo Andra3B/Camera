@@ -6,7 +6,6 @@ function VideoFrame.Create()
 	local self = Class.CreateInstance(Frame.Create(), VideoFrame)
 
 	self._Video = nil
-	self._VideoWriter = nil
 
 	self._Playing = false
 	self._Time = 0
@@ -128,18 +127,11 @@ end
 function VideoFrame:Destroy()
 	if not self._Destroyed then
 		local video = self._Video
-		local videoWriter = self._VideoWriter
 
 		if video then
 			self:SetVideo(nil)
 
 			video:Destroy()
-		end
-
-		if videoWriter then
-			self:SetVideoWriter(nil)
-
-			videoWriter:Destroy()
 		end
 
 		Frame.Destroy(self)
