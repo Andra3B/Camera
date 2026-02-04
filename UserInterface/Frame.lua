@@ -21,6 +21,13 @@ function Frame.Create()
 	return self
 end
 
+function Frame:Refresh()
+	Object.Refresh(self)
+
+	self._AbsolutePosition = nil
+	self._AbsoluteSize = nil
+end
+
 function Frame:Draw()
 	local absolutePosition = self.AbsolutePosition
 	local absoluteSize = self.AbsoluteSize

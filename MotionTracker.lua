@@ -3,29 +3,30 @@ local MotionTracker = {}
 function MotionTracker.Create(width, height)
 	local self = Class.CreateInstance(Entity.Create(), MotionTracker)
 
-	self._DifferenceLuminanceCanvas = love.graphics.newCanvas(width, height)
-	self._PreviousDifferenceLuminanceCanvas = love.graphics.newCanvas(width, height)
+	self._MotionMask = love.graphics.newCanvas(width, height)
+	self._PreviousMotionMask = love.graphics.newCanvas(width, height)
 
-	self._BlurredDifferenceCanvas = love.graphics.newCanvas(width, height)
-
-	self._MotionCanvas = love.graphics.newCanvas(width, height)
-	self._PreviousMotionCanvas = love.graphics.newCanvas(width, height)
-
-	self._MotionWeightedCanvas = love.graphics.newCanvas(width, height)
 	self._ReductionCanvases = {}
 
 	repeat
+		local reductionCanvas = love.graphics.newCanvas(width, height, {format = "rgba16f", readable = true})
+		reductionCanvas:setWrap("clampzero")
+		reductionCanvas:setFilter("nearest")
+
+		table.insert(self._ReductionCanvases, reductionCanvas)
+
 		width = math.ceil(width * 0.5)
 		height = math.ceil(height * 0.5)
-
-		table.insert(self._ReductionCanvases, love.graphics.newCanvas(width, height, {format = "rgba32f"}))
 	until width == 1 and height == 1
 
-	self._FilterFactor = 0.25
-	self._FilterGain = 1.0
-	self._LowerThreshold = 0.04
-	self._HigherThreshold = 0.08
-	self._Decay = 0.0
+	local reductionCanvas = love.graphics.newCanvas(1, 1, {format = "rgba16f", readable = true})
+	reductionCanvas:setWrap("clampzero")
+	reductionCanvas:setFilter("nearest")
+
+	table.insert(self._ReductionCanvases, reductionCanvas)
+
+	self._LowerThreshold = 0.01
+	self._HigherThreshold = 0.2
 
 	return self
 end
@@ -34,95 +35,55 @@ function MotionTracker:Update(currentFrame)
 	love.graphics.push("all")
 	love.graphics.reset()
 
-	local differenceLuminanceCanvas = self._DifferenceLuminanceCanvas
-	self._DifferenceLuminanceCanvas = self._PreviousDifferenceLuminanceCanvas
-	self._PreviousDifferenceLuminanceCanvas = differenceLuminanceCanvas
+	local motionMask = self._MotionMask
+	self._MotionMask = self._PreviousMotionMask
+	self._PreviousMotionMask = motionMask
 
-	-- Pass One
-	love.graphics.setCanvas(self._DifferenceLuminanceCanvas)
-	love.graphics.setShader(Shaders.MotionTrackingOne)
-	Shaders.MotionTrackingOne:send("PreviousDifferenceLuminance", self._PreviousDifferenceLuminanceCanvas)
-	Shaders.MotionTrackingOne:send("FilterFactor", self._FilterFactor)
-	Shaders.MotionTrackingOne:send("FilterGain", self._FilterGain)
+	love.graphics.setCanvas(self._MotionMask)
+	love.graphics.setShader(Shaders.MotionMask)
+	Shaders.MotionMask:send("PreviousMotionMask", self._PreviousMotionMask)
+	Shaders.MotionMask:send("LowerThreshold", self._LowerThreshold)
+	Shaders.MotionMask:send("HigherThreshold", self._HigherThreshold)
 	love.graphics.draw(currentFrame)
 	
-	-- Pass Two
-	love.graphics.setCanvas(self._BlurredDifferenceCanvas)
-	love.graphics.setShader(Shaders.MotionTrackingTwo)
-	Shaders.MotionTrackingTwo:send("Pixel", {
-		1 / self._BlurredDifferenceCanvas:getWidth(),
-		1 / self._BlurredDifferenceCanvas:getHeight()
-	})
-	love.graphics.draw(self._DifferenceLuminanceCanvas)
+	love.graphics.setBlendMode("replace")
 
-	local motionCanvas = self._MotionCanvas
-	self._MotionCanvas = self._PreviousMotionCanvas
-	self._PreviousMotionCanvas = motionCanvas
+	local encodeCanvas = self._ReductionCanvases[1]
 
-	-- Pass Three
-	love.graphics.setCanvas(self._MotionCanvas)
-	love.graphics.setShader(Shaders.MotionTrackingThree)
-	Shaders.MotionTrackingThree:send("PreviousMotion", self._PreviousMotionCanvas)
-	Shaders.MotionTrackingThree:send("LowerThreshold", self._LowerThreshold)
-	Shaders.MotionTrackingThree:send("HigherThreshold", self._HigherThreshold)
-	Shaders.MotionTrackingThree:send("Decay", self._Decay)
-	love.graphics.draw(self._BlurredDifferenceCanvas)
+	love.graphics.setCanvas(encodeCanvas)
+	love.graphics.setShader(Shaders.COMEncode)
+	love.graphics.draw(self._MotionMask)
 
-	--[[
-	-- Pass Four
-	love.graphics.setCanvas(self._MotionWeightedCanvas)
-	love.graphics.setShader(Shaders.MotionTrackingFour)
-	love.graphics.draw(self._MotionCanvas)
+	love.graphics.setShader(Shaders.Reduction)
 
-	-- Pass Five
-	love.graphics.setShader(Shaders.MotionTrackingFive)
+	for index = 2, #self._ReductionCanvases, 1 do
+		local previousReductionCanvas = self._ReductionCanvases[index - 1]
 
-	local sourceCanvas = self._MotionWeightedCanvas
-	for _, reductionCanvas in ipairs(self._ReductionCanvases) do
-		love.graphics.setCanvas(reductionCanvas)
-		Shaders.MotionTrackingFive:send("SourcePixel", {
-			1 / sourceCanvas:getWidth(),
-			1 / sourceCanvas:getHeight()
-		})
-		love.graphics.draw(sourceCanvas)
-		sourceCanvas = reductionCanvas
+		love.graphics.setCanvas(self._ReductionCanvases[index])
+		Shaders.Reduction:send("TexelSize", {1/previousReductionCanvas:getPixelWidth(), 1/previousReductionCanvas:getPixelHeight()})
+		love.graphics.clear(1, 0, 0, 1)
+		love.graphics.draw(previousReductionCanvas)
 	end
-	--]]
 
 	love.graphics.pop()
 end
 
 function MotionTracker:GetCenterOfMotion()
-	local centerOfMotionImage = self._ReductionCanvases[#self._ReductionCanvases]:newImageData()
-	local xWeightSum, yWeightSum, weightSum = centerOfMotionImage:getPixel(0, 0)
-	centerOfMotionImage:release()
+	local COMData = self._ReductionCanvases[#self._ReductionCanvases]:newImageData()
+	local x, y, motionSum = COMData:getPixel(0, 0)
+	COMData:release()
 
-	if weightSum > 0 then
-		return xWeightSum / weightSum, yWeightSum / weightSum
-	else
-		return 0, 0
-	end
+	return x, y
 end
 
 function MotionTracker:Destroy()
 	if not self._Destroyed then
-		self._DifferenceLuminanceCanvas:release()
-		self._DifferenceLuminanceCanvas = nil
 
-		self._PreviousDifferenceLuminanceCanvas:release()
-		self._PreviousDifferenceLuminanceCanvas = nil
+		self._MotionMask:release()
+		self._MotionMask = nil
 
-		self._BlurredDifferenceCanvas:release()
-		self._BlurredDifferenceCanvas = nil
-
-		self._MotionCanvas:release()
-		self._MotionCanvas = nil
-
-		self._PreviousMotionCanvas:release()
-		self._PreviousMotionCanvas = nil
-
-		self._MotionWeightedCanvas:release()
-		self._MotionWeightedCanvas = nil
+		self._PreviousMotionMask:release()
+		self._PreviousMotionMask = nil
 
 		for index = 1, #self._ReductionCanvases, 1 do
 			self._ReductionCanvases[index]:release()

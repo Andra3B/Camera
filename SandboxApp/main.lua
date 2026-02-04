@@ -30,28 +30,18 @@ function love.load(args)
 	})
 
 	Shaders = {
-		["MotionTrackingOne"] = love.graphics.newShader(
-			"Assets/Shaders/MotionTrackingOne.frag",
+		["MotionMask"] = love.graphics.newShader(
+			"Assets/Shaders/MotionMask.frag",
 			"Assets/Shaders/Default.vert"
 		),
 
-		["MotionTrackingTwo"] = love.graphics.newShader(
-			"Assets/Shaders/MotionTrackingTwo.frag",
+		["COMEncode"] = love.graphics.newShader(
+			"Assets/Shaders/COMEncode.frag",
 			"Assets/Shaders/Default.vert"
 		),
 
-		["MotionTrackingThree"] = love.graphics.newShader(
-			"Assets/Shaders/MotionTrackingThreeA.frag",
-			"Assets/Shaders/Default.vert"
-		),
-
-		["MotionTrackingFour"] = love.graphics.newShader(
-			"Assets/Shaders/MotionTrackingFour.frag",
-			"Assets/Shaders/Default.vert"
-		),
-
-		["MotionTrackingFive"] = love.graphics.newShader(
-			"Assets/Shaders/MotionTrackingFive.frag",
+		["Reduction"] = love.graphics.newShader(
+			"Assets/Shaders/Reduction.frag",
 			"Assets/Shaders/Default.vert"
 		)
 	}
@@ -59,6 +49,8 @@ function love.load(args)
 	libav.avdevice.avdevice_register_all()
 
 	UserInterface.Initialise()
+
+	print("Texture \"clampzero\" wrap mode is "..(love.graphics.getSupported().clampzero and "" or "not ").."supported!")
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.Create(1, 1)
@@ -69,18 +61,17 @@ function love.load(args)
 	sourceVideoFrame.PixelSize = Vector2.Create(-20, -20)
 	sourceVideoFrame.PixelPosition = Vector2.Create(10, 10)
 	sourceVideoFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
-	sourceVideoFrame.Video = VideoReader.CreateFromURL("Assets/Videos/ManWalking.mp4", "mp4")
+	sourceVideoFrame.Video = VideoReader.CreateFromURL("Assets/Videos/Ocean.mp4", "mp4")
 	sourceVideoFrame.Playing = true
 
 	motionTracker = MotionTracker.Create(sourceVideoFrame.Video.Width, sourceVideoFrame.Video.Height)
 
 	local MotionOutputFrame = UserInterface.Frame.Create()
-	MotionOutputFrame.Name = "MotionOutputFrame"
 	MotionOutputFrame.RelativeSize = Vector2.Create(0.5, 1)
 	MotionOutputFrame.PixelSize = Vector2.Create(-20, -20)
 	MotionOutputFrame.RelativePosition = Vector2.Create(0.5, 0)
 	MotionOutputFrame.PixelPosition = Vector2.Create(10, 10)
-	MotionOutputFrame.BackgroundImage = motionTracker._MotionCanvas
+	MotionOutputFrame.BackgroundImage = motionTracker._ReductionCanvases[6]
 
 	Root:AddChild(sourceVideoFrame)
 	Root:AddChild(MotionOutputFrame)
@@ -89,21 +80,36 @@ function love.load(args)
 end
 
 function love.quit(exitCode)
+	motionTracker:Destroy()
+
 	UserInterface.Deinitialise()
 
-	motionTracker:Destroy()
+	for _, shader in pairs(Shaders) do
+		shader:release()
+	end
 end
 
 function love.update(deltaTime)
 	UserInterface.Update(deltaTime)
 end
 
+local x, y
 function love.draw()
+	love.graphics.clear(0, 0, 0, 0)
+
 	if sourceVideoFrame.FrameChanged then
 		motionTracker:Update(sourceVideoFrame.BackgroundImage)
+
+		x, y = motionTracker:GetCenterOfMotion()
+		
+		x = sourceVideoFrame.AbsolutePosition.X + x * sourceVideoFrame.AbsoluteSize.X
+		y = sourceVideoFrame.AbsolutePosition.Y + y * sourceVideoFrame.AbsoluteSize.Y
 	end
 
 	UserInterface.Draw()
+
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.circle("fill", x, y, 5)
 
 	love.graphics.present()
 end
