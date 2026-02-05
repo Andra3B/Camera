@@ -7,7 +7,6 @@ UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
-UserInterface.ViewSelectorFrame = require("UserInterface.ViewSelectorFrame")
 
 UserInterface.Font = require("UserInterface.Font")
 
@@ -16,8 +15,7 @@ UserInterface.Events = nil
 UserInterface.Root = nil
 
 UserInterface.Hovering = nil
-UserInterface.LastPressed = nil
-UserInterface.CurrentlyPressed = nil
+UserInterface.Pressed = nil
 UserInterface.Focus = nil
 
 local MOUSE_INPUT_STRINGS = {
@@ -62,32 +60,33 @@ function UserInterface.Input(inputType, scancode, state)
 
 		local interactiveFrame = UserInterface.GetFrameContainingPoint(state.X, state.Y, UserInterface.Root, "Interactive")
 
-		if scancode == "mousemovement" then
-			UserInterface.Hovering = interactiveFrame
-		elseif scancode == "leftmousebutton" then
+		UserInterface.Hovering = interactiveFrame
+
+		if scancode == "leftmousebutton" then
 			if state.Z < 0 then
 				if interactiveFrame and interactiveFrame.AbsoluteActive then
-					UserInterface.CurrentlyPressed = interactiveFrame
-					UserInterface.LastPressed = interactiveFrame
-					UserInterface.Focus = interactiveFrame.CanFocus and interactiveFrame or nil
+					UserInterface.Pressed = interactiveFrame
+					UserInterface.Focus = interactiveFrame
 					
 					interactiveFrame.Events:Push("Pressed", true)
 				else
-					UserInterface.CurrentlyPressed = nil
+					UserInterface.Pressed = nil
 					UserInterface.Focus = nil
 				end
-			else
-				if UserInterface.CurrentlyPressed then
-					UserInterface.CurrentlyPressed.Events:Push("Pressed", false)
+			elseif UserInterface.Pressed then
+				UserInterface.Pressed.Events:Push("Pressed", false)
 
-					UserInterface.CurrentlyPressed = nil
-				end
+				UserInterface.Pressed = nil
 			end
 		end
 	end
 
 	if UserInterface.Focus then
 		UserInterface.Focus:Input(inputType, scancode, state)
+	end
+
+	if UserInterface.Hovering and UserInterface.Hovering ~= UserInterface.Focus then
+		UserInterface.Hovering:Input(inputType, scancode, state)
 	end
 end
 
@@ -110,7 +109,7 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 			end
 
 			local childContainingFrame = nil
-			local children = frame:GetDrawnChildren()
+			local children = frame:GetChildren()
 
 			if children[0] then
 				childContainingFrame = UserInterface.GetFrameContainingPoint(

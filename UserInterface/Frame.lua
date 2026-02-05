@@ -5,11 +5,15 @@ function Frame.Create()
 
 	self._RelativePosition = Vector2.Zero
 	self._PixelPosition = Vector2.Zero
-	self._AbsolutePosition = Vector2.Zero
+	self._AbsolutePosition = nil
 	
 	self._RelativeSize = Vector2.Zero
 	self._PixelSize = Vector2.Zero
-	self._AbsoluteSize = Vector2.Zero
+	self._AbsoluteSize = nil
+
+	self._ChildPixelOffset = Vector2.Zero
+	self._ChildRelativeOffset = Vector2.Zero
+	self._AbsoluteChildOffset = nil
 
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
@@ -26,6 +30,7 @@ function Frame:Refresh()
 
 	self._AbsolutePosition = nil
 	self._AbsoluteSize = nil
+	self._AbsoluteChildOffset = nil
 end
 
 function Frame:Draw()
@@ -94,8 +99,7 @@ function Frame:RecursiveDraw()
 
 			self:Draw()
 
-			local children = self:GetDrawnChildren()
-			for _, child in ipairs(children) do
+			for _, child in ipairs(self:GetChildren()) do
 				if Class.IsA(child, "Frame") then
 					love.graphics.push("all")
 
@@ -109,10 +113,6 @@ function Frame:RecursiveDraw()
 			love.graphics.pop()
 		end
 	end
-end
-
-function Frame:GetDrawnChildren()
-	return self:GetChildren()
 end
 
 function Frame:GetRelativePosition()
@@ -145,17 +145,21 @@ function Frame:GetAbsolutePosition()
 	if not self._AbsolutePosition then
 		local parentAbsolutePosition = nil
 		local parentAbsoluteSize = nil
+		local parentAbsoluteChildOffset = nil
 		local parent = self._Parent
 
 		if parent then
 			parentAbsolutePosition = parent.AbsolutePosition
 			parentAbsoluteSize = parent.AbsoluteSize
+			parentAbsoluteChildOffset = parent.AbsoluteChildOffset
 		else
 			parentAbsolutePosition = Vector2.Zero
 			parentAbsoluteSize = Vector2.Create(love.graphics.getDimensions())
+			parentAbsoluteChildOffset = Vector2.Zero
 		end
 
-		self._AbsolutePosition = parentAbsoluteSize * self._RelativePosition + parentAbsolutePosition + self._PixelPosition
+		self._AbsolutePosition =
+			parentAbsolutePosition + parentAbsoluteChildOffset + self._PixelPosition + parentAbsoluteSize*self._RelativePosition
 	end
 
 	return self._AbsolutePosition
@@ -169,6 +173,7 @@ function Frame:SetRelativeSize(size)
 	if self._RelativeSize ~= size then
 		self._RelativeSize = size
 		self._AbsoluteSize = nil
+		self._AbsoluteChildOffset = nil
 
 		self:RecursiveRefresh()
 	end
@@ -182,6 +187,7 @@ function Frame:SetPixelSize(size)
 	if self._PixelSize ~= size then
 		self._PixelSize = size
 		self._AbsoluteSize = nil
+		self._AbsoluteChildOffset = nil
 
 		self:RecursiveRefresh()
 	end
@@ -192,10 +198,34 @@ function Frame:GetAbsoluteSize()
 		local parent = self._Parent
 
 		self._AbsoluteSize = 
-			(parent and parent.AbsoluteSize or Vector2.Create(love.graphics.getDimensions())) * self._RelativeSize + self._PixelSize
+			self._PixelSize + (parent and parent.AbsoluteSize or Vector2.Create(love.graphics.getDimensions()))*self._RelativeSize
 	end
 
 	return self._AbsoluteSize
+end
+
+function Frame:GetChildPixelOffset()
+	return self._ChildPixelOffset
+end
+
+function Frame:SetChildPixelOffset(offset)
+	self._ChildPixelOffset = offset
+end
+
+function Frame:GetChildRelativeOffset()
+	return self._ChildRelativeOffset
+end
+
+function Frame:SetChildRelativeOffset(offset)
+	self._ChildRelativeOffset = offset
+end
+
+function Frame:GetAbsoluteChildOffset()
+	if not self._AbsoluteChildOffset then
+		self._AbsoluteChildOffset = self._ChildPixelOffset + self.AbsoluteSize*self._ChildRelativeOffset
+	end
+
+	return self._AbsoluteChildOffset
 end
 
 function Frame:GetBackgroundColour()
@@ -240,6 +270,11 @@ function Frame:Destroy()
 
 		self._AbsolutePosition = nil
 		self._AbsoluteSize = nil
+
+		self._ChildPixelOffset = nil
+		self._ChildRelativeOffset = nil
+
+		self._AbsoluteChildOffset = nil
 
 		self._BackgroundColour = nil
 		self._BackgroundImage = nil

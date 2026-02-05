@@ -10,8 +10,6 @@ function Interactive.Create()
 	
 	self._Active = true
 	self._AbsoluteActive = true
-	
-	self._CanFocus = true
 
 	self._FocusedBackgroundColour = Vector4.Create(1, 0, 0, 1)
 	self._PressedBackgroundColour = Vector4.Create(0, 1, 0, 1)
@@ -62,14 +60,6 @@ function Interactive:SetActive(active)
 	if self:IsPressed() and not active then
 		self._Events:Push("Pressed", false)
 	end
-end
-
-function Interactive:GetCanFocus()
-	return self._CanFocus
-end
-
-function Interactive:SetCanFocus(canFocus)
-	self._CanFocus = canFocus
 end
 
 function Interactive:IsFocused()

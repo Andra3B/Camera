@@ -3,13 +3,16 @@ local MotionTracker = {}
 function MotionTracker.Create(width, height)
 	local self = Class.CreateInstance(Entity.Create(), MotionTracker)
 
+	self._Width = width
+	self._Height = height
+
 	self._MotionMask = love.graphics.newCanvas(width, height)
 	self._PreviousMotionMask = love.graphics.newCanvas(width, height)
 
 	self._ReductionCanvases = {}
 
 	repeat
-		local reductionCanvas = love.graphics.newCanvas(width, height, {format = "rgba16f", readable = true})
+		local reductionCanvas = love.graphics.newCanvas(width, height, {format = "rgba32f", readable = true})
 		reductionCanvas:setWrap("clampzero")
 		reductionCanvas:setFilter("nearest")
 
@@ -19,14 +22,17 @@ function MotionTracker.Create(width, height)
 		height = math.ceil(height * 0.5)
 	until width == 1 and height == 1
 
-	local reductionCanvas = love.graphics.newCanvas(1, 1, {format = "rgba16f", readable = true})
+	local reductionCanvas = love.graphics.newCanvas(1, 1, {format = "rgba32f", readable = true})
 	reductionCanvas:setWrap("clampzero")
 	reductionCanvas:setFilter("nearest")
 
 	table.insert(self._ReductionCanvases, reductionCanvas)
 
 	self._LowerThreshold = 0.01
-	self._HigherThreshold = 0.2
+	self._HigherThreshold = 0.3
+
+	self._CenterOfMotion = Vector2.Zero
+	self._MotionCoverage = 0
 
 	return self
 end
@@ -65,15 +71,28 @@ function MotionTracker:Update(currentFrame)
 		love.graphics.draw(previousReductionCanvas)
 	end
 
+	self._CenterOfMotion = nil
+
 	love.graphics.pop()
 end
 
 function MotionTracker:GetCenterOfMotion()
-	local COMData = self._ReductionCanvases[#self._ReductionCanvases]:newImageData()
-	local x, y, motionSum = COMData:getPixel(0, 0)
-	COMData:release()
+	if not self._CenterOfMotion then
+		local COMData = self._ReductionCanvases[#self._ReductionCanvases]:newImageData()
+		local x, y, motionSum = COMData:getPixel(0, 0)
+		COMData:release()
 
-	return x, y
+		self._CenterOfMotion = Vector2.Create(x, y)
+		self._MotionCoverage = motionSum / (self._Width * self._Height)
+	end
+	
+	return self._CenterOfMotion
+end
+
+function MotionTracker:GetMotionCoverage()
+	self:GetCenterOfMotion()
+
+	return self._MotionCoverage
 end
 
 function MotionTracker:Destroy()
@@ -90,6 +109,8 @@ function MotionTracker:Destroy()
 		end
 
 		self._ReductionCanvases = nil
+
+		self._CenterOfMotion = nil
 
 		Entity.Destroy(self)
 	end

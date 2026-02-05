@@ -117,7 +117,7 @@ function TextBox:Submit()
 end
 
 function TextBox:Input(inputType, scancode, state)
-	if self._AbsoluteActive and state.Z < 0 and inputType == Enum.InputType.Keyboard then
+	if self._AbsoluteActive and self:IsFocused() and state.Z < 0 and inputType == Enum.InputType.Keyboard then
 		if scancode == "left" then
 			self:SetCursorPosition(self:GetCursorPosition() - 1)
 		elseif scancode == "right" then
@@ -143,7 +143,7 @@ function TextBox:Input(inputType, scancode, state)
 end
 
 function TextBox:TextInput(text)
-	if self._AbsoluteActive then
+	if self._AbsoluteActive and self:IsFocused() then
 		self:InsertText(text)
 	end
 end
