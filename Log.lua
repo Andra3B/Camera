@@ -1,5 +1,23 @@
 local Log = {}
 
+Enum.LogCategory = Enum.Create({
+    App = 1,
+	Video = 2,
+	UserInterface = 3,
+	Network = 4,
+	Build = 5
+})
+
+Enum.LogPriority = Enum.Create({
+    Trace = 1,
+    Verbose = 2,
+    Debug = 3,
+    Info = 4,
+    Warn = 5,
+    Error = 6,
+    Critical = 7
+})
+
 local priorities = {}
 
 function Log.GetCategoryPriority(category)

@@ -123,7 +123,7 @@ end
 function Vector2.__unm(vector)
 	local x, y = vector:Unpack()
 
-	return Vector3.Create(-x, -y)
+	return Vector2.Create(-x, -y)
 end
 
 function Vector2.__eq(leftVector, rightVector)

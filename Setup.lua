@@ -8,11 +8,9 @@ Class = require("Class")
 Entity = require("Entity")
 Object = require("Object")
 
-System = require("System")
-
 Enum = require("Enum")
-require("Enums")
 
+System = require("System")
 Log = require("Log")
 
 Vector2 = require("Vector2")
@@ -20,6 +18,8 @@ Vector3 = require("Vector3")
 Vector4 = require("Vector4")
 
 EventDirector = require("EventDirector")
+
+Animation = require("Animation")
 
 table.new = require("table.new")
 table.empty = table.new(0, 0)
