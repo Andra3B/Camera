@@ -14,10 +14,6 @@ NetworkServer = require("NetworkServer")
 
 MotionTracker = require("MotionTracker")
 
-local sourceVideoFrame = nil
-
-local motionTracker = nil
-
 function love.load(args)
 	local width, height = love.window.getDesktopDimensions(1)
 	love.window.setTitle("Sandbox")
@@ -56,32 +52,23 @@ function love.load(args)
 	Root.RelativeSize = Vector2.Create(1, 1)
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	sourceVideoFrame = UserInterface.VideoFrame.Create()
-	sourceVideoFrame.RelativeSize = Vector2.Create(0.5, 1)
-	sourceVideoFrame.PixelSize = Vector2.Create(-20, -20)
-	sourceVideoFrame.PixelPosition = Vector2.Create(10, 10)
-	sourceVideoFrame.BackgroundColour = Vector4.Create(0, 0, 0, 0.1)
-	sourceVideoFrame.Video = VideoReader.CreateFromURL("Assets/Videos/ManWalking.mp4", "mp4")
-	sourceVideoFrame.Playing = true
+	local Frame1 = UserInterface.Frame.Create()
+	Frame1.RelativeSize = Vector2.Create(0.9, 0.9)
+	Frame1.RelativePosition = Vector2.Create(0.05, 0.05)
+	Frame1.BackgroundColour = Vector4.Create(1, 0, 0, 1)
 
-	motionTracker = MotionTracker.Create(sourceVideoFrame.Video.Width, sourceVideoFrame.Video.Height)
+	local Frame2 = UserInterface.Frame.Create()
+	Frame2.RelativeSize = Vector2.Create(0.9, 0.9)
+	Frame2.RelativePosition = Vector2.Create(1.05, 0.05)
+	Frame2.BackgroundColour = Vector4.Create(0, 1, 0, 1)
 
-	local MotionOutputFrame = UserInterface.Frame.Create()
-	MotionOutputFrame.RelativeSize = Vector2.Create(0.5, 1)
-	MotionOutputFrame.PixelSize = Vector2.Create(-20, -20)
-	MotionOutputFrame.RelativePosition = Vector2.Create(0.5, 0)
-	MotionOutputFrame.PixelPosition = Vector2.Create(10, 10)
-	MotionOutputFrame.BackgroundImage = motionTracker._ReductionCanvases[1]
-
-	Root:AddChild(sourceVideoFrame)
-	Root:AddChild(MotionOutputFrame)
+	Root:AddChild(Frame1)
+	Root:AddChild(Frame2)
 
 	UserInterface.SetRoot(Root)
 end
 
 function love.quit(exitCode)
-	motionTracker:Destroy()
-
 	UserInterface.Deinitialise()
 
 	for _, shader in pairs(Shaders) do
@@ -94,22 +81,9 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	love.graphics.clear(0, 0, 0, 0)
-
-	if sourceVideoFrame.FrameChanged then
-		motionTracker:Update(sourceVideoFrame.BackgroundImage)
-	end
-
 	UserInterface.Draw()
 
-	love.graphics.setColor(1, 0, 0, 1)
-
-	local trackerPosition = sourceVideoFrame.AbsolutePosition + motionTracker.CenterOfMotion*sourceVideoFrame.AbsoluteSize
-	love.graphics.circle("fill", trackerPosition.X, trackerPosition.Y, 5)
-	
 	love.graphics.present()
-
-	print(string.format("Motion Coverage: %.2f", motionTracker.MotionCoverage * 100))
 end
 
 function love.focus(focused)

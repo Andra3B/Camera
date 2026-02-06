@@ -81,32 +81,12 @@ function Object:GetAncestorWithType(ancestorType)
 end
 
 function Object:SetParent(parent, where)
-	if self._Parent then
-		local parentChildren = self._Parent._Children
-
-		for index, child in ipairs(parentChildren) do
-			if child == self then
-				table.remove(parentChildren, index)
-	
-				break
-			end
-		end
-	end
-
-	self._Parent = parent
-
 	if parent then
-		if parent ~= self and Class.IsA(parent, "Object") then
-			local parentChildren = parent._Children
-
-			table.insert(parentChildren, math.clamp(where or (#parentChildren + 1), 1, #parentChildren + 1), self)
-
-			self:RecursiveRefresh()
-		else
-			return false
-		end
+		return parent:AddChild(self, where)
+	elseif self._Parent then
+		self._Parent:RemoveChild(self)
 	end
-	
+
 	return true
 end
 
@@ -137,7 +117,32 @@ function Object:GetChildWithType(childType)
 end
 
 function Object:AddChild(child, where)
-	return child:SetParent(self, where)
+	if Class.IsA(child, "Object") then
+		where = math.clamp(where or (#self._Children + 1), 1, #self._Children + 1)
+
+		if child._Parent == self then
+			for index, currentChild in ipairs(self._Children) do
+				if child == currentChild then
+					if index == where then
+						return true
+					else
+						table.remove(self._Children, index)
+					end
+
+					break
+				end
+			end
+		else
+			child:SetParent(nil)
+		end
+
+		child._Parent = self
+		table.insert(self._Children, where, child)
+
+		return true
+	end
+
+	return false
 end
 
 local function DescendantIterator(children)
@@ -171,19 +176,28 @@ function Object:GetDescendantWithType(descendantType)
 end
 
 function Object:RemoveAllChildren()
-	while #self._Children > 0 do
-		self._Children[1]:SetParent(nil)
+	for index, child in ipairs(self._Children) do
+		self._Children[index] = nil
+		child._Parent = nil
 	end
 end
 
 function Object:RemoveChild(child)
-	return child:SetParent(nil)
+	for index, currentChild in ipairs(self._Children) do
+		if currentChild == child then
+			table.remove(self._Children, index)
+			child._Parent = nil
+
+			break
+		end
+	end
 end
 
 function Object:RemoveChildWithName(name)
-	for _, child in ipairs(self._Children) do
+	for index, child in ipairs(self._Children) do
 		if child._Name == name then
-			child:SetParent(nil)
+			table.remove(self._Children, index)
+			child._Parent = nil
 
 			break
 		end
@@ -191,9 +205,10 @@ function Object:RemoveChildWithName(name)
 end
 
 function Object:RemoveChildWithType(childType)
-	for _, child in ipairs(self._Children) do
+	for index, child in ipairs(self._Children) do
 		if Class.IsA(child, childType) then
-			child:SetParent(nil)
+			table.remove(self._Children, index)
+			child._Parent = nil
 
 			break
 		end
@@ -206,13 +221,13 @@ end
 
 function Object:Destroy()
 	if not self._Destroyed then
-		for _, child in ipairs(self._Children) do
+		for index, child in ipairs(self._Children) do
+			table.remove(self._Children, index)
 			child:Destroy()
 		end
 		
-		self:SetParent(nil)
-		
-		self._Events:Trigger("Destroyed")
+		self.Parent = nil
+
 		self._Events:Destroy()
 
 		Entity.Destroy(self)

@@ -1,5 +1,22 @@
 local UserInterface = {}
 
+Enum.HorizontalAlignment = Enum.Create({
+	Left = 1,
+	Middle = 2,
+	Right = 3
+})
+
+Enum.VerticalAlignment = Enum.Create({
+	Top = 1,
+	Middle = 2,
+	Bottom = 3
+})
+
+Enum.InputType = Enum.Create({
+	Keyboard = 1,
+	Mouse = 2
+})
+
 UserInterface.Initialised = false
 
 UserInterface.Frame = require("UserInterface.Frame")
@@ -7,6 +24,7 @@ UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
+UserInterface.Pages = require("UserInterface.Pages")
 
 UserInterface.Font = require("UserInterface.Font")
 
@@ -99,7 +117,7 @@ end
 function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 	local containingFrame = nil
 
-	if frame then
+	if frame and frame.Visible then
 		local absoluteX, absoluteY = frame.AbsolutePosition:Unpack()
 		local absoluteWidth, absoluteHeight = frame.AbsoluteSize:Unpack()
 
@@ -107,34 +125,20 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 			if not frameType or Class.IsA(frame, frameType) then
 				containingFrame = frame
 			end
-
-			local childContainingFrame = nil
+			
 			local children = frame:GetChildren()
 
-			if children[0] then
-				childContainingFrame = UserInterface.GetFrameContainingPoint(
+			for childIndex = #children, 1, -1 do
+				local childContainingFrame = UserInterface.GetFrameContainingPoint(
 					x, y,
-					children[0],
+					children[childIndex],
 					frameType
 				)
-			end
 
-			if not childContainingFrame then
-				for childIndex = #children, 1, -1 do
-					childContainingFrame = UserInterface.GetFrameContainingPoint(
-						x, y,
-						children[childIndex],
-						frameType
-					)
-
-					if childContainingFrame then
-						break
-					end
+				if childContainingFrame then
+					containingFrame = childContainingFrame
+					break
 				end
-			end
-
-			if childContainingFrame then
-				containingFrame = childContainingFrame
 			end
 		end
 	end
@@ -165,6 +169,9 @@ function UserInterface.Deinitialise()
 		end
 
 		UserInterface.Root = nil
+
+		UserInterface.Hovering = nil
+		UserInterface.Pressed = nil
 		UserInterface.Focus = nil
 
 		UserInterface.Events:Destroy()

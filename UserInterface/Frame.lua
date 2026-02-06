@@ -209,7 +209,12 @@ function Frame:GetChildPixelOffset()
 end
 
 function Frame:SetChildPixelOffset(offset)
-	self._ChildPixelOffset = offset
+	if self._ChildPixelOffset ~= offset then
+		self._ChildPixelOffset = offset
+		self._AbsoluteChildOffset = nil
+
+		self:RecursiveRefresh()
+	end
 end
 
 function Frame:GetChildRelativeOffset()
@@ -217,7 +222,12 @@ function Frame:GetChildRelativeOffset()
 end
 
 function Frame:SetChildRelativeOffset(offset)
-	self._ChildRelativeOffset = offset
+	if self._ChildRelativeOffset ~= offset then
+		self._ChildRelativeOffset = offset
+		self._AbsoluteChildOffset = nil
+
+		self:RecursiveRefresh()
+	end
 end
 
 function Frame:GetAbsoluteChildOffset()

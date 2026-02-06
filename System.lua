@@ -1,5 +1,29 @@
 local System = {}
 
+Enum.PathType = Enum.Create({
+    File = 1,
+    Folder = 2
+})
+
+Enum.PathType = Enum.Create({
+    File = 1,
+    Folder = 2
+})
+
+Enum.ExecutionMode = Enum.Create({
+	Read = "r",
+	Write = "w",
+	Execute = "e"
+})
+
+Enum.OptionDataType = Enum.Create({
+	String = 1,
+	Boolean = 2,
+	Number = 3,
+	Enum = 4,
+	Path = 5
+})
+
 function System.GetSeparator()
 	return jit.os == "Windows" and "\\" or "/"
 end
