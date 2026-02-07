@@ -133,7 +133,7 @@ function Object:AddChild(child, where)
 				end
 			end
 		else
-			child:SetParent(nil)
+			child.Parent = nil
 		end
 
 		child._Parent = self

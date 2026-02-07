@@ -182,10 +182,14 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 end
 
 function FFILoader.CreateLibrary(libraryPath, defines, loadGlobally)
-	return setmetatable({
-		Defines = defines,
-		Library = ffi.load(libraryPath, loadGlobally)
-	}, { __index = IndexMetamethod })
+	local success, library = pcall(ffi.load, libraryPath)
+
+	if success then
+		return setmetatable(
+			{Defines = defines, Library = library},
+			{__index = IndexMetamethod}
+		)
+	end
 end
 
 return FFILoader

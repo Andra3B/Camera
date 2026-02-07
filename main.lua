@@ -1,2 +1,2 @@
-package.path = package.path..";./"..arg[2].."/?.lua"
-dofile(arg[2].."/main.lua")
+package.path = package.path..";./"..arg[2].."App/?.lua"
+dofile(arg[2].."App/main.lua")

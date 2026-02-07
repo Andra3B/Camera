@@ -6,6 +6,7 @@ function VideoFrame.Create()
 	local self = Class.CreateInstance(Frame.Create(), VideoFrame)
 
 	self._Video = nil
+	self._VideoVisible = true
 
 	self._Playing = false
 	self._Time = 0
@@ -46,14 +47,10 @@ function VideoFrame:Update(deltaTime)
 
 					self._FrameHandle = frameHandle
 					self._FrameChanged = true
-
-					if self._VideoWriter then
-						self._VideoWriter:WriteFrame(frameHandle)
-					end
-
+					
 					break
 				elseif not needsAnotherPacket then
-					self:SetPlaying(false)
+					self.Playing = false
 
 					break
 				end
@@ -66,16 +63,8 @@ function VideoFrame:GetVideo()
 	return self._Video
 end
 
-function VideoFrame:GetVideoWriter()
-	return self._VideoWriter
-end
-
-function VideoFrame:SetVideoWriter(writer)
-	self._VideoWriter = writer
-end
-
 function VideoFrame:GetBackgroundImage()
-	return self._Video and self._VideoImage or Frame.GetBackgroundImage(self)
+	return self._VideoVisible and self._VideoImage or Frame.GetBackgroundImage(self)
 end
 
 function VideoFrame:SetVideo(video)
@@ -101,8 +90,16 @@ function VideoFrame:SetVideo(video)
 		
 		self._VideoImage = love.graphics.newImage(self._VideoImageBuffer)
 	else
-		self:SetPlaying(false)
+		self.Playing = false
 	end
+end
+
+function VideoFrame:IsVideoVisible()
+	return self._VideoVisible
+end
+
+function VideoFrame:SetVideoVisible(visible)
+	self._VideoVisible = visible
 end
 
 function VideoFrame:IsPlaying()
@@ -124,12 +121,16 @@ function VideoFrame:GetFrameChanged()
 	return frameChanged
 end
 
+function VideoFrame:GetVideoImage()
+	return self._VideoImage
+end
+
 function VideoFrame:Destroy()
 	if not self._Destroyed then
 		local video = self._Video
 
 		if video then
-			self:SetVideo(nil)
+			self.Video = nil
 
 			video:Destroy()
 		end
@@ -138,4 +139,6 @@ function VideoFrame:Destroy()
 	end
 end
 
-return Class.CreateClass(VideoFrame, "VideoFrame", Frame)
+return Class.CreateClass(VideoFrame, "VideoFrame", Frame, {
+	["AbsoluteBackgroundImagePosition"] = {"Video", "VideoVisible"}
+})

@@ -6,9 +6,7 @@ local Button = {}
 
 function Button.Create()
 	local self = Class.CreateInstance(Interactive.Create(), Button)
-
-	self._BackgroundColour = Vector4.Create(0.0, 0.0, 0.0, 0.1)
-
+	
 	return self
 end
 

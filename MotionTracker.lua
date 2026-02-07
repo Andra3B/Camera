@@ -31,8 +31,8 @@ function MotionTracker.Create(width, height)
 	self._LowerThreshold = 0.01
 	self._HigherThreshold = 0.3
 
-	self._CenterOfMotion = Vector2.Zero
-	self._MotionCoverage = 0
+	self._CenterOfMotion = nil
+	self._MotionCoverage = nil
 
 	return self
 end
@@ -72,8 +72,29 @@ function MotionTracker:Update(currentFrame)
 	end
 
 	self._CenterOfMotion = nil
+	self._MotionCoverage = nil
 
 	love.graphics.pop()
+end
+
+function MotionTracker:GetMotionMask()
+	return self._ReductionCanvases[2]
+end
+
+function MotionTracker:GetHigherThreshold()
+	return self._HigherThreshold
+end
+
+function MotionTracker:SetHigherThreshold(threshold)
+	self._HigherThreshold = math.clamp(threshold, 0, 1)
+end
+
+function MotionTracker:GetLowerThreshold()
+	return self._LowerThreshold
+end
+
+function MotionTracker:SetLowerThreshold(threshold)
+	self._LowerThreshold = math.clamp(threshold, 0, 1)
 end
 
 function MotionTracker:GetCenterOfMotion()
@@ -97,7 +118,6 @@ end
 
 function MotionTracker:Destroy()
 	if not self._Destroyed then
-
 		self._MotionMask:release()
 		self._MotionMask = nil
 

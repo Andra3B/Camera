@@ -9,11 +9,12 @@ function Interactive.Create()
 	local self = Class.CreateInstance(BASE_CLASS.Create(), Interactive)
 	
 	self._Active = true
-	self._AbsoluteActive = true
+	self._AbsoluteActive = nil
 
-	self._FocusedBackgroundColour = Vector4.Create(1, 0, 0, 1)
-	self._PressedBackgroundColour = Vector4.Create(0, 1, 0, 1)
-	self._HoveringBackgroundColour = Vector4.Create(0, 0, 1, 1)
+	self._FocusedBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
+	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 1)
+	self._HoveringBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
+	self._InactiveOverlayColour = Vector4.Create(0.9, 0.9, 0.9, 0.8)
 
 	return self
 end
@@ -21,17 +22,29 @@ end
 function Interactive:Refresh()
 	BASE_CLASS.Refresh(self)
 
-	local interactiveAncestor = self:GetAncestorWithType("Interactive")
+	self._AbsoluteActive = nil
+end
 
-	if interactiveAncestor then
-		self._AbsoluteActive = interactiveAncestor._AbsoluteActive and self._Active
-	else
-		self._AbsoluteActive = self._Active
+function Interactive:PostDraw()
+	if not self._AbsoluteActive then
+		local absolutePosition = self.AbsolutePosition
+		local absoluteSize = self.AbsoluteSize
+		local absoluteCornerRadius = self.AbsoluteCornerRadius
+
+		love.graphics.setColor(self.InactiveOverlayColour:Unpack())
+		love.graphics.rectangle(
+			"fill",
+			absolutePosition.X, absolutePosition.Y,
+			absoluteSize.X, absoluteSize.Y,
+			absoluteCornerRadius, absoluteCornerRadius
+		)
 	end
+
+	BASE_CLASS.PostDraw(self)
 end
 
 function Interactive:GetBackgroundColour()
-	if self._AbsoluteActive then
+	if self.AbsoluteActive then
 		if self:IsPressed() then
 			return self:GetPressedBackgroundColour()
 		elseif self:IsHovering() then
@@ -49,6 +62,16 @@ function Interactive:IsActive()
 end
 
 function Interactive:GetAbsoluteActive()
+	if self._AbsoluteActive == nil then
+		local interactiveAncestor = self:GetAncestorWithType("Interactive")
+
+		if interactiveAncestor then
+			self._AbsoluteActive = interactiveAncestor._AbsoluteActive and self._Active
+		else
+			self._AbsoluteActive = self._Active
+		end
+	end
+
 	return self._AbsoluteActive
 end
 
@@ -58,7 +81,7 @@ function Interactive:SetActive(active)
 	self:RecursiveRefresh()
 
 	if self:IsPressed() and not active then
-		self._Events:Push("Pressed", false)
+		self._Events:Push("Released")
 	end
 end
 
@@ -87,7 +110,7 @@ function Interactive:SetHoveringBackgroundColour(colour)
 end
 
 function Interactive:IsPressed()
-	return UserInterface.CurrentlyPressed == self
+	return UserInterface.Pressed == self
 end
 
 function Interactive:GetPressedBackgroundColour()
@@ -98,11 +121,20 @@ function Interactive:SetPressedBackgroundColour(colour)
 	self._PressedBackgroundColour = colour
 end
 
+function Interactive:GetInactiveOverlayColour()
+	return self._InactiveOverlayColour
+end
+
+function Interactive:SetInactiveOverlayColour(colour)
+	self._InactiveOverlayColour = colour
+end
+
 function Interactive:Destroy()
 	if not self._Destroyed then
 		self._FocusedBackgroundColour = nil
 		self._HoveringBackgroundColour = nil
 		self._PressedBackgroundColour = nil
+		self._InactiveOverlayColour = nil
 		
 		BASE_CLASS.Destroy(self)
 	end

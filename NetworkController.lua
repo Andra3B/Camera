@@ -127,6 +127,10 @@ function NetworkController.GetCommandsFromString(commandsString)
 	end
 end
 
+function NetworkController:GetLocalDetails()
+	return self._Socket:getsockname()
+end
+
 function NetworkController.GetPrivateIP()
 	local udpSocket = socket.udp()
 	udpSocket:setpeername("8.8.8.8", 80) -- Google DNS

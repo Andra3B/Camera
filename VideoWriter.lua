@@ -42,6 +42,7 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps, option
 				libav.avcodec.avcodec_parameters_from_context(videoStreamHandle.codecpar, encoderHandle)
 
 				videoStreamHandle.time_base = encoderHandle.time_base
+				videoStreamHandle.avg_frame_rate = encoderHandle.framerate
 
 				if bit.band(outputFormatHandle.flags, libav.avformat.AVFMT_NOFILE) == 0 then
 					local ioHandle = ffi.new("AVIOContext*[1]")
@@ -145,6 +146,7 @@ function VideoWriter:WriteFrame(frameHandle, frameTimeBase)
 		libav.avcodec.av_init_packet(packetHandle)
 
 		while (libav.avcodec.avcodec_receive_packet(self._VideoStreamEncoderHandle, packetHandle) == 0) do
+			libav.avcodec.av_packet_rescale_ts(packetHandle, self._VideoStreamEncoderHandle.time_base, self._VideoStreamHandle.time_base)
 			packetHandle[0].stream_index = self._VideoStreamHandle.index
 
 			libav.avformat.av_interleaved_write_frame(self._FormatHandle, packetHandle)

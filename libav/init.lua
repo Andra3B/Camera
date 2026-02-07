@@ -19,7 +19,6 @@ local defines = FFILoader.LoadDefinitions(
 )
 
 defines.AVERROR_EAGAIN = -11
-defines.AV_TIME_BASE_Q = ffi.new("AVRational", {1, 1000000})
 
 local libav
 
