@@ -53,7 +53,7 @@ function VideoFrame:Update(deltaTime)
 
 					break
 				elseif not needsAnotherPacket then
-					self:SetPlaying(false)
+					self.Playing = false
 
 					break
 				end
@@ -101,7 +101,7 @@ function VideoFrame:SetVideo(video)
 		
 		self._VideoImage = love.graphics.newImage(self._VideoImageBuffer)
 	else
-		self:SetPlaying(false)
+		self.Playing = false
 	end
 end
 
@@ -129,7 +129,7 @@ function VideoFrame:Destroy()
 		local video = self._Video
 
 		if video then
-			self:SetVideo(nil)
+			self.Video = nil
 
 			video:Destroy()
 		end

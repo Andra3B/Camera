@@ -31,7 +31,7 @@ function MotionTracker.Create(width, height)
 	self._LowerThreshold = 0.01
 	self._HigherThreshold = 0.3
 
-	self._CenterOfMotion = Vector2.Zero
+	self._CenterOfMotion = nil
 	self._MotionCoverage = 0
 
 	return self
@@ -97,7 +97,6 @@ end
 
 function MotionTracker:Destroy()
 	if not self._Destroyed then
-
 		self._MotionMask:release()
 		self._MotionMask = nil
 

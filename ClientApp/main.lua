@@ -21,29 +21,59 @@ function love.load()
 	AppNetworkClient = NetworkClient.Create()
 	AppNetworkClient:Bind()
 
+	local width, height = love.window.getDesktopDimensions(1)
+	love.window.setTitle("Camera Client")
+	love.window.setMode(width*0.5, height*0.5, {
+		["fullscreen"] = false,
+		["stencil"] = false,
+		["resizable"] = true,
+		["centered"] = true,
+		["display"] = 1
+	})
+
 	UserInterface.Initialise()
 
 	local Root = UserInterface.Frame.Create()
-	Root.RelativeSize = Vector2.Create(1, 1)
+	Root.RelativeSize = Vector2.One
 	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
-	MyPages = UserInterface.Pages.Create()
-	MyPages.RelativeSize = Vector2.Create(1, 1)
+	local ConnectionPage = UserInterface.Frame.Create()
+	ConnectionPage.RelativeSize = Vector2.One
+	ConnectionPage.Parent = Root
 
-	local Frame1 = UserInterface.Frame.Create()
-	Frame1.RelativeSize = Vector2.Create(1, 1)
-	Frame1.BackgroundColour = Vector4.Create(1, 0, 0, 1)
+	local ConnectionTitle = UserInterface.Label.Create()
+	ConnectionTitle.RelativeSize = Vector2.Create(1, 0)
+	ConnectionTitle.PixelSize = Vector2.Create(0, 50)
+	ConnectionTitle.RelativePosition = Vector2.Create(0, 0.5)
+	ConnectionTitle.PixelPosition = Vector2.Create(0, -85)
+	ConnectionTitle.RelativeCornerRadius = 0.5
+	ConnectionTitle.Text = "Cameras Connection Details:"
+	ConnectionTitle.Parent = ConnectionPage
 
-	local Frame2 = UserInterface.Frame.Create()
-	Frame2.RelativeSize = Vector2.Create(1, 1)
-	Frame2.BackgroundColour = Vector4.Create(0, 1, 0, 1)
+	local HostEntry = UserInterface.TextBox.Create()
+	HostEntry.RelativeSize = Vector2.Create(0.4, 0)
+	HostEntry.PixelSize = Vector2.Create(0, 50)
+	HostEntry.RelativePosition = Vector2.Create(0.3, 0.5)
+	HostEntry.PixelPosition = Vector2.Create(0, -25)
+	HostEntry.PlaceholderText = "Enter Host..."
+	HostEntry.RelativeCornerRadius = 0.5
+	HostEntry.BorderThickness = 1
+	HostEntry.Parent = ConnectionPage
 
-	MyPages:AddChild(Frame1)
-	MyPages:AddChild(Frame2)
+	local PortEntry = UserInterface.TextBox.Create()
+	PortEntry.RelativeSize = Vector2.Create(0.4, 0)
+	PortEntry.PixelSize = Vector2.Create(0, 50)
+	PortEntry.RelativePosition = Vector2.Create(0.3, 0.5)
+	PortEntry.PixelPosition = Vector2.Create(0, 35)
+	PortEntry.PlaceholderText = "Enter Port..."
+	PortEntry.RelativeCornerRadius = 0.5
+	PortEntry.BorderThickness = 1
+	PortEntry.Parent = ConnectionPage
 
-	Root:AddChild(MyPages)
+	UserInterface.SetRoot(Root)
+end
 
-	--[[
+--[[
 	LivestreamStartButton.Events:Listen("Pressed", function(pressed)
 		if pressed then
 			if LivestreamVideoFrame.Video then
@@ -92,35 +122,9 @@ function love.load()
 	SettingsPortTextBox.PixelPosition = Vector2.Create(5, 10)
 	SettingsPortTextBox.PlaceholderText = "Enter port..."
 	SettingsPortTextBox.Text = "64641"
-	--]]
-
-	UserInterface.SetRoot(Root)
-
-	MyPages:AddTransition(1, 2, Enum.PageTransitionDirection.Up).AnimationType = Enum.AnimationType.SharpSmoothStep
-	MyPages:AddTransition(2, 1, Enum.PageTransitionDirection.Down).AnimationType = Enum.AnimationType.SharpSmoothStep
-
-	MyPages.Page = 2
-
-	local width, height = love.window.getDesktopDimensions(1)
-	love.window.setTitle("Camera Client")
-	love.window.setMode(width*0.5, height*0.5, {
-		["fullscreen"] = false,
-		["stencil"] = false,
-		["resizable"] = true,
-		["centered"] = true,
-		["display"] = 1
-	})
-end
-
-local counter = 200
+--]]
 
 function love.update(deltaTime)
-	counter = counter - 1
-
-	if counter <= 0 then
-		MyPages.Page = 1
-	end
-
 	AppNetworkClient:Update()
 	Animation.Update(deltaTime)
 	UserInterface.Update(deltaTime)

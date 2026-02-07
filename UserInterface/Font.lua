@@ -16,13 +16,13 @@ function Font:GetFontPath()
 end
 
 function Font:GetFont(size, sizeTolerance)
-	sizeTolerance = sizeTolerance or 5
+	size = math.floor(size + 0.5)
 
 	if self._Fonts[size] then
 		return self._Fonts[size]
 	else
 		local closest
-		local closestSizeDifference = sizeTolerance
+		local closestSizeDifference = sizeTolerance or 1
 
 		for fontSize, font in pairs(self._Fonts) do
 			local sizeDifference = math.abs(size - fontSize)

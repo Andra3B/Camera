@@ -1,26 +1,5 @@
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then require("lldebugger").start() end
 
-ffi = require("ffi")
-buffer = require("string.buffer")
-
-Class = require("Class")
-
-Entity = require("Entity")
-Object = require("Object")
-
-Enum = require("Enum")
-
-System = require("System")
-Log = require("Log")
-
-Vector2 = require("Vector2")
-Vector3 = require("Vector3")
-Vector4 = require("Vector4")
-
-EventDirector = require("EventDirector")
-
-Animation = require("Animation")
-
 table.new = require("table.new")
 table.empty = table.new(0, 0)
 
@@ -51,6 +30,27 @@ math.clamp = function(value, min, max)
 		return value
 	end
 end
+
+ffi = require("ffi")
+buffer = require("string.buffer")
+
+Class = require("Class")
+
+Entity = require("Entity")
+Object = require("Object")
+
+Enum = require("Enum")
+
+System = require("System")
+Log = require("Log")
+
+Vector2 = require("Vector2")
+Vector3 = require("Vector3")
+Vector4 = require("Vector4")
+
+EventDirector = require("EventDirector")
+
+Animation = require("Animation")
 
 FFILoader = require("FFILoader")
 

@@ -18,7 +18,12 @@ function Frame.Create()
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
 
-	self._CornerRadius = 0
+	self._BorderColour = Vector4.Create(0, 0, 0, 1)
+	self._BorderThickness = 0
+
+	self._RelativeCornerRadius = 0
+	self._PixelCornerRadius = 0
+	self._AbsoluteCornerRadius = nil
 
 	self._Visible = true
 
@@ -31,27 +36,42 @@ function Frame:Refresh()
 	self._AbsolutePosition = nil
 	self._AbsoluteSize = nil
 	self._AbsoluteChildOffset = nil
+	self._AbsoluteCornerRadius = nil
 end
 
 function Frame:Draw()
 	local absolutePosition = self.AbsolutePosition
 	local absoluteSize = self.AbsoluteSize
-	local backgroundImage = self:GetBackgroundImage()
-	local cornerRadius = self:GetCornerRadius()
+	local backgroundImage = self.BackgroundImage
+	local absoluteCornerRadius = self.AbsoluteCornerRadius
 
 	love.graphics.setColor(self:GetBackgroundColour():Unpack())
 	love.graphics.rectangle(
 		"fill",
 		absolutePosition.X, absolutePosition.Y,
 		absoluteSize.X, absoluteSize.Y,
-		cornerRadius, cornerRadius
+		absoluteCornerRadius, absoluteCornerRadius
 	)
+
+	local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
+	love.graphics.setScissor() --TODO: Find fix to still have scissor enabled but images dont glitch at edges
+
+	if self._BorderThickness > 0 then
+		local thickness = self._BorderThickness
+		local halfThickness = thickness*0.5
+
+		love.graphics.setColor(self._BorderColour:Unpack())
+		love.graphics.setLineWidth(thickness)
+		love.graphics.rectangle(
+			"line",
+			absolutePosition.X - halfThickness, absolutePosition.Y - halfThickness,
+			absoluteSize.X + thickness - 1, absoluteSize.Y + thickness,
+			absoluteCornerRadius + halfThickness, absoluteCornerRadius + halfThickness
+		)
+	end
 
 	if backgroundImage then
 		local width, height = backgroundImage:getDimensions()
-		
-		local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
-		love.graphics.setScissor() -- TODO: Find fix to still have scissor enabled but images dont glitch at edges
 
 		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
 		love.graphics.draw(
@@ -62,9 +82,9 @@ function Frame:Draw()
 			0, 0,
 			0, 0
 		)
-
-		love.graphics.setScissor(scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight)
 	end
+
+	love.graphics.setScissor(scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight)
 end
 
 function Frame:RecursiveDraw()
@@ -79,7 +99,7 @@ function Frame:RecursiveDraw()
 
 		local newScissorTopLeft = self.AbsolutePosition
 		local newScissorBottomRight = self.AbsolutePosition + self.AbsoluteSize
-
+		
 		if not (
 			newScissorBottomRight.X < scissorTopLeftX or
 			newScissorTopLeft.X > scissorBottomRightX or
@@ -122,7 +142,6 @@ end
 function Frame:SetRelativePosition(position)
 	if self._RelativePosition ~= position then
 		self._RelativePosition = position
-		self._AbsolutePosition = nil
 
 		self:RecursiveRefresh()
 	end
@@ -135,7 +154,6 @@ end
 function Frame:SetPixelPosition(position)
 	if self._PixelPosition ~= position then
 		self._PixelPosition = position
-		self._AbsolutePosition = nil
 
 		self:RecursiveRefresh()
 	end
@@ -172,8 +190,6 @@ end
 function Frame:SetRelativeSize(size)
 	if self._RelativeSize ~= size then
 		self._RelativeSize = size
-		self._AbsoluteSize = nil
-		self._AbsoluteChildOffset = nil
 
 		self:RecursiveRefresh()
 	end
@@ -186,8 +202,6 @@ end
 function Frame:SetPixelSize(size)
 	if self._PixelSize ~= size then
 		self._PixelSize = size
-		self._AbsoluteSize = nil
-		self._AbsoluteChildOffset = nil
 
 		self:RecursiveRefresh()
 	end
@@ -211,7 +225,6 @@ end
 function Frame:SetChildPixelOffset(offset)
 	if self._ChildPixelOffset ~= offset then
 		self._ChildPixelOffset = offset
-		self._AbsoluteChildOffset = nil
 
 		self:RecursiveRefresh()
 	end
@@ -224,7 +237,6 @@ end
 function Frame:SetChildRelativeOffset(offset)
 	if self._ChildRelativeOffset ~= offset then
 		self._ChildRelativeOffset = offset
-		self._AbsoluteChildOffset = nil
 
 		self:RecursiveRefresh()
 	end
@@ -254,12 +266,45 @@ function Frame:SetBackgroundImage(image)
 	self._BackgroundImage = image
 end
 
-function Frame:GetCornerRadius()
-	return self._CornerRadius
+function Frame:GetBorderColour()
+	return self._BorderColour
 end
 
-function Frame:SetCornerRadius(radius)
-	self._CornerRadius = radius
+function Frame:SetBorderColour(colour)
+	self._BorderColour = colour
+end
+
+function Frame:GetBorderThickness()
+	return self._BorderThickness
+end
+
+function Frame:SetBorderThickness(thickness)
+	self._BorderThickness = thickness
+end
+
+function Frame:GetRelativeCornerRadius()
+	return self._RelativeCornerRadius
+end
+
+function Frame:SetRelativeCornerRadius(radius)
+	self._RelativeCornerRadius = radius
+end
+
+function Frame:GetPixelCornerRadius()
+	return self._PixelCornerRadius
+end
+
+function Frame:SetPixelCornerRadius(radius)
+	self._PixelCornerRadius = radius
+end
+
+function Frame:GetAbsoluteCornerRadius()
+	if not self._AbsoluteCornerRadius then
+		self._AbsoluteCornerRadius =
+			self._PixelCornerRadius + math.min(self.AbsoluteSize:Unpack())*self._RelativeCornerRadius
+	end
+
+	return self._AbsoluteCornerRadius
 end
 
 function Frame:IsVisible()
@@ -289,8 +334,15 @@ function Frame:Destroy()
 		self._BackgroundColour = nil
 		self._BackgroundImage = nil
 
+		self._BorderColour = nil
+
 		Object.Destroy(self)
 	end
 end
 
-return Class.CreateClass(Frame, "Frame", Object)
+return Class.CreateClass(Frame, "Frame", Object, {
+	["AbsolutePosition"] = {"RelativePosition", "PixelPosition"},
+	["AbsoluteSize"] = {"RelativeSize", "PixelSize"},
+	["AbsoluteChildOffset"] = {"AbsoluteSize", "ChildRelativeOffset", "ChildPixelOffset"},
+	["AbsoluteCornerRadius"] = {"AbsoluteSize", "RelativeCornerRadius", "PixelCornerRadius"}
+})

@@ -141,7 +141,7 @@ end
 function Animation:SetDuration(duration)
 	self._Duration = duration
 
-	self:SetTime(self._Time)
+	self.Time = self._Time
 end
 
 function Animation:GetTime()

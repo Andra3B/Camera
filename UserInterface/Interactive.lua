@@ -9,11 +9,11 @@ function Interactive.Create()
 	local self = Class.CreateInstance(BASE_CLASS.Create(), Interactive)
 	
 	self._Active = true
-	self._AbsoluteActive = true
+	self._AbsoluteActive = nil
 
-	self._FocusedBackgroundColour = Vector4.Create(1, 0, 0, 1)
-	self._PressedBackgroundColour = Vector4.Create(0, 1, 0, 1)
-	self._HoveringBackgroundColour = Vector4.Create(0, 0, 1, 1)
+	self._FocusedBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
+	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 1)
+	self._HoveringBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
 
 	return self
 end
@@ -21,17 +21,11 @@ end
 function Interactive:Refresh()
 	BASE_CLASS.Refresh(self)
 
-	local interactiveAncestor = self:GetAncestorWithType("Interactive")
-
-	if interactiveAncestor then
-		self._AbsoluteActive = interactiveAncestor._AbsoluteActive and self._Active
-	else
-		self._AbsoluteActive = self._Active
-	end
+	self._AbsoluteActive = nil
 end
 
 function Interactive:GetBackgroundColour()
-	if self._AbsoluteActive then
+	if self.AbsoluteActive then
 		if self:IsPressed() then
 			return self:GetPressedBackgroundColour()
 		elseif self:IsHovering() then
@@ -49,6 +43,16 @@ function Interactive:IsActive()
 end
 
 function Interactive:GetAbsoluteActive()
+	if self._AbsoluteActive == nil then
+		local interactiveAncestor = self:GetAncestorWithType("Interactive")
+
+		if interactiveAncestor then
+			self._AbsoluteActive = interactiveAncestor._AbsoluteActive and self._Active
+		else
+			self._AbsoluteActive = self._Active
+		end
+	end
+
 	return self._AbsoluteActive
 end
 
