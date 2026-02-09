@@ -51,6 +51,7 @@ Vector4 = require("Vector4")
 EventDirector = require("EventDirector")
 
 Animation = require("Animation")
+Timer = require("Timer")
 
 FFILoader = require("FFILoader")
 

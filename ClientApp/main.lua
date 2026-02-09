@@ -35,40 +35,174 @@ function love.load()
 
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.One
-	Root.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 
+	local AppPages = UserInterface.Pages.Create()
+	AppPages.RelativeSize = Vector2.One
+	AppPages.Parent = Root
+	
 	local ConnectionPage = UserInterface.Frame.Create()
 	ConnectionPage.RelativeSize = Vector2.One
-	ConnectionPage.Parent = Root
+	ConnectionPage.Parent = AppPages
 
 	local ConnectionTitle = UserInterface.Label.Create()
-	ConnectionTitle.RelativeSize = Vector2.Create(1, 0)
-	ConnectionTitle.PixelSize = Vector2.Create(0, 50)
-	ConnectionTitle.RelativePosition = Vector2.Create(0, 0.5)
-	ConnectionTitle.PixelPosition = Vector2.Create(0, -85)
-	ConnectionTitle.RelativeCornerRadius = 0.5
-	ConnectionTitle.Text = "Cameras Connection Details:"
+	ConnectionTitle.RelativeOrigin = Vector2.Create(0.5, 1)
+	ConnectionTitle.RelativeSize = Vector2.Create(1, 0.1)
+	ConnectionTitle.RelativePosition = Vector2.Create(0.5, 0.45)
+	ConnectionTitle.PixelPosition = Vector2.Create(0, -10)
+	ConnectionTitle.Text = "Camera Connection Details:"
+	ConnectionTitle.Font = UserInterface.Font.FreeSansBold
 	ConnectionTitle.Parent = ConnectionPage
 
 	local HostEntry = UserInterface.TextBox.Create()
-	HostEntry.RelativeSize = Vector2.Create(0.4, 0)
-	HostEntry.PixelSize = Vector2.Create(0, 50)
-	HostEntry.RelativePosition = Vector2.Create(0.3, 0.5)
-	HostEntry.PixelPosition = Vector2.Create(0, -25)
+	HostEntry.RelativeOrigin = Vector2.Create(1, 0.5)
+	HostEntry.RelativeSize = Vector2.Create(0.4, 0.1)
+	HostEntry.RelativePosition = Vector2.Create(0.5, 0.5)
+	HostEntry.PixelPosition = Vector2.Create(-5, 0)
 	HostEntry.PlaceholderText = "Enter Host..."
-	HostEntry.RelativeCornerRadius = 0.5
+	HostEntry.RelativeCornerRadius = 1
 	HostEntry.BorderThickness = 1
 	HostEntry.Parent = ConnectionPage
 
 	local PortEntry = UserInterface.TextBox.Create()
-	PortEntry.RelativeSize = Vector2.Create(0.4, 0)
-	PortEntry.PixelSize = Vector2.Create(0, 50)
-	PortEntry.RelativePosition = Vector2.Create(0.3, 0.5)
-	PortEntry.PixelPosition = Vector2.Create(0, 35)
+	PortEntry.RelativeOrigin = Vector2.Create(0, 0.5)
+	PortEntry.RelativeSize = Vector2.Create(0.4, 0.1)
+	PortEntry.RelativePosition = Vector2.Create(0.5, 0.5)
+	PortEntry.PixelPosition = Vector2.Create(5, 0)
 	PortEntry.PlaceholderText = "Enter Port..."
-	PortEntry.RelativeCornerRadius = 0.5
+	PortEntry.RelativeCornerRadius = 1
 	PortEntry.BorderThickness = 1
 	PortEntry.Parent = ConnectionPage
+
+	local ConnectButton = UserInterface.Button.Create()
+	ConnectButton.RelativeOrigin = Vector2.Create(0.5, 0)
+	ConnectButton.RelativeSize = Vector2.Create(0.8, 0.1)
+	ConnectButton.PixelSize = Vector2.Create(10, 0)
+	ConnectButton.RelativePosition = Vector2.Create(0.5, 0.55)
+	ConnectButton.PixelPosition = Vector2.Create(0, 10)
+	ConnectButton.RelativeCornerRadius = 1
+	ConnectButton.BorderThickness = 1
+	ConnectButton.Text = "Connect"
+	ConnectButton.Parent = ConnectionPage
+
+	local ErrorLabel = UserInterface.Label.Create()
+	ErrorLabel.RelativeOrigin = Vector2.Create(0.5, 0)
+	ErrorLabel.RelativeSize = Vector2.Create(0.8, 0.075)
+	ErrorLabel.PixelSize = Vector2.Create(10, 0)
+	ErrorLabel.RelativePosition = Vector2.Create(0.5, 0.65)
+	ErrorLabel.PixelPosition = Vector2.Create(0, 20)
+	ErrorLabel.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
+	ErrorLabel.TextColour = Vector4.Create(1, 0, 0, 1)
+	ErrorLabel.Font = UserInterface.Font.FreeSansBold
+	ErrorLabel.RelativeCornerRadius = 1
+	ErrorLabel.Visible = false
+	ErrorLabel.Parent = ConnectionPage
+
+	ConnectButton.Events:Listen("Released", function()
+		local host = HostEntry.Text
+		local success, errorMessage = false, "Invalid host"
+
+		if #host > 0 then
+			success, errorMessage = AppNetworkClient:Connect(host, PortEntry.Text, 3)
+		end
+
+		if success then
+			print("Connected!")
+			ErrorLabel.Visible = false
+		else
+			ErrorLabel.Text = errorMessage.."!"
+			ErrorLabel.Visible = true
+		end
+	end)
+
+	local NavigationBar = UserInterface.Frame.Create()
+	NavigationBar.AspectRatio = 5
+	NavigationBar.DominantAxis = Enum.Axis.Y
+	NavigationBar.RelativeOrigin = Vector2.Create(0.5, 0)
+	NavigationBar.RelativeSize = Vector2.Create(1, 0.1)
+	NavigationBar.RelativePosition = Vector2.Create(0.5, 0)
+	NavigationBar.PixelPosition = Vector2.Create(0, 10)
+	NavigationBar.RelativeCornerRadius = 1
+	NavigationBar.BorderThickness = 1
+	NavigationBar.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
+	NavigationBar.Parent = Root
+
+	local LivestreamPage = UserInterface.Frame.Create()
+	LivestreamPage.RelativeSize = Vector2.One
+	LivestreamPage.Parent = AppPages
+
+	local ControlBar = UserInterface.Frame.Create()
+	ControlBar.AspectRatio = 5
+	ControlBar.DominantAxis = Enum.Axis.Y
+	ControlBar.RelativeOrigin = Vector2.Create(0.5, 1)
+	ControlBar.RelativeSize = Vector2.Create(1, 0.1)
+	ControlBar.RelativePosition = Vector2.Create(0.5, 1)
+	ControlBar.PixelPosition = Vector2.Create(0, -10)
+	ControlBar.RelativeCornerRadius = 1
+	ControlBar.BorderThickness = 1
+	ControlBar.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
+	ControlBar.Parent = LivestreamPage
+
+	local LeftControlButton = UserInterface.Button.Create()
+	LeftControlButton.AspectRatio = 1
+	LeftControlButton.DominantAxis = Enum.Axis.Y
+	LeftControlButton.RelativeOrigin = Vector2.Create(0, 0.5)
+	LeftControlButton.RelativeSize = Vector2.Create(1, 1)
+	LeftControlButton.PixelSize = Vector2.Create(-10, -10)
+	LeftControlButton.RelativePosition = Vector2.Create(0, 0.5)
+	LeftControlButton.PixelPosition = Vector2.Create(5, 0)
+	LeftControlButton.Text = "<"
+	LeftControlButton.RelativeCornerRadius = 1
+	LeftControlButton.BorderThickness = 1
+	LeftControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	LeftControlButton.Parent = ControlBar
+
+	local StartControlButton = UserInterface.Button.Create()
+	StartControlButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	StartControlButton.RelativeSize = Vector2.Create(0.55, 1)
+	StartControlButton.PixelSize = Vector2.Create(0, -10)
+	StartControlButton.RelativePosition = Vector2.Create(0.5, 0.5)
+	StartControlButton.Text = "Start"
+	StartControlButton.RelativeCornerRadius = 1
+	StartControlButton.BorderThickness = 1
+	StartControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	StartControlButton.Parent = ControlBar
+
+	local RightControlButton = UserInterface.Button.Create()
+	RightControlButton.AspectRatio = 1
+	RightControlButton.DominantAxis = Enum.Axis.Y
+	RightControlButton.RelativeOrigin = Vector2.Create(1, 0.5)
+	RightControlButton.RelativeSize = Vector2.Create(1, 1)
+	RightControlButton.PixelSize = Vector2.Create(-10, -10)
+	RightControlButton.RelativePosition = Vector2.Create(1, 0.5)
+	RightControlButton.PixelPosition = Vector2.Create(-5, 0)
+	RightControlButton.Text = ">"
+	RightControlButton.RelativeCornerRadius = 1
+	RightControlButton.BorderThickness = 1
+	RightControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	RightControlButton.Parent = ControlBar
+
+	local LivestreamFrame = UserInterface.VideoFrame.Create()
+	LivestreamFrame.RelativeSize = Vector2.Create(1, 0.8)
+	LivestreamFrame.PixelSize = Vector2.Create(-20, -40)
+	LivestreamFrame.RelativePosition = Vector2.Create(0, 0.1)
+	LivestreamFrame.PixelPosition = Vector2.Create(10, 20)
+	LivestreamFrame.PixelCornerRadius = 10
+	LivestreamFrame.BorderThickness = 1
+	LivestreamFrame.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	LivestreamFrame.Parent = LivestreamPage
+
+	local SettingsPage = UserInterface.Frame.Create()
+	SettingsPage.RelativeSize = Vector2.One
+	SettingsPage.Parent = AppPages
+
+	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
+
+	local timer = Timer.Create(1, true)
+	timer.Events:Listen("TimerElapsed", function()
+		AppPages.Page = 2
+	end)
+
+	timer.Running = true
 
 	UserInterface.SetRoot(Root)
 end
@@ -126,6 +260,7 @@ end
 
 function love.update(deltaTime)
 	AppNetworkClient:Update()
+	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
 	UserInterface.Update(deltaTime)
 end
@@ -139,6 +274,7 @@ end
 function love.quit(exitCode)
 	UserInterface.Deinitialise()
 	Animation.DestroyAllAnimations()
+	Timer.DestroyAllTimers()
 	AppNetworkClient:Destroy()
 end
 

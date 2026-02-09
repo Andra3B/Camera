@@ -10,8 +10,8 @@ function Label.Create()
 	self._Text = ""
 	self._TextColour = Vector4.Create(0, 0, 0, 1)
 	
-	self._TextRelativeSize = 0
-	self._TextPixelSize = 20
+	self._TextRelativeSize = 0.5
+	self._TextPixelSize = 0
 
 	self._TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
 	self._TextVerticalAlignment = Enum.VerticalAlignment.Middle
@@ -65,7 +65,7 @@ function Label:GetAbsoluteTextOffset()
 		if verticalAlignment == Enum.VerticalAlignment.Top then
 			dy = 0
 		elseif verticalAlignment == Enum.VerticalAlignment.Middle then
-			dy = (absoluteSize.Y - absoluteTextSize.Y)*0.5
+			dy = (absoluteSize.Y - absoluteTextSize.Y*1.3)*0.5
 		else
 			dy = absoluteSize.Y - absoluteTextSize.Y
 		end
@@ -78,10 +78,13 @@ end
 
 function Label:GetAbsoluteTextSize()
 	if not self._AbsoluteTextSize then
-		local textSize = math.floor(self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize + 0.5)
+		local textSize = self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize
 		local font = self:GetFont():GetFont(textSize)
 
-		self._AbsoluteTextSize = Vector2.Create(font:getWidth(self._Text), textSize)
+		self._AbsoluteTextSize = Vector2.Create(
+			font:getWidth(self._Text),
+			font:getBaseline()
+		)
 	end
 
 	return self._AbsoluteTextSize
@@ -157,6 +160,6 @@ function Label:Destroy()
 end
 
 return Class.CreateClass(Label, "Label", Frame, {
-	["AbsoluteTextOffset"] = {"Font", "Text", "TextHorizontalAlignment", "TextVerticalAlignment"},
+	["AbsoluteTextOffset"] = {"AbsoluteSize", "AbsoluteTextSize", "Font", "Text", "TextHorizontalAlignment", "TextVerticalAlignment"},
 	["AbsoluteTextSize"] = {"AbsoluteSize", "Font", "Text", "TextRelativeSize", "TextPixelSize"}
 })

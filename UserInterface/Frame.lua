@@ -1,5 +1,11 @@
 local Frame = {}
 
+Enum.Axis = Enum.Create({
+	None = 1,
+	X = 2,
+	Y = 3
+})
+
 function Frame.Create()
 	local self = Class.CreateInstance(Object.Create(), Frame)
 
@@ -10,6 +16,9 @@ function Frame.Create()
 	self._RelativeSize = Vector2.Zero
 	self._PixelSize = Vector2.Zero
 	self._AbsoluteSize = nil
+
+	self._RelativeOrigin = Vector2.Zero
+	self._PixelOrigin = Vector2.Zero
 
 	self._ChildPixelOffset = Vector2.Zero
 	self._ChildRelativeOffset = Vector2.Zero
@@ -24,6 +33,9 @@ function Frame.Create()
 	self._RelativeCornerRadius = 0
 	self._PixelCornerRadius = 0
 	self._AbsoluteCornerRadius = nil
+
+	self._AspectRatio = 1
+	self._DominantAxis = Enum.Axis.None
 
 	self._Visible = true
 
@@ -177,7 +189,12 @@ function Frame:GetAbsolutePosition()
 		end
 
 		self._AbsolutePosition =
-			parentAbsolutePosition + parentAbsoluteChildOffset + self._PixelPosition + parentAbsoluteSize*self._RelativePosition
+			parentAbsolutePosition +
+			parentAbsoluteChildOffset +
+			self._PixelPosition +
+			parentAbsoluteSize*self._RelativePosition -
+			self.AbsoluteSize*self._RelativeOrigin -
+			self._PixelOrigin
 	end
 
 	return self._AbsolutePosition
@@ -212,10 +229,33 @@ function Frame:GetAbsoluteSize()
 		local parent = self._Parent
 
 		self._AbsoluteSize = 
-			self._PixelSize + (parent and parent.AbsoluteSize or Vector2.Create(love.graphics.getDimensions()))*self._RelativeSize
+			self._PixelSize +
+			(parent and parent.AbsoluteSize or Vector2.Create(love.graphics.getDimensions()))*self._RelativeSize
+
+		if self._DominantAxis == Enum.Axis.X then
+			self._AbsoluteSize.Y = self._AbsoluteSize.X/self._AspectRatio
+		elseif self._DominantAxis == Enum.Axis.Y then
+			self._AbsoluteSize.X = self._AbsoluteSize.Y*self._AspectRatio
+		end
 	end
 
 	return self._AbsoluteSize
+end
+
+function Frame:GetRelativeOrigin()
+	return self._RelativeOrigin
+end
+
+function Frame:SetRelativeOrigin(origin)
+	self._RelativeOrigin = origin
+end
+
+function Frame:GetPixelOrigin()
+	return self._PixelOrigin
+end
+
+function Frame:SetPixelOrigin(origin)
+	self._PixelOrigin = origin
 end
 
 function Frame:GetChildPixelOffset()
@@ -301,10 +341,26 @@ end
 function Frame:GetAbsoluteCornerRadius()
 	if not self._AbsoluteCornerRadius then
 		self._AbsoluteCornerRadius =
-			self._PixelCornerRadius + math.min(self.AbsoluteSize:Unpack())*self._RelativeCornerRadius
+			self._PixelCornerRadius + math.min(self.AbsoluteSize:Unpack())*0.5*self._RelativeCornerRadius
 	end
 
 	return self._AbsoluteCornerRadius
+end
+
+function Frame:GetAspectRatio()
+	return self._AspectRatio
+end
+
+function Frame:SetAspectRatio(ratio)
+	self._AspectRatio = ratio
+end
+
+function Frame:GetDominantAxis()
+	return self._DominantAxis
+end
+
+function Frame:SetDominantAxis(axis)
+	self._DominantAxis = axis
 end
 
 function Frame:IsVisible()
@@ -341,7 +397,7 @@ function Frame:Destroy()
 end
 
 return Class.CreateClass(Frame, "Frame", Object, {
-	["AbsolutePosition"] = {"RelativePosition", "PixelPosition"},
+	["AbsolutePosition"] = {"RelativePosition", "PixelPosition", "AbsoluteSize"},
 	["AbsoluteSize"] = {"RelativeSize", "PixelSize"},
 	["AbsoluteChildOffset"] = {"AbsoluteSize", "ChildRelativeOffset", "ChildPixelOffset"},
 	["AbsoluteCornerRadius"] = {"AbsoluteSize", "RelativeCornerRadius", "PixelCornerRadius"}

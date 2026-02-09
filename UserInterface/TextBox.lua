@@ -59,12 +59,12 @@ end
 
 function TextBox:GetAbsoluteTextSize()
 	if not self._AbsoluteTextSize then
-		local textSize = math.floor(self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize + 0.5)
+		local textSize = self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize
 		local font = self:GetFont():GetFont(textSize)
 
 		self._AbsoluteTextSize = Vector2.Create(
 			font:getWidth(#self._Text > 0 and self._Text or self._PlaceholderText),
-			textSize
+			font:getBaseline()
 		)
 	end
 

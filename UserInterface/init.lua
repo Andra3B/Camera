@@ -86,24 +86,28 @@ function UserInterface.Input(inputType, scancode, state)
 					UserInterface.Pressed = interactiveFrame
 					UserInterface.Focus = interactiveFrame
 					
-					interactiveFrame.Events:Push("Pressed", true)
+					interactiveFrame.Events:Push("Pressed")
 				else
 					UserInterface.Pressed = nil
 					UserInterface.Focus = nil
 				end
 			elseif UserInterface.Pressed then
-				UserInterface.Pressed.Events:Push("Pressed", false)
+				UserInterface.Pressed.Events:Push("Released")
 
 				UserInterface.Pressed = nil
 			end
 		end
 	end
 
-	if UserInterface.Focus then
+	if UserInterface.Focus and UserInterface.Focus.Input then
 		UserInterface.Focus:Input(inputType, scancode, state)
 	end
 
-	if UserInterface.Hovering and UserInterface.Hovering ~= UserInterface.Focus then
+	if
+		UserInterface.Hovering and 
+		UserInterface.Hovering ~= UserInterface.Focus and 
+		UserInterface.Hovering.Focus
+	then
 		UserInterface.Hovering:Input(inputType, scancode, state)
 	end
 end

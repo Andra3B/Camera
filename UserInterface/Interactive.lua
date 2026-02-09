@@ -13,7 +13,7 @@ function Interactive.Create()
 
 	self._FocusedBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
 	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 1)
-	self._HoveringBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
+	self._HoveringBackgroundColour = Vector4.Create(0, 0.9, 0.9, 1)
 
 	return self
 end
@@ -62,7 +62,7 @@ function Interactive:SetActive(active)
 	self:RecursiveRefresh()
 
 	if self:IsPressed() and not active then
-		self._Events:Push("Pressed", false)
+		self._Events:Push("Released")
 	end
 end
 
@@ -91,7 +91,7 @@ function Interactive:SetHoveringBackgroundColour(colour)
 end
 
 function Interactive:IsPressed()
-	return UserInterface.CurrentlyPressed == self
+	return UserInterface.Pressed == self
 end
 
 function Interactive:GetPressedBackgroundColour()

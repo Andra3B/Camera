@@ -119,7 +119,7 @@ function Pages:AddTransition(from, to, direction)
 				direction == Enum.PageTransitionDirection.Down and Vector2.Create(0, -1) or
 				direction == Enum.PageTransitionDirection.Left and Vector2.Create(1, 0) or
 				Vector2.Create(-1, 0)
-			, Vector2.Zero, 1, Enum.AnimationType.Linear, false)
+			, Vector2.Zero, 1, Enum.AnimationType.SharpSmoothStep, false)
 
 			transitions[to] = animation
 

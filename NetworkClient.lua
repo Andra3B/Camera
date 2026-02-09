@@ -12,13 +12,20 @@ end
 
 function NetworkClient:Connect(ipAddress, port, timeout)
 	timeout = timeout or 0
+	port = tonumber(port)
 
-	local success, errorMessage = false, "No IP address or port given"
+	local success, errorMessage = false
 
-	if ipAddress and port then
-		self._Socket:settimeout(timeout)
-		success, errorMessage = self._Socket:connect(ipAddress, port)
-		self._Socket:settimeout(0)
+	if ipAddress then
+		if port then
+			self._Socket:settimeout(timeout)
+			success, errorMessage = self._Socket:connect(ipAddress, port)
+			self._Socket:settimeout(0)
+		else
+			errorMessage = "Invalid port"
+		end
+	else
+		errorMessage = "Invalid IP Address"
 	end
 
 	if success == 1 then
@@ -30,9 +37,7 @@ end
 
 function NetworkClient:Disconnect()
 	if self:IsConnected() then
-		self:Send({{
-			"Disconnect"
-		}})
+		self:Send({{"Disconnect"}})
 
 		self._Socket:close()
 		self._Socket = socket.tcp()

@@ -64,6 +64,7 @@ end
 Class.CreateClass(Font, "Font", Entity)
 
 Font.FreeSans = Font.Create("Assets/Fonts/FreeSans.ttf")
+Font.FreeSansBold = Font.Create("Assets/Fonts/FreeSansBold.ttf")
 
 Font.Default = Font.FreeSans
 

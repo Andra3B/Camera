@@ -161,11 +161,7 @@ function Animation:SetPlaying(playing)
 		self._Playing = playing
 
 		if not self._Object.Destroyed then
-			if playing then
-				self._Object.Events:Push("AnimationStarted", self)
-			else
-				self._Object.Events:Push("AnimationStopped", self)
-			end
+			self._Object.Events:Push(playing and "AnimationStarted" or "AnimationStopped", self)
 		end
 	end
 end
