@@ -10,23 +10,28 @@ Enum.PageTransitionDirection = Enum.Create({
 })
 
 local function OnTransitionStopped(pages, animation)
-	local otherPageFrame = pages._Children[pages._OtherPage]
+	local oldPage = pages._OldPage
+	local page = pages._Page
 
-	if otherPageFrame then
-		otherPageFrame.Visible = false
+	local oldPageFrame = pages._Children[oldPage]
+
+	if oldPageFrame then
+		oldPageFrame.Visible = false
 	end
 
 	pages.ChildRelativeOffset = Vector2.Zero
-	pages._OtherPage = pages._Page
+	pages._OldPage = page
 	
 	animation:Reset()
+
+	pages._Events:Push("PageSwitching", oldPage, page, true)
 end
 
 function Pages.Create()
 	local self = Class.CreateInstance(Frame.Create(), Pages)
 
 	self._Page = 1
-	self._OtherPage = 1
+	self._OldPage = 1
 
 	self._PageTransitions = {}
 
@@ -45,11 +50,11 @@ function Pages:AddChild(child)
 end
 
 function Pages:IsTransitioning()  
-	return self._Page ~= self._OtherPage
+	return self._Page ~= self._OldPage
 end
 
 function Pages:GetPlayingTransition()
-	return self:GetTransition(self._OtherPage, self._Page)
+	return self:GetTransition(self._OldPage, self._Page)
 end
 
 function Pages:GetPage()
@@ -59,32 +64,30 @@ end
 function Pages:SetPage(page)
 	local oldPage = self._Page
 	
-	if oldPage ~= page and oldPage == self._OtherPage then
+	if oldPage == self._OldPage and oldPage ~= page then
 		local pageFrame = self._Children[page]
 		
 		if pageFrame then
 			local oldPageFrame = self._Children[oldPage]
 			local animation = self:GetTransition(oldPage, page)
-			
+				
 			pageFrame.RelativePosition = Vector2.Zero
 			pageFrame.Visible = true
 			self._Page = page
-			self._OtherPage = oldPage
+			self._OldPage = oldPage
 
 			if animation then
 				oldPageFrame.RelativePosition = -animation.From
 				self.ChildRelativeOffset = animation.From
-				
+					
 				animation.Playing = true
 			else
 				oldPageFrame.Visible = false
 			end
 
-			return true
+			self._Events:Trigger("PageSwitching", oldPage, page, false)
 		end
 	end
-
-	return false
 end
 
 function Pages:GetTransition(from, to)

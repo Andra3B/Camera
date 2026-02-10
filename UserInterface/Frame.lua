@@ -33,6 +33,9 @@ function Frame.Create()
 	self._BackgroundImage = nil
 	self._BackgroundImageScaleMode = Enum.ScaleMode.Stretch
 
+	self._AbsoluteBackgroundImagePosition = nil
+	self._AbsoluteBackgroundImageSize = nil
+
 	self._BorderColour = Vector4.Create(0, 0, 0, 1)
 	self._BorderThickness = 0
 
@@ -55,6 +58,8 @@ function Frame:Refresh()
 	self._AbsoluteSize = nil
 	self._AbsoluteChildOffset = nil
 	self._AbsoluteCornerRadius = nil
+	self._AbsoluteBackgroundImagePosition = nil
+	self._AbsoluteBackgroundImageSize = nil
 end
 
 function Frame:Draw()
@@ -74,26 +79,17 @@ function Frame:Draw()
 	if backgroundImage then
 		local width, height = backgroundImage:getDimensions()
 		
-		love.graphics.setColor(1, 1, 1, 1)
+		local absoluteBackgroundImagePosition = self.AbsoluteBackgroundImagePosition
+		local absoluteBackgroundImageSize = self.AbsoluteBackgroundImageSize
+		local scaleFactorX, scaleFactorY = self.AbsoluteBackgroundImageSize.X/width, self.AbsoluteBackgroundImageSize.Y/height
 		
-		if self._BackgroundImageScaleMode == Enum.ScaleMode.Stretch then
-			love.graphics.draw(
-				backgroundImage,
-				absolutePosition.X, absolutePosition.Y,
-				0,
-				absoluteSize.X / width, absoluteSize.Y / height
-			)
-		else
-			local scaleFactor = math.min(absoluteSize.X / width, absoluteSize.Y / height)
-			
-			love.graphics.draw(
-				backgroundImage,
-				absolutePosition.X + (absoluteSize.X - scaleFactor*width)*0.5,
-				absolutePosition.Y + (absoluteSize.Y - scaleFactor*height)*0.5,
-				0,
-				scaleFactor, scaleFactor
-			)
-		end
+		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.draw(
+			backgroundImage,
+			absoluteBackgroundImagePosition.X, absoluteBackgroundImagePosition.Y,
+			0,
+			scaleFactorX, scaleFactorY
+		)
 	end
 end
 
@@ -338,6 +334,34 @@ function Frame:SetBackgroundImageScaleMode(mode)
 	self._BackgroundImageScaleMode = mode
 end
 
+function Frame:GetAbsoluteBackgroundImagePosition()
+	local backgroundImage = self.BackgroundImage
+
+	if not self._AbsoluteBackgroundImagePosition and backgroundImage then
+		local absolutePosition = self.AbsolutePosition
+		local absoluteSize = self.AbsoluteSize
+
+		if self._BackgroundImageScaleMode == Enum.ScaleMode.Stretch then
+			self._AbsoluteBackgroundImagePosition = absolutePosition
+			self._AbsoluteBackgroundImageSize = absoluteSize
+		else
+			local width, height = backgroundImage:getDimensions()
+			local scaleFactor = math.min(absoluteSize.X / width, absoluteSize.Y / height)
+
+			self._AbsoluteBackgroundImageSize = Vector2.Create(scaleFactor*width, scaleFactor*height)
+			self._AbsoluteBackgroundImagePosition = absolutePosition + (absoluteSize - self._AbsoluteBackgroundImageSize)*0.5
+		end
+	end
+
+	return self._AbsoluteBackgroundImagePosition
+end
+
+function Frame:GetAbsoluteBackgroundImageSize()
+	self:GetAbsoluteBackgroundImagePosition()
+
+	return self._AbsoluteBackgroundImageSize
+end
+
 function Frame:GetBorderColour()
 	return self._BorderColour
 end
@@ -422,6 +446,9 @@ function Frame:Destroy()
 		self._BackgroundColour = nil
 		self._BackgroundImage = nil
 
+		self._AbsoluteBackgroundImagePosition = nil
+		self._AbsoluteBackgroundImageSize = nil
+
 		self._BorderColour = nil
 
 		Object.Destroy(self)
@@ -432,5 +459,7 @@ return Class.CreateClass(Frame, "Frame", Object, {
 	["AbsolutePosition"] = {"RelativePosition", "PixelPosition", "AbsoluteSize"},
 	["AbsoluteSize"] = {"RelativeSize", "PixelSize"},
 	["AbsoluteChildOffset"] = {"AbsoluteSize", "ChildRelativeOffset", "ChildPixelOffset"},
-	["AbsoluteCornerRadius"] = {"AbsoluteSize", "RelativeCornerRadius", "PixelCornerRadius"}
+	["AbsoluteCornerRadius"] = {"AbsoluteSize", "RelativeCornerRadius", "PixelCornerRadius"},
+	["AbsoluteBackgroundImagePosition"] = {"AbsolutePosition", "AbsoluteSize", "BackgroundImage"},
+	["AbsoluteBackgroundImageSize"] = {"AbsoluteBackgroundImagePosition"}
 })

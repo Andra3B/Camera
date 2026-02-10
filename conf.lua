@@ -1,5 +1,5 @@
 function love.conf(config)
-    config.identity = "Camera"               -- The name of the save directory (string)
+    config.identity = arg[2]	             -- The name of the save directory (string)
     config.appendidentity = false            -- Search files in source directory before save directory (boolean)
     config.version = "11.4"                  -- The LÖVE version this game was made for (string)
     config.console = false                   -- Attach a console (boolean, Windows only)

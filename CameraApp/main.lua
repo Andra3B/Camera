@@ -49,7 +49,7 @@ if jit.os == "Windows" then
 				if livestreamFrameBufferHandle then
 					livestreamOut = VideoWriter.CreateFromURL(
 						"udp://"..from:GetRemoteDetails()..":"..port,
-						"h264",
+						"mpegts",
 						livestreamIn.Width, livestreamIn.Height,
 						livestreamIn.FPS
 					)
@@ -131,7 +131,6 @@ function love.load()
 		end
 	end)
 
-
 	if jit.os == "Windows" then
 		libav.avdevice.avdevice_register_all()
 	else
@@ -152,6 +151,7 @@ function love.load()
 	AppNetworkServer:Listen()
 
 	Log.Info(Enum.LogCategory.Camera, "Camera listening for clients on %s:%d", AppNetworkServer:GetLocalDetails())
+	--StartLivestream()
 end
 
 function love.update(deltaTime)

@@ -17,7 +17,10 @@ local AppNetworkClient
 local livestreaming
 
 local motionTracker
-local motionThreshold = 0.02
+local motionThreshold = 0.008
+
+local calibratingMotionTracking = false
+local trackerRelativePosition = nil
 
 local function StartLivestream()
 	if not livestreaming then
@@ -26,8 +29,8 @@ local function StartLivestream()
 		AppNetworkClient:Send({{"StartLivestream", freePort}})
 
 		local livestream = VideoReader.CreateFromURL(
-			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000",
-			"h264"
+			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000&fifo_size=1000000&overrun_nonfatal=1",
+			"mpegts"
 		)
 
 		if livestream then
@@ -37,6 +40,9 @@ local function StartLivestream()
 
 			LivestreamFrame.Video = livestream
 			LivestreamFrame.Playing = true
+
+			LivestreamFrame.VideoVisible = true
+			LivestreamFrame.BackgroundImage = motionTracker.MotionMask
 
 			CalibrationControlButton.Active = true
 
@@ -55,9 +61,13 @@ local function StopLivestream()
 			motionTracker:Destroy()
 			motionTracker = nil
 		end
+		
+		calibratingMotionTracking = false
+		trackerRelativePosition = nil
 
 		LivestreamFrame.Video:Destroy()
 		LivestreamFrame.Video = nil
+		LivestreamFrame.BackgroundImage = nil
 
 		CalibrationControlButton.Active = false
 
@@ -83,6 +93,23 @@ function love.load()
 		["centered"] = true,
 		["display"] = 1
 	})
+
+	Shaders = {
+		["MotionMask"] = love.graphics.newShader(
+			"Assets/Shaders/MotionMask.frag",
+			"Assets/Shaders/Default.vert"
+		),
+
+		["COMEncode"] = love.graphics.newShader(
+			"Assets/Shaders/COMEncode.frag",
+			"Assets/Shaders/Default.vert"
+		),
+
+		["Reduction"] = love.graphics.newShader(
+			"Assets/Shaders/Reduction.frag",
+			"Assets/Shaders/Default.vert"
+		)
+	}
 
 	UserInterface.Initialise()
 
@@ -357,7 +384,7 @@ function love.load()
 	MotionThresholdEntry.RelativeSize = Vector2.Create(1/3 - 0.02, 1/3 - 0.02)
 	MotionThresholdEntry.RelativePosition = Vector2.Create(5/6, 3/6 - 0.05)
 	MotionThresholdEntry.PlaceholderText = "Enter threshold..."
-	MotionThresholdEntry.Value = 0.02
+	MotionThresholdEntry.Value = 0.008
 	MotionThresholdEntry.Cursor = math.huge
 	MotionThresholdEntry.BorderThickness = 1
 	MotionThresholdEntry.RelativeCornerRadius = 1
@@ -366,26 +393,24 @@ function love.load()
 	local SaveCalibrationButton = UserInterface.Button.Create()
 	SaveCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0)
 	SaveCalibrationButton.RelativeSize = Vector2.Create(1/6, 1/3 - 0.06)
-	SaveCalibrationButton.RelativePosition = Vector2.Create(3/12 + 0.06, 2/3)
+	SaveCalibrationButton.RelativePosition = Vector2.Create(1/12 + 0.06, 2/3)
 	SaveCalibrationButton.Text = "Save"
 	SaveCalibrationButton.BorderThickness = 1
 	SaveCalibrationButton.RelativeCornerRadius = 1
 	SaveCalibrationButton.Parent = CalibrationFrame
 
 	SaveCalibrationButton.Events:Listen("Pressed", function()
-		if motionTracker then
+		if calibratingMotionTracking then
 			motionTracker.HigherThreshold = HigherThresholdEntry.Value
 			motionTracker.LowerThreshold = LowerThresholdEntry.Value
 			motionThreshold = MotionThresholdEntry.Value
 		end
-
-		print(motionThreshold)
 	end)
 
 	local ResetCalibrationButton = UserInterface.Button.Create()
 	ResetCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0)
 	ResetCalibrationButton.RelativeSize = Vector2.Create(1/6, 1/3 - 0.06)
-	ResetCalibrationButton.RelativePosition = Vector2.Create(6/12, 2/3)
+	ResetCalibrationButton.RelativePosition = Vector2.Create(4/12, 2/3)
 	ResetCalibrationButton.Text = "Reset"
 	ResetCalibrationButton.BorderThickness = 1
 	ResetCalibrationButton.RelativeCornerRadius = 1
@@ -398,14 +423,14 @@ function love.load()
 		LowerThresholdEntry.Value = 0.01
 		LowerThresholdTitle.Cursor = math.huge
 
-		MotionThresholdEntry.Value = 0.02
+		MotionThresholdEntry.Value = 0.008
 		MotionThresholdEntry.Cursor = math.huge
 	end)
 
 	local BackCalibrationButton = UserInterface.Button.Create()
 	BackCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0)
 	BackCalibrationButton.RelativeSize = Vector2.Create(1/6, 1/3 - 0.06)
-	BackCalibrationButton.RelativePosition = Vector2.Create(9/12 - 0.06, 2/3)
+	BackCalibrationButton.RelativePosition = Vector2.Create(7/12 - 0.06, 2/3)
 	BackCalibrationButton.Text = "Back"
 	BackCalibrationButton.BorderThickness = 1
 	BackCalibrationButton.RelativeCornerRadius = 1
@@ -417,6 +442,63 @@ function love.load()
 		calibrationModeAnimation:Reset()
 		calibrationModeAnimation.Reversed = true
 		calibrationModeAnimation.Playing = true
+	end)
+
+	MotionCoverageLabel = UserInterface.Label.Create()
+	MotionCoverageLabel.RelativeOrigin = Vector2.Create(0.5, 0)
+	MotionCoverageLabel.RelativeSize = Vector2.Create(1/3 - 0.02, 1/3 - 0.06)
+	MotionCoverageLabel.RelativePosition = Vector2.Create(5/6, 2/3)
+	MotionCoverageLabel.Text = "Motion Coverage: 0%"
+	MotionCoverageLabel.BorderThickness = 1
+	MotionCoverageLabel.RelativeCornerRadius = 1
+	MotionCoverageLabel.Parent = CalibrationFrame
+
+	NoMotionLabel = UserInterface.Label.Create()
+	NoMotionLabel.AspectRatio = 5
+	NoMotionLabel.DominantAxis = Enum.Axis.Y
+	NoMotionLabel.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	NoMotionLabel.RelativeSize = Vector2.Create(1, 0.1)
+	NoMotionLabel.RelativePosition = Vector2.Create(0.5, 0.5)
+	NoMotionLabel.Text = "No Motion"
+	NoMotionLabel.TextColour = Vector4.Create(1, 0, 0, 1)
+	NoMotionLabel.Font = UserInterface.Font.FreeSansBold
+	NoMotionLabel.RelativeCornerRadius = 1
+	NoMotionLabel.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.5)
+	NoMotionLabel.BorderThickness = 1
+	NoMotionLabel.Visible = false
+	NoMotionLabel.Parent = LivestreamFrame
+
+	MotionMaskButton = UserInterface.Button.Create()
+	MotionMaskButton.AspectRatio = 1
+	MotionMaskButton.DominantAxis = Enum.Axis.Y
+	MotionMaskButton.RelativeOrigin = Vector2.Create(1, 0)
+	MotionMaskButton.RelativeSize = Vector2.Create(1, 0.08)
+	MotionMaskButton.RelativePosition = Vector2.Create(1, 0)
+	MotionMaskButton.Text = "MM"
+	MotionMaskButton.RelativeCornerRadius = 1
+	MotionMaskButton.BorderThickness = 1
+	MotionMaskButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	MotionMaskButton.Visible = false
+	MotionMaskButton.Parent = LivestreamFrame
+
+	MotionMaskButton.Events:Listen("Pressed", function()
+		LivestreamFrame.VideoVisible = not LivestreamFrame.VideoVisible
+	end)
+
+	BottomBarPages.Events:Listen("PageSwitching", function(from, to, switched)
+		if livestreaming then
+			if to == 2 then
+				if switched then
+					calibratingMotionTracking = true
+					MotionMaskButton.Visible = true
+				end
+			elseif from == 2 then
+				if not switched then
+					calibratingMotionTracking = false
+					MotionMaskButton.Visible = false
+				end
+			end
+		end
 	end)
 
 	BottomBarPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
@@ -431,12 +513,48 @@ function love.update(deltaTime)
 	AppNetworkClient:Update()
 	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
+	
+	NoMotionLabel.Visible = false
+
+	if calibratingMotionTracking then
+		local motionCoverage = motionTracker.MotionCoverage
+		MotionCoverageLabel.Text = string.format("Motion Coverage: %.2f%%", motionCoverage*100)
+
+		if motionCoverage >= motionThreshold then
+			trackerRelativePosition = motionTracker.CenterOfMotion
+		else
+			trackerRelativePosition = nil
+
+			NoMotionLabel.Visible = true
+		end
+	end
+
 	UserInterface.Update(deltaTime)
 end
 
 function love.draw()
 	UserInterface.Draw()
 
+	if livestreaming then
+		if LivestreamFrame.FrameChanged then
+			motionTracker:Update(LivestreamFrame.VideoImage)
+		end
+		
+		if calibratingMotionTracking and trackerRelativePosition then
+			local absolutePosition = LivestreamFrame.AbsoluteBackgroundImagePosition
+			local absoluteSize = LivestreamFrame.AbsoluteBackgroundImageSize
+
+			love.graphics.setColor(1, 0, 0, 1)
+			love.graphics.setLineWidth(2)
+			love.graphics.circle(
+				"line",
+				absolutePosition.X + absoluteSize.X*trackerRelativePosition.X,
+				absolutePosition.Y + absoluteSize.Y*trackerRelativePosition.Y,
+				4
+			)
+		end
+	end
+		
 	love.graphics.present()
 end
 
