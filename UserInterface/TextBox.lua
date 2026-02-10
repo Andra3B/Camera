@@ -10,7 +10,7 @@ function TextBox.Create()
 	self._PlaceholderText = "Enter text here..."
 	self._PlaceholderTextColour = Vector4.Create(0.0, 0.0, 0.0, 0.5)
 
-	self._CursorPosition = 0
+	self._Cursor = 0
 
 	self._AbsoluteCursorOffset = nil
 	self._AbsoluteCursorSize = nil
@@ -74,19 +74,22 @@ end
 function TextBox:SetText(text)
 	Interactive.SetText(self, text)
 
-	self.CursorPosition = self._CursorPosition
+	self.Cursor = self._Cursor
 end
 
 function TextBox:InsertText(text)
 	if #text > 0 then
-		local cursorPosition = self._CursorPosition
+		local Cursor = self._Cursor
 
 		local boxText = self._Text
-		local cursorByteOffset = utf8.offset(boxText, cursorPosition + 1)
+		local cursorByteOffset = utf8.offset(boxText, Cursor + 1)
 
-		self.Text = string.sub(boxText, 1, cursorByteOffset - 1)..text..string.sub(boxText, cursorByteOffset)
+		local text = string.sub(boxText, 1, cursorByteOffset - 1)..text..string.sub(boxText, cursorByteOffset)
+		self.Text = text
 
-		self.CursorPosition = cursorPosition + utf8.len(text)
+		if self._Text == text then
+			self.Cursor = Cursor + utf8.len(text)
+		end
 	end
 end
 
@@ -106,25 +109,25 @@ function TextBox:SetPlaceholderTextColour(colour)
 	self._PlaceholderTextColour = colour
 end
 
-function TextBox:GetCursorPosition()
-	return self._CursorPosition
+function TextBox:GetCursor()
+	return self._Cursor
 end
 
-function TextBox:SetCursorPosition(position)
-	self._CursorPosition = math.clamp(position, 0, utf8.len(self._Text))
+function TextBox:SetCursor(position)
+	self._Cursor = math.clamp(position, 0, utf8.len(self._Text))
 end
 
 function TextBox:GetAbsoluteCursorOffset()
 	if not self._AbsoluteCursorOffset then
-		local cursorPosition = self._CursorPosition
+		local Cursor = self._Cursor
 		local absoluteTextOffset = self.AbsoluteTextOffset
 
-		if cursorPosition == 0 then
+		if Cursor == 0 then
 			self._AbsoluteCursorOffset = absoluteTextOffset
 		else
 			local text = self._Text
 			local textWidth = self:GetFont():GetFont(self.AbsoluteTextSize.Y):getWidth(
-				string.sub(text, 1, utf8.offset(text, cursorPosition))
+				string.sub(text, 1, utf8.offset(text, Cursor))
 			)
 
 			self._AbsoluteCursorOffset = Vector2.Create(
@@ -159,27 +162,32 @@ function TextBox:Submit()
 end
 
 function TextBox:Input(inputType, scancode, state)
-	if self.AbsoluteActive and self:IsFocused() and state.Z < 0 and inputType == Enum.InputType.Keyboard then
+	if self.AbsoluteActive and self.Focused and state.Z < 0 and inputType == Enum.InputType.Keyboard then
 		if scancode == "left" then
-			self.CursorPosition = self.CursorPosition - 1
+			self.Cursor = self.Cursor - 1
 		elseif scancode == "right" then
-			self.CursorPosition = self.CursorPosition + 1
+			self.Cursor = self.Cursor + 1
 		elseif scancode == "backspace" then
 			local text = self._Text
-			local cursorPosition = self.CursorPosition
+			local Cursor = self.Cursor
 
-			if cursorPosition > 0 and #text > 0 then
-				self.Text = string.replace(
+			if Cursor > 0 and #text > 0 then
+				local expectedText = string.replace(
 					text,
-					utf8.offset(text, cursorPosition),
-					utf8.offset(text, cursorPosition + 1) - 1,
+					utf8.offset(text, Cursor),
+					utf8.offset(text, Cursor + 1) - 1,
 					""
 				)
 
-				self.CursorPosition = cursorPosition - 1
+				self.Text = expectedText
+
+				if self._Text == expectedText then
+					self.Cursor = Cursor - 1
+				end
 			end
 		elseif scancode == "return" then
 			self:Submit()
+			UserInterface.SetFocus(nil)
 		end
 	end
 end
@@ -192,6 +200,6 @@ end
 
 return Class.CreateClass(TextBox, "TextBox", Interactive, {
 	["AbsoluteTextSize"] = {"PlaceholderText"},
-	["AbsoluteCursorOffset"] = {"CursorPosition", "AbsoluteTextSize", "AbsoluteTextOffset"},
+	["AbsoluteCursorOffset"] = {"Cursor", "AbsoluteTextSize", "AbsoluteTextOffset"},
 	["AbsoluteCursorSize"] = {"Font", "AbsoluteTextSize"}
 })

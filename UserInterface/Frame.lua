@@ -6,6 +6,11 @@ Enum.Axis = Enum.Create({
 	Y = 3
 })
 
+Enum.ScaleMode = Enum.Create({
+	Stretch = 1,
+	MaintainAspectRatio = 2
+})
+
 function Frame.Create()
 	local self = Class.CreateInstance(Object.Create(), Frame)
 
@@ -26,6 +31,7 @@ function Frame.Create()
 
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
+	self._BackgroundImageScaleMode = Enum.ScaleMode.Stretch
 
 	self._BorderColour = Vector4.Create(0, 0, 0, 1)
 	self._BorderThickness = 0
@@ -57,42 +63,59 @@ function Frame:Draw()
 	local backgroundImage = self.BackgroundImage
 	local absoluteCornerRadius = self.AbsoluteCornerRadius
 
-	love.graphics.setColor(self:GetBackgroundColour():Unpack())
+	love.graphics.setColor(self.BackgroundColour:Unpack())
 	love.graphics.rectangle(
 		"fill",
 		absolutePosition.X, absolutePosition.Y,
 		absoluteSize.X, absoluteSize.Y,
 		absoluteCornerRadius, absoluteCornerRadius
 	)
+	
+	if backgroundImage then
+		local width, height = backgroundImage:getDimensions()
+		
+		love.graphics.setColor(1, 1, 1, 1)
+		
+		if self._BackgroundImageScaleMode == Enum.ScaleMode.Stretch then
+			love.graphics.draw(
+				backgroundImage,
+				absolutePosition.X, absolutePosition.Y,
+				0,
+				absoluteSize.X / width, absoluteSize.Y / height
+			)
+		else
+			local scaleFactor = math.min(absoluteSize.X / width, absoluteSize.Y / height)
+			
+			love.graphics.draw(
+				backgroundImage,
+				absolutePosition.X + (absoluteSize.X - scaleFactor*width)*0.5,
+				absolutePosition.Y + (absoluteSize.Y - scaleFactor*height)*0.5,
+				0,
+				scaleFactor, scaleFactor
+			)
+		end
+	end
+end
+
+function Frame:PostDraw()
+	local absolutePosition = self.AbsolutePosition
+	local absoluteSize = self.AbsoluteSize
+	local absoluteCornerRadius = self.AbsoluteCornerRadius
 
 	local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
-	love.graphics.setScissor() --TODO: Find fix to still have scissor enabled but images dont glitch at edges
+	love.graphics.setScissor()
 
-	if self._BorderThickness > 0 then
-		local thickness = self._BorderThickness
+	local thickness = self.BorderThickness
+	if thickness > 0 then
 		local halfThickness = thickness*0.5
 
-		love.graphics.setColor(self._BorderColour:Unpack())
+		love.graphics.setColor(self.BorderColour:Unpack())
 		love.graphics.setLineWidth(thickness)
 		love.graphics.rectangle(
 			"line",
 			absolutePosition.X - halfThickness, absolutePosition.Y - halfThickness,
 			absoluteSize.X + thickness - 1, absoluteSize.Y + thickness,
 			absoluteCornerRadius + halfThickness, absoluteCornerRadius + halfThickness
-		)
-	end
-
-	if backgroundImage then
-		local width, height = backgroundImage:getDimensions()
-
-		love.graphics.setColor(1.0, 1.0, 1.0, 1.0)
-		love.graphics.draw(
-			backgroundImage,
-			absolutePosition.X, absolutePosition.Y,
-			0,
-			absoluteSize.X / width, absoluteSize.Y / height,
-			0, 0,
-			0, 0
 		)
 	end
 
@@ -130,6 +153,7 @@ function Frame:RecursiveDraw()
 			love.graphics.push("all")
 
 			self:Draw()
+			self:PostDraw()
 
 			for _, child in ipairs(self:GetChildren()) do
 				if Class.IsA(child, "Frame") then
@@ -304,6 +328,14 @@ end
 
 function Frame:SetBackgroundImage(image)
 	self._BackgroundImage = image
+end
+
+function Frame:GetBackgroundImageScaleMode()
+	return self._BackgroundImageScaleMode
+end
+
+function Frame:SetBackgroundImageScaleMode(mode)
+	self._BackgroundImageScaleMode = mode
 end
 
 function Frame:GetBorderColour()

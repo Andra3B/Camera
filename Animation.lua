@@ -39,6 +39,10 @@ function Animation.Update(deltaTime)
 
 					local alpha = animation._Time / animation._Duration
 
+					if animation._Reversed then
+						alpha = 1 - alpha
+					end
+
 					local propertyValue = animation._Object[animation._Property]
 					local propertyType = Class.GetType(propertyValue)
 
@@ -66,7 +70,7 @@ function Animation.Update(deltaTime)
 						)
 					end
 				else
-					animation._Object[animation._Property] = animation._To
+					animation._Object[animation._Property] = animation._Reversed and animation._From or animation._To
 					animation.Playing = false
 					animation._Object.Events:Push("AnimationFinished", animation)
 
@@ -99,6 +103,8 @@ function Animation.Create(object, property, from, to, duration, animationType, d
 	self._Time = 0
 
 	self._Playing = false
+
+	self._Reversed = false
 
 	if destroyOnFinish == nil then
 		self._DestroyOnFinish = true
@@ -166,6 +172,14 @@ function Animation:SetPlaying(playing)
 	end
 end
 
+function Animation:IsReversed()
+	return self._Reversed
+end
+
+function Animation:SetReversed(reversed)
+	self._Reversed = reversed
+end
+
 function Animation:Reset()
 	self.Playing = false
 	self.Time = 0
@@ -178,9 +192,7 @@ end
 function Animation:Destroy()
 	if not self._Destroyed then
 		self.Playing = false
-
-		self._Object[self._Property] = self._To
-
+		
 		self._Object = nil
 		self._From = nil
 		self._To = nil

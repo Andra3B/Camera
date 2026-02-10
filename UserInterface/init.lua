@@ -23,6 +23,7 @@ UserInterface.Frame = require("UserInterface.Frame")
 UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
 UserInterface.TextBox = require("UserInterface.TextBox")
+UserInterface.NumericTextBox = require("UserInterface.NumericTextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
 UserInterface.Pages = require("UserInterface.Pages")
 
@@ -66,6 +67,22 @@ function UserInterface.Refresh()
 	end
 end
 
+function UserInterface.SetFocus(focus)
+	local oldFocus = UserInterface.Focus
+
+	if focus ~= oldFocus then
+		UserInterface.Focus = focus
+
+		if oldFocus and oldFocus.FocusLost then
+			oldFocus:FocusLost()
+		end
+
+		if UserInterface.Focus and UserInterface.Focus.FocusGained then
+			UserInterface.Focus:FocusGained()
+		end
+	end
+end
+
 function UserInterface.Input(inputType, scancode, state)
 	if inputType == Enum.InputType.Mouse then
 		if type(scancode) == "number" then
@@ -84,12 +101,12 @@ function UserInterface.Input(inputType, scancode, state)
 			if state.Z < 0 then
 				if interactiveFrame and interactiveFrame.AbsoluteActive then
 					UserInterface.Pressed = interactiveFrame
-					UserInterface.Focus = interactiveFrame
-					
+					UserInterface.SetFocus(interactiveFrame)
+
 					interactiveFrame.Events:Push("Pressed")
 				else
 					UserInterface.Pressed = nil
-					UserInterface.Focus = nil
+					UserInterface.SetFocus(nil)
 				end
 			elseif UserInterface.Pressed then
 				UserInterface.Pressed.Events:Push("Released")
@@ -176,7 +193,7 @@ function UserInterface.Deinitialise()
 
 		UserInterface.Hovering = nil
 		UserInterface.Pressed = nil
-		UserInterface.Focus = nil
+		UserInterface.SetFocus(nil)
 
 		UserInterface.Events:Destroy()
 		UserInterface.Events = nil

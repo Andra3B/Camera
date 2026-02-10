@@ -1,11 +1,10 @@
 local Log = {}
 
 Enum.LogCategory = Enum.Create({
-    App = 1,
-	Video = 2,
-	UserInterface = 3,
-	Network = 4,
-	Build = 5
+    Client = 1,
+	Camera = 2,
+	Video = 3,
+	Build = 4
 })
 
 Enum.LogPriority = Enum.Create({

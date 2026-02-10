@@ -7,6 +7,8 @@ function NetworkClient.Create(clientSocket, owner)
 	
 	self._Owner = owner
 
+	self._Connected = owner ~= nil
+
 	return self
 end
 
@@ -29,6 +31,8 @@ function NetworkClient:Connect(ipAddress, port, timeout)
 	end
 
 	if success == 1 then
+		self._Connected = true
+
 		return true
 	else
 		return false, errorMessage
@@ -36,25 +40,30 @@ function NetworkClient:Connect(ipAddress, port, timeout)
 end
 
 function NetworkClient:Disconnect()
-	if self:IsConnected() then
+	if self._Connected then
 		self:Send({{"Disconnect"}})
+
+		if self._Owner then
+			self._Events:Trigger("Disconnect")
+			self._Owner.Events:Trigger("Disconnect", self)
+		else
+			self._Events:Push("Disconnect")
+		end
 
 		self._Socket:close()
 		self._Socket = socket.tcp()
 		self._Socket:settimeout(0)
+
+		self._Connected = false
 	end
 end
 
 function NetworkClient:IsConnected()
-	return self._Socket:getpeername() ~= nil
+	return self._Connected
 end
 
 function NetworkClient:GetOwner()
 	return self._Owner
-end
-
-function NetworkClient:GetLocalDetails()
-	return self._Socket:getsockname()
 end
 
 function NetworkClient:GetRemoteDetails()
@@ -64,7 +73,7 @@ end
 function NetworkClient:Update()
 	NetworkController.Update(self)
 
-	if self:IsConnected() then
+	if self._Connected then
 		local commands = nil
 		local data = buffer.new()
 		local retries = 0
@@ -73,7 +82,11 @@ function NetworkClient:Update()
 		while retries <= self._Retries do
 			local partialData, partialErrorMessage = self._Socket:receive("*l")
 			
-			if partialData then
+			if partialErrorMessage == "closed" then
+				self:Disconnect()
+
+				return false
+			elseif partialData then
 				data:put(partialData)
 
 				commands = NetworkController.GetCommandsFromString(data:tostring())
@@ -94,7 +107,7 @@ function NetworkClient:Update()
 			if commands then
 				for _, command in ipairs(commands) do
 					self._Events:Push(command[1], select(2, unpack(command)))
-					
+						
 					if self._Owner then
 						self._Owner.Events:Push(command[1], self, select(2, unpack(command)))
 					end
@@ -120,29 +133,35 @@ function NetworkClient:Update()
 		end
 
 		data:free()
+		return true
 	end
+
+	return false
 end
 
 function NetworkClient:Send(commands)
-	local commandsString = " "..NetworkController.GetStringFromCommands(commands).."\n"
+	if self._Connected then
+		local commandsString = " "..NetworkController.GetStringFromCommands(commands).."\n"
 
-	local lastByteSent = 1
-	local errorMessage
+		local lastByteSent = 1
+		local errorMessage
 
-	while lastByteSent < #commandsString do
-		lastByteSent, errorMessage = self._Socket:send(commandsString, lastByteSent + 1)
+		while lastByteSent < #commandsString do
+			lastByteSent, errorMessage = self._Socket:send(commandsString, lastByteSent + 1)
 
-		if not lastByteSent then
-			return false, errorMessage
+			if not lastByteSent then
+				return false, errorMessage
+			end
 		end
+
+		return true
 	end
 
-	return true
+	return false
 end
 
 function NetworkClient:Destroy()
 	if not self._Destroyed then
-		self:Disconnect()
 		self._Owner = nil
 
 		NetworkController.Destroy(self)

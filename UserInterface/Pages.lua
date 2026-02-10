@@ -44,7 +44,7 @@ function Pages:AddChild(child)
 	end
 end
 
-function Pages:IsTransitioning()
+function Pages:IsTransitioning()  
 	return self._Page ~= self._OtherPage
 end
 

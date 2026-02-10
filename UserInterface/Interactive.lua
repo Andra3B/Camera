@@ -13,7 +13,8 @@ function Interactive.Create()
 
 	self._FocusedBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
 	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 1)
-	self._HoveringBackgroundColour = Vector4.Create(0, 0.9, 0.9, 1)
+	self._HoveringBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
+	self._InactiveOverlayColour = Vector4.Create(0.9, 0.9, 0.9, 0.8)
 
 	return self
 end
@@ -22,6 +23,24 @@ function Interactive:Refresh()
 	BASE_CLASS.Refresh(self)
 
 	self._AbsoluteActive = nil
+end
+
+function Interactive:PostDraw()
+	if not self._AbsoluteActive then
+		local absolutePosition = self.AbsolutePosition
+		local absoluteSize = self.AbsoluteSize
+		local absoluteCornerRadius = self.AbsoluteCornerRadius
+
+		love.graphics.setColor(self.InactiveOverlayColour:Unpack())
+		love.graphics.rectangle(
+			"fill",
+			absolutePosition.X, absolutePosition.Y,
+			absoluteSize.X, absoluteSize.Y,
+			absoluteCornerRadius, absoluteCornerRadius
+		)
+	end
+
+	BASE_CLASS.PostDraw(self)
 end
 
 function Interactive:GetBackgroundColour()
@@ -102,11 +121,20 @@ function Interactive:SetPressedBackgroundColour(colour)
 	self._PressedBackgroundColour = colour
 end
 
+function Interactive:GetInactiveOverlayColour()
+	return self._InactiveOverlayColour
+end
+
+function Interactive:SetInactiveOverlayColour(colour)
+	self._InactiveOverlayColour = colour
+end
+
 function Interactive:Destroy()
 	if not self._Destroyed then
 		self._FocusedBackgroundColour = nil
 		self._HoveringBackgroundColour = nil
 		self._PressedBackgroundColour = nil
+		self._InactiveOverlayColour = nil
 		
 		BASE_CLASS.Destroy(self)
 	end

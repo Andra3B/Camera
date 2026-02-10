@@ -6,17 +6,17 @@ local NetworkServer = {}
 function NetworkServer.Create(serverSocket)
 	local self = Class.CreateInstance(NetworkController.Create(serverSocket), NetworkServer)
 
-	self._Connections = {}
+	self._Clients = {}
 	
 	return self
 end
 
 function NetworkServer:GetClient(index)
-	return self._Connections[index]
+	return self._Clients[index]
 end
 
-function NetworkServer:GetLocalDetails()
-	return self._Socket:getsockname()
+function NetworkServer:IterateClients()
+	return ipairs(self._Clients)
 end
 
 function NetworkServer:Listen()
@@ -34,22 +34,20 @@ function NetworkServer:Update()
 		if clientSocket then
 			local networkClient = NetworkClient.Create(clientSocket, self)
 
-			table.insert(self._Connections, networkClient)
+			table.insert(self._Clients, networkClient)
 		else
 			break
 		end
 	end
 
 	local index = 1
-	while index <= #self._Connections do
-		local networkClient = self._Connections[index]
+	while index <= #self._Clients do
+		local networkClient = self._Clients[index]
 
-		if networkClient:IsConnected() then
-			networkClient:Update()
-
+		if networkClient:Update() then
 			index = index + 1
 		else
-			table.remove(self._Connections, index)
+			table.remove(self._Clients, index)
 			networkClient:Destroy()
 		end
 	end
@@ -57,12 +55,9 @@ end
 
 function NetworkServer:Destroy()
 	if not self._Destroyed then
-		for index, networkClient in pairs(self._Connections) do
-			networkClient:Destroy()
-			self._Connections[index] = nil
-		end
+		table.erase(self._Clients, NetworkClient.Destroy)
 
-		self._Connections = nil
+		self._Clients = nil
 
 		NetworkController.Destroy(self)
 	end

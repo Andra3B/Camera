@@ -6,7 +6,7 @@ uniform float HigherThreshold;
 vec4 effect(vec4 colour, Image currentFrame, vec2 imagePosition, vec2 screenPosition) {
 	vec3 currentPixel = Texel(currentFrame, imagePosition).rgb;
 	
-	float currentLuminance = (currentPixel.r + currentPixel.g + currentPixel.b) * 0.33;
+	float currentLuminance = (currentPixel.r + currentPixel.g + currentPixel.b) / 3.0;
 	float previousLuminance = Texel(PreviousMotionMask, imagePosition).g;
 
 	float currentMotion = abs(currentLuminance - previousLuminance);

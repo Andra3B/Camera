@@ -40,7 +40,7 @@ function EventDirector:Update()
 end
 
 function EventDirector:Trigger(event, ...)
-    local eventListeners = self._Listeners[event] or self._Listeners.All
+    local eventListeners = self._Listeners[event]
 
     if eventListeners then
         for index, eventListener in pairs(eventListeners) do
@@ -49,6 +49,14 @@ function EventDirector:Trigger(event, ...)
             end
         end
     end
+
+	if self._Listeners.All then
+		for index, eventListener in pairs(self._Listeners.All) do
+			if eventListener._Destroyed or eventListener:Trigger(event, ...) then
+				eventListeners[index] = nil
+			end
+		end
+	end
 end
 
 function EventDirector:ClearListeners()

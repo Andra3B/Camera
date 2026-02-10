@@ -7,41 +7,49 @@ local function GetLibAVErrorString(errorCode)
 	return ffi.string(errorDescriptionHandle)
 end
 
+function VideoReader.GetCameraURL()
+	local inputDeviceListHandle = ffi.new("AVDeviceInfoList*[1]")
+	local listCount = libav.avdevice.avdevice_list_input_sources(
+		inputFormatHandle, nil, nil,
+		inputDeviceListHandle
+	)
+
+	local url = nil
+	for deviceIndex = 0, listCount - 1, 1 do
+		local deviceDetailsHandle = inputDeviceListHandle[0].devices[deviceIndex]
+
+		local supportsVideo = false
+		for typeIndex = 0, deviceDetailsHandle.nb_media_types - 1, 1 do
+			if deviceDetailsHandle.media_types[typeIndex] == libav.avutil.AVMEDIA_TYPE_VIDEO then
+				supportsVideo = true
+
+				break
+			end
+		end
+
+		if supportsVideo then
+			url = (jit.os == "Windows" and "video=" or "")..ffi.string(deviceDetailsHandle.device_description)
+
+			break
+		end
+	end
+
+	libav.avdevice.avdevice_free_list_devices(inputDeviceListHandle)
+
+	return url
+end
+
 function VideoReader.CreateFromURL(url, inputFormat, options)
 	local inputFormatHandle = inputFormat and libav.avformat.av_find_input_format(inputFormat) or nil
 
 	if inputFormat and inputFormatHandle == nil then
 		Log.Critical(Enum.LogCategory.Video, "Input format \"%s\" is not supported!", inputFormat)
 	else
+		url = url or VideoReader.GetCameraURL()
+
 		if not url then
-			local inputDeviceListHandle = ffi.new("AVDeviceInfoList*[1]")
-			local listCount = libav.avdevice.avdevice_list_input_sources(
-				inputFormatHandle, nil, nil,
-				inputDeviceListHandle
-			)
-
-			for deviceIndex = 0, listCount - 1, 1 do
-				local deviceDetailsHandle = inputDeviceListHandle[0].devices[deviceIndex]
-
-				local supportsVideo = false
-				for typeIndex = 0, deviceDetailsHandle.nb_media_types - 1, 1 do
-					if deviceDetailsHandle.media_types[typeIndex] == libav.avutil.AVMEDIA_TYPE_VIDEO then
-						supportsVideo = true
-						break
-					end
-				end
-
-				if supportsVideo then
-					url = (inputFormat == "dshow" and "video=" or "")..ffi.string(deviceDetailsHandle.device_description)
-					break
-				end
-			end
-
-			libav.avdevice.avdevice_free_list_devices(inputDeviceListHandle)
-
-			if not url then
-				Log.Critical(Enum.LogCategory.Video, "Failed to find a video input device!")
-			end
+			Log.Critical(Enum.LogCategory.Video, "Failed to find a video input device!")
+			return
 		end
 
 		local formatHandleHandle = ffi.new("AVFormatContext*[1]")

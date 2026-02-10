@@ -46,11 +46,7 @@ function VideoFrame:Update(deltaTime)
 
 					self._FrameHandle = frameHandle
 					self._FrameChanged = true
-
-					if self._VideoWriter then
-						self._VideoWriter:WriteFrame(frameHandle)
-					end
-
+					
 					break
 				elseif not needsAnotherPacket then
 					self.Playing = false
@@ -64,14 +60,6 @@ end
 
 function VideoFrame:GetVideo()
 	return self._Video
-end
-
-function VideoFrame:GetVideoWriter()
-	return self._VideoWriter
-end
-
-function VideoFrame:SetVideoWriter(writer)
-	self._VideoWriter = writer
 end
 
 function VideoFrame:GetBackgroundImage()
