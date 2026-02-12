@@ -1,0 +1,10 @@
+1) Install minimal terminal OS to the SD card using Pi Imager with SSH on.
+2) Ensure "dtoverlay=dwc2" is inside boot file "config.txt" under [all].
+3) Ensure "modules-load=dwc2,g_serial" is inside boot file "cmdline.txt" and after "rootwait".
+4) Install latest "PuTTY" on to PC.
+4) Boot Pi and get terminal access via PuTTY.
+5) Install latest "git" on to Pi.
+7) Install latest "love" on to Pi.
+8) Install latest "ffmpeg" on to Pi.
+9) Install latest "pigpio" on to Pi.
+10) Clone "https://github.com/Andra3B/Camera".

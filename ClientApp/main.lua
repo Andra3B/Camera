@@ -34,9 +34,7 @@ local function StartLivestream()
 		)
 
 		if livestream then
-			motionTracker = MotionTracker.Create(
-				livestream.Width, livestream.Height
-			)
+			motionTracker = MotionTracker.Create(livestream.Width, livestream.Height)
 
 			LivestreamFrame.Video = livestream
 			LivestreamFrame.Playing = true
@@ -597,10 +595,6 @@ function love.load()
 
 	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
 	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
-
-	--RAT
-	AppPages.Page = 2
-	SubPages.Page = 2
 
 	UserInterface.SetRoot(Root)
 end
