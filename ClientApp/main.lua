@@ -81,7 +81,7 @@ function love.load()
 	libav.avdevice.avdevice_register_all()
 
 	AppNetworkClient = NetworkClient.Create()
-	AppNetworkClient.Events:Listen("Disconnect", StopLivestream)
+	AppNetworkClient.Events:Listen("Disconnected", StopLivestream)
 	AppNetworkClient:Bind()
 
 	local width, height = love.window.getDesktopDimensions(1)
@@ -91,6 +91,8 @@ function love.load()
 		["stencil"] = false,
 		["resizable"] = true,
 		["centered"] = true,
+		["minwidth"] = 400,
+		["minheight"] = 400,
 		["display"] = 1
 	})
 
@@ -139,7 +141,7 @@ function love.load()
 	HostEntry.RelativePosition = Vector2.Create(0.5, 0.5)
 	HostEntry.PixelPosition = Vector2.Create(-5, 0)
 	HostEntry.PlaceholderText = "Enter Host..."
-	HostEntry.RelativeCornerRadius = 1
+	HostEntry.CornerRelativeRadius = 1
 	HostEntry.BorderThickness = 1
 	HostEntry.Parent = ConnectionPage
 
@@ -149,7 +151,7 @@ function love.load()
 	PortEntry.RelativePosition = Vector2.Create(0.5, 0.5)
 	PortEntry.PixelPosition = Vector2.Create(5, 0)
 	PortEntry.PlaceholderText = "Enter Port..."
-	PortEntry.RelativeCornerRadius = 1
+	PortEntry.CornerRelativeRadius = 1
 	PortEntry.BorderThickness = 1
 	PortEntry.Parent = ConnectionPage
 
@@ -159,7 +161,7 @@ function love.load()
 	ConnectButton.PixelSize = Vector2.Create(10, 0)
 	ConnectButton.RelativePosition = Vector2.Create(0.5, 0.55)
 	ConnectButton.PixelPosition = Vector2.Create(0, 10)
-	ConnectButton.RelativeCornerRadius = 1
+	ConnectButton.CornerRelativeRadius = 1
 	ConnectButton.BorderThickness = 1
 	ConnectButton.Text = "Connect"
 	ConnectButton.Parent = ConnectionPage
@@ -173,7 +175,7 @@ function love.load()
 	ErrorLabel.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
 	ErrorLabel.TextColour = Vector4.Create(1, 0, 0, 1)
 	ErrorLabel.Font = UserInterface.Font.FreeSansBold
-	ErrorLabel.RelativeCornerRadius = 1
+	ErrorLabel.CornerRelativeRadius = 1
 	ErrorLabel.Visible = false
 	ErrorLabel.Parent = ConnectionPage
 
@@ -194,15 +196,25 @@ function love.load()
 		end
 	end)
 
+	local SubPagesFrame = UserInterface.Frame.Create()
+	SubPagesFrame.RelativeSize = Vector2.One
+	SubPagesFrame.BackgroundColour = Vector4.Zero
+	SubPagesFrame.Parent = AppPages
+
+	local SubPages = UserInterface.Pages.Create()
+	SubPages.RelativeSize = Vector2.Create(1, 1)
+	SubPages.BackgroundColour = Vector4.Zero
+	SubPages.Parent = SubPagesFrame
+	
 	local LivestreamPage = UserInterface.Frame.Create()
 	LivestreamPage.RelativeSize = Vector2.One
-	LivestreamPage.Parent = AppPages
+	LivestreamPage.Parent = SubPages
 
 	LivestreamFrame = UserInterface.VideoFrame.Create()
 	LivestreamFrame.RelativeSize = Vector2.Create(1, 1)
-	LivestreamFrame.PixelSize = Vector2.Create(-20, -80)
-	LivestreamFrame.PixelPosition = Vector2.Create(10, 10)
-	LivestreamFrame.RelativeCornerRadius = 0.1
+	LivestreamFrame.PixelSize = Vector2.Create(-20, -140)
+	LivestreamFrame.PixelPosition = Vector2.Create(10, 70)
+	LivestreamFrame.CornerRelativeRadius = 0.1
 	LivestreamFrame.BorderThickness = 1
 	LivestreamFrame.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	LivestreamFrame.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
@@ -228,7 +240,7 @@ function love.load()
 	ControlBar.RelativeOrigin = Vector2.Create(0.5, 0)
 	ControlBar.RelativeSize = Vector2.Create(1, 0.5)
 	ControlBar.RelativePosition = Vector2.Create(0.5, 0.5)
-	ControlBar.RelativeCornerRadius = 1
+	ControlBar.CornerRelativeRadius = 1
 	ControlBar.BorderThickness = 1
 	ControlBar.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
 	ControlBar.Parent = ControlFrame
@@ -240,7 +252,7 @@ function love.load()
 	LeftControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
 	LeftControlButton.RelativePosition = Vector2.Create(1/12, 0.5)
 	LeftControlButton.Text = "<"
-	LeftControlButton.RelativeCornerRadius = 1
+	LeftControlButton.CornerRelativeRadius = 1
 	LeftControlButton.BorderThickness = 1
 	LeftControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	LeftControlButton.Parent = ControlBar
@@ -252,7 +264,7 @@ function love.load()
 	TrackingControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
 	TrackingControlButton.RelativePosition = Vector2.Create(3/12, 0.5)
 	TrackingControlButton.Text = "MT"
-	TrackingControlButton.RelativeCornerRadius = 1
+	TrackingControlButton.CornerRelativeRadius = 1
 	TrackingControlButton.BorderThickness = 1
 	TrackingControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	TrackingControlButton.Parent = ControlBar
@@ -264,7 +276,7 @@ function love.load()
 	LivestreamControlButton.RelativeSize = Vector2.Create(1, 0.8)
 	LivestreamControlButton.RelativePosition = Vector2.Create(0.5, 0.5)
 	LivestreamControlButton.Text = "Start"
-	LivestreamControlButton.RelativeCornerRadius = 1
+	LivestreamControlButton.CornerRelativeRadius = 1
 	LivestreamControlButton.BorderThickness = 1
 	LivestreamControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	LivestreamControlButton.Parent = ControlBar
@@ -284,7 +296,7 @@ function love.load()
 	CalibrationControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
 	CalibrationControlButton.RelativePosition = Vector2.Create(9/12, 0.5)
 	CalibrationControlButton.Text = "C"
-	CalibrationControlButton.RelativeCornerRadius = 1
+	CalibrationControlButton.CornerRelativeRadius = 1
 	CalibrationControlButton.BorderThickness = 1
 	CalibrationControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	CalibrationControlButton.Active = false
@@ -311,7 +323,7 @@ function love.load()
 	RightControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
 	RightControlButton.RelativePosition = Vector2.Create(11/12, 0.5)
 	RightControlButton.Text = ">"
-	RightControlButton.RelativeCornerRadius = 1
+	RightControlButton.CornerRelativeRadius = 1
 	RightControlButton.BorderThickness = 1
 	RightControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	RightControlButton.Parent = ControlBar
@@ -329,7 +341,7 @@ function love.load()
 	CalibrationFrame.RelativePosition = Vector2.Create(0.5, 0)
 	CalibrationFrame.BackgroundColour = Vector4.Zero
 	CalibrationFrame.BorderThickness = 1
-	CalibrationFrame.RelativeCornerRadius = 0.3
+	CalibrationFrame.CornerRelativeRadius = 0.3
 	CalibrationFrame.BackgroundColour = Vector4.One
 	CalibrationFrame.Parent = _CalibrationFrame
 
@@ -349,7 +361,7 @@ function love.load()
 	HigherThresholdEntry.Value = 0.3
 	HigherThresholdEntry.Cursor = math.huge
 	HigherThresholdEntry.BorderThickness = 1
-	HigherThresholdEntry.RelativeCornerRadius = 1
+	HigherThresholdEntry.CornerRelativeRadius = 1
 	HigherThresholdEntry.Parent = CalibrationFrame
 
 	local LowerThresholdTitle = UserInterface.Label.Create()
@@ -368,7 +380,7 @@ function love.load()
 	LowerThresholdEntry.Value = 0.01
 	LowerThresholdEntry.Cursor = math.huge
 	LowerThresholdEntry.BorderThickness = 1
-	LowerThresholdEntry.RelativeCornerRadius = 1
+	LowerThresholdEntry.CornerRelativeRadius = 1
 	LowerThresholdEntry.Parent = CalibrationFrame
 
 	local MotionThresholdTitle = UserInterface.Label.Create()
@@ -387,7 +399,7 @@ function love.load()
 	MotionThresholdEntry.Value = 0.008
 	MotionThresholdEntry.Cursor = math.huge
 	MotionThresholdEntry.BorderThickness = 1
-	MotionThresholdEntry.RelativeCornerRadius = 1
+	MotionThresholdEntry.CornerRelativeRadius = 1
 	MotionThresholdEntry.Parent = CalibrationFrame
 
 	local SaveCalibrationButton = UserInterface.Button.Create()
@@ -396,7 +408,7 @@ function love.load()
 	SaveCalibrationButton.RelativePosition = Vector2.Create(1/12 + 0.06, 2/3)
 	SaveCalibrationButton.Text = "Save"
 	SaveCalibrationButton.BorderThickness = 1
-	SaveCalibrationButton.RelativeCornerRadius = 1
+	SaveCalibrationButton.CornerRelativeRadius = 1
 	SaveCalibrationButton.Parent = CalibrationFrame
 
 	SaveCalibrationButton.Events:Listen("Pressed", function()
@@ -413,7 +425,7 @@ function love.load()
 	ResetCalibrationButton.RelativePosition = Vector2.Create(4/12, 2/3)
 	ResetCalibrationButton.Text = "Reset"
 	ResetCalibrationButton.BorderThickness = 1
-	ResetCalibrationButton.RelativeCornerRadius = 1
+	ResetCalibrationButton.CornerRelativeRadius = 1
 	ResetCalibrationButton.Parent = CalibrationFrame
 
 	ResetCalibrationButton.Events:Listen("Pressed", function()
@@ -433,7 +445,7 @@ function love.load()
 	BackCalibrationButton.RelativePosition = Vector2.Create(7/12 - 0.06, 2/3)
 	BackCalibrationButton.Text = "Back"
 	BackCalibrationButton.BorderThickness = 1
-	BackCalibrationButton.RelativeCornerRadius = 1
+	BackCalibrationButton.CornerRelativeRadius = 1
 	BackCalibrationButton.Parent = CalibrationFrame
 
 	BackCalibrationButton.Events:Listen("Pressed", function()
@@ -450,7 +462,7 @@ function love.load()
 	MotionCoverageLabel.RelativePosition = Vector2.Create(5/6, 2/3)
 	MotionCoverageLabel.Text = "Motion Coverage: 0%"
 	MotionCoverageLabel.BorderThickness = 1
-	MotionCoverageLabel.RelativeCornerRadius = 1
+	MotionCoverageLabel.CornerRelativeRadius = 1
 	MotionCoverageLabel.Parent = CalibrationFrame
 
 	NoMotionLabel = UserInterface.Label.Create()
@@ -462,7 +474,7 @@ function love.load()
 	NoMotionLabel.Text = "No Motion"
 	NoMotionLabel.TextColour = Vector4.Create(1, 0, 0, 1)
 	NoMotionLabel.Font = UserInterface.Font.FreeSansBold
-	NoMotionLabel.RelativeCornerRadius = 1
+	NoMotionLabel.CornerRelativeRadius = 1
 	NoMotionLabel.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.5)
 	NoMotionLabel.BorderThickness = 1
 	NoMotionLabel.Visible = false
@@ -474,8 +486,9 @@ function love.load()
 	MotionMaskButton.RelativeOrigin = Vector2.Create(1, 0)
 	MotionMaskButton.RelativeSize = Vector2.Create(1, 0.08)
 	MotionMaskButton.RelativePosition = Vector2.Create(1, 0)
+	MotionMaskButton.PixelPosition = Vector2.Create(-10, 10)
 	MotionMaskButton.Text = "MM"
-	MotionMaskButton.RelativeCornerRadius = 1
+	MotionMaskButton.CornerRelativeRadius = 1
 	MotionMaskButton.BorderThickness = 1
 	MotionMaskButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
 	MotionMaskButton.Visible = false
@@ -504,7 +517,90 @@ function love.load()
 	BottomBarPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
 	BottomBarPages:AddTransition(2, 1, Enum.PageTransitionDirection.Right)
 
+	local SettingsPage = UserInterface.Frame.Create()
+	SettingsPage.RelativeSize = Vector2.One
+	SettingsPage.Parent = SubPages
+
+	local TopBar = UserInterface.Button.Create()
+	TopBar.RelativeOrigin = Vector2.Create(0.5, 0)
+	TopBar.PixelSize = Vector2.Create(320, 50)
+	TopBar.RelativePosition = Vector2.Create(0.5, 0)
+	TopBar.PixelPosition = Vector2.Create(0, 10)
+	TopBar.CornerRelativeRadius = 1
+	TopBar.BorderThickness = 1
+	TopBar.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
+	TopBar.FocusedBackgroundColour = TopBar.BackgroundColour
+	TopBar.HoveringBackgroundColour = TopBar.BackgroundColour
+	TopBar.PressedBackgroundColour = TopBar.BackgroundColour
+	TopBar.InactiveOverlayColour = TopBar.BackgroundColour
+	TopBar.Parent = SubPagesFrame
+
+	local LivestreamPageButton = UserInterface.Button.Create()
+	LivestreamPageButton.RelativeOrigin = Vector2.Create(0, 0.5)
+	LivestreamPageButton.RelativeSize = Vector2.Create(0.4, 0.8)
+	LivestreamPageButton.RelativePosition = Vector2.Create(0.02, 0.5)
+	LivestreamPageButton.Text = "Livestream"
+	LivestreamPageButton.CornerRelativeRadius = 1
+	LivestreamPageButton.BorderThickness = 1
+	LivestreamPageButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	LivestreamPageButton.Parent = TopBar
+
+	LivestreamPageButton.Events:Listen("Pressed", function()
+		SubPages.Page = 1
+	end)
+	
+	local SettingsPageButton = UserInterface.Button.Create()
+	SettingsPageButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	SettingsPageButton.RelativeSize = Vector2.Create(0.4, 0.8)
+	SettingsPageButton.RelativePosition = Vector2.Create(0.64, 0.5)
+	SettingsPageButton.Text = "Settings"
+	SettingsPageButton.CornerRelativeRadius = 1
+	SettingsPageButton.BorderThickness = 1
+	SettingsPageButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	SettingsPageButton.Parent = TopBar
+
+	SettingsPageButton.Events:Listen("Pressed", function()
+		SubPages.Page = 2
+	end)
+
+	local DisconnectButton = UserInterface.Button.Create()
+	DisconnectButton.AspectRatio = 1
+	DisconnectButton.DominantAxis = Enum.Axis.Y
+	DisconnectButton.RelativeOrigin = Vector2.Create(1, 0.5)
+	DisconnectButton.RelativeSize = Vector2.Create(0.8, 0.8)
+	DisconnectButton.RelativePosition = Vector2.Create(0.98, 0.5)
+	DisconnectButton.Text = "X"
+	DisconnectButton.CornerRelativeRadius = 1
+	DisconnectButton.BorderThickness = 1
+	DisconnectButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	DisconnectButton.Parent = TopBar
+
+	DisconnectButton.Events:Listen("Pressed", function()
+		StopLivestream()
+
+		AppNetworkClient:Disconnect()
+
+		AppPages.Page = 1
+	end)
+
+	local SettingsScrollFrame = UserInterface.ScrollFrame.Create()
+	SettingsScrollFrame.RelativeSize = Vector2.Create(1, 1)
+	SettingsScrollFrame.PixelSize = Vector2.Create(-20, -80)
+	SettingsScrollFrame.PixelPosition = Vector2.Create(10, 70)
+	SettingsScrollFrame.BorderThickness = 1
+	SettingsScrollFrame.CornerRelativeRadius = 0.1
+	SettingsScrollFrame.BackgroundColour = Vector4.One
+	SettingsScrollFrame.Parent = SettingsPage
+
+	SubPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
+	SubPages:AddTransition(2, 1, Enum.PageTransitionDirection.Right)
+
 	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
+	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
+
+	--RAT
+	AppPages.Page = 2
+	SubPages.Page = 2
 
 	UserInterface.SetRoot(Root)
 end
@@ -513,7 +609,7 @@ function love.update(deltaTime)
 	AppNetworkClient:Update()
 	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
-	
+
 	NoMotionLabel.Visible = false
 
 	if calibratingMotionTracking then
@@ -541,8 +637,8 @@ function love.draw()
 		end
 		
 		if calibratingMotionTracking and trackerRelativePosition then
-			local absolutePosition = LivestreamFrame.AbsoluteBackgroundImagePosition
-			local absoluteSize = LivestreamFrame.AbsoluteBackgroundImageSize
+			local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
+			local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
 
 			love.graphics.setColor(1, 0, 0, 1)
 			love.graphics.setLineWidth(2)
@@ -572,7 +668,7 @@ function love.resize(width, height) UserInterface.Refresh() end
 function love.keypressed(key, scancode) UserInterface.Input(Enum.InputType.Keyboard, scancode, Vector4.Create(0, 0, -1, 0)) end
 function love.keyreleased(key, scancode) UserInterface.Input(Enum.InputType.Keyboard, scancode, Vector4.Zero) end
 function love.mousemoved(x, y, dx, dy) UserInterface.Input(Enum.InputType.Mouse, "mousemovement", Vector4.Create(x, y, dx, dy)) end
-function love.wheelmoved(dx, dy) UserInterface.Input(Enum.InputType.Mouse, "mousewheelmovement", Vector4.Create(dx, dx, 0, 0)) end
+function love.wheelmoved(dx, dy) UserInterface.Input(Enum.InputType.Mouse, "mousewheelmovement", Vector4.Create(dx, dy, 0, 0)) end
 function love.mousepressed(x, y, button, isTouch, presses) UserInterface.Input(Enum.InputType.Mouse, button, Vector4.Create(x, y, -presses, 0)) end
 function love.mousereleased(x, y, button, isTouch, presses) UserInterface.Input(Enum.InputType.Mouse, button, Vector4.Create(x, y, 0, 0)) end
 

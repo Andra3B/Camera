@@ -4,6 +4,43 @@ local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(
 
 local TextBox = {}
 
+local function Input(self, inputType, scancode, state)
+	if self.AbsoluteActive and self.Focused and state.Z < 0 and inputType == Enum.InputType.Keyboard then
+		if scancode == "left" then
+			self.Cursor = self.Cursor - 1
+		elseif scancode == "right" then
+			self.Cursor = self.Cursor + 1
+		elseif scancode == "backspace" then
+			local text = self._Text
+			local Cursor = self.Cursor
+
+			if Cursor > 0 and #text > 0 then
+				local expectedText = string.replace(
+					text,
+					utf8.offset(text, Cursor),
+					utf8.offset(text, Cursor + 1) - 1,
+					""
+				)
+
+				self.Text = expectedText
+
+				if self._Text == expectedText then
+					self.Cursor = Cursor - 1
+				end
+			end
+		elseif scancode == "return" then
+			self:Submit()
+			UserInterface.SetFocus(nil)
+		end
+	end
+end
+
+local function TextInput(self, text)
+	if self.AbsoluteActive and self:IsFocused() then
+		self:InsertText(text)
+	end
+end
+
 function TextBox.Create()
 	local self = Class.CreateInstance(Interactive.Create(), TextBox)
 
@@ -14,6 +51,9 @@ function TextBox.Create()
 
 	self._AbsoluteCursorOffset = nil
 	self._AbsoluteCursorSize = nil
+
+	self._Events:Listen("Input", Input, self)
+	self._Events:Listen("TextInput", TextInput, self)
 
 	return self
 end
@@ -158,43 +198,6 @@ end
 function TextBox:Submit()
 	if self.AbsoluteActive then
 		self._Events:Push("Submit", self._Text)
-	end
-end
-
-function TextBox:Input(inputType, scancode, state)
-	if self.AbsoluteActive and self.Focused and state.Z < 0 and inputType == Enum.InputType.Keyboard then
-		if scancode == "left" then
-			self.Cursor = self.Cursor - 1
-		elseif scancode == "right" then
-			self.Cursor = self.Cursor + 1
-		elseif scancode == "backspace" then
-			local text = self._Text
-			local Cursor = self.Cursor
-
-			if Cursor > 0 and #text > 0 then
-				local expectedText = string.replace(
-					text,
-					utf8.offset(text, Cursor),
-					utf8.offset(text, Cursor + 1) - 1,
-					""
-				)
-
-				self.Text = expectedText
-
-				if self._Text == expectedText then
-					self.Cursor = Cursor - 1
-				end
-			end
-		elseif scancode == "return" then
-			self:Submit()
-			UserInterface.SetFocus(nil)
-		end
-	end
-end
-
-function TextBox:TextInput(text)
-	if self.AbsoluteActive and self:IsFocused() then
-		self:InsertText(text)
 	end
 end
 

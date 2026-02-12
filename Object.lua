@@ -138,7 +138,7 @@ function Object:AddChild(child, where)
 
 		child._Parent = self
 		table.insert(self._Children, where, child)
-
+		
 		return true
 	end
 

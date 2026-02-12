@@ -32,6 +32,8 @@ function NetworkClient:Connect(ipAddress, port, timeout)
 
 	if success == 1 then
 		self._Connected = true
+		
+		self:Send({{"Connected"}})
 
 		return true
 	else
@@ -41,15 +43,15 @@ end
 
 function NetworkClient:Disconnect()
 	if self._Connected then
-		self:Send({{"Disconnect"}})
-
 		if self._Owner then
-			self._Events:Trigger("Disconnect")
-			self._Owner.Events:Trigger("Disconnect", self)
+			self._Events:Trigger("Disconnected")
+			self._Owner.Events:Trigger("Disconnected", self)
 		else
-			self._Events:Push("Disconnect")
+			self._Events:Push("Disconnected")
 		end
 
+		self:Send({{"Disconnected"}})
+		
 		self._Socket:close()
 		self._Socket = socket.tcp()
 		self._Socket:settimeout(0)
@@ -106,16 +108,16 @@ function NetworkClient:Update()
 		if #data > 0 then
 			if commands then
 				for _, command in ipairs(commands) do
-					self._Events:Push(command[1], select(2, unpack(command)))
-						
-					if self._Owner then
-						self._Owner.Events:Push(command[1], self, select(2, unpack(command)))
-					end
-
-					if command[1] == "Disconnect" then
+					if command[1] == "Disconnected" then
 						self:Disconnect()
 
 						break
+					else
+						self._Events:Push(command[1], select(2, unpack(command)))
+							
+						if self._Owner then
+							self._Owner.Events:Push(command[1], self, select(2, unpack(command)))
+						end
 					end
 				end
 			else
