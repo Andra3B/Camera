@@ -11,6 +11,8 @@ function Interactive.Create()
 	self._Active = true
 	self._AbsoluteActive = nil
 
+	self._CanFocus = true
+
 	self._FocusedBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
 	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 1)
 	self._HoveringBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
@@ -25,36 +27,38 @@ function Interactive:Refresh()
 	self._AbsoluteActive = nil
 end
 
-function Interactive:PostDraw()
+function Interactive:PostDescendantDraw()
 	if not self._AbsoluteActive then
 		local absolutePosition = self.AbsolutePosition
 		local absoluteSize = self.AbsoluteSize
-		local absoluteCornerRadius = self.AbsoluteCornerRadius
-
+		local cornerAbsoluteRadius = self.CornerAbsoluteRadius
+		
 		love.graphics.setColor(self.InactiveOverlayColour:Unpack())
 		love.graphics.rectangle(
 			"fill",
 			absolutePosition.X, absolutePosition.Y,
 			absoluteSize.X, absoluteSize.Y,
-			absoluteCornerRadius, absoluteCornerRadius
+			cornerAbsoluteRadius, cornerAbsoluteRadius
 		)
 	end
 
-	BASE_CLASS.PostDraw(self)
+	BASE_CLASS.PostDescendantDraw(self)
 end
 
 function Interactive:GetBackgroundColour()
+	local setBackgroundColour = BASE_CLASS.GetBackgroundColour(self)
+
 	if self.AbsoluteActive then
-		if self:IsPressed() then
-			return self:GetPressedBackgroundColour()
-		elseif self:IsHovering() then
-			return self:GetHoveringBackgroundColour()
-		elseif self:IsFocused() then
-			return self:GetFocusedBackgroundColour()
+		if self.Pressed then
+			return self.PressedBackgroundColour or setBackgroundColour
+		elseif self.Hovering then
+			return self.HoveringBackgroundColour or setBackgroundColour
+		elseif self.Focused then
+			return self.FocusedBackgroundColour or setBackgroundColour
 		end
 	end
 	
-	return BASE_CLASS.GetBackgroundColour(self)
+	return setBackgroundColour
 end
 
 function Interactive:IsActive()
@@ -73,6 +77,14 @@ function Interactive:GetAbsoluteActive()
 	end
 
 	return self._AbsoluteActive
+end
+
+function Interactive:GetCanFocus()
+	return self._CanFocus
+end
+
+function Interactive:SetCanFocus(canFocus)
+	self._CanFocus = canFocus
 end
 
 function Interactive:SetActive(active)

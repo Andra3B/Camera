@@ -59,24 +59,22 @@ function EventDirector:Trigger(event, ...)
 	end
 end
 
-function EventDirector:ClearListeners()
-    for eventIndex, eventListeners in pairs(self._Listeners) do
-        for listenerIndex, eventListener in pairs(eventListeners) do
-            eventListener:Destroy()
-
-            eventListeners[listenerIndex] = nil
-        end
-
-        self._Listeners[eventIndex] = nil
-    end
-end
 
 function EventDirector:Destroy()
 	if not self._Destroyed then
 		self:ClearQueue()
 		self._Queue = nil
 
-		self:ClearListeners()
+		for eventIndex, eventListeners in pairs(self._Listeners) do
+        	for listenerIndex, eventListener in pairs(eventListeners) do
+            	eventListener:Destroy()
+
+            	eventListeners[listenerIndex] = nil
+        	end
+
+        	self._Listeners[eventIndex] = nil
+    	end
+		
 		self._Listeners = nil
 
 		Entity.Destroy(self)

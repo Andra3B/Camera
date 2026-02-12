@@ -7,6 +7,8 @@ local Button = {}
 function Button.Create()
 	local self = Class.CreateInstance(Interactive.Create(), Button)
 	
+	self._CanFocus = false
+
 	return self
 end
 

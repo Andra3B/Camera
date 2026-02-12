@@ -140,5 +140,5 @@ function VideoFrame:Destroy()
 end
 
 return Class.CreateClass(VideoFrame, "VideoFrame", Frame, {
-	["AbsoluteBackgroundImagePosition"] = {"Video", "VideoVisible"}
+	["BackgroundImageAbsolutePosition"] = {"Video", "VideoVisible"}
 })

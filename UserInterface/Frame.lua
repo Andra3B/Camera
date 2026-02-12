@@ -27,21 +27,24 @@ function Frame.Create()
 
 	self._ChildPixelOffset = Vector2.Zero
 	self._ChildRelativeOffset = Vector2.Zero
-	self._AbsoluteChildOffset = nil
+	self._ChildAbsoluteOffset = nil
 
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
 	self._BackgroundImageScaleMode = Enum.ScaleMode.Stretch
 
-	self._AbsoluteBackgroundImagePosition = nil
-	self._AbsoluteBackgroundImageSize = nil
+	self._BackgroundImageAbsolutePosition = nil
+	self._BackgroundImageAbsoluteSize = nil
+
+	self._ChildAbsolutePosition = nil
+	self._ChildAbsoluteSize = nil
 
 	self._BorderColour = Vector4.Create(0, 0, 0, 1)
 	self._BorderThickness = 0
 
-	self._RelativeCornerRadius = 0
-	self._PixelCornerRadius = 0
-	self._AbsoluteCornerRadius = nil
+	self._CornerRelativeRadius = 0
+	self._CornerPixelRadius = 0
+	self._CornerAbsoluteRadius = nil
 
 	self._AspectRatio = 1
 	self._DominantAxis = Enum.Axis.None
@@ -56,37 +59,39 @@ function Frame:Refresh()
 
 	self._AbsolutePosition = nil
 	self._AbsoluteSize = nil
-	self._AbsoluteChildOffset = nil
-	self._AbsoluteCornerRadius = nil
-	self._AbsoluteBackgroundImagePosition = nil
-	self._AbsoluteBackgroundImageSize = nil
+	self._ChildAbsoluteOffset = nil
+	self._CornerAbsoluteRadius = nil
+	self._BackgroundImageAbsolutePosition = nil
+	self._BackgroundImageAbsoluteSize = nil
+	self._ChildAbsolutePosition = nil
+	self._ChildAbsoluteSize = nil
 end
 
 function Frame:Draw()
 	local absolutePosition = self.AbsolutePosition
 	local absoluteSize = self.AbsoluteSize
 	local backgroundImage = self.BackgroundImage
-	local absoluteCornerRadius = self.AbsoluteCornerRadius
+	local cornerAbsoluteRadius = self.CornerAbsoluteRadius
 
 	love.graphics.setColor(self.BackgroundColour:Unpack())
 	love.graphics.rectangle(
 		"fill",
 		absolutePosition.X, absolutePosition.Y,
 		absoluteSize.X, absoluteSize.Y,
-		absoluteCornerRadius, absoluteCornerRadius
+		cornerAbsoluteRadius, cornerAbsoluteRadius
 	)
 	
 	if backgroundImage then
 		local width, height = backgroundImage:getDimensions()
 		
-		local absoluteBackgroundImagePosition = self.AbsoluteBackgroundImagePosition
-		local absoluteBackgroundImageSize = self.AbsoluteBackgroundImageSize
-		local scaleFactorX, scaleFactorY = self.AbsoluteBackgroundImageSize.X/width, self.AbsoluteBackgroundImageSize.Y/height
+		local backgroundImageAbsolutePosition = self.BackgroundImageAbsolutePosition
+		local backgroundImageAbsoluteSize = self.BackgroundImageAbsoluteSize
+		local scaleFactorX, scaleFactorY = self.BackgroundImageAbsoluteSize.X/width, self.BackgroundImageAbsoluteSize.Y/height
 		
 		love.graphics.setColor(1, 1, 1, 1)
 		love.graphics.draw(
 			backgroundImage,
-			absoluteBackgroundImagePosition.X, absoluteBackgroundImagePosition.Y,
+			backgroundImageAbsolutePosition.X, backgroundImageAbsolutePosition.Y,
 			0,
 			scaleFactorX, scaleFactorY
 		)
@@ -94,11 +99,13 @@ function Frame:Draw()
 end
 
 function Frame:PostDraw()
+end
+
+function Frame:PostDescendantDraw()
 	local absolutePosition = self.AbsolutePosition
 	local absoluteSize = self.AbsoluteSize
-	local absoluteCornerRadius = self.AbsoluteCornerRadius
-
-	local scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight = love.graphics.getScissor()
+	local cornerAbsoluteRadius = self.CornerAbsoluteRadius
+	
 	love.graphics.setScissor()
 
 	local thickness = self.BorderThickness
@@ -111,11 +118,9 @@ function Frame:PostDraw()
 			"line",
 			absolutePosition.X - halfThickness, absolutePosition.Y - halfThickness,
 			absoluteSize.X + thickness - 1, absoluteSize.Y + thickness,
-			absoluteCornerRadius + halfThickness, absoluteCornerRadius + halfThickness
+			cornerAbsoluteRadius + halfThickness, cornerAbsoluteRadius + halfThickness
 		)
 	end
-
-	love.graphics.setScissor(scissorTopLeftX, scissorTopLeftY, scissorWidth, scissorHeight)
 end
 
 function Frame:RecursiveDraw()
@@ -139,32 +144,45 @@ function Frame:RecursiveDraw()
 		) then
 			love.graphics.push("all")
 
+			local finalScissorTopLeftX = math.max(newScissorTopLeft.X, scissorTopLeftX)
+			local finalScissorTopLeftY = math.max(newScissorTopLeft.Y, scissorTopLeftY)
+
 			love.graphics.setScissor(
-				math.max(newScissorTopLeft.X, scissorTopLeftX),
-				math.max(newScissorTopLeft.Y, scissorTopLeftY),
-				math.min(newScissorBottomRight.X - newScissorTopLeft.X, scissorWidth),
-				math.min(newScissorBottomRight.Y - newScissorTopLeft.Y, scissorHeight)
+				finalScissorTopLeftX,
+				finalScissorTopLeftY,
+				math.min(newScissorBottomRight.X, scissorBottomRightX) - finalScissorTopLeftX,
+				math.min(newScissorBottomRight.Y, scissorBottomRightY) - finalScissorTopLeftY
 			)
 
 			love.graphics.push("all")
-
 			self:Draw()
+			love.graphics.pop()
+			love.graphics.push("all")
 			self:PostDraw()
+			love.graphics.pop()
 
 			for _, child in ipairs(self:GetChildren()) do
 				if Class.IsA(child, "Frame") then
-					love.graphics.push("all")
-
 					child:RecursiveDraw()
-
-					love.graphics.pop()
 				end
 			end
 
-			love.graphics.pop()
+			self:PostDescendantDraw()
+
 			love.graphics.pop()
 		end
 	end
+end
+
+function Frame:AddChild(child, where)
+	if Object.AddChild(self, child, where) then
+		self._ChildAbsolutePosition = nil
+		self._ChildAbsoluteSize = nil
+
+		return true
+	end
+
+	return false
 end
 
 function Frame:GetRelativePosition()
@@ -174,6 +192,11 @@ end
 function Frame:SetRelativePosition(position)
 	if self._RelativePosition ~= position then
 		self._RelativePosition = position
+
+		if self._Parent then
+			self._Parent._ChildAbsolutePosition = nil
+			self._Parent._ChildAbsoluteSize = nil
+		end
 
 		self:RecursiveRefresh()
 	end
@@ -187,6 +210,11 @@ function Frame:SetPixelPosition(position)
 	if self._PixelPosition ~= position then
 		self._PixelPosition = position
 
+		if self._Parent then
+			self._Parent._ChildAbsolutePosition = nil
+			self._Parent._ChildAbsoluteSize = nil
+		end
+
 		self:RecursiveRefresh()
 	end
 end
@@ -195,22 +223,22 @@ function Frame:GetAbsolutePosition()
 	if not self._AbsolutePosition then
 		local parentAbsolutePosition = nil
 		local parentAbsoluteSize = nil
-		local parentAbsoluteChildOffset = nil
+		local parentChildAbsoluteOffset = nil
 		local parent = self._Parent
 
 		if parent then
 			parentAbsolutePosition = parent.AbsolutePosition
 			parentAbsoluteSize = parent.AbsoluteSize
-			parentAbsoluteChildOffset = parent.AbsoluteChildOffset
+			parentChildAbsoluteOffset = parent.ChildAbsoluteOffset
 		else
 			parentAbsolutePosition = Vector2.Zero
 			parentAbsoluteSize = Vector2.Create(love.graphics.getDimensions())
-			parentAbsoluteChildOffset = Vector2.Zero
+			parentChildAbsoluteOffset = Vector2.Zero
 		end
 
 		self._AbsolutePosition =
 			parentAbsolutePosition +
-			parentAbsoluteChildOffset +
+			parentChildAbsoluteOffset +
 			self._PixelPosition +
 			parentAbsoluteSize*self._RelativePosition -
 			self.AbsoluteSize*self._RelativeOrigin -
@@ -228,6 +256,11 @@ function Frame:SetRelativeSize(size)
 	if self._RelativeSize ~= size then
 		self._RelativeSize = size
 
+		if self._Parent then
+			self._Parent._ChildAbsolutePosition = nil
+			self._Parent._ChildAbsoluteSize = nil
+		end
+
 		self:RecursiveRefresh()
 	end
 end
@@ -239,6 +272,11 @@ end
 function Frame:SetPixelSize(size)
 	if self._PixelSize ~= size then
 		self._PixelSize = size
+
+		if self._Parent then
+			self._Parent._ChildAbsolutePosition = nil
+			self._Parent._ChildAbsoluteSize = nil
+		end
 
 		self:RecursiveRefresh()
 	end
@@ -302,12 +340,12 @@ function Frame:SetChildRelativeOffset(offset)
 	end
 end
 
-function Frame:GetAbsoluteChildOffset()
-	if not self._AbsoluteChildOffset then
-		self._AbsoluteChildOffset = self._ChildPixelOffset + self.AbsoluteSize*self._ChildRelativeOffset
+function Frame:GetChildAbsoluteOffset()
+	if not self._ChildAbsoluteOffset then
+		self._ChildAbsoluteOffset = self._ChildPixelOffset + self.AbsoluteSize*self._ChildRelativeOffset
 	end
 
-	return self._AbsoluteChildOffset
+	return self._ChildAbsoluteOffset
 end
 
 function Frame:GetBackgroundColour()
@@ -334,32 +372,65 @@ function Frame:SetBackgroundImageScaleMode(mode)
 	self._BackgroundImageScaleMode = mode
 end
 
-function Frame:GetAbsoluteBackgroundImagePosition()
+function Frame:GetBackgroundImageAbsolutePosition()
 	local backgroundImage = self.BackgroundImage
 
-	if not self._AbsoluteBackgroundImagePosition and backgroundImage then
+	if not self._BackgroundImageAbsolutePosition and backgroundImage then
 		local absolutePosition = self.AbsolutePosition
 		local absoluteSize = self.AbsoluteSize
 
 		if self._BackgroundImageScaleMode == Enum.ScaleMode.Stretch then
-			self._AbsoluteBackgroundImagePosition = absolutePosition
-			self._AbsoluteBackgroundImageSize = absoluteSize
+			self._BackgroundImageAbsolutePosition = absolutePosition
+			self._BackgroundImageAbsoluteSize = absoluteSize
 		else
 			local width, height = backgroundImage:getDimensions()
 			local scaleFactor = math.min(absoluteSize.X / width, absoluteSize.Y / height)
 
-			self._AbsoluteBackgroundImageSize = Vector2.Create(scaleFactor*width, scaleFactor*height)
-			self._AbsoluteBackgroundImagePosition = absolutePosition + (absoluteSize - self._AbsoluteBackgroundImageSize)*0.5
+			self._BackgroundImageAbsoluteSize = Vector2.Create(scaleFactor*width, scaleFactor*height)
+			self._BackgroundImageAbsolutePosition = absolutePosition + (absoluteSize - self._BackgroundImageAbsoluteSize)*0.5
 		end
 	end
 
-	return self._AbsoluteBackgroundImagePosition
+	return self._BackgroundImageAbsolutePosition
 end
 
-function Frame:GetAbsoluteBackgroundImageSize()
-	self:GetAbsoluteBackgroundImagePosition()
+function Frame:GetBackgroundImageAbsoluteSize()
+	self:GetBackgroundImageAbsolutePosition()
 
-	return self._AbsoluteBackgroundImageSize
+	return self._BackgroundImageAbsoluteSize
+end
+
+function Frame:GetChildAbsolutePosition()
+	if not self._ChildAbsolutePosition then
+		if #self._Children > 0 then
+			local minX, minY, maxX, maxY = math.huge, math.huge, -math.huge, -math.huge
+
+			for _, child in pairs(self._Children) do
+				local absolutePosition = child.AbsolutePosition - self.ChildAbsoluteOffset - self.AbsolutePosition
+				local x1, y1 = absolutePosition:Unpack()
+				local x2, y2 = (absolutePosition + child.AbsoluteSize):Unpack()
+
+				minX = math.min(minX, x1)
+				minY = math.min(minY, y1)
+				maxX = math.max(maxX, x2)
+				maxY = math.max(maxY, y2)
+			end
+
+			self._ChildAbsolutePosition = Vector2.Create(minX, minY)
+			self._ChildAbsoluteSize = Vector2.Create(maxX - minX, maxY - minY)
+		else
+			self._ChildAbsolutePosition = Vector2.Zero
+			self._ChildAbsoluteSize = Vector2.Zero
+		end
+	end
+
+	return self._ChildAbsolutePosition
+end
+
+function Frame:GetChildAbsoluteSize()
+	self:GetChildAbsolutePosition()
+
+	return self._ChildAbsoluteSize
 end
 
 function Frame:GetBorderColour()
@@ -378,29 +449,29 @@ function Frame:SetBorderThickness(thickness)
 	self._BorderThickness = thickness
 end
 
-function Frame:GetRelativeCornerRadius()
-	return self._RelativeCornerRadius
+function Frame:GetCornerRelativeRadius()
+	return self._CornerRelativeRadius
 end
 
-function Frame:SetRelativeCornerRadius(radius)
-	self._RelativeCornerRadius = radius
+function Frame:SetCornerRelativeRadius(radius)
+	self._CornerRelativeRadius = radius
 end
 
-function Frame:GetPixelCornerRadius()
-	return self._PixelCornerRadius
+function Frame:GetCornerPixelRadius()
+	return self._CornerPixelRadius
 end
 
-function Frame:SetPixelCornerRadius(radius)
-	self._PixelCornerRadius = radius
+function Frame:SetCornerPixelRadius(radius)
+	self._CornerPixelRadius = radius
 end
 
-function Frame:GetAbsoluteCornerRadius()
-	if not self._AbsoluteCornerRadius then
-		self._AbsoluteCornerRadius =
-			self._PixelCornerRadius + math.min(self.AbsoluteSize:Unpack())*0.5*self._RelativeCornerRadius
+function Frame:GetCornerAbsoluteRadius()
+	if not self._CornerAbsoluteRadius then
+		self._CornerAbsoluteRadius =
+			self._CornerPixelRadius + math.min(self.AbsoluteSize:Unpack())*0.5*self._CornerRelativeRadius
 	end
 
-	return self._AbsoluteCornerRadius
+	return self._CornerAbsoluteRadius
 end
 
 function Frame:GetAspectRatio()
@@ -441,13 +512,16 @@ function Frame:Destroy()
 		self._ChildPixelOffset = nil
 		self._ChildRelativeOffset = nil
 
-		self._AbsoluteChildOffset = nil
+		self._ChildAbsoluteOffset = nil
 
 		self._BackgroundColour = nil
 		self._BackgroundImage = nil
 
-		self._AbsoluteBackgroundImagePosition = nil
-		self._AbsoluteBackgroundImageSize = nil
+		self._BackgroundImageAbsolutePosition = nil
+		self._BackgroundImageAbsoluteSize = nil
+
+		self._ChildAbsolutePosition = nil
+		self._ChildAbsoluteSize = nil
 
 		self._BorderColour = nil
 
@@ -458,8 +532,8 @@ end
 return Class.CreateClass(Frame, "Frame", Object, {
 	["AbsolutePosition"] = {"RelativePosition", "PixelPosition", "AbsoluteSize"},
 	["AbsoluteSize"] = {"RelativeSize", "PixelSize"},
-	["AbsoluteChildOffset"] = {"AbsoluteSize", "ChildRelativeOffset", "ChildPixelOffset"},
-	["AbsoluteCornerRadius"] = {"AbsoluteSize", "RelativeCornerRadius", "PixelCornerRadius"},
-	["AbsoluteBackgroundImagePosition"] = {"AbsolutePosition", "AbsoluteSize", "BackgroundImage"},
-	["AbsoluteBackgroundImageSize"] = {"AbsoluteBackgroundImagePosition"}
+	["ChildAbsoluteOffset"] = {"AbsoluteSize", "ChildRelativeOffset", "ChildPixelOffset"},
+	["CornerAbsoluteRadius"] = {"AbsoluteSize", "CornerRelativeRadius", "CornerPixelRadius"},
+	["BackgroundImageAbsolutePosition"] = {"AbsolutePosition", "AbsoluteSize", "BackgroundImage"},
+	["BackgroundImageAbsoluteSize"] = {"BackgroundImageAbsolutePosition"}
 })

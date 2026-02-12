@@ -91,11 +91,11 @@ else
 	function StartLivestream(from, port)
 		if livestreamPID < 0 then
 			os.execute(
-				"rpicam-vid -t 0 --codec h264 --nopreview --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $! > LivestreamPID.txt"
+				"rpicam-vid -t 0 --codec libav --libav-format mpegts --nopreview --inline --width 1280 --height 720 -o udp://"..from:GetRemoteDetails()..":"..port.." > /dev/null 2>&1 & echo $! > LivestreamPID.txt"
 			)
 
 			local livestreamFile = io.open("LivestreamPID.txt", "r")
-			livestreamPID = tonumber(livestreamFile:read("*a"):match("^%s*(%d+)%s*$"))
+			livestreamPID = tonumber(livestreamFile:read("*a"):match("%d+"))
 			livestreamFile:close()
 			os.remove("LivestreamPID.txt")
 
@@ -122,12 +122,14 @@ function love.load()
 
 	AppNetworkServer.Events:Listen("StartLivestream", StartLivestream)
 	AppNetworkServer.Events:Listen("StopLivestream", StopLivestream)
-	AppNetworkServer.Events:Listen("Disconnect", StopLivestream)
+	AppNetworkServer.Events:Listen("Disconnected", StopLivestream)
 	AppNetworkServer.Events:Listen("All", function(command, from)
-		if command == "Disconnect" then
-			Log.Info(Enum.LogCategory.Camera, "Client %s:%d disconnected", from:GetLocalDetails())
+		if command == "Connected" then
+			Log.Info(Enum.LogCategory.Camera, "Client %s:%d connected", from:GetRemoteDetails())
+		elseif command == "Disconnected" then
+			Log.Info(Enum.LogCategory.Camera, "Client %s:%d disconnected", from:GetRemoteDetails())
 		else
-			Log.Info(Enum.LogCategory.Camera, "Received command \"%s\" from %s:%d", command, from:GetLocalDetails())
+			Log.Info(Enum.LogCategory.Camera, "Received command \"%s\" from %s:%d", command, from:GetRemoteDetails())
 		end
 	end)
 

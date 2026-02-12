@@ -26,6 +26,7 @@ UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.NumericTextBox = require("UserInterface.NumericTextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
 UserInterface.Pages = require("UserInterface.Pages")
+UserInterface.ScrollFrame = require("UserInterface.ScrollFrame")
 
 UserInterface.Font = require("UserInterface.Font")
 
@@ -71,14 +72,15 @@ function UserInterface.SetFocus(focus)
 	local oldFocus = UserInterface.Focus
 
 	if focus ~= oldFocus then
-		UserInterface.Focus = focus
-
-		if oldFocus and oldFocus.FocusLost then
-			oldFocus:FocusLost()
+		if focus and focus.CanFocus then
+			UserInterface.Focus = focus
+			UserInterface.Focus.Events:Push("FocusGained")
+		else
+			UserInterface.Focus = nil
 		end
 
-		if UserInterface.Focus and UserInterface.Focus.FocusGained then
-			UserInterface.Focus:FocusGained()
+		if oldFocus then
+			oldFocus.Events:Push("FocusLost")
 		end
 	end
 end
@@ -103,35 +105,45 @@ function UserInterface.Input(inputType, scancode, state)
 					UserInterface.Pressed = interactiveFrame
 					UserInterface.SetFocus(interactiveFrame)
 
-					interactiveFrame.Events:Push("Pressed")
+					interactiveFrame.Events:Trigger("Pressed")
 				else
 					UserInterface.Pressed = nil
 					UserInterface.SetFocus(nil)
 				end
 			elseif UserInterface.Pressed then
-				UserInterface.Pressed.Events:Push("Released")
+				UserInterface.Pressed.Events:Trigger("Released")
 
 				UserInterface.Pressed = nil
 			end
 		end
 	end
 
-	if UserInterface.Focus and UserInterface.Focus.Input then
-		UserInterface.Focus:Input(inputType, scancode, state)
+	if UserInterface.Focus and UserInterface.Focus.AbsoluteActive then
+		UserInterface.Focus.Events:Trigger("Input", inputType, scancode, state)
 	end
 
-	if
-		UserInterface.Hovering and 
-		UserInterface.Hovering ~= UserInterface.Focus and 
-		UserInterface.Hovering.Focus
-	then
-		UserInterface.Hovering:Input(inputType, scancode, state)
+	if UserInterface.Hovering and UserInterface.Hovering ~= UserInterface.Focus and UserInterface.Hovering.AbsoluteActive then
+		UserInterface.Hovering.Events:Trigger("Input", inputType, scancode, state)
+	end
+
+	if scancode == "mousewheelmovement" then
+		local x, y = love.mouse.getPosition()
+		local scrollFrame = UserInterface.GetFrameContainingPoint(x, y, UserInterface.Root, "ScrollFrame")
+
+		if
+			scrollFrame and
+			scrollFrame.AbsoluteActive and
+			UserInterface.Focus ~= scrollFrame and
+			UserInterface.Hovering ~= scrollFrame
+		then
+			scrollFrame.Events:Trigger("Input", inputType, scancode, state)
+		end
 	end
 end
 
 function UserInterface.TextInput(text)
-	if UserInterface.Focus and UserInterface.Focus.TextInput then
-		UserInterface.Focus:TextInput(text)
+	if UserInterface.Focus then
+		UserInterface.Focus.Events:Trigger("TextInput", text)
 	end
 end
 
@@ -147,14 +159,10 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 				containingFrame = frame
 			end
 			
-			local children = frame:GetChildren()
+			local children = frame.Children
 
 			for childIndex = #children, 1, -1 do
-				local childContainingFrame = UserInterface.GetFrameContainingPoint(
-					x, y,
-					children[childIndex],
-					frameType
-				)
+				local childContainingFrame = UserInterface.GetFrameContainingPoint(x, y, children[childIndex], frameType)
 
 				if childContainingFrame then
 					containingFrame = childContainingFrame
