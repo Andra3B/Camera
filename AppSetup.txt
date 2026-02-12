@@ -1,0 +1,7 @@
+1) Install minimal terminal OS to the SD card using Pi Imager with SSH on.
+2) Follow "https://manski.net/articles/raspberry-pi/serial-console-on-zero2w".
+3) Install latest "git" on to Pi.
+4) Install latest "love" on to Pi.
+5) Install latest "ffmpeg" on to Pi.
+6) Install latest "pigpio" on to Pi.
+7) Clone "https://github.com/Andra3B/Camera".

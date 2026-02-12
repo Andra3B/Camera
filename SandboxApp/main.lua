@@ -16,7 +16,7 @@ function love.load()
 	libav.avdevice.avdevice_register_all()
 
 	local width, height = love.window.getDesktopDimensions(1)
-	love.window.setTitle("Camera Client")
+	love.window.setTitle("Sandbox")
 	love.window.setMode(width*0.5, height*0.5, {
 		["fullscreen"] = false,
 		["stencil"] = false,
@@ -33,32 +33,34 @@ function love.load()
 			"Assets/Shaders/Default.vert"
 		),
 
-		["COMEncode"] = love.graphics.newShader(
-			"Assets/Shaders/COMEncode.frag",
+		["Reduction"] = love.graphics.newShader(
+			"Assets/Shaders/Reduction.frag",
 			"Assets/Shaders/Default.vert"
 		),
 
-		["Reduction"] = love.graphics.newShader(
-			"Assets/Shaders/Reduction.frag",
+		["FivePointAverage"] = love.graphics.newShader(
+			"Assets/Shaders/FivePointAverage.frag",
 			"Assets/Shaders/Default.vert"
 		)
 	}
 
 	UserInterface.Initialise()
 
-	Root = UserInterface.Frame.Create()
+	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.One
 
-	local redFrame = UserInterface.Frame.Create()
-	redFrame.RelativeSize = Vector2.Create(0.6, 0.6)
-	redFrame.BackgroundColour = Vector4.Create(1, 0, 0, 1)
-	redFrame.Parent = Root
-
-	local blueFrame = UserInterface.Frame.Create()
-	blueFrame.RelativeSize = Vector2.Create(0.5, 0.5)
-	blueFrame.RelativePosition = Vector2.Create(0.8, 0.8)
-	blueFrame.BackgroundColour = Vector4.Create(0, 0, 1, 1)
-	blueFrame.Parent = redFrame
+	VideoPlayer = UserInterface.VideoFrame.Create()
+	VideoPlayer.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	VideoPlayer.RelativeSize = Vector2.Create(0.9, 0.9)
+	VideoPlayer.RelativePosition = Vector2.Create(0.5, 0.5)
+	VideoPlayer.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
+	VideoPlayer.Video = VideoReader.CreateFromURL(nil, "dshow")
+	VideoPlayer.Parent = Root
+	
+	motionTracker = MotionTracker.Create(VideoPlayer.Video.Width, VideoPlayer.Video.Height, 7)
+	VideoPlayer.BackgroundImage = motionTracker._ReductionCanvases[#motionTracker._ReductionCanvases]
+	VideoPlayer.VideoVisible = false
+	VideoPlayer.Playing = true
 
 	UserInterface.SetRoot(Root)
 end
@@ -66,11 +68,29 @@ end
 function love.update(deltaTime)
 	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
+
 	UserInterface.Update(deltaTime)
 end
 
 function love.draw()
+	if VideoPlayer.FrameChanged then
+		motionTracker:Update(VideoPlayer.VideoImage)
+	end
+
 	UserInterface.Draw()
+
+	love.graphics.setColor(0, 1, 0, 1)
+	love.graphics.setLineWidth(3)
+
+	for _, shape in pairs(motionTracker.MotionShapes) do
+		local x1, y1, x2, y2 = unpack(shape)
+		x1 = VideoPlayer.BackgroundImageAbsolutePosition.X + VideoPlayer.BackgroundImageAbsoluteSize.X*x1
+		y1 = VideoPlayer.BackgroundImageAbsolutePosition.Y + VideoPlayer.BackgroundImageAbsoluteSize.Y*y1
+		x2 = VideoPlayer.BackgroundImageAbsolutePosition.X + VideoPlayer.BackgroundImageAbsoluteSize.X*x2
+		y2 = VideoPlayer.BackgroundImageAbsolutePosition.Y + VideoPlayer.BackgroundImageAbsoluteSize.Y*y2
+
+		love.graphics.rectangle("line", x1, y1, x2 - x1, y2 - y1)
+	end
 		
 	love.graphics.present()
 end

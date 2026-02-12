@@ -29,14 +29,12 @@ local function StartLivestream()
 		AppNetworkClient:Send({{"StartLivestream", freePort}})
 
 		local livestream = VideoReader.CreateFromURL(
-			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=10000000&fifo_size=1000000&overrun_nonfatal=1",
+			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=5000000&fifo_size=1000000&overrun_nonfatal=1",
 			"mpegts"
 		)
 
 		if livestream then
-			motionTracker = MotionTracker.Create(
-				livestream.Width, livestream.Height
-			)
+			motionTracker = MotionTracker.Create(livestream.Width, livestream.Height)
 
 			LivestreamFrame.Video = livestream
 			LivestreamFrame.Playing = true
@@ -597,10 +595,6 @@ function love.load()
 
 	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
 	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
-
-	--RAT
-	AppPages.Page = 2
-	SubPages.Page = 2
 
 	UserInterface.SetRoot(Root)
 end

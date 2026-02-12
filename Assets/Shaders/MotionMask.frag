@@ -1,24 +1,14 @@
-uniform Image PreviousMotionMask;
+uniform Image Background;
 
-uniform float LowerThreshold;
-uniform float HigherThreshold;
+uniform float MotionThreshold;
+uniform float AdaptionRate;
 
-vec4 effect(vec4 colour, Image currentFrame, vec2 imagePosition, vec2 screenPosition) {
-	vec3 currentPixel = Texel(currentFrame, imagePosition).rgb;
-	
-	float currentLuminance = (currentPixel.r + currentPixel.g + currentPixel.b) / 3.0;
-	float previousLuminance = Texel(PreviousMotionMask, imagePosition).g;
+vec4 effect(vec4 colour, Image Input, vec2 inputPosition, vec2 screenPosition) {
+	vec3 inputPixel = Texel(Input, inputPosition).rgb;
+	vec3 backgroundPixel = Texel(Background, inputPosition).rgb;
 
-	float currentMotion = abs(currentLuminance - previousLuminance);
-	float previousMotion = Texel(PreviousMotionMask, imagePosition).r;
+	vec3 difference = abs(inputPixel - backgroundPixel);
+	float motion = step(MotionThreshold, dot(difference, vec3(0.3, 0.587, 0.114)));
 
-	float finalMotion;
-
-	if (previousMotion > 0.0) {
-		finalMotion = step(LowerThreshold, currentMotion);
-	} else {
-		finalMotion = step(HigherThreshold, currentMotion);
-	}
-
-	return vec4(finalMotion, currentLuminance, 0.0, 1.0);
+	return vec4(motion, 0.0, 0.0, 1.0);
 }
