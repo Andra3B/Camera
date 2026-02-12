@@ -84,7 +84,7 @@ function VideoFrame:SetVideo(video)
 	
 	self._Video = video
 
-	if video then
+	if video then		
 		self._VideoImageBuffer = love.image.newImageData(video.Width, video.Height, "rgba8")
 		self._VideoImageBufferHandle = ffi.cast("uint8_t*", self._VideoImageBuffer:getFFIPointer())
 		
