@@ -91,7 +91,7 @@ else
 	function StartLivestream(from, port)
 		if livestreamPID < 0 then
 			os.execute(
-				"setsid sh -c 'rpicam-vid -t 0 -n --framerate 30 -b 2000000 --width 1280 --height 720 --inline --codec h264 -o - | ffmpeg -fflags nobuffer -flags low_delay -f h264 -i - -f mpegts udp://"..from:GetRemoteDetails()..":"..port.."' >/dev/null 2>&1 & echo $! > LivestreamPID.txt"
+				"setsid sh -c 'rpicam-vid -t 0 -n --framerate 30 -b 3000000 --width 1280 --height 720 --inline --codec h264 -o - | ffmpeg -fflags nobuffer -flags low_delay -f h264 -i - -f mpegts udp://"..from:GetRemoteDetails()..":"..port.."' >/dev/null 2>&1 & echo $! > LivestreamPID.txt"
 			)
 
 			local livestreamFile = io.open("LivestreamPID.txt", "r")
