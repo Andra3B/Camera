@@ -38,8 +38,8 @@ function love.load()
 			"Assets/Shaders/Default.vert"
 		),
 
-		["FivePointAverage"] = love.graphics.newShader(
-			"Assets/Shaders/FivePointAverage.frag",
+		["BackgroundAdaption"] = love.graphics.newShader(
+			"Assets/Shaders/BackgroundAdaption.frag",
 			"Assets/Shaders/Default.vert"
 		)
 	}
@@ -54,12 +54,12 @@ function love.load()
 	VideoPlayer.RelativeSize = Vector2.Create(0.9, 0.9)
 	VideoPlayer.RelativePosition = Vector2.Create(0.5, 0.5)
 	VideoPlayer.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
-	VideoPlayer.Video = VideoReader.CreateFromURL(nil, "dshow")
+	VideoPlayer.Video = VideoReader.CreateFromURL("Assets/Videos/Cars.mp4", "mp4")
 	VideoPlayer.Parent = Root
 	
 	motionTracker = MotionTracker.Create(VideoPlayer.Video.Width, VideoPlayer.Video.Height, 7)
 	VideoPlayer.BackgroundImage = motionTracker._ReductionCanvases[#motionTracker._ReductionCanvases]
-	VideoPlayer.VideoVisible = false
+	VideoPlayer.VideoVisible = true
 	VideoPlayer.Playing = true
 
 	UserInterface.SetRoot(Root)
@@ -68,26 +68,32 @@ end
 function love.update(deltaTime)
 	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
-
 	UserInterface.Update(deltaTime)
 end
 
 function love.draw()
 	if VideoPlayer.FrameChanged then
-		motionTracker:Update(VideoPlayer.VideoImage)
+		motionTracker:Update(VideoPlayer.VideoImage, not justRan)
+		justRan = true
 	end
 
 	UserInterface.Draw()
 
-	love.graphics.setColor(0, 1, 0, 1)
 	love.graphics.setLineWidth(3)
 
-	for _, shape in pairs(motionTracker.MotionShapes) do
+	for index, shape in pairs(motionTracker.MotionShapes) do
 		local x1, y1, x2, y2 = unpack(shape)
+		
 		x1 = VideoPlayer.BackgroundImageAbsolutePosition.X + VideoPlayer.BackgroundImageAbsoluteSize.X*x1
 		y1 = VideoPlayer.BackgroundImageAbsolutePosition.Y + VideoPlayer.BackgroundImageAbsoluteSize.Y*y1
 		x2 = VideoPlayer.BackgroundImageAbsolutePosition.X + VideoPlayer.BackgroundImageAbsoluteSize.X*x2
 		y2 = VideoPlayer.BackgroundImageAbsolutePosition.Y + VideoPlayer.BackgroundImageAbsoluteSize.Y*y2
+		
+		if index == motionTracker.LargestMotionShape then
+			love.graphics.setColor(0, 0, 1, 1)
+		else
+			love.graphics.setColor(0, 1, 0, 1)
+		end
 
 		love.graphics.rectangle("line", x1, y1, x2 - x1, y2 - y1)
 	end

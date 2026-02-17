@@ -4,25 +4,21 @@ function MotionTracker.Create(width, height, subdivisions)
 	local self = Class.CreateInstance(Entity.Create(), MotionTracker)
 
 	self._BackgroundCanvas = love.graphics.newCanvas(width, height)
-
-	self._FrameHistory = {}
-	self._FrameHistoryIndex = 1
-
-	for _ = 1, 5, 1 do
-		table.insert(self._FrameHistory, love.graphics.newCanvas(width, height))
-	end
+	self._PreviousBackgroundCanvas = love.graphics.newCanvas(width, height)
 
 	self._ReductionCanvases = {}
 	
 	self._MotionShapes = nil
-	self._AverageMotion = nil
+	self._LargestMotionShape = 0
+	self._AverageMotion = 0
 	
-	self._MotionThreshold = 0.32
-	self._ShapeMinimumArea = 0.08
-	self._NeighbourSearchRadius = 5
-
-	local maxSubdivisions = math.ceil(math.log(math.min(width, height))/math.log(2))
-	for _ = 0, math.clamp(maxSubdivisions - subdivisions, 1, maxSubdivisions), 1 do
+	self._MotionThreshold = 0.1
+	self._ShapeMinimumArea = 0.001
+	self._NeighbourSearchRadius = 2
+	self._AdaptionRate = 0.5
+	
+	local maxSubdivisions = math.floor(math.log(math.min(width, height))/math.log(2))
+	for _ = 0, math.clamp(maxSubdivisions - subdivisions, 0, maxSubdivisions), 1 do
 		local reductionCanvas = love.graphics.newCanvas(
 			width, height,
 			{format = "rgba8", readable = true}
@@ -32,14 +28,14 @@ function MotionTracker.Create(width, height, subdivisions)
 
 		table.insert(self._ReductionCanvases, reductionCanvas)
 		
-		width = math.ceil(width*0.5)
-		height = math.ceil(height*0.5)
+		width = math.floor(width*0.5)
+		height = math.floor(height*0.5)
 	end
 
 	return self
 end
 
-function MotionTracker:Update(frame)
+function MotionTracker:Update(frame, immediateBackgroundUpdate)
 	love.graphics.push("all")
 	love.graphics.reset()
 
@@ -61,21 +57,16 @@ function MotionTracker:Update(frame)
 		})
 		love.graphics.draw(previousReductionCanvas)
 	end
-	
-	self._FrameHistoryIndex = self._FrameHistoryIndex == 5 and 1 or self._FrameHistoryIndex + 1
-
-	love.graphics.setCanvas(self._FrameHistory[self._FrameHistoryIndex])
-	love.graphics.setShader()
-	love.graphics.draw(frame)
 
 	love.graphics.setCanvas(self._BackgroundCanvas)
-	love.graphics.setShader(Shaders.FivePointAverage)
-	Shaders.FivePointAverage:send("FrameOne", self._FrameHistory[1])
-	Shaders.FivePointAverage:send("FrameTwo", self._FrameHistory[2])
-	Shaders.FivePointAverage:send("FrameThree", self._FrameHistory[3])
-	Shaders.FivePointAverage:send("FrameFour", self._FrameHistory[4])
-	Shaders.FivePointAverage:send("FrameFive", self._FrameHistory[5])
+	love.graphics.setShader(Shaders.BackgroundAdaption)
+	Shaders.BackgroundAdaption:send("PreviousBackground", self._PreviousBackgroundCanvas)
+	Shaders.BackgroundAdaption:send("AdaptionRate", immediateBackgroundUpdate and 1 or self._AdaptionRate)
 	love.graphics.draw(frame)
+
+	local backgroundCanvas = self._BackgroundCanvas
+	self._BackgroundCanvas = self._PreviousBackgroundCanvas
+	self._PreviousBackgroundCanvas = backgroundCanvas
 
 	self._MotionShapes = nil
 
@@ -106,6 +97,14 @@ function MotionTracker:SetShapeMinimumArea(area)
 	self._ShapeMinimumArea = math.clamp(area, 0, 1)
 end
 
+function MotionTracker:GetAdaptionRate()
+	return self._AdaptionRate
+end
+
+function MotionTracker:SetAdaptionRate(rate)
+	self._AdaptionRate = math.clamp(rate, 0, 1)
+end
+
 function MotionTracker:GetMotionShapes()
 	if not self._MotionShapes then
 		local blockGrid = self._ReductionCanvases[#self._ReductionCanvases]:newImageData()
@@ -124,7 +123,7 @@ function MotionTracker:GetMotionShapes()
 			for x = 0, width - 1, 1 do
 				local index = y*height + x
 				local motion = blockGrid:getPixel(x, y)
-
+				
 				motionSum = motionSum + motion
 
 				if not visited[index] and motion > 0.95 then
@@ -172,7 +171,12 @@ function MotionTracker:GetMotionShapes()
 
 		blockGrid:release()
 		
-		for index, currentShape in pairs(shapes) do
+		local largestArea = 0
+		local largestShape = 0
+
+		local index = 1
+		while index <= #shapes do
+			local currentShape = shapes[index]
 			local x1, y1, x2, y2 = unpack(currentShape)
 			
 			x1 = x1/width
@@ -180,21 +184,37 @@ function MotionTracker:GetMotionShapes()
 			x2 = x2/width
 			y2 = y2/height
 
-			if (x2 - x1)*(y2 - y1) >= self._ShapeMinimumArea then
+			local area = (x2 - x1)*(y2 - y1)
+
+			if area >= self._ShapeMinimumArea then
+				if area > largestArea then
+					largestArea = area
+					largestShape = index
+				end
+
 				currentShape[1] = x1
 				currentShape[2] = y1
 				currentShape[3] = x2
 				currentShape[4] = y2
+
+				index = index + 1
 			else
 				table.remove(shapes, index)
 			end
 		end
 
 		self._MotionShapes = shapes
+		self._LargestMotionShape = largestShape
 		self._AverageMotion = motionSum/(width*height)
 	end
 	
 	return self._MotionShapes
+end
+
+function MotionTracker:GetLargestMotionShape()
+	self:GetMotionShapes()
+
+	return self._LargestMotionShape
 end
 
 function MotionTracker:GetAverageMotion()
@@ -208,16 +228,14 @@ function MotionTracker:Destroy()
 		self._BackgroundCanvas:release()
 		self._BackgroundCanvas = nil
 
+		self._PreviousBackgroundCanvas:release()
+		self._PreviousBackgroundCanvas = nil
+
 		for index = 1, #self._ReductionCanvases, 1 do
 			self._ReductionCanvases[index]:release()
 		end
 
-		for index = 1, #self._FrameHistory, 1 do
-			self._FrameHistory[index]:release()
-		end
-
 		self._ReductionCanvases = nil
-		self._FrameHistory = nil
 
 		self._MotionShapes = nil
 
