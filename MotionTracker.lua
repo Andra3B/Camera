@@ -12,10 +12,10 @@ function MotionTracker.Create(width, height, subdivisions)
 	self._LargestMotionShape = 0
 	self._AverageMotion = 0
 	
-	self._MotionThreshold = 0.1
+	self._MotionThreshold = 0.125
 	self._ShapeMinimumArea = 0.001
-	self._NeighbourSearchRadius = 2
-	self._AdaptionRate = 0.5
+	self._NeighbourSearchRadius = 3
+	self._AdaptionRate = 0.1
 	
 	local maxSubdivisions = math.floor(math.log(math.min(width, height))/math.log(2))
 	for _ = 0, math.clamp(maxSubdivisions - subdivisions, 0, maxSubdivisions), 1 do

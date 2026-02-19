@@ -59,7 +59,7 @@ function love.load()
 	
 	motionTracker = MotionTracker.Create(VideoPlayer.Video.Width, VideoPlayer.Video.Height, 7)
 	VideoPlayer.BackgroundImage = motionTracker._ReductionCanvases[#motionTracker._ReductionCanvases]
-	VideoPlayer.VideoVisible = true
+	VideoPlayer.VideoVisible = false
 	VideoPlayer.Playing = true
 
 	UserInterface.SetRoot(Root)
