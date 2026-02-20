@@ -54,12 +54,10 @@ function love.load()
 	VideoPlayer.RelativeSize = Vector2.Create(0.9, 0.9)
 	VideoPlayer.RelativePosition = Vector2.Create(0.5, 0.5)
 	VideoPlayer.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
-	VideoPlayer.Video = VideoReader.CreateFromURL("Assets/Videos/Cars.mp4", "mp4")
+	VideoPlayer.Video = VideoReader.CreateFromURL(nil, "dshow")
 	VideoPlayer.Parent = Root
 	
-	motionTracker = MotionTracker.Create(VideoPlayer.Video.Width, VideoPlayer.Video.Height, 7)
-	VideoPlayer.BackgroundImage = motionTracker._ReductionCanvases[#motionTracker._ReductionCanvases]
-	VideoPlayer.VideoVisible = false
+	motionTracker = MotionTracker.Create(VideoPlayer.Video.Width, VideoPlayer.Video.Height)
 	VideoPlayer.Playing = true
 
 	UserInterface.SetRoot(Root)

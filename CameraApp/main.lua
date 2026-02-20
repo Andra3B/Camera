@@ -26,6 +26,7 @@ if jit.os == "Windows" then
 				livestreamTime = 0
 
 				local url = VideoReader.GetCameraURL()
+				url = nil
 
 				if url then
 					livestreamIn = VideoReader.CreateFromURL(url, "dshow")

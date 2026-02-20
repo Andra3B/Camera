@@ -17,10 +17,8 @@ local AppNetworkClient
 local livestreaming
 
 local motionTracker
-local motionThreshold = 0.008
 
 local calibratingMotionTracking = false
-local trackerRelativePosition = nil
 
 local function StartLivestream()
 	if not livestreaming then
@@ -100,13 +98,14 @@ function love.load()
 			"Assets/Shaders/Default.vert"
 		),
 
-		["COMEncode"] = love.graphics.newShader(
-			"Assets/Shaders/COMEncode.frag",
+		
+		["Reduction"] = love.graphics.newShader(
+			"Assets/Shaders/Reduction.frag",
 			"Assets/Shaders/Default.vert"
 		),
 
-		["Reduction"] = love.graphics.newShader(
-			"Assets/Shaders/Reduction.frag",
+		["BackgroundAdaption"] = love.graphics.newShader(
+			"Assets/Shaders/BackgroundAdaption.frag",
 			"Assets/Shaders/Default.vert"
 		)
 	}
@@ -332,119 +331,164 @@ function love.load()
 	_CalibrationFrame.Parent = BottomBarPages
 
 	local CalibrationFrame = UserInterface.Frame.Create()
-	CalibrationFrame.AspectRatio = 6
-	CalibrationFrame.DominantAxis = Enum.Axis.Y
-	CalibrationFrame.RelativeOrigin = Vector2.Create(0.5, 0)
-	CalibrationFrame.RelativeSize = Vector2.One
-	CalibrationFrame.RelativePosition = Vector2.Create(0.5, 0)
+	CalibrationFrame.RelativeSize = Vector2.Create(1, 0.5)
 	CalibrationFrame.BackgroundColour = Vector4.Zero
-	CalibrationFrame.BorderThickness = 1
-	CalibrationFrame.CornerRelativeRadius = 0.3
-	CalibrationFrame.BackgroundColour = Vector4.One
 	CalibrationFrame.Parent = _CalibrationFrame
 
-	local HigherThresholdTitle = UserInterface.Label.Create()
-	HigherThresholdTitle.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	HigherThresholdTitle.RelativeSize = Vector2.Create(1/3, 1/3)
-	HigherThresholdTitle.RelativePosition = Vector2.Create(1/6, 1/6)
-	HigherThresholdTitle.BackgroundColour = Vector4.Zero
-	HigherThresholdTitle.Text = "Higher Threshold:"
-	HigherThresholdTitle.Parent = CalibrationFrame
-
-	HigherThresholdEntry = UserInterface.NumericTextBox.Create()
-	HigherThresholdEntry.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	HigherThresholdEntry.RelativeSize = Vector2.Create(1/3 - 0.02, 1/3 - 0.02)
-	HigherThresholdEntry.RelativePosition = Vector2.Create(1/6, 3/6 - 0.05)
-	HigherThresholdEntry.PlaceholderText = "Enter threshold..."
-	HigherThresholdEntry.Value = 0.3
-	HigherThresholdEntry.Cursor = math.huge
-	HigherThresholdEntry.BorderThickness = 1
-	HigherThresholdEntry.CornerRelativeRadius = 1
-	HigherThresholdEntry.Parent = CalibrationFrame
-
-	local LowerThresholdTitle = UserInterface.Label.Create()
-	LowerThresholdTitle.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	LowerThresholdTitle.RelativeSize = Vector2.Create(1/3, 1/3)
-	LowerThresholdTitle.RelativePosition = Vector2.Create(3/6, 1/6)
-	LowerThresholdTitle.BackgroundColour = Vector4.Zero
-	LowerThresholdTitle.Text = "Lower Threshold:"
-	LowerThresholdTitle.Parent = CalibrationFrame
-
-	LowerThresholdEntry = UserInterface.NumericTextBox.Create()
-	LowerThresholdEntry.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	LowerThresholdEntry.RelativeSize = Vector2.Create(1/3 - 0.02, 1/3 - 0.02)
-	LowerThresholdEntry.RelativePosition = Vector2.Create(3/6, 3/6 - 0.05)
-	LowerThresholdEntry.PlaceholderText = "Enter threshold..."
-	LowerThresholdEntry.Value = 0.01
-	LowerThresholdEntry.Cursor = math.huge
-	LowerThresholdEntry.BorderThickness = 1
-	LowerThresholdEntry.CornerRelativeRadius = 1
-	LowerThresholdEntry.Parent = CalibrationFrame
+	local CalibrationButtonFrame = UserInterface.Frame.Create()
+	CalibrationButtonFrame.RelativeSize = Vector2.Create(1, 0.5)
+	CalibrationButtonFrame.RelativePosition = Vector2.Create(0, 0.5)
+	CalibrationButtonFrame.BackgroundColour = Vector4.Zero
+	CalibrationButtonFrame.Parent = _CalibrationFrame
 
 	local MotionThresholdTitle = UserInterface.Label.Create()
-	MotionThresholdTitle.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	MotionThresholdTitle.RelativeSize = Vector2.Create(1/3, 1/3)
-	MotionThresholdTitle.RelativePosition = Vector2.Create(5/6, 1/6)
+	MotionThresholdTitle.RelativeSize = Vector2.Create(0.2, 0.5)
 	MotionThresholdTitle.BackgroundColour = Vector4.Zero
 	MotionThresholdTitle.Text = "Motion Threshold:"
 	MotionThresholdTitle.Parent = CalibrationFrame
 
 	MotionThresholdEntry = UserInterface.NumericTextBox.Create()
-	MotionThresholdEntry.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	MotionThresholdEntry.RelativeSize = Vector2.Create(1/3 - 0.02, 1/3 - 0.02)
-	MotionThresholdEntry.RelativePosition = Vector2.Create(5/6, 3/6 - 0.05)
+	MotionThresholdEntry.RelativeOrigin = Vector2.Create(0.5, 1)
+	MotionThresholdEntry.RelativeSize = Vector2.Create(0.175, 0.5)
+	MotionThresholdEntry.RelativePosition = Vector2.Create(0.1, 1)
 	MotionThresholdEntry.PlaceholderText = "Enter threshold..."
-	MotionThresholdEntry.Value = 0.008
+	MotionThresholdEntry.Value = 0.12
 	MotionThresholdEntry.Cursor = math.huge
 	MotionThresholdEntry.BorderThickness = 1
 	MotionThresholdEntry.CornerRelativeRadius = 1
 	MotionThresholdEntry.Parent = CalibrationFrame
 
+	local ShapeMinimumAreaTitle = UserInterface.Label.Create()
+	ShapeMinimumAreaTitle.RelativeSize = Vector2.Create(0.2, 0.5)
+	ShapeMinimumAreaTitle.RelativePosition = Vector2.Create(0.2, 0)
+	ShapeMinimumAreaTitle.BackgroundColour = Vector4.Zero
+	ShapeMinimumAreaTitle.Text = "Shape Minimum Area:"
+	ShapeMinimumAreaTitle.Parent = CalibrationFrame
+
+	ShapeMinimumAreaEntry = UserInterface.NumericTextBox.Create()
+	ShapeMinimumAreaEntry.RelativeOrigin = Vector2.Create(0.5, 1)
+	ShapeMinimumAreaEntry.RelativeSize = Vector2.Create(0.175, 0.5)
+	ShapeMinimumAreaEntry.RelativePosition = Vector2.Create(0.3, 1)
+	ShapeMinimumAreaEntry.PlaceholderText = "Enter area..."
+	ShapeMinimumAreaEntry.Value = 0.03
+	ShapeMinimumAreaEntry.Cursor = math.huge
+	ShapeMinimumAreaEntry.BorderThickness = 1
+	ShapeMinimumAreaEntry.CornerRelativeRadius = 1
+	ShapeMinimumAreaEntry.Parent = CalibrationFrame
+
+	local ShapeSearchRadiusTitle = UserInterface.Label.Create()
+	ShapeSearchRadiusTitle.RelativeSize = Vector2.Create(0.2, 0.5)
+	ShapeSearchRadiusTitle.RelativePosition = Vector2.Create(0.4, 0)
+	ShapeSearchRadiusTitle.BackgroundColour = Vector4.Zero
+	ShapeSearchRadiusTitle.Text = "Shape Search Radius:"
+	ShapeSearchRadiusTitle.Parent = CalibrationFrame
+
+	ShapeSearchRadiusEntry = UserInterface.NumericTextBox.Create()
+	ShapeSearchRadiusEntry.RelativeOrigin = Vector2.Create(0.5, 1)
+	ShapeSearchRadiusEntry.RelativeSize = Vector2.Create(0.175, 0.5)
+	ShapeSearchRadiusEntry.RelativePosition = Vector2.Create(0.5, 1)
+	ShapeSearchRadiusEntry.PlaceholderText = "Enter radius..."
+	ShapeSearchRadiusEntry.Value = 7
+	ShapeSearchRadiusEntry.Minimum = 1
+	ShapeSearchRadiusEntry.Maximum = math.huge
+	ShapeSearchRadiusEntry.Cursor = math.huge
+	ShapeSearchRadiusEntry.BorderThickness = 1
+	ShapeSearchRadiusEntry.CornerRelativeRadius = 1
+	ShapeSearchRadiusEntry.Parent = CalibrationFrame
+
+	local AdaptionRateTitle = UserInterface.Label.Create()
+	AdaptionRateTitle.RelativeSize = Vector2.Create(0.2, 0.5)
+	AdaptionRateTitle.RelativePosition = Vector2.Create(0.6, 0)
+	AdaptionRateTitle.BackgroundColour = Vector4.Zero
+	AdaptionRateTitle.Text = "Adaption Rate:"
+	AdaptionRateTitle.Parent = CalibrationFrame
+
+	AdaptionRateEntry = UserInterface.NumericTextBox.Create()
+	AdaptionRateEntry.RelativeOrigin = Vector2.Create(0.5, 1)
+	AdaptionRateEntry.RelativeSize = Vector2.Create(0.175, 0.5)
+	AdaptionRateEntry.RelativePosition = Vector2.Create(0.7, 1)
+	AdaptionRateEntry.PlaceholderText = "Enter rate..."
+	AdaptionRateEntry.Value = 0.1
+	AdaptionRateEntry.Cursor = math.huge
+	AdaptionRateEntry.BorderThickness = 1
+	AdaptionRateEntry.CornerRelativeRadius = 1
+	AdaptionRateEntry.Parent = CalibrationFrame
+
+	local SubdivisionsTitle = UserInterface.Label.Create()
+	SubdivisionsTitle.RelativeSize = Vector2.Create(0.2, 0.5)
+	SubdivisionsTitle.RelativePosition = Vector2.Create(0.8, 0)
+	SubdivisionsTitle.BackgroundColour = Vector4.Zero
+	SubdivisionsTitle.Text = "Subdivisions:"
+	SubdivisionsTitle.Parent = CalibrationFrame
+
+	SubdivisionsEntry = UserInterface.NumericTextBox.Create()
+	SubdivisionsEntry.RelativeOrigin = Vector2.Create(0.5, 1)
+	SubdivisionsEntry.RelativeSize = Vector2.Create(0.175, 0.5)
+	SubdivisionsEntry.RelativePosition = Vector2.Create(0.9, 1)
+	SubdivisionsEntry.PlaceholderText = "Enter subdivisions..."
+	SubdivisionsEntry.Value = 6
+	SubdivisionsEntry.Minimum = 0
+	SubdivisionsEntry.Maximum = math.huge
+	SubdivisionsEntry.Cursor = math.huge
+	SubdivisionsEntry.BorderThickness = 1
+	SubdivisionsEntry.CornerRelativeRadius = 1
+	SubdivisionsEntry.Parent = CalibrationFrame
+
 	local SaveCalibrationButton = UserInterface.Button.Create()
-	SaveCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0)
-	SaveCalibrationButton.RelativeSize = Vector2.Create(1/6, 1/3 - 0.06)
-	SaveCalibrationButton.RelativePosition = Vector2.Create(1/12 + 0.06, 2/3)
+	SaveCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	SaveCalibrationButton.RelativeSize = Vector2.Create(0.175, 0.5)
+	SaveCalibrationButton.RelativePosition = Vector2.Create(0.3, 0.5)
 	SaveCalibrationButton.Text = "Save"
 	SaveCalibrationButton.BorderThickness = 1
 	SaveCalibrationButton.CornerRelativeRadius = 1
-	SaveCalibrationButton.Parent = CalibrationFrame
+	SaveCalibrationButton.Parent = CalibrationButtonFrame
 
 	SaveCalibrationButton.Events:Listen("Pressed", function()
 		if calibratingMotionTracking then
-			motionTracker.HigherThreshold = HigherThresholdEntry.Value
-			motionTracker.LowerThreshold = LowerThresholdEntry.Value
-			motionThreshold = MotionThresholdEntry.Value
+			LivestreamFrame.VideoVisible = true
+
+			motionTracker.MotionThreshold = MotionThresholdEntry.Value
+			motionTracker.ShapeMinimumArea = ShapeMinimumAreaEntry.Value
+			motionTracker.ShapeSearchRadius = ShapeSearchRadiusEntry.Value
+			motionTracker.AdaptionRate = AdaptionRateEntry.Value
+			motionTracker.Subdivisions = SubdivisionsEntry.Value
 		end
 	end)
 
 	local ResetCalibrationButton = UserInterface.Button.Create()
-	ResetCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0)
-	ResetCalibrationButton.RelativeSize = Vector2.Create(1/6, 1/3 - 0.06)
-	ResetCalibrationButton.RelativePosition = Vector2.Create(4/12, 2/3)
+	ResetCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	ResetCalibrationButton.RelativeSize = Vector2.Create(0.175, 0.5)
+	ResetCalibrationButton.RelativePosition = Vector2.Create(0.5, 0.5)
 	ResetCalibrationButton.Text = "Reset"
 	ResetCalibrationButton.BorderThickness = 1
 	ResetCalibrationButton.CornerRelativeRadius = 1
-	ResetCalibrationButton.Parent = CalibrationFrame
+	ResetCalibrationButton.Parent = CalibrationButtonFrame
 
 	ResetCalibrationButton.Events:Listen("Pressed", function()
-		HigherThresholdEntry.Value = 0.3
-		HigherThresholdEntry.Cursor = math.huge
-
-		LowerThresholdEntry.Value = 0.01
-		LowerThresholdTitle.Cursor = math.huge
-
-		MotionThresholdEntry.Value = 0.008
+		MotionThresholdEntry.Value = 0.12
 		MotionThresholdEntry.Cursor = math.huge
+
+		ShapeMinimumAreaEntry.Value = 0.03
+		ShapeMinimumAreaEntry.Cursor = math.huge
+
+		ShapeSearchRadiusEntry.Value = 7
+		ShapeSearchRadiusEntry.Cursor = math.huge
+
+		AdaptionRateEntry.Value = 0.1
+		AdaptionRateEntry.Cursor = math.huge
+
+		SubdivisionsEntry.Value = 6
+		SubdivisionsEntry.Cursor = math.huge
 	end)
 
 	local BackCalibrationButton = UserInterface.Button.Create()
-	BackCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0)
-	BackCalibrationButton.RelativeSize = Vector2.Create(1/6, 1/3 - 0.06)
-	BackCalibrationButton.RelativePosition = Vector2.Create(7/12 - 0.06, 2/3)
+	BackCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
+	BackCalibrationButton.RelativeSize = Vector2.Create(0.175, 0.5)
+	BackCalibrationButton.RelativePosition = Vector2.Create(0.7, 0.5)
 	BackCalibrationButton.Text = "Back"
 	BackCalibrationButton.BorderThickness = 1
 	BackCalibrationButton.CornerRelativeRadius = 1
-	BackCalibrationButton.Parent = CalibrationFrame
+	BackCalibrationButton.Parent = CalibrationButtonFrame
 
 	BackCalibrationButton.Events:Listen("Pressed", function()
 		BottomBarPages.Page = 1
@@ -453,15 +497,6 @@ function love.load()
 		calibrationModeAnimation.Reversed = true
 		calibrationModeAnimation.Playing = true
 	end)
-
-	MotionCoverageLabel = UserInterface.Label.Create()
-	MotionCoverageLabel.RelativeOrigin = Vector2.Create(0.5, 0)
-	MotionCoverageLabel.RelativeSize = Vector2.Create(1/3 - 0.02, 1/3 - 0.06)
-	MotionCoverageLabel.RelativePosition = Vector2.Create(5/6, 2/3)
-	MotionCoverageLabel.Text = "Motion Coverage: 0%"
-	MotionCoverageLabel.BorderThickness = 1
-	MotionCoverageLabel.CornerRelativeRadius = 1
-	MotionCoverageLabel.Parent = CalibrationFrame
 
 	NoMotionLabel = UserInterface.Label.Create()
 	NoMotionLabel.AspectRatio = 5
@@ -493,6 +528,26 @@ function love.load()
 	MotionMaskButton.Parent = LivestreamFrame
 
 	MotionMaskButton.Events:Listen("Pressed", function()
+		LivestreamFrame.BackgroundImage = motionTracker.MotionMask
+		LivestreamFrame.VideoVisible = not LivestreamFrame.VideoVisible
+	end)
+
+	BackgroundButton = UserInterface.Button.Create()
+	BackgroundButton.AspectRatio = 1
+	BackgroundButton.DominantAxis = Enum.Axis.Y
+	BackgroundButton.RelativeOrigin = Vector2.Create(1, 1)
+	BackgroundButton.RelativeSize = Vector2.Create(1, 0.08)
+	BackgroundButton.RelativePosition = Vector2.Create(1, 1)
+	BackgroundButton.PixelPosition = Vector2.Create(-10, -10)
+	BackgroundButton.Text = "B"
+	BackgroundButton.CornerRelativeRadius = 1
+	BackgroundButton.BorderThickness = 1
+	BackgroundButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
+	BackgroundButton.Visible = false
+	BackgroundButton.Parent = LivestreamFrame
+
+	BackgroundButton.Events:Listen("Pressed", function()
+		LivestreamFrame.BackgroundImage = motionTracker.Background
 		LivestreamFrame.VideoVisible = not LivestreamFrame.VideoVisible
 	end)
 
@@ -502,11 +557,13 @@ function love.load()
 				if switched then
 					calibratingMotionTracking = true
 					MotionMaskButton.Visible = true
+					BackgroundButton.Visible = true
 				end
 			elseif from == 2 then
 				if not switched then
 					calibratingMotionTracking = false
 					MotionMaskButton.Visible = false
+					BackgroundButton.Visible = false
 				end
 			end
 		end
@@ -596,6 +653,11 @@ function love.load()
 	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
 	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
 
+	FPSLabel = UserInterface.Label.Create()
+	FPSLabel.RelativeSize = Vector2.Create(0.2, 0.1)
+	FPSLabel.BackgroundColour = Vector4.Zero
+	FPSLabel.Parent = Root
+
 	UserInterface.SetRoot(Root)
 end
 
@@ -604,20 +666,9 @@ function love.update(deltaTime)
 	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
 
-	NoMotionLabel.Visible = false
-
-	if calibratingMotionTracking then
-		local motionCoverage = motionTracker.MotionCoverage
-		MotionCoverageLabel.Text = string.format("Motion Coverage: %.2f%%", motionCoverage*100)
-
-		if motionCoverage >= motionThreshold then
-			trackerRelativePosition = motionTracker.CenterOfMotion
-		else
-			trackerRelativePosition = nil
-
-			NoMotionLabel.Visible = true
-		end
-	end
+	FPSLabel.Text = string.format("FPS: %d", love.timer.getFPS())
+	
+	NoMotionLabel.Visible = calibratingMotionTracking and #motionTracker.MotionShapes == 0
 
 	UserInterface.Update(deltaTime)
 end
@@ -630,18 +681,29 @@ function love.draw()
 			motionTracker:Update(LivestreamFrame.VideoImage)
 		end
 		
-		if calibratingMotionTracking and trackerRelativePosition then
+		if calibratingMotionTracking then
 			local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
 			local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
 
-			love.graphics.setColor(1, 0, 0, 1)
-			love.graphics.setLineWidth(2)
-			love.graphics.circle(
-				"line",
-				absolutePosition.X + absoluteSize.X*trackerRelativePosition.X,
-				absolutePosition.Y + absoluteSize.Y*trackerRelativePosition.Y,
-				4
-			)
+			love.graphics.setLineWidth(3)
+
+			for index, shape in pairs(motionTracker.MotionShapes) do
+				local topLeft, bottomRight = unpack(shape)
+				
+				if index == motionTracker.LargestMotionShape then
+					love.graphics.setColor(0, 0, 1, 1)
+				else
+					love.graphics.setColor(0, 1, 0, 1)
+				end
+
+				love.graphics.rectangle(
+					"line",
+					absolutePosition.X + absoluteSize.X*topLeft.X,
+					absolutePosition.Y + absoluteSize.Y*topLeft.Y,
+					absoluteSize.X*(bottomRight.X - topLeft.X),
+					absoluteSize.Y*(bottomRight.Y - topLeft.Y)
+				)
+			end
 		end
 	end
 		
