@@ -4,7 +4,7 @@ socket = require("socket")
 utf8 = require("utf8")
 
 UserInterface = require("UserInterface")
-libav = require("libav")
+libav = require("libav.libav")
 
 VideoReader = require("VideoReader")
 

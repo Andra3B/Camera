@@ -1,16 +1,7 @@
-local ffi = require("ffi")
+require("Setup")
+NIL = table.empty
 
 local FFILoader = {}
-
-local function IndexMetamethod(self, name)
-	local value = self.Defines[name]
-
-	if value == nil then
-		return self.Library[name]
-	elseif value ~= table.empty then
-		return value
-	end
-end
 
 function FFILoader.ConvertCToLua(expression)
 	if string.find(expression, "^\".*\"$") then return expression end
@@ -23,6 +14,7 @@ function FFILoader.ConvertCToLua(expression)
 	expression = string.gsub(expression, "~([%b()%w]+)", "bit.bnot(%1)")
 	expression = string.gsub(expression, "(0x%x+)[fuUl]+", "%1")
 	expression = string.gsub(expression, "(%d)[FfuULl]+", "%1")
+	expression = string.gsub(expression, "%(([%w_]+%*?)%)%s*%(([%w_]-)%)", "ffi.cast(\"%1\", %2)")
 	expression = "("..expression..")"
 
 	while true do
@@ -81,12 +73,57 @@ function FFILoader.ConvertCToLua(expression)
 	return expression
 end
 
-function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defines, declarations)
-	defines = defines or {}
+function FFILoader.CreateBindings(libraryKeywords, headerPath, libraryPaths, outputPath, outputName, defines, declarations)
+	local outputDirectory = outputPath.."/"..outputName
 
-	defines.bit = require("bit")
-	defines.NIL = table.empty
+	local cDefinitionsFile = io.open(outputDirectory.."/"..outputName..".cdef", "w")
+	local luaFile = io.open(outputDirectory.."/"..outputName..".lua", "w")
+	cDefinitionsFile:setvbuf("full")
+	luaFile:setvbuf("full")
 
+	luaFile:write([[
+local ffi = require("ffi")
+local bit = require("bit")
+
+local function IndexMetamethod(self, name)
+	local value = self.Defines[name]
+
+	if value == nil then
+		return self.Library[name]
+	elseif value ~= table.empty then
+		return value
+	end
+end
+
+local defines = {}
+local libraries = {}
+
+local cDefinitionsFile = io.open("]]..outputDirectory.."/"..outputName..[[.cdef", "r")
+ffi.cdef(cDefinitionsFile:read("a*"))
+cDefinitionsFile:close()
+
+]])
+	
+	for name, library in pairs(libraryPaths) do
+		luaFile:write([[libraries["]]..name..[["] = setmetatable({Library = ffi.load("]]..library..[[", true), Defines = defines}, {__index = IndexMetamethod})]].."\n")
+	end
+
+	luaFile:write("\n")
+
+	if defines then
+		for name, value in pairs(defines) do
+			local valueType = type(value)
+
+			if valueType == "string" then
+				luaFile:write("defines[\""..name.."\"] = \""..value.."\"\n")
+			elseif valueType == "number" or valueType == "boolean" then
+				luaFile:write("defines[\""..name.."\"] = "..tostring(value).."\n")
+			end
+		end
+	else
+		defines = {}
+	end
+	
 	local libraryLineMarkerMatches = {}
 
 	for _, keyword in ipairs(libraryKeywords) do
@@ -97,10 +134,11 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 	local declaration = ""
 
 	if declarations then
-		ffi.cdef(declarations)
+		cDefinitionsFile:write(declarations.."\n")
 	end
 
-	for line in love and love.filesystem.lines(preprocessedHeaderPath) or io.lines(preprocessedHeaderPath) do
+	local lineIndex = 1
+	for line in love and love.filesystem.lines(headerPath) or io.lines(headerPath) do
 		if string.find(line, "^%s*$") then
 		elseif string.find(line, "^# %d") then
 			fromLibrary = false
@@ -112,8 +150,8 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 					break
 				end
 			end
-		elseif string.find(line, "^#") then
-			if fromLibrary then
+		elseif fromLibrary then
+			if string.find(line, "^#") then
 				local name, arguments, value, body
 
 				name, value = string.match(line, "^#define ([%w_]*) (.*)")
@@ -122,17 +160,24 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 					if not defines[name] then
 						if #value == 0 then
 							defines[name] = true
+							luaFile:write("defines[\""..name.."\"] = true\n")
 						else
-							local defineCode = load(
-								"return "..FFILoader.ConvertCToLua(value),
-								name, "t", defines
-							)
+							local defineCodeString = "return "..FFILoader.ConvertCToLua(value)
+							local defineCode = load(defineCodeString, name, "t", defines)
 
 							if defineCode then
 								local success, defineValue = pcall(defineCode)
 
 								if success then
+									local valueType = type(defineValue)
+
 									defines[name] = defineValue
+
+									if valueType == "string" then
+										luaFile:write("defines[\""..name.."\"] = \""..string.gsub(defineValue, "[\"\\']", "\\%0").."\"\n")
+									elseif valueType == "number" or valueType == "boolean" then
+										luaFile:write("defines[\""..name.."\"] = "..tostring(defineValue).."\n")
+									end
 								end
 							end
 						end
@@ -145,51 +190,69 @@ function FFILoader.LoadDefinitions(libraryKeywords, preprocessedHeaderPath, defi
 
 				if name then
 					if not defines[name] then
-						local macroCode = load(string.format(
-							"return (function%s return %s end)(...)", arguments, FFILoader.ConvertCToLua(body)
-						), name, "t", defines)
+						local macroCodeString = string.format(
+							"function%s return %s end",
+							arguments, FFILoader.ConvertCToLua(body)
+						)
+						local macroCode = load("return ("..macroCodeString..")(...)", name, "t", defines)
 
-						defines[name] = macroCode
+						if macroCode then
+							defines[name] = macroCode
+							luaFile:write("defines[\""..name.."\"] = setfenv("..macroCodeString..", defines)\n")
+						end
 					end
 
 					goto LoopEnd
 				end
-						
+					
 				name = string.match(line, "^#undef ([%w_]*)")
 
 				if name then
 					defines[name] = nil
+					luaFile:write("defines[\""..name.."\"] = nil\n")
 				end
-			end
-		else
-			declaration = declaration..line
+			else
+				declaration = declaration.." "..line
 
-			if
-				string.find(declaration, ";", 1, true) and
-				select(2, string.gsub(declaration, "{", "")) == select(2, string.gsub(declaration, "}", ""))
-			then
-				declaration = declaration:gsub("%[%[.-%]%]", ""):gsub("__attribute__%(%(.-%)%)", "")
-				pcall(ffi.cdef, declaration)
+				if string.find(declaration, ";", 1, true) then
+					local insideString = false
+					local curlyBraceCount = 0
 
-				declaration = ""
+					for character in string.gmatch(declaration, ".") do
+						if character == "\"" or character == "'" then
+							insideString = not insideString
+						elseif not insideString then
+							if character == "{" then
+								curlyBraceCount = curlyBraceCount + 1
+							elseif character == "}" then
+								curlyBraceCount = curlyBraceCount - 1
+							end
+						end
+					end
+
+					if curlyBraceCount == 0 then
+						declaration = declaration:gsub("%[%[.-%]%]", ""):gsub("__attribute__%(%(.-%)%)", "")
+
+						if pcall(ffi.cdef, declaration) then
+							cDefinitionsFile:write(declaration.."\n")
+						end
+
+						declaration = ""
+					end
+				end
 			end
 		end
 		
 		::LoopEnd::
+		
+		print("Line "..tostring(lineIndex).." processed.")
+		lineIndex = lineIndex + 1
 	end
 
-	return defines
-end
+	luaFile:write("\nreturn libraries")
 
-function FFILoader.CreateLibrary(libraryPath, defines, loadGlobally)
-	local success, library = pcall(ffi.load, libraryPath)
-
-	if success then
-		return setmetatable(
-			{Defines = defines, Library = library},
-			{__index = IndexMetamethod}
-		)
-	end
+	cDefinitionsFile:close()
+	luaFile:close()
 end
 
 return FFILoader

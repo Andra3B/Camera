@@ -53,6 +53,4 @@ EventDirector = require("EventDirector")
 Animation = require("Animation")
 Timer = require("Timer")
 
-FFILoader = require("FFILoader")
-
 return true

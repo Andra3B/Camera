@@ -4,7 +4,11 @@ socket = require("socket")
 utf8 = require("utf8")
 
 UserInterface = require("UserInterface")
-libav = require("libav")
+
+GStreamer = require("GStreamer.GStreamer")
+GObject = GStreamer.GObject
+GLib = GStreamer.GLib
+GStreamer = GStreamer.GStreamer
 
 VideoReader = require("VideoReader")
 
@@ -13,8 +17,6 @@ NetworkClient = require("NetworkClient")
 MotionTracker = require("MotionTracker")
 
 function love.load()
-	libav.avdevice.avdevice_register_all()
-
 	local width, height = love.window.getDesktopDimensions(1)
 	love.window.setTitle("Sandbox")
 	love.window.setMode(width*0.5, height*0.5, {
@@ -49,16 +51,28 @@ function love.load()
 	local Root = UserInterface.Frame.Create()
 	Root.RelativeSize = Vector2.One
 
-	VideoPlayer = UserInterface.VideoFrame.Create()
-	VideoPlayer.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	VideoPlayer.RelativeSize = Vector2.Create(0.9, 0.9)
-	VideoPlayer.RelativePosition = Vector2.Create(0.5, 0.5)
-	VideoPlayer.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
-	VideoPlayer.Video = VideoReader.CreateFromURL(nil, "dshow")
-	VideoPlayer.Parent = Root
-	
-	motionTracker = MotionTracker.Create(VideoPlayer.Video.Width, VideoPlayer.Video.Height)
-	VideoPlayer.Playing = true
+	GStreamer.gst_init(ffi.new("int[1]", 0), nil)
+
+  	pipeline = GStreamer.gst_parse_launch(
+    	"playbin uri=https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm",
+    	nil
+	)
+
+  	GStreamer.gst_element_set_state(pipeline, GStreamer.GST_STATE_PLAYING)
+
+	local loop = GLib.g_main_loop_new(NULL, GLib.FALSE)
+	GLib.g_main_loop_run(loop)
+
+  	bus = GStreamer.gst_element_get_bus(pipeline)
+  	msg = GStreamer.gst_bus_timed_pop_filtered(
+		bus, GStreamer.GST_CLOCK_TIME_NONE,
+    	bit.bor(GStreamer.GST_MESSAGE_ERROR, GStreamer.GST_MESSAGE_EOS)
+	)
+
+  	if (GStreamer.GST_MESSAGE_TYPE(msg) == GStreamer.GST_MESSAGE_ERROR) then
+    	print("ERROR!")
+		return 0
+	end
 
 	UserInterface.SetRoot(Root)
 end
@@ -70,31 +84,7 @@ function love.update(deltaTime)
 end
 
 function love.draw()
-	if VideoPlayer.FrameChanged then
-		motionTracker:Update(VideoPlayer.VideoImage, not justRan)
-		justRan = true
-	end
-
 	UserInterface.Draw()
-
-	love.graphics.setLineWidth(3)
-
-	for index, shape in pairs(motionTracker.MotionShapes) do
-		local x1, y1, x2, y2 = unpack(shape)
-		
-		x1 = VideoPlayer.BackgroundImageAbsolutePosition.X + VideoPlayer.BackgroundImageAbsoluteSize.X*x1
-		y1 = VideoPlayer.BackgroundImageAbsolutePosition.Y + VideoPlayer.BackgroundImageAbsoluteSize.Y*y1
-		x2 = VideoPlayer.BackgroundImageAbsolutePosition.X + VideoPlayer.BackgroundImageAbsoluteSize.X*x2
-		y2 = VideoPlayer.BackgroundImageAbsolutePosition.Y + VideoPlayer.BackgroundImageAbsoluteSize.Y*y2
-		
-		if index == motionTracker.LargestMotionShape then
-			love.graphics.setColor(0, 0, 1, 1)
-		else
-			love.graphics.setColor(0, 1, 0, 1)
-		end
-
-		love.graphics.rectangle("line", x1, y1, x2 - x1, y2 - y1)
-	end
 		
 	love.graphics.present()
 end
