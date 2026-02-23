@@ -1,6 +1,6 @@
 require("SetupEnvironment")
 
-local libav = require("libav.init")
+local libav = require("libav.libav")
 
 System.Options = {
 	["Target"] = {

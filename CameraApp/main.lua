@@ -9,7 +9,7 @@ local livestreamReceiver = nil
 local livestreamReceiverPort = nil
 
 if jit.os == "Windows" then
-	libav = require("libav")
+	libav = require("libav.libav")
 
 	VideoReader = require("VideoReader")
 	VideoWriter = require("VideoWriter")

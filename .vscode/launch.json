@@ -41,7 +41,7 @@
 			]
 		},
 		{
-			"name": "Debug Build",
+			"name": "Build libav",
 			"type": "lua-local",
 			"request": "launch",
 			"cwd": "${workspaceFolder}",
@@ -49,10 +49,7 @@
 				"command": "luajit"
 			},
 			"args": [
-				"${workspaceFolder}/Build.lua",
-				"--Target=${input:TargetInput}",
-				"--LoveFolder=\"${input:LoveFolderInput}\"",
-				"--LibAVFolder=\"${input:LibAVFolderInput}\""
+				"${workspaceFolder}/libav/Build.lua"
 			]
 		}
 	],
