@@ -553,6 +553,8 @@ function love.load()
 
 	BottomBarPages.Events:Listen("PageSwitching", function(from, to, switched)
 		if livestreaming then
+			LivestreamFrame.VideoVisible = true
+			
 			if to == 2 then
 				if switched then
 					calibratingMotionTracking = true
@@ -666,9 +668,9 @@ function love.update(deltaTime)
 	Timer.Update(deltaTime)
 	Animation.Update(deltaTime)
 
-	FPSLabel.Text = string.format("FPS: %d", love.timer.getFPS())
+	--FPSLabel.Text = string.format("FPS: %d", love.timer.getFPS())
 	
-	NoMotionLabel.Visible = calibratingMotionTracking and #motionTracker.MotionShapes == 0
+	NoMotionLabel.Visible = motionTracker and #motionTracker.MotionShapes == 0
 
 	UserInterface.Update(deltaTime)
 end
@@ -680,7 +682,7 @@ function love.draw()
 		if LivestreamFrame.FrameChanged then
 			motionTracker:Update(LivestreamFrame.VideoImage)
 		end
-		
+
 		if calibratingMotionTracking then
 			local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
 			local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
