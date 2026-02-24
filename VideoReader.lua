@@ -210,7 +210,7 @@ function VideoReader:ReadFrame(packetHandle, rgbaBufferHandle)
 				rgbaFrameHandle.data, rgbaFrameHandle.linesize
 			)
 
-			self._FrameTime = self._FrameIndex * (1 / self._VideoStreamFPS)
+			self._FrameTime = self._FrameIndex / self._VideoStreamFPS
 			self._FrameIndex = self._FrameIndex + 1
 		elseif code == libav.avutil.AVERROR_EAGAIN then
 			needAnotherPacket = true

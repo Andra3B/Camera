@@ -216,7 +216,7 @@ function MotionTracker:GetMaxSubdivisions()
 end
 
 function MotionTracker:GetSubdivisions()
-	return self._Subdivisions
+	return self._MaxSubdivisions - #self._ReductionCanvases - 1
 end
 
 function MotionTracker:SetSubdivisions(subdivisions)
@@ -236,8 +236,6 @@ function MotionTracker:SetSubdivisions(subdivisions)
 
 		width, height = math.floor(width*0.5), math.floor(height*0.5)
 	end
-
-	self._Subdivisions = subdivisions
 end
 
 function MotionTracker:Destroy()
