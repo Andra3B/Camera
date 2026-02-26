@@ -1,5 +1,3 @@
-local libav = require("libav.libav")
-
 local VideoWriter = {}
 
 local function GetLibAVErrorString(errorCode)

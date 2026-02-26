@@ -1,3 +1,5 @@
+libav = require("libav.libav")
+
 VideoReader = require("VideoReader")
 
 MotionTracker = require("MotionTracker")

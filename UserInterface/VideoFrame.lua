@@ -1,4 +1,3 @@
-local libav = require("libav.libav")
 local Frame = require("UserInterface.Frame")
 
 local VideoFrame = {}
