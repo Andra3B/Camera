@@ -193,12 +193,7 @@ function Frame:SetRelativePosition(position)
 	if self._RelativePosition ~= position then
 		self._RelativePosition = position
 
-		if self._Parent then
-			self._Parent._ChildAbsolutePosition = nil
-			self._Parent._ChildAbsoluteSize = nil
-		end
-
-		self:RecursiveRefresh()
+		self:RecursiveRefresh(true)
 	end
 end
 
@@ -210,12 +205,7 @@ function Frame:SetPixelPosition(position)
 	if self._PixelPosition ~= position then
 		self._PixelPosition = position
 
-		if self._Parent then
-			self._Parent._ChildAbsolutePosition = nil
-			self._Parent._ChildAbsoluteSize = nil
-		end
-
-		self:RecursiveRefresh()
+		self:RecursiveRefresh(true)
 	end
 end
 
@@ -256,12 +246,7 @@ function Frame:SetRelativeSize(size)
 	if self._RelativeSize ~= size then
 		self._RelativeSize = size
 
-		if self._Parent then
-			self._Parent._ChildAbsolutePosition = nil
-			self._Parent._ChildAbsoluteSize = nil
-		end
-
-		self:RecursiveRefresh()
+		self:RecursiveRefresh(true)
 	end
 end
 
@@ -273,12 +258,7 @@ function Frame:SetPixelSize(size)
 	if self._PixelSize ~= size then
 		self._PixelSize = size
 
-		if self._Parent then
-			self._Parent._ChildAbsolutePosition = nil
-			self._Parent._ChildAbsoluteSize = nil
-		end
-
-		self:RecursiveRefresh()
+		self:RecursiveRefresh(true)
 	end
 end
 
@@ -286,8 +266,7 @@ function Frame:GetAbsoluteSize()
 	if not self._AbsoluteSize then
 		local parent = self._Parent
 
-		self._AbsoluteSize = 
-			self._PixelSize +
+		self._AbsoluteSize = self._PixelSize +
 			(parent and parent.AbsoluteSize or Vector2.Create(love.graphics.getDimensions()))*self._RelativeSize
 
 		if self._DominantAxis == Enum.Axis.X then
@@ -324,7 +303,7 @@ function Frame:SetChildPixelOffset(offset)
 	if self._ChildPixelOffset ~= offset then
 		self._ChildPixelOffset = offset
 
-		self:RecursiveRefresh()
+		self:RecursiveRefresh(false)
 	end
 end
 
@@ -336,7 +315,7 @@ function Frame:SetChildRelativeOffset(offset)
 	if self._ChildRelativeOffset ~= offset then
 		self._ChildRelativeOffset = offset
 
-		self:RecursiveRefresh()
+		self:RecursiveRefresh(false)
 	end
 end
 
@@ -530,10 +509,8 @@ function Frame:Destroy()
 end
 
 return Class.CreateClass(Frame, "Frame", Object, {
-	["AbsolutePosition"] = {"RelativePosition", "PixelPosition", "AbsoluteSize"},
-	["AbsoluteSize"] = {"RelativeSize", "PixelSize"},
-	["ChildAbsoluteOffset"] = {"AbsoluteSize", "ChildRelativeOffset", "ChildPixelOffset"},
-	["CornerAbsoluteRadius"] = {"AbsoluteSize", "CornerRelativeRadius", "CornerPixelRadius"},
-	["BackgroundImageAbsolutePosition"] = {"AbsolutePosition", "AbsoluteSize", "BackgroundImage"},
+	["ChildAbsoluteOffset"] = {"ChildRelativeOffset", "ChildPixelOffset"},
+	["CornerAbsoluteRadius"] = {"CornerRelativeRadius", "CornerPixelRadius"},
+	["BackgroundImageAbsolutePosition"] = {"BackgroundImage"},
 	["BackgroundImageAbsoluteSize"] = {"BackgroundImageAbsolutePosition"}
 })

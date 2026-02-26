@@ -1,4 +1,5 @@
-require("Setup")
+require("main")
+
 NIL = table.empty
 
 local FFILoader = {}

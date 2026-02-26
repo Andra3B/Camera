@@ -90,7 +90,7 @@ end
 function Interactive:SetActive(active)
 	self._Active = active
 
-	self:RecursiveRefresh()
+	self:RecursiveRefresh(false)
 
 	if self:IsPressed() and not active then
 		self._Events:Push("Released")

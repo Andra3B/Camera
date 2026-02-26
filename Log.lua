@@ -1,12 +1,5 @@
 local Log = {}
 
-Enum.LogCategory = Enum.Create({
-    Client = 1,
-	Camera = 2,
-	Video = 3,
-	Build = 4
-})
-
 Enum.LogPriority = Enum.Create({
     Trace = 1,
     Verbose = 2,
@@ -17,33 +10,29 @@ Enum.LogPriority = Enum.Create({
     Critical = 7
 })
 
-local priorities = {}
+local currentPriority = Enum.LogPriority.Info
 
-function Log.GetCategoryPriority(category)
-	return priorities[category]
+function Log.DefaultWriter(category, priority, message, ...)
+	io.stdout:write(Log.Format(category, priority, nil, message, ...).."\n")
 end
 
-function Log.SetCategoryPriority(category, priority)
-	priorities[category] = priority
-end
+local currentWriter = Log.DefaultWriter
 
 function Log.Format(category, priority, time, message, ...)
-	return string.format(
-		"[%s:%s] [%s] "..message.."\n",
-		Enum.LogCategory[category] or "Unknown",
-		string.upper(Enum.LogPriority[priority] or ""),
-		os.date("%H:%M:%S", time),
-		...
-	)
+	return string.format("[%s] [%s:%s] "..message, os.date("%H:%M:%S", time), category, string.upper(Enum.LogPriority[priority]), ...)
 end
 
-function Log.NewLine()
-	io.stdout:write("\n")
+function Log.GetWriter()
+	return currentWriter
+end
+
+function Log.SetWriter(writer)
+	currentWriter = writer
 end
 
 function Log.Log(category, priority, message, ...)
-	if not priorities[category] or priority >= priorities[category] then
-		io.stdout:write(Log.Format(category, priority, nil, message, ...))
+	if currentWriter and priority >= currentPriority then
+		currentWriter(category, priority, message, ...)
 	end
 end
 

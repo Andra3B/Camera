@@ -9,7 +9,7 @@ function MotionTracker.Create(width, height)
 	self._ReductionCanvases = {}
 
 	self._MotionShapes = nil
-	self._LargestMotionShape = 0
+	self._LargestMotionShape = nil
 
 	self._MotionThreshold = 0.12
 	self._ShapeMinimumArea = 0.03
@@ -56,6 +56,7 @@ function MotionTracker:Update(frame, immediateBackgroundUpdate)
 	self._PreviousBackgroundCanvas = backgroundCanvas
 
 	self._MotionShapes = nil
+	self._LargestMotionShape = nil
 
 	love.graphics.pop()
 end
@@ -199,7 +200,7 @@ function MotionTracker:GetMotionShapes()
 		end
 
 		self._MotionShapes = shapes
-		self._LargestMotionShape = largestShape
+		self._LargestMotionShape = shapes[largestShape]
 	end
 	
 	return self._MotionShapes
@@ -253,6 +254,7 @@ function MotionTracker:Destroy()
 		self._ReductionCanvases = nil
 
 		self._MotionShapes = nil
+		self._LargestMotionShape = nil
 
 		Entity.Destroy(self)
 	end

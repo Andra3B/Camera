@@ -28,11 +28,15 @@ end
 function Object:Refresh()
 end
 
-function Object:RecursiveRefresh()
-	self:Refresh()
-	
-	for _, child in ipairs(self._Children) do
-		child:RecursiveRefresh()
+function Object:RecursiveRefresh(fromRoot)
+	if fromRoot then
+		self.Root:RecursiveRefresh(false)
+	else
+		self:Refresh()
+		
+		for _, child in ipairs(self._Children) do
+			child:RecursiveRefresh(false)
+		end
 	end
 end
 
@@ -78,6 +82,16 @@ function Object:GetAncestorWithType(ancestorType)
 			return ancestor
 		end
 	end
+end
+
+function Object:GetRoot()
+	local object = self
+
+	while object._Parent do
+		object = object._Parent
+	end
+
+	return object
 end
 
 function Object:SetParent(parent, where)
