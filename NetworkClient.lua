@@ -125,7 +125,7 @@ function NetworkClient:Update()
 				local remoteIPAddress, remotePort = self:GetRemoteDetails()
 
 				Log.Error(
-					Enum.LogCategory.Network,
+					"Network",
 					"%s:%s failed to read valid data from %s:%s! %s",
 					sourceIPAddress, sourcePort,
 					remoteIPAddress, remotePort,

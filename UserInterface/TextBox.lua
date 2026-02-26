@@ -5,32 +5,25 @@ local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(
 local TextBox = {}
 
 local function Input(self, inputType, scancode, state)
-	if self.AbsoluteActive and self.Focused and state.Z < 0 and inputType == Enum.InputType.Keyboard then
+	if self.Focused and state.Z < 0 and inputType == Enum.InputType.Keyboard then
 		if scancode == "left" then
 			self.Cursor = self.Cursor - 1
 		elseif scancode == "right" then
 			self.Cursor = self.Cursor + 1
 		elseif scancode == "backspace" then
 			local text = self._Text
-			local Cursor = self.Cursor
+			local cursor = self._Cursor
 
-			if Cursor > 0 and #text > 0 then
-				local expectedText = string.replace(
-					text,
-					utf8.offset(text, Cursor),
-					utf8.offset(text, Cursor + 1) - 1,
-					""
-				)
-
-				self.Text = expectedText
-
-				if self._Text == expectedText then
-					self.Cursor = Cursor - 1
-				end
+			if cursor > 0 and #text > 0 then
+				self.Text = string.replace(text, utf8.offset(text, cursor), utf8.offset(text, cursor + 1) - 1, "")
+				self.Cursor = cursor - 1
 			end
 		elseif scancode == "return" then
 			self:Submit()
-			UserInterface.SetFocus(nil)
+
+			if self._ReleaseFocusOnSubmit then
+				UserInterface.SetFocus(nil)
+			end
 		end
 	end
 end
@@ -48,18 +41,14 @@ function TextBox.Create()
 	self._PlaceholderTextColour = Vector4.Create(0.0, 0.0, 0.0, 0.5)
 
 	self._Cursor = 0
+	self._CursorAbsolutePosition = nil
 
-	self._AbsoluteCursorOffset = nil
-	self._AbsoluteCursorSize = nil
+	self._ReleaseFocusOnSubmit = true
 
 	self._Events:Listen("Input", Input, self)
 	self._Events:Listen("TextInput", TextInput, self)
 
 	return self
-end
-
-function TextBox:Refresh()
-	Interactive.Refresh(self)
 end
 
 function TextBox:Draw()
@@ -68,24 +57,23 @@ function TextBox:Draw()
 	local absolutePosition = self.AbsolutePosition
 	
 	if self.AbsoluteActive and self:IsFocused() then
-		local absoluteCursorOffset = self.AbsoluteCursorOffset
-		local absoluteCursorSize = self.AbsoluteCursorSize
+		local cursorAbsolutePosition = self.CursorAbsolutePosition
 		
+		love.graphics.setColor(self.TextColour:Unpack())
 		love.graphics.rectangle(
 			"fill",
-			absolutePosition.X + absoluteCursorOffset.X,
-			absolutePosition.Y + absoluteCursorOffset.Y,
-			absoluteCursorSize.X,
-			absoluteCursorSize.Y
+			absolutePosition.X + cursorAbsolutePosition.X,
+			absolutePosition.Y + cursorAbsolutePosition.Y,
+			2, self.TextObject:getHeight()*0.8
 		)
-	elseif #self._Text == 0 then
-		local absoluteTextOffset = self.AbsoluteTextOffset
-		
-		love.graphics.setColor(self._PlaceholderTextColour:Unpack())
-		love.graphics.print(
-			self._PlaceholderText,
-			absolutePosition.X + absoluteTextOffset.X,
-			absolutePosition.Y + absoluteTextOffset.Y
+	elseif #self.Text == 0 then
+		local textAbsolutePosition = self.TextAbsolutePosition
+
+		love.graphics.setColor(self.PlaceholderTextColour:Unpack())
+		love.graphics.draw(
+			self.TextObject,
+			absolutePosition.X + textAbsolutePosition.X,
+			absolutePosition.Y + textAbsolutePosition.Y
 		)
 	end
 end
@@ -93,22 +81,7 @@ end
 function TextBox:Refresh()
 	Interactive.Refresh(self)
 
-	self._AbsoluteCursorOffset = nil
-	self._AbsoluteCursorSize = nil
-end
-
-function TextBox:GetAbsoluteTextSize()
-	if not self._AbsoluteTextSize then
-		local textSize = self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize
-		local font = self:GetFont():GetFont(textSize)
-
-		self._AbsoluteTextSize = Vector2.Create(
-			font:getWidth(#self._Text > 0 and self._Text or self._PlaceholderText),
-			font:getBaseline()
-		)
-	end
-
-	return self._AbsoluteTextSize
+	self._CursorAbsolutePosition = nil
 end
 
 function TextBox:SetText(text)
@@ -117,19 +90,24 @@ function TextBox:SetText(text)
 	self.Cursor = self._Cursor
 end
 
+function TextBox:GetTextObject()
+	if not self._TextObject then
+		self._TextObject = love.graphics.newText(
+			self.Font:GetFont(self.TextAbsoluteSize),
+			#self.Text > 0 and self.Text or self.PlaceholderText
+		)
+	end
+
+	return self._TextObject
+end
+
 function TextBox:InsertText(text)
 	if #text > 0 then
-		local Cursor = self._Cursor
-
 		local boxText = self._Text
-		local cursorByteOffset = utf8.offset(boxText, Cursor + 1)
+		local cursorByteOffset = utf8.offset(boxText, self._Cursor + 1)
 
-		local text = string.sub(boxText, 1, cursorByteOffset - 1)..text..string.sub(boxText, cursorByteOffset)
-		self.Text = text
-
-		if self._Text == text then
-			self.Cursor = Cursor + utf8.len(text)
-		end
+		self.Text = string.sub(boxText, 1, cursorByteOffset - 1)..text..string.sub(boxText, cursorByteOffset)
+		self.Cursor = self._Cursor + utf8.len(text)
 	end
 end
 
@@ -157,42 +135,30 @@ function TextBox:SetCursor(position)
 	self._Cursor = math.clamp(position, 0, utf8.len(self._Text))
 end
 
-function TextBox:GetAbsoluteCursorOffset()
-	if not self._AbsoluteCursorOffset then
-		local Cursor = self._Cursor
-		local absoluteTextOffset = self.AbsoluteTextOffset
+function TextBox:GetCursorAbsolutePosition()
+	if not self._CursorAbsolutePosition then
+		local textAbsolutePosition = self.TextAbsolutePosition
 
-		if Cursor == 0 then
-			self._AbsoluteCursorOffset = absoluteTextOffset
+		if self.Cursor == 0 then
+			self._CursorAbsolutePosition = textAbsolutePosition
 		else
-			local text = self._Text
-			local textWidth = self:GetFont():GetFont(self.AbsoluteTextSize.Y):getWidth(
-				string.sub(text, 1, utf8.offset(text, Cursor))
+			local textWidth = self.Font:GetFont(self.TextAbsoluteSize):getWidth(
+				string.sub(self._Text, 1, utf8.offset(self._Text, self._Cursor))
 			)
 
-			self._AbsoluteCursorOffset = Vector2.Create(
-				textWidth + absoluteTextOffset.X, absoluteTextOffset.Y
-			)
+			self._CursorAbsolutePosition = Vector2.Create(textWidth + textAbsolutePosition.X, textAbsolutePosition.Y)
 		end
 	end
 
-	return self._AbsoluteCursorOffset
+	return self._CursorAbsolutePosition
 end
 
-function TextBox:GetAbsoluteCursorSize()
-	if not self._AbsoluteCursorSize then
-		self._AbsoluteCursorSize = Vector2.Create(
-			2, self:GetFont():GetFont(self.AbsoluteTextSize.Y):getHeight()
-		)
-	end
-
-	return self._AbsoluteCursorSize
+function TextBox:GetReleaseFocusOnSubmit()
+	return self._ReleaseFocusOnSubmit
 end
 
-function TextBox:SetFont(font)
-	Interactive.SetFont(self, font)
-
-	self._AbsoluteCursorOffset = nil
+function TextBox:SetReleaseFocusOnSubmit(keep)
+	self._ReleaseFocusOnSubmit = keep
 end
 
 function TextBox:Submit()
@@ -201,8 +167,17 @@ function TextBox:Submit()
 	end
 end
 
+function TextBox:Destroy()
+	if not self._Destroyed then
+		self._PlaceholderTextColour = nil
+
+		self._CursorAbsolutePosition = nil
+
+		Interactive.Destroy(self)
+	end
+end
+
 return Class.CreateClass(TextBox, "TextBox", Interactive, {
-	["AbsoluteTextSize"] = {"PlaceholderText"},
-	["AbsoluteCursorOffset"] = {"Cursor", "AbsoluteTextSize", "AbsoluteTextOffset"},
-	["AbsoluteCursorSize"] = {"Font", "AbsoluteTextSize"}
+	["CursorAbsolutePosition"] = {"Cursor", "Text", "Font", "TextAbsoluteSize", "TextAbsolutePosition"},
+	["TextObject"] = {"PlaceholderText"}
 })

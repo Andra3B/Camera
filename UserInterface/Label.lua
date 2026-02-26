@@ -8,16 +8,22 @@ function Label.Create()
 	self._Font = UserInterface.Font.Default
 
 	self._Text = ""
+	self._TextObject = nil
+
 	self._TextColour = Vector4.Create(0, 0, 0, 1)
-	
+
+	self._TextRelativePosition = Vector2.Create(0.5, 0.5)
+	self._TextPixelPosition = Vector2.Zero
+	self._TextAbsolutePosition = nil
+
 	self._TextRelativeSize = 0.5
 	self._TextPixelSize = 0
+	self._TextAbsoluteSize = nil
 
-	self._TextHorizontalAlignment = Enum.HorizontalAlignment.Middle
-	self._TextVerticalAlignment = Enum.VerticalAlignment.Middle
+	self._TextRelativeOrigin = Vector2.Create(0.5, 0.5)
+	self._TextPixelOrigin = Vector2.Zero
 
-	self._AbsoluteTextOffset = nil
-	self._AbsoluteTextSize = nil
+	self._ScaleToFit = false
 
 	return self
 end
@@ -25,85 +31,75 @@ end
 function Label:Draw()
 	Frame.Draw(self)
 
-	local absolutePosition = self.AbsolutePosition
-	local absoluteTextOffset = self.AbsoluteTextOffset
+	if #self.Text > 0 then
+		local absolutePosition = self.AbsolutePosition
+		local textAbsolutePosition = self.TextAbsolutePosition
 
-	love.graphics.setFont(self:GetFont():GetFont(self.AbsoluteTextSize.Y))
-	love.graphics.setColor(self:GetTextColour():Unpack())
-	love.graphics.print(
-		self:GetText(),
-		absolutePosition.X + absoluteTextOffset.X,
-		absolutePosition.Y + absoluteTextOffset.Y
-	)
+		love.graphics.setColor(self.TextColour:Unpack())
+		love.graphics.draw(
+			self.TextObject,
+			absolutePosition.X + textAbsolutePosition.X,
+			absolutePosition.Y + textAbsolutePosition.Y
+		)
+	end
+end
+
+function Label:GetAbsoluteSize()
+	if not self._AbsoluteSize then
+		local absoluteSize = Frame.GetAbsoluteSize(self)
+
+		if self.ScaleToFit then
+			local width, height = self.TextObject:getDimensions()
+
+			self._AbsoluteSize.X = math.max(absoluteSize.X, width)
+			self._AbsoluteSize.Y = math.max(absoluteSize.Y, height)
+		end
+	end
+
+	return self._AbsoluteSize
 end
 
 function Label:Refresh()
 	Frame.Refresh(self)
 
-	self._AbsoluteTextOffset = nil
-	self._AbsoluteTextSize = nil
+	self._TextObject = nil
+
+	self._TextAbsolutePosition = nil
+	self._TextAbsoluteSize = nil
 end
 
-function Label:GetAbsoluteTextOffset()
-	if not self._AbsoluteTextOffset then
-		local absoluteSize = self.AbsoluteSize
-		local absoluteTextSize = self.AbsoluteTextSize
+function Label:GetTextRelativePosition()
+	return self._TextRelativePosition
+end
 
-		local horizontalAlignment = self._TextHorizontalAlignment
-		local verticalAlignment = self._TextVerticalAlignment
+function Label:SetTextRelativePosition(position)
+	self._TextRelativePosition = position
 
-		local dx, dy
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
+end
 
-		if horizontalAlignment == Enum.HorizontalAlignment.Left then
-			dx = 0
-		elseif horizontalAlignment == Enum.HorizontalAlignment.Middle then
-			dx = (absoluteSize.X - absoluteTextSize.X)*0.5
-		else
-			dx = absoluteSize.X - absoluteTextSize.X
-		end
+function Label:GetTextPixelPosition()
+	return self._TextPixelPosition
+end
 
-		if verticalAlignment == Enum.VerticalAlignment.Top then
-			dy = 0
-		elseif verticalAlignment == Enum.VerticalAlignment.Middle then
-			dy = (absoluteSize.Y - absoluteTextSize.Y*1.3)*0.5
-		else
-			dy = absoluteSize.Y - absoluteTextSize.Y
-		end
+function Label:SetTextPixelPosition(position)
+	self._TextPixelPosition = position
 
-		self._AbsoluteTextOffset = Vector2.Create(math.floor(dx + 0.5), math.floor(dy + 0.5))
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
+end
+
+function Label:GetTextAbsolutePosition()
+	if not self._TextAbsolutePosition then
+		self._TextAbsolutePosition = 
+			self._TextPixelPosition + self.AbsoluteSize*self._TextRelativePosition -
+			self._TextPixelOrigin - self._TextRelativeOrigin*Vector2.Create(self.TextObject:getDimensions())
 	end
 
-	return self._AbsoluteTextOffset
-end
-
-function Label:GetAbsoluteTextSize()
-	if not self._AbsoluteTextSize then
-		local textSize = self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize
-		local font = self:GetFont():GetFont(textSize)
-
-		self._AbsoluteTextSize = Vector2.Create(
-			font:getWidth(self._Text),
-			font:getBaseline()
-		)
-	end
-
-	return self._AbsoluteTextSize
-end
-
-function Label:GetFont()
-	return self._Font
-end
-
-function Label:SetFont(font)
-	self._Font = font
-end
-
-function Label:GetText()
-	return self._Text
-end
-
-function Label:SetText(text)
-	self._Text = tostring(text)
+	return self._TextAbsolutePosition
 end
 
 function Label:GetTextRelativeSize()
@@ -112,6 +108,10 @@ end
 
 function Label:SetTextRelativeSize(size)
 	self._TextRelativeSize = size
+
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
 end
 
 function Label:GetTextPixelSize()
@@ -120,6 +120,84 @@ end
 
 function Label:SetTextPixelSize(size)
 	self._TextPixelSize = size
+
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
+end
+
+function Label:GetTextAbsoluteSize()
+	if not self._TextAbsoluteSize then
+		if self.ScaleToFit then
+			self._TextAbsoluteSize = math.floor(self._TextPixelSize + 0.5)
+		else
+			self._TextAbsoluteSize = math.floor(self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize + 0.5)
+		end
+	end
+
+	return self._TextAbsoluteSize
+end
+
+function Label:GetTextRelativeOrigin()
+	return self._TextRelativeOrigin
+end
+
+function Label:SetTextRelativeOrigin(origin)
+	self._TextRelativeOrigin = origin
+
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
+end
+
+function Label:GetTextPixelOrigin()
+	return self._TextPixelOrigin
+end
+
+function Label:SetTextPixelOrigin(origin)
+	self._TextPixelOrigin = origin
+
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
+end
+
+function Label:GetFont()
+	return self._Font
+end
+
+function Label:SetFont(font)
+	self._Font = font
+
+	if self.ScaleToFit then
+		self:RecursiveRefresh(true)
+	end
+end
+
+function Label:GetText()
+	return self._Text
+end
+
+function Label:SetText(text)
+	text = tostring(text)
+
+	if text ~= self._Text then
+		self._Text = text
+
+		if self.ScaleToFit then
+			self:RecursiveRefresh(true)
+		end
+
+		self.Events:Push("TextChanged", text)
+	end
+end
+
+function Label:GetTextObject()
+	if not self._TextObject then
+		self._TextObject = love.graphics.newText(self.Font:GetFont(self.TextAbsoluteSize), self.Text)
+	end
+
+	return self._TextObject
 end
 
 function Label:GetTextColour()
@@ -130,36 +208,31 @@ function Label:SetTextColour(colour)
 	self._TextColour = colour
 end
 
-function Label:GetTextVerticalAlignment()
-	return self._TextVerticalAlignment
+function Label:GetScaleToFit()
+	return self._ScaleToFit
 end
 
-function Label:SetTextVerticalAlignment(alignment)
-	self._TextVerticalAlignment = alignment
-end
-
-function Label:GetTextHorizontalAlignment()
-	return self._TextHorizontalAlignment
-end
-
-function Label:SetTextHorizontalAlignment(alignment)
-	self._TextHorizontalAlignment = alignment
+function Label:SetScaleToFit(scaleToFit)
+	self._ScaleToFit = scaleToFit
 end
 
 function Label:Destroy()
 	if not self._Destroyed then
 		self._Font = nil
 
-		self._TextColour = nil
+		self._TextObject = nil
 
-		self._AbsoluteTextOffset = nil
-		self._AbsoluteTextSize = nil
+		self._TextAbsolutePosition = nil
+		self._TextAbsoluteSize = nil
+
+		self._TextColour = nil
 
 		Frame.Destroy(self)
 	end
 end
 
 return Class.CreateClass(Label, "Label", Frame, {
-	["AbsoluteTextOffset"] = {"AbsoluteSize", "AbsoluteTextSize", "Font", "Text", "TextHorizontalAlignment", "TextVerticalAlignment"},
-	["AbsoluteTextSize"] = {"AbsoluteSize", "Font", "Text", "TextRelativeSize", "TextPixelSize"}
+	["TextObject"] = {"TextAbsoluteSize", "Font", "Text"},
+	["TextAbsolutePosition"] = {"TextObject", "TextPixelPosition", "TextRelativePosition", "TextPixelOrigin", "TestRelativeOrigin"},
+	["TextAbsoluteSize"] = {"AbsoluteSize", "TextPixelSize", "TextRelativeSize"}
 })

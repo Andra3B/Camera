@@ -30,11 +30,7 @@ local function VerticalScrollBarInput(self, inputType, scancode, state)
 		local absoluteChildBottomRightY = absoluteChildTopLeftPosition.Y + childAbsoluteSize.Y
 		local absoluteSize = container.AbsoluteSize
 
-		local totalHeight = (absoluteChildTopLeftPosition.Y < 0 and absoluteChildBottomRightY < absoluteSize.Y) and (
-			absoluteSize.Y - absoluteChildTopLeftPosition.Y
-		) or (
-			childAbsoluteSize.Y
-		)
+		local totalHeight = (absoluteChildTopLeftPosition.Y < 0 and absoluteChildBottomRightY < absoluteSize.Y) and absoluteSize.Y - absoluteChildTopLeftPosition.Y or childAbsoluteSize.Y
 
 		container.ChildPixelOffset = Vector2.Create(
 			container.ChildPixelOffset.X,
@@ -57,11 +53,8 @@ local function HorizontalScrollBarInput(self, inputType, scancode, state)
 		local absoluteChildBottomRightX = absoluteChildTopLeftPosition.X + childAbsoluteSize.X
 		local absoluteSize = container.AbsoluteSize
 
-		local totalWidth = (absoluteChildTopLeftPosition.X < 0 and absoluteChildBottomRightX < absoluteSize.X) and (
-			absoluteSize.X - absoluteChildTopLeftPosition.X
-		) or (
-			childAbsoluteSize.X
-		)
+		local totalWidth = (absoluteChildTopLeftPosition.X < 0 and absoluteChildBottomRightX < absoluteSize.X) and
+			absoluteSize.X - absoluteChildTopLeftPosition.X or childAbsoluteSize.X
 
 		container.ChildPixelOffset = Vector2.Create(
 			((container.AbsolutePosition.X + self._HorizontalDragOffset - state.X)/absoluteSize.X)*totalWidth - absoluteChildTopLeftPosition.X,
@@ -123,13 +116,6 @@ function ScrollFrame.Create()
 	return self
 end
 
-function ScrollFrame:Refresh()
-	Interactive.Refresh(self)
-
-	self._VerticalDragOffset = nil
-	self._HorizontalDragOffset = nil
-end
-
 function ScrollFrame:GetContainer()
 	return self._Container
 end
@@ -171,11 +157,8 @@ function ScrollFrame:Draw()
 				math.max(absoluteChildBottomRightPosition.Y - absoluteSize.Y, 0)
 			)
 
-			local totalHeight = (absoluteChildTopLeftPosition.Y < 0 and absoluteChildBottomRightPosition.Y < absoluteSize.Y) and (
-				absoluteSize.Y - absoluteChildTopLeftPosition.Y
-			) or (
-				childAbsoluteSize.Y
-			)
+			local totalHeight = (absoluteChildTopLeftPosition.Y < 0 and absoluteChildBottomRightPosition.Y < absoluteSize.Y) and
+				absoluteSize.Y - absoluteChildTopLeftPosition.Y or childAbsoluteSize.Y
 
 			if horizontalBarVisible then
 				local horizontalBarAbsoluteSize = self._HorizontalScrollBar.AbsoluteSize
@@ -203,11 +186,8 @@ function ScrollFrame:Draw()
 				math.max(absoluteChildBottomRightPosition.X - absoluteSize.X, 0)
 			)
 
-			local totalWidth = (absoluteChildTopLeftPosition.X < 0 and absoluteChildBottomRightPosition.X < absoluteSize.X) and (
-				absoluteSize.X - absoluteChildTopLeftPosition.X
-			) or (
-				childAbsoluteSize.X
-			)
+			local totalWidth = (absoluteChildTopLeftPosition.X < 0 and absoluteChildBottomRightPosition.X < absoluteSize.X) and
+				absoluteSize.X - absoluteChildTopLeftPosition.X or childAbsoluteSize.X
 
 			if verticalBarVisible then
 				local verticalBarAbsoluteSize = self._VerticalScrollBar.AbsoluteSize

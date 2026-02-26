@@ -51,27 +51,18 @@
 			"args": [
 				"${workspaceFolder}/libav/Build.lua"
 			]
-		}
-	],
-
-	"inputs": [
-		{
-			"id": "TargetInput",
-			"type": "promptString",
-			"description": "Enter name target name",
-			"default": "All"
 		},
 		{
-			"id": "LoveFolderInput",
-			"type": "promptString",
-			"description": "Enter path to the Love2D folder",
-			"default": "D:/Love2D"
-		},
-		{
-			"id": "LibAVFolderInput",
-			"type": "promptString",
-			"description": "Enter path to the LibAV folder",
-			"default": "D:/ffmpeg/bin"
+			"name": "Build pigpio",
+			"type": "lua-local",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"program": {
+				"command": "luajit"
+			},
+			"args": [
+				"${workspaceFolder}/pigpio/Build.lua"
+			]
 		}
 	],
 

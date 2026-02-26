@@ -1,3 +1,5 @@
+local libav = require("libav.libav")
+
 local VideoWriter = {}
 
 local function GetLibAVErrorString(errorCode)
@@ -49,7 +51,7 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps, option
 					code = libav.avformat.avio_open(ioHandle, url, libav.avformat.AVIO_FLAG_WRITE)
 
 					if code < 0 then
-						Log.Critical(Enum.LogCategory.Video, "Failed to open \"%s\"! %s", url, GetLibAVErrorString(code))
+						Log.Critical("Video", "Failed to open \"%s\"! %s", url, GetLibAVErrorString(code))
 						
 						goto Cleanup
 					end
@@ -85,19 +87,19 @@ function VideoWriter.CreateFromURL(url, outputFormat, width, height, fps, option
 
 					return self
 				else
-					Log.Critical(Enum.LogCategory.Video, "Failed to write header to \"%s\"", url, GetLibAVErrorString(code))
+					Log.Critical("Video", "Failed to write header to \"%s\"", url, GetLibAVErrorString(code))
 				end
 			else
-				Log.Critical(Enum.LogCategory.Video, "Failed to create encoder for \"%s\"! %s", url, GetLibAVErrorString(code))
+				Log.Critical("Video", "Failed to create encoder for \"%s\"! %s", url, GetLibAVErrorString(code))
 			end
 		else
-			Log.Critical(Enum.LogCategory.Video, "Encoder for \"%s\" output format could not be found!", outputFormat)
+			Log.Critical("Video", "Encoder for \"%s\" output format could not be found!", outputFormat)
 		end
 
 		::Cleanup::
 		libav.avformat.avformat_free_context(formatHandle)
 	else
-		Log.Critical(Enum.LogCategory.Video, "Output format \"%s\" is not supported!", outputFormat)
+		Log.Critical("Video", "Output format \"%s\" is not supported!", outputFormat)
 	end
 end
 
@@ -155,7 +157,7 @@ function VideoWriter:WriteFrame(frameHandle, frameTimeBase)
 
 		return true
 	else
-		Log.Critical(Enum.LogCategory.Video, "Failed to encode frame! %s", GetLibAVErrorString(code))
+		Log.Critical("Video", "Failed to encode frame! %s", GetLibAVErrorString(code))
 	end
 
 	return false

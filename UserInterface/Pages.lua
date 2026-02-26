@@ -22,7 +22,9 @@ local function OnTransitionStopped(pages, animation)
 	pages.ChildRelativeOffset = Vector2.Zero
 	pages._OldPage = page
 	
-	animation:Reset()
+	if animation then
+		animation:Reset()
+	end
 
 	pages._Events:Push("PageSwitching", oldPage, page, true)
 end
@@ -81,11 +83,13 @@ function Pages:SetPage(page)
 				self.ChildRelativeOffset = animation.From
 					
 				animation.Playing = true
-			else
-				oldPageFrame.Visible = false
-			end
 
-			self._Events:Trigger("PageSwitching", oldPage, page, false)
+				self._Events:Trigger("PageSwitching", oldPage, page, false)
+			else
+				self._Events:Trigger("PageSwitching", oldPage, page, false)
+				OnTransitionStopped(self)
+			end
+			
 		end
 	end
 end

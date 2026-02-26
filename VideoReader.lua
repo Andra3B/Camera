@@ -1,3 +1,5 @@
+local libav = require("libav.libav")
+
 local VideoReader = {}
 
 local function GetLibAVErrorString(errorCode)
@@ -50,9 +52,9 @@ function VideoReader.CreateFromURL(url, inputFormat, options)
 	local inputFormatHandle = libav.avformat.av_find_input_format(inputFormat)
 
 	if inputFormatHandle == nil then
-		Log.Critical(Enum.LogCategory.Video, "Input format \"%s\" is not supported!", inputFormat)
+		Log.Critical("Video", "Input format \"%s\" is not supported!", inputFormat)
 	elseif not url then
-		Log.Critical(Enum.LogCategory.Video, "No video input device found!")
+		Log.Critical("Video", "No video input device found!")
 	else
 		local formatHandleHandle = ffi.new("AVFormatContext*[1]")
 		local formatOptionsHandleHandle = ffi.new("AVDictionary*[1]")
@@ -126,18 +128,18 @@ function VideoReader.CreateFromURL(url, inputFormat, options)
 
 						return self
 					else
-						Log.Critical(Enum.LogCategory.Video, "Failed to create video stream decoder for \"%s\"! %s", url, GetLibAVErrorString(code))
+						Log.Critical("Video", "Failed to create video stream decoder for \"%s\"! %s", url, GetLibAVErrorString(code))
 					end
 				else
-					Log.Critical(Enum.LogCategory.Video, "Failed to find valid video stream and decoder details from \"%s\"", url, GetLibAVErrorString(videoStreamIndex))
+					Log.Critical("Video", "Failed to find valid video stream and decoder details from \"%s\"", url, GetLibAVErrorString(videoStreamIndex))
 				end
 			else
-				Log.Critical(Enum.LogCategory.Video, "Failed to read stream details from \"%s\"! %s", url, GetLibAVErrorString(code))
+				Log.Critical("Video", "Failed to read stream details from \"%s\"! %s", url, GetLibAVErrorString(code))
 			end
 
 			libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", formatHandle))
 		else
-			Log.Critical(Enum.LogCategory.Video, "Failed to open \"%s\"! %s", url, GetLibAVErrorString(code))
+			Log.Critical("Video", "Failed to open \"%s\"! %s", url, GetLibAVErrorString(code))
 		end
 	end
 end
@@ -217,12 +219,12 @@ function VideoReader:ReadFrame(packetHandle, rgbaBufferHandle)
 		elseif code == libav.avutil.AVERROR_EOF then
 			endOfFrames = true
 		else
-			Log.Critical(Enum.LogCategory.Video, "Failed to get next frame! %s", GetLibAVErrorString(code))
+			Log.Critical("Video", "Failed to get next frame! %s", GetLibAVErrorString(code))
 		end
 
 		libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", frameHandle))
 	else
-		Log.Critical(Enum.LogCategory.Video, "Failed to decode packet! %s", GetLibAVErrorString(code))
+		Log.Critical("Video", "Failed to decode packet! %s", GetLibAVErrorString(code))
 	end
 	
 	return rgbaFrameHandle, needAnotherPacket, endOfFrames
