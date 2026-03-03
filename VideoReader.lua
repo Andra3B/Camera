@@ -1,5 +1,129 @@
 local VideoReader = {}
 
+VideoReader.Initialized = false
+
+local avErroBuffer
+local function GetAVErrorString(errorCode)
+	libav.avutil.av_strerror(errorCode, avErroBuffer, 256)
+
+	return tostring(avErroBuffer).." (Error Code: "..tostring(errorCode)..")"
+end
+
+function VideoReader.Initialize()
+	if not VideoReader.Initialized then
+		avErroBuffer = ffi.new("char[256]")
+
+		libav.avformat.avformat_network_init()
+
+		VideoReader.Initialized = true
+	end
+end
+
+function VideoReader.Deinitialize()
+	if VideoReader.Initialized then
+		avErroBuffer = nil
+
+		libav.avformat.avformat_network_deinit()
+
+		VideoReader.Initialized = false
+	end
+end
+
+function VideoReader.Create(url, format, options)
+	local errorCode = 0
+	local inputFormatPointer = nil
+
+	if format then
+		inputFormatPointer = libav.avformat.av_find_input_format(format)
+	end
+
+	local optionsPointer
+
+	if options then
+		optionsPointer = ffi.new("AVDictionary*[1]")
+		errorCode = libav.avutil.av_dict_parse_string(
+			optionsPointer,
+			options,
+			"=", ",",
+			libav.avutil.AV_DICT_APPEND
+		)
+	end
+
+	local self = nil
+	if errorCode >= 0 then
+		local formatContextPointer = ffi.new("AVFormatContext[1]")
+		local optionsPointerPointer = ffi.new("AVDictionary*[1]", optionsPointer)
+		errorCode = libav.avformat.avformat_open_input(
+			ffi.new("AVFormatContext*[1]", formatContextPointer),
+			url,
+			inputFormatHandle,
+			optionsPointerPointer
+		)
+
+		optionsPointer = optionsPointerPointer[0]
+
+		if libav.avutil.av_dict_count(optionsPointer) > 0 then
+			local message = "The following options were not found: "
+			local previousOptionPointer = ffi.new("AVDictionaryEntry*")
+
+			while true do
+				previousOptionPointer = libav.avutil.av_dict_iterate(
+					optionsPointer,
+					previousOptionPointer
+				)
+
+				if previousOptionPointer == nil then
+					break
+				else
+					message = message..tostring(previousOptionPointer.key)..", "
+				end
+			end
+
+			Log.Warn("VideoReader", string.sub(message, 1, -3))
+			libav.avutil.av_dict_free(optionsPointer)
+		end
+
+		if errorCode >= 0 then
+			libav.avformat.avformat_find_stream_info(formatContextPointer, nil)
+
+			local decoderPointer = ffi.new("AVCodec[1]")
+			local errorCode = libav.avformat.av_find_best_stream(
+				formatContextPointer, libav.avformat.AVMEDIA_TYPE_VIDEO,
+				-1, -1, ffi.new("AVCodec*[1]", decoderPointer), 0
+			)
+
+			if errorCode >= 0 then
+				self = {}
+
+				self._FormatContextPointer = formatContextPointer
+				self._VideoStreamIndex = errorCode
+
+				errorCode = 0
+			else
+				libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", formatContextPointer))
+			end
+		end
+	end
+
+	if errorCode < 0 then
+		Log.Error("VideoReader", GetAVErrorString(errorCode))
+	end
+
+	return self
+end
+
+function VideoReader:Destroy()
+	if not self._Destroyed then
+		libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", {self._FormatContextPointer}))
+		self._FormatContextPointer = nil
+
+		Entity.Destroy(self)
+	end
+end
+
+return Class.CreateClass(VideoReader, "VideoReader", Entity)
+
+--[[
 local function GetLibAVErrorString(errorCode)
 	local errorDescriptionHandle = ffi.new("char[256]")
 	libav.avutil.av_strerror(errorCode, errorDescriptionHandle, 256)
@@ -248,3 +372,4 @@ function VideoReader:Destroy()
 end
 
 return Class.CreateClass(VideoReader, "VideoReader", Entity)
+--]]
