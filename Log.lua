@@ -10,29 +10,20 @@ Enum.LogPriority = Enum.Create({
     Critical = 7
 })
 
-local currentPriority = Enum.LogPriority.Info
-
 function Log.DefaultWriter(category, priority, message, ...)
 	io.stdout:write(Log.Format(category, priority, nil, message, ...).."\n")
 end
 
-local currentWriter = Log.DefaultWriter
+Log.Priority = Enum.LogPriority.Info
+Log.Writer = Log.DefaultWriter
 
 function Log.Format(category, priority, time, message, ...)
 	return string.format("[%s] [%s:%s] "..message, os.date("%H:%M:%S", time), category, string.upper(Enum.LogPriority[priority]), ...)
 end
 
-function Log.GetWriter()
-	return currentWriter
-end
-
-function Log.SetWriter(writer)
-	currentWriter = writer
-end
-
 function Log.Log(category, priority, message, ...)
-	if currentWriter and priority >= currentPriority then
-		currentWriter(category, priority, message, ...)
+	if Log.Writer and priority >= Log.Priority then
+		Log.Writer(category, priority, message, ...)
 	end
 end
 

@@ -1,14 +1,12 @@
 local NetworkController = {}
 
 function NetworkController.Create(controllerSocket)
-	local self = Class.CreateInstance(Entity.Create(), NetworkController)
+	local self = Class.CreateInstance(Object.Create(), NetworkController)
 
 	self._Socket = controllerSocket or socket.tcp()
 	self._Socket:settimeout(0)
 	
 	self._Retries = 3
-
-	self._Events = EventDirector.Create()
 
 	return self
 end
@@ -151,20 +149,16 @@ function NetworkController.GetFreePort()
 	return freePort
 end
 
-function NetworkController:GetEvents()
-	return self._Events
-end
-
 function NetworkController:GetRetries()
 	return self._Retries
 end
 
 function NetworkController:SetRetries(retries)
-	self._Retries = retries
-end
+	if retries ~= self._Retries then
+		self._Retries = retries
 
-function NetworkController:Update()
-	self._Events:Update()
+		return true, retries
+	end
 end
 
 function NetworkController:Bind(IPAddress, port)
@@ -185,11 +179,8 @@ function NetworkController:Destroy()
 		self._Socket:close()
 		self._Socket = nil
 
-		self._Events:Destroy()
-		self._Events = nil
-
-		Entity.Destroy(self)
+		Object.Destroy(self)
 	end
 end
 
-return Class.CreateClass(NetworkController, "NetworkController", Entity)
+return Class.CreateClass(NetworkController, "NetworkController", Object)

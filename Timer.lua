@@ -19,21 +19,18 @@ function Timer.Update(deltaTime)
 				end
 			end
 		else
-			timer:Destroy()
 			table.remove(Timers, index)
 		end
 	end
 end
 
 function Timer.Create(duration, destroyOnFinish)
-	local self = Class.CreateInstance(Entity.Create(), Timer)
+	local self = Class.CreateInstance(Object.Create(), Timer)
 
 	self._Duration = duration
 	self._Time = 0
 
 	self._Running = false
-
-	self._Events = EventDirector.Create()
 
 	if destroyOnFinish == nil then
 		self._DestroyOnFinish = true
@@ -50,9 +47,13 @@ function Timer:GetDuration()
 end
 
 function Timer:SetDuration(duration)
-	self._Duration = duration
+	if duration ~= self._Duration then
+		self._Duration = duration
 
-	self.Time = self._Time
+		self.Time = self._Time
+
+		return true, duration
+	end
 end
 
 function Timer:GetTime()
@@ -60,7 +61,13 @@ function Timer:GetTime()
 end
 
 function Timer:SetTime(time)
-	self._Time = math.clamp(time, 0, self._Duration)
+	time = math.clamp(time, 0, self._Duration)
+
+	if time ~= self._Time then
+		self._Time = time
+
+		return true, time
+	end
 end
 
 function Timer:IsRunning()
@@ -68,10 +75,10 @@ function Timer:IsRunning()
 end
 
 function Timer:SetRunning(running)
-	if self._Running ~= running then
+	if running ~= self._Running then
 		self._Running = running
 
-		self._Events:Push(running and "TimerStarted" or "TimerStopped", self)
+		return true, running
 	end
 end
 
@@ -92,15 +99,12 @@ function Timer:Destroy()
 	if not self._Destroyed then
 		self.Running = false
 
-		self._Events:Destroy()
-		self._Events = nil
-
-		Entity.Destroy(self)
+		Object.Destroy(self)
 	end
 end
 
-function Timer.DestroyAllTimers()
+function Timer.DestroyTimers()
 	table.erase(Timers, Timer.Destroy)
 end
 
-return Class.CreateClass(Timer, "Timer", Entity)
+return Class.CreateClass(Timer, "Timer", Object)

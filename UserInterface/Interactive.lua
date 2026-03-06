@@ -1,7 +1,5 @@
 local BASE_CLASS = ...
-if not BASE_CLASS then error("Failed to create interative widget! BASE_CLASS not defined.", 2) end
-
-local Frame = require("UserInterface.Frame")
+if not BASE_CLASS then error("Failed to create interative! BASE_CLASS not defined.", 2) end
 
 local Interactive = {}
 
@@ -9,7 +7,6 @@ function Interactive.Create()
 	local self = Class.CreateInstance(BASE_CLASS.Create(), Interactive)
 	
 	self._Active = true
-	self._AbsoluteActive = nil
 
 	self._CanFocus = true
 
@@ -21,17 +18,11 @@ function Interactive.Create()
 	return self
 end
 
-function Interactive:Refresh()
-	BASE_CLASS.Refresh(self)
-
-	self._AbsoluteActive = nil
-end
-
 function Interactive:PostDescendantDraw()
-	if not self._AbsoluteActive then
-		local absolutePosition = self.AbsolutePosition
-		local absoluteSize = self.AbsoluteSize
-		local cornerAbsoluteRadius = self.CornerAbsoluteRadius
+	if not self._Active then
+		local absolutePosition = self._AbsolutePosition
+		local absoluteSize = self._AbsoluteSize
+		local cornerAbsoluteRadius = self._CornerAbsoluteRadius
 		
 		love.graphics.setColor(self.InactiveOverlayColour:Unpack())
 		love.graphics.rectangle(
@@ -46,37 +37,31 @@ function Interactive:PostDescendantDraw()
 end
 
 function Interactive:GetBackgroundColour()
-	local setBackgroundColour = BASE_CLASS.GetBackgroundColour(self)
+	local backgroundColour = BASE_CLASS.GetBackgroundColour(self)
 
-	if self.AbsoluteActive then
+	if self._Active then
 		if self.Pressed then
-			return self.PressedBackgroundColour or setBackgroundColour
+			return self.PressedBackgroundColour or backgroundColour
 		elseif self.Hovering then
-			return self.HoveringBackgroundColour or setBackgroundColour
+			return self.HoveringBackgroundColour or backgroundColour
 		elseif self.Focused then
-			return self.FocusedBackgroundColour or setBackgroundColour
+			return self.FocusedBackgroundColour or backgroundColour
 		end
 	end
 	
-	return setBackgroundColour
+	return backgroundColour
 end
 
 function Interactive:IsActive()
 	return self._Active
 end
 
-function Interactive:GetAbsoluteActive()
-	if self._AbsoluteActive == nil then
-		local interactiveAncestor = self:GetAncestorWithType("Interactive")
+function Interactive:SetActive(active)
+	if active ~= self._Active then
+		self._Active = active
 
-		if interactiveAncestor then
-			self._AbsoluteActive = interactiveAncestor._AbsoluteActive and self._Active
-		else
-			self._AbsoluteActive = self._Active
-		end
+		return true, active
 	end
-
-	return self._AbsoluteActive
 end
 
 function Interactive:GetCanFocus()
@@ -84,16 +69,10 @@ function Interactive:GetCanFocus()
 end
 
 function Interactive:SetCanFocus(canFocus)
-	self._CanFocus = canFocus
-end
+	if canFocus ~= self._CanFocus then
+		self._CanFocus = canFocus
 
-function Interactive:SetActive(active)
-	self._Active = active
-
-	self:RecursiveRefresh(false)
-
-	if self:IsPressed() and not active then
-		self._Events:Push("Released")
+		return true, canFocus
 	end
 end
 
@@ -106,7 +85,11 @@ function Interactive:GetFocusedBackgroundColour()
 end
 
 function Interactive:SetFocusedBackgroundColour(colour)
-	self._FocusedBackgroundColour = colour
+	if colour ~= self._FocusedBackgroundColour then
+		self._FocusedBackgroundColour = colour
+
+		return true, colour
+	end
 end
 
 function Interactive:IsHovering()
@@ -118,7 +101,11 @@ function Interactive:GetHoveringBackgroundColour()
 end
 
 function Interactive:SetHoveringBackgroundColour(colour)
-	self._HoveringBackgroundColour = colour
+	if colour ~= self._HoveringBackgroundColour then
+		self._HoveringBackgroundColour = colour
+
+		return true, colour
+	end
 end
 
 function Interactive:IsPressed()
@@ -130,7 +117,11 @@ function Interactive:GetPressedBackgroundColour()
 end
 
 function Interactive:SetPressedBackgroundColour(colour)
-	self._PressedBackgroundColour = colour
+	if colour ~= self._PressedBackgroundColour then
+		self._PressedBackgroundColour = colour
+
+		return true, colour
+	end
 end
 
 function Interactive:GetInactiveOverlayColour()
@@ -138,7 +129,11 @@ function Interactive:GetInactiveOverlayColour()
 end
 
 function Interactive:SetInactiveOverlayColour(colour)
-	self._InactiveOverlayColour = colour
+	if colour ~= self._InactiveOverlayColour then
+		self._InactiveOverlayColour = colour
+
+		return true, colour
+	end
 end
 
 function Interactive:Destroy()

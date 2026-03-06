@@ -42,7 +42,7 @@ function Font:GetFont(size, sizeTolerance)
 	end
 end
 
-function Font:RemoveAllFonts()
+function Font:RemoveFonts()
 	for size, font in pairs(self._Fonts) do
 		self._Fonts[size] = nil
 		font:release()
@@ -55,7 +55,7 @@ end
 
 function Font:Destroy()
 	if not self._Destroyed then
-		self:RemoveAllFonts()
+		self:RemoveFonts()
 
 		Entity.Destroy(self)
 	end

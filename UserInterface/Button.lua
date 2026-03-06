@@ -1,6 +1,4 @@
-local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(
-	require("UserInterface.Label")
-)
+local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(require("UserInterface.Label"))
 
 local Button = {}
 

@@ -10,6 +10,8 @@ function NumericTextBox.Create()
 
 	self._LastValidValue = nil
 
+	self._Events:Listen("FocusLost", NumericTextBox.CorrectValue)
+
 	return self
 end
 
@@ -31,8 +33,6 @@ function NumericTextBox:CorrectValue()
 	self.Text = self._LastValidValue or self._Minimum
 end
 
-NumericTextBox.FocusLost = NumericTextBox.CorrectValue
-
 function NumericTextBox:GetValue()
 	return tonumber(self._Text)
 end
@@ -46,9 +46,13 @@ function NumericTextBox:GetMinimum()
 end
 
 function NumericTextBox:SetMinimum(minimum)
-	self._Minimum = minimum
+	if minimum ~= self._Minimum then
+		self._Minimum = minimum
 
-	self._LastValidValue = nil
+		self._LastValidValue = nil
+
+		return true, minimum
+	end
 end
 
 function NumericTextBox:GetMaximum()
@@ -56,9 +60,13 @@ function NumericTextBox:GetMaximum()
 end
 
 function NumericTextBox:SetMaximum(maximum)
-	self._Maximum = maximum
+	if maximum ~= self._Maximum then
+		self._Maximum = maximum
 
-	self._LastValidValue = nil
+		self._LastValidValue = nil
+
+		return true, maximum
+	end
 end
 
 return Class.CreateClass(NumericTextBox, "NumericTextBox", TextBox)

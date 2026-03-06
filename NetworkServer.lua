@@ -3,20 +3,16 @@ local NetworkClient = require("NetworkClient")
 
 local NetworkServer = {}
 
+local function OnChildDisconnected(self, _, networkClient)
+	networkClient:Destroy()
+end
+
 function NetworkServer.Create(serverSocket)
 	local self = Class.CreateInstance(NetworkController.Create(serverSocket), NetworkServer)
 
-	self._Clients = {}
-	
+	self._Events:Listen("ChildDisconnected", OnChildDisconnected)
+
 	return self
-end
-
-function NetworkServer:GetClient(index)
-	return self._Clients[index]
-end
-
-function NetworkServer:IterateClients()
-	return ipairs(self._Clients)
 end
 
 function NetworkServer:Listen()
@@ -32,34 +28,11 @@ function NetworkServer:Update()
 		local clientSocket = self._Socket:accept()
 
 		if clientSocket then
-			local networkClient = NetworkClient.Create(clientSocket, self)
-
-			table.insert(self._Clients, networkClient)
+			local networkClient = NetworkClient.Create(clientSocket, true)
+			networkClient.Parent = self
 		else
 			break
 		end
-	end
-
-	local index = 1
-	while index <= #self._Clients do
-		local networkClient = self._Clients[index]
-
-		if networkClient:Update() then
-			index = index + 1
-		else
-			table.remove(self._Clients, index)
-			networkClient:Destroy()
-		end
-	end
-end
-
-function NetworkServer:Destroy()
-	if not self._Destroyed then
-		table.erase(self._Clients, NetworkClient.Destroy)
-
-		self._Clients = nil
-
-		NetworkController.Destroy(self)
 	end
 end
 

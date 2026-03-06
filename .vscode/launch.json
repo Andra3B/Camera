@@ -7,10 +7,9 @@
 		{
 			"name": "Debug Client",
 			"type": "lua-local",
-			"request": "launch",
-			"program": {
-				"command": "love"
-			},
+			"request": "launch",  
+			"scriptRoots": ["${workspaceFolder}/Assets/Scripts"],
+			"program": {"command": "love"},
 			"args": [
 				"${workspaceFolder}",
 				"Client"
@@ -20,9 +19,8 @@
 			"name": "Debug Camera",
 			"type": "lua-local",
 			"request": "launch",
-			"program": {
-				"command": "love"
-			},
+			"scriptRoots": ["${workspaceFolder}/Assets/Scripts"],
+			"program": {"command": "love"},
 			"args": [
 				"${workspaceFolder}",
 				"Camera"
@@ -32,9 +30,8 @@
 			"name": "Debug Sandbox",
 			"type": "lua-local",
 			"request": "launch",
-			"program": {
-				"command": "love"
-			},
+			"scriptRoots": ["${workspaceFolder}/Assets/Scripts"],
+			"program": {"command": "love"},
 			"args": [
 				"${workspaceFolder}",
 				"Sandbox"
@@ -44,10 +41,9 @@
 			"name": "Build libav",
 			"type": "lua-local",
 			"request": "launch",
+			"scriptRoots": ["${workspaceFolder}/Assets/Scripts"],
 			"cwd": "${workspaceFolder}",
-			"program": {
-				"command": "luajit"
-			},
+			"program": {"command": "luajit"},
 			"args": [
 				"${workspaceFolder}/libav/Build.lua"
 			]
@@ -56,10 +52,9 @@
 			"name": "Build pigpio",
 			"type": "lua-local",
 			"request": "launch",
+			"scriptRoots": ["${workspaceFolder}/Assets/Scripts"],
 			"cwd": "${workspaceFolder}",
-			"program": {
-				"command": "luajit"
-			},
+			"program": {"command": "luajit"},
 			"args": [
 				"${workspaceFolder}/pigpio/Build.lua"
 			]

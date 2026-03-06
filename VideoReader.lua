@@ -2,18 +2,54 @@ local VideoReader = {}
 
 VideoReader.Initialized = false
 
-local avErroBuffer
+local avErrorBuffer
 local function GetAVErrorString(errorCode)
-	libav.avutil.av_strerror(errorCode, avErroBuffer, 256)
+	libav.avutil.av_strerror(errorCode, avErrorBuffer, 256)
 
-	return tostring(avErroBuffer).." (Error Code: "..tostring(errorCode)..")"
+	return ffi.string(avErrorBuffer).." (Error Code: "..tostring(errorCode)..")"
+end
+
+function VideoReader.GetDefaultCameraURL(format)
+	local inputFormatPointer = libav.avformat.av_find_input_format(format or (jit.os == "Windows" and "dshow" or "v4l2"))
+	
+	local url = nil
+	if inputFormatPointer ~= nil then
+		local inputDeviceListPointer = ffi.new("AVDeviceInfoList*[1]")
+		local listCount = libav.avdevice.avdevice_list_input_sources(
+			inputFormatPointer, nil, nil, inputDeviceListPointer
+		)
+
+		for deviceIndex = 0, listCount - 1, 1 do
+			local deviceDetailsPointer = inputDeviceListPointer[0].devices[deviceIndex]
+
+			local supportsVideo = false
+			for typeIndex = 0, deviceDetailsPointer.nb_media_types - 1, 1 do
+				if deviceDetailsPointer.media_types[typeIndex] == libav.avdevice.AVMEDIA_TYPE_VIDEO then
+					supportsVideo = true
+
+					break
+				end
+			end
+
+			if supportsVideo then
+				url = (jit.os == "Windows" and "video=" or "")..ffi.string(deviceDetailsPointer.device_description)
+
+				break
+			end
+		end
+
+		libav.avdevice.avdevice_free_list_devices(inputDeviceListPointer)
+	end
+
+	return url
 end
 
 function VideoReader.Initialize()
 	if not VideoReader.Initialized then
-		avErroBuffer = ffi.new("char[256]")
+		avErrorBuffer = ffi.new("char[256]")
 
 		libav.avformat.avformat_network_init()
+		libav.avdevice.avdevice_register_all()
 
 		VideoReader.Initialized = true
 	end
@@ -21,7 +57,7 @@ end
 
 function VideoReader.Deinitialize()
 	if VideoReader.Initialized then
-		avErroBuffer = nil
+		avErrorBuffer = nil
 
 		libav.avformat.avformat_network_deinit()
 
@@ -29,48 +65,40 @@ function VideoReader.Deinitialize()
 	end
 end
 
-function VideoReader.Create(url, format, options)
+function VideoReader.Create(url, format, frameQueueCapacity, options)
+	url = url or VideoReader.GetDefaultCameraURL(format)
+	frameQueueCapacity = frameQueueCapacity or 8
+
 	local errorCode = 0
-	local inputFormatPointer = nil
-
-	if format then
-		inputFormatPointer = libav.avformat.av_find_input_format(format)
-	end
-
-	local optionsPointer
+	local optionsPointerPointer = nil
 
 	if options then
-		optionsPointer = ffi.new("AVDictionary*[1]")
+		optionsPointerPointer = ffi.new("AVDictionary*[1]")
 		errorCode = libav.avutil.av_dict_parse_string(
-			optionsPointer,
+			optionsPointerPointer,
 			options,
 			"=", ",",
 			libav.avutil.AV_DICT_APPEND
 		)
 	end
 
-	local self = nil
 	if errorCode >= 0 then
-		local formatContextPointer = ffi.new("AVFormatContext[1]")
-		local optionsPointerPointer = ffi.new("AVDictionary*[1]", optionsPointer)
+		local formatContextPointer = libav.avformat.avformat_alloc_context()
 		errorCode = libav.avformat.avformat_open_input(
 			ffi.new("AVFormatContext*[1]", formatContextPointer),
 			url,
-			inputFormatHandle,
+			format and libav.avformat.av_find_input_format(format) or nil,
 			optionsPointerPointer
 		)
 
-		optionsPointer = optionsPointerPointer[0]
+		local optionsPointer = optionsPointerPointer[0]
 
 		if libav.avutil.av_dict_count(optionsPointer) > 0 then
 			local message = "The following options were not found: "
 			local previousOptionPointer = ffi.new("AVDictionaryEntry*")
 
 			while true do
-				previousOptionPointer = libav.avutil.av_dict_iterate(
-					optionsPointer,
-					previousOptionPointer
-				)
+				previousOptionPointer = libav.avutil.av_dict_iterate(optionsPointer, previousOptionPointer)
 
 				if previousOptionPointer == nil then
 					break
@@ -86,290 +114,235 @@ function VideoReader.Create(url, format, options)
 		if errorCode >= 0 then
 			libav.avformat.avformat_find_stream_info(formatContextPointer, nil)
 
-			local decoderPointer = ffi.new("AVCodec[1]")
-			local errorCode = libav.avformat.av_find_best_stream(
+			local decoderPointerPointer = ffi.new("const AVCodec*[1]")
+			errorCode = libav.avformat.av_find_best_stream(
 				formatContextPointer, libav.avformat.AVMEDIA_TYPE_VIDEO,
-				-1, -1, ffi.new("AVCodec*[1]", decoderPointer), 0
+				-1, -1, decoderPointerPointer, 0
 			)
+			local decoderPointer = decoderPointerPointer[0]
 
 			if errorCode >= 0 then
-				self = {}
+				local videoStreamIndex = errorCode
 
-				self._FormatContextPointer = formatContextPointer
-				self._VideoStreamIndex = errorCode
-
-				errorCode = 0
-			else
-				libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", formatContextPointer))
-			end
-		end
-	end
-
-	if errorCode < 0 then
-		Log.Error("VideoReader", GetAVErrorString(errorCode))
-	end
-
-	return self
-end
-
-function VideoReader:Destroy()
-	if not self._Destroyed then
-		libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", {self._FormatContextPointer}))
-		self._FormatContextPointer = nil
-
-		Entity.Destroy(self)
-	end
-end
-
-return Class.CreateClass(VideoReader, "VideoReader", Entity)
-
---[[
-local function GetLibAVErrorString(errorCode)
-	local errorDescriptionHandle = ffi.new("char[256]")
-	libav.avutil.av_strerror(errorCode, errorDescriptionHandle, 256)
-
-	return ffi.string(errorDescriptionHandle)
-end
-
-function VideoReader.GetCameraURL(inputFormat)
-	local inputFormatHandle = libav.avformat.av_find_input_format(
-		inputFormat or (jit.os == "Windows" and "dshow" or "v4l2")
-	)
-	
-	local url = nil
-	if inputFormatHandle ~= nil then
-		local inputDeviceListHandle = ffi.new("AVDeviceInfoList*[1]")
-		local listCount = libav.avdevice.avdevice_list_input_sources(
-			inputFormatHandle, nil, nil,
-			inputDeviceListHandle
-		)
-
-		for deviceIndex = 0, listCount - 1, 1 do
-			local deviceDetailsHandle = inputDeviceListHandle[0].devices[deviceIndex]
-
-			local supportsVideo = false
-			for typeIndex = 0, deviceDetailsHandle.nb_media_types - 1, 1 do
-				if deviceDetailsHandle.media_types[typeIndex] == libav.avutil.AVMEDIA_TYPE_VIDEO then
-					supportsVideo = true
-
-					break
-				end
-			end
-
-			if supportsVideo then
-				url = (jit.os == "Windows" and "video=" or "")..ffi.string(deviceDetailsHandle.device_description)
-
-				break
-			end
-		end
-
-		libav.avdevice.avdevice_free_list_devices(inputDeviceListHandle)
-	end
-
-	return url
-end
-
-function VideoReader.CreateFromURL(url, inputFormat, options)
-	url = url or VideoReader.GetCameraURL(inputFormat)
-	local inputFormatHandle = libav.avformat.av_find_input_format(inputFormat)
-
-	if inputFormatHandle == nil then
-		Log.Critical("Video", "Input format \"%s\" is not supported!", inputFormat)
-	elseif not url then
-		Log.Critical("Video", "No video input device found!")
-	else
-		local formatHandleHandle = ffi.new("AVFormatContext*[1]")
-		local formatOptionsHandleHandle = ffi.new("AVDictionary*[1]")
-
-		if options then
-			for key, value in pairs(options) do
-				libav.avutil.av_dict_set(formatOptionsHandleHandle, key, value, 0)
-			end
-		end
-
-		local code = libav.avformat.avformat_open_input(
-			formatHandleHandle,
-			url,
-			inputFormatHandle,
-			formatOptionsHandleHandle
-		)
-		libav.avutil.av_dict_free(formatOptionsHandleHandle)
-
-		if code >= 0 then
-			local formatHandle = formatHandleHandle[0]
-
-			code = libav.avformat.avformat_find_stream_info(formatHandle, nil)
-
-			if code >= 0 then
-				local decoderDetailsHandleHandle = ffi.new("const AVCodec*[1]")
-				local videoStreamIndex = libav.avformat.av_find_best_stream(
-					formatHandle,
-					libav.avutil.AVMEDIA_TYPE_VIDEO,
-					-1, -1,
-					decoderDetailsHandleHandle,
-					0
+				local decoderContextPointer = libav.avcodec.avcodec_alloc_context3(decoderPointer)
+				errorCode = libav.avcodec.avcodec_parameters_to_context(
+					decoderContextPointer,
+					formatContextPointer.streams[videoStreamIndex].codecpar
 				)
-				
-				if videoStreamIndex >= 0 then
-					local decoderHandle = libav.avcodec.avcodec_alloc_context3(decoderDetailsHandleHandle[0])
-					local videoStreamHandle = formatHandle.streams[videoStreamIndex]
-					local decoderParametersHandle = videoStreamHandle.codecpar
-					libav.avcodec.avcodec_parameters_to_context(decoderHandle, decoderParametersHandle)
 
-					code = libav.avcodec.avcodec_open2(decoderHandle, decoderDetailsHandleHandle[0], nil)
+				if errorCode >= 0 then
+					errorCode = libav.avcodec.avcodec_open2(decoderContextPointer, decoderPointer, nil)
 
-					if code >= 0 then
-						local self = Class.CreateInstance(Entity.Create(), VideoReader)
-
-						self._FormatHandle = formatHandle
-
-						self._VideoStreamIndex = videoStreamIndex
-						self._VideoStreamDecoderHandle = decoderHandle
-
-						self._DecoderParametersHandle = decoderParametersHandle
-
-						self._FrameTime = 0
-						self._FrameIndex = 0
-
-						self._VideoStreamTimeBase = videoStreamHandle.time_base
-
-						if videoStreamHandle.avg_frame_rate.num ~= 0 and videoStreamHandle.avg_frame_rate.den ~= 0 then
-							self._VideoStreamFPS = videoStreamHandle.avg_frame_rate.num / videoStreamHandle.avg_frame_rate.den
-						elseif videoStreamHandle.r_frame_rate.num ~= 0 and videoStreamHandle.r_frame_rate.den ~= 0 then
-							self._VideoStreamFPS = videoStreamHandle.r_frame_rate.num / videoStreamHandle.r_frame_rate.den
-						else
-							self._VideoStreamFPS = 30
-						end
-
-						self._ConversionContextHandle = libav.swscale.sws_getContext(
-							decoderParametersHandle.width, decoderParametersHandle.height, decoderParametersHandle.format,
-							decoderParametersHandle.width, decoderParametersHandle.height, libav.avutil.AV_PIX_FMT_RGBA,
-							libav.swscale.SWS_BILINEAR,
-							nil, nil, nil
+					if errorCode >= 0 then
+						local swsContextPointer = libav.swscale.sws_getContext(
+							decoderContextPointer.width, decoderContextPointer.height,
+							decoderContextPointer.pix_fmt,
+							decoderContextPointer.width, decoderContextPointer.height,
+							libav.avutil.AV_PIX_FMT_RGBA,
+							0, nil, nil, nil
 						)
 
-						return self
-					else
-						Log.Critical("Video", "Failed to create video stream decoder for \"%s\"! %s", url, GetLibAVErrorString(code))
+						if swsContextPointer ~= nil then
+							local self = Class.CreateInstance(Entity.Create(), VideoReader)
+			
+							self._FormatContextPointer = formatContextPointer
+							self._DecoderContextPointer = decoderContextPointer
+							self._VideoStreamPointer = formatContextPointer.streams[videoStreamIndex]
+							self._VideoStreamIndex = videoStreamIndex
+							self._VideoStreamTimeBase = self._VideoStreamPointer.time_base.num/self._VideoStreamPointer.time_base.den
+			
+							self._SwsContextPointer = swsContextPointer
+
+							self._FrameImageData = love.image.newImageData(
+								decoderContextPointer.width,
+								decoderContextPointer.height,
+								"rgba8"
+							)
+							self._Frame = love.graphics.newImage(self._FrameImageData)
+
+							self._AVFramePointerIndex = nil
+
+							self._PacketDecodeThread = love.thread.newThread("Assets/Scripts/PacketDecode.lua")
+							self._PacketDecodeChannel = love.thread.newChannel()
+			
+							self._EndOfVideo = false
+
+							self._FrameQueue = {}
+
+							local pointerData = love.data.newByteData((3 + frameQueueCapacity)*ffi.sizeof("uintptr_t"))
+							local pointerDataPointer = ffi.cast("uintptr_t*", pointerData:getFFIPointer())
+							
+							pointerDataPointer[0] = ffi.cast("uintptr_t", formatContextPointer)
+							pointerDataPointer[1] = ffi.cast("uintptr_t", decoderContextPointer)
+							pointerDataPointer[2] = ffi.cast("uintptr_t", swsContextPointer)
+
+							for index = 3, frameQueueCapacity + 2, 1 do
+								local framePointer = libav.avutil.av_frame_alloc()
+
+								table.insert(self._FrameQueue, framePointer)
+								pointerDataPointer[index] = ffi.cast("uintptr_t", framePointer)
+							end
+
+							self._PacketDecodeThread:start(
+								self._PacketDecodeChannel,
+								pointerData,
+								self._VideoStreamIndex
+							)
+
+							return self
+						else
+							Log.Error("VideoReader", "Unable to create SwsContext")
+						end
 					end
-				else
-					Log.Critical("Video", "Failed to find valid video stream and decoder details from \"%s\"", url, GetLibAVErrorString(videoStreamIndex))
 				end
-			else
-				Log.Critical("Video", "Failed to read stream details from \"%s\"! %s", url, GetLibAVErrorString(code))
+
+				libav.avcodec.avcodec_free_context(ffi.new("AVCodecContext*[1]", decoderContextPointer))
 			end
 
-			libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", formatHandle))
-		else
-			Log.Critical("Video", "Failed to open \"%s\"! %s", url, GetLibAVErrorString(code))
+			libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", formatContextPointer))
 		end
 	end
+
+	Log.Error("VideoReader", GetAVErrorString(errorCode))
+end
+
+function VideoReader:GetFrame()
+	return self._Frame
+end
+
+function VideoReader:GetFrameImageData()
+	return self._FrameImageData
+end
+
+function VideoReader:GetAVFramePointer()
+	return self._FrameQueue[self._AVFramePointerIndex]
 end
 
 function VideoReader:GetWidth()
-	return self._DecoderParametersHandle.width
+	return self._DecoderContextPointer.width
 end
 
 function VideoReader:GetHeight()
-	return self._DecoderParametersHandle.height
+	return self._DecoderContextPointer.height
 end
 
-function VideoReader:GetFPS()
-	return self._VideoStreamFPS
-end
+function VideoReader:GetFrameDuration()
+	local framePointer = self._FrameQueue[self._AVFramePointerIndex]
 
-function VideoReader:GetFrameTime()
-	return self._FrameTime
-end
-
-function VideoReader:GetTimeBase()
-	return self._TimeBase
-end
-
-function VideoReader:ReadPacket()
-	local packetHandle = libav.avcodec.av_packet_alloc()
-
-	while true do
-		libav.avcodec.av_packet_unref(packetHandle)
-		local code = libav.avformat.av_read_frame(self._FormatHandle, packetHandle)
-
-		if code >= 0 then
-			if packetHandle.stream_index == self._VideoStreamIndex then
-				return packetHandle, false
-			end
-		elseif code == libav.avutil.AVERROR_EOF then
-			libav.avcodec.av_packet_free(ffi.new("AVPacket*[1]", packetHandle))
-
-			return nil, true
-		end
-	end
-end
-
-function VideoReader:ReadFrame(packetHandle, rgbaBufferHandle)
-	local rgbaFrameHandle, needAnotherPacket, endOfFrames = nil, false, false
-	local code = libav.avcodec.avcodec_send_packet(self._VideoStreamDecoderHandle, packetHandle)
-
-	if code >= 0 or code == libav.avcodec.AVERROR_EOF then
-		local frameHandle = libav.avutil.av_frame_alloc()
-
-		code = libav.avcodec.avcodec_receive_frame(self._VideoStreamDecoderHandle, frameHandle)
-
-		if code >= 0 then
-			rgbaFrameHandle = libav.avutil.av_frame_alloc()
-
-			rgbaFrameHandle.format = libav.avutil.AV_PIX_FMT_RGBA
-			rgbaFrameHandle.width = frameHandle.width
-			rgbaFrameHandle.height = frameHandle.height
-			
-			if rgbaBufferHandle == nil then
-				libav.avutil.av_frame_get_buffer(rgbaFrameHandle, 0)
-			else
-				rgbaFrameHandle.data[0] = rgbaBufferHandle
-				rgbaFrameHandle.linesize[0] = frameHandle.width * 4
-			end
-			
-			libav.swscale.sws_scale(
-				self._ConversionContextHandle,
-				ffi.cast("const uint8_t* const*", frameHandle.data), frameHandle.linesize, 0, frameHandle.height,
-				rgbaFrameHandle.data, rgbaFrameHandle.linesize
-			)
-
-			self._FrameTime = self._FrameIndex / self._VideoStreamFPS
-			self._FrameIndex = self._FrameIndex + 1
-		elseif code == libav.avutil.AVERROR_EAGAIN then
-			needAnotherPacket = true
-		elseif code == libav.avutil.AVERROR_EOF then
-			endOfFrames = true
-		else
-			Log.Critical("Video", "Failed to get next frame! %s", GetLibAVErrorString(code))
-		end
-
-		libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", frameHandle))
+	if framePointer then
+		return tonumber(framePointer.duration)*self._VideoStreamTimeBase
 	else
-		Log.Critical("Video", "Failed to decode packet! %s", GetLibAVErrorString(code))
+		return 0
 	end
-	
-	return rgbaFrameHandle, needAnotherPacket, endOfFrames
+end
+
+function VideoReader:GetDuration()
+	return tonumber(self._VideoStreamPointer.duration)*self._VideoStreamTimeBase
+end
+
+function VideoReader:GetTime()
+	local framePointer = self._FrameQueue[self._AVFramePointerIndex]
+
+	if framePointer then
+		return tonumber(framePointer.best_effort_timestamp)*self._VideoStreamTimeBase
+	else
+		return 0
+	end
+end
+
+function VideoReader:SetTime(time)
+	time = math.floor(time/self._VideoStreamTimeBase)
+	self._PacketDecodeChannel:supply("Stop")
+
+	local success = libav.avformat.av_seek_frame(
+		self._FormatContextPointer,
+		self._VideoStreamIndex,
+		time,
+		(time*self._VideoStreamTimeBase) < self.Time and libav.avformat.AVSEEK_FLAG_BACKWARD or 0
+	)
+
+	if success >= 0 then
+		libav.avcodec.avcodec_flush_buffers(self._DecoderContextPointer)
+
+		self._AVFramePointerIndex = nil
+
+		self._PacketDecodeChannel:push("Flush")
+
+		return true
+	else
+		self._PacketDecodeChannel:push("Start")
+
+		return false
+	end
+end
+
+function VideoReader:GetFrameQueueCapacity()
+	return #self._FrameQueue
+end
+
+function VideoReader:IsEndOfVideo()
+	return self._EndOfVideo
+end
+
+function VideoReader:Update()
+	self._PacketDecodeChannel:supply("Pop")
+	local frameIndex = self._PacketDecodeChannel:demand()
+
+	self._EndOfVideo = frameIndex == -1
+
+	if frameIndex > 0 then
+		self._AVFramePointerIndex = frameIndex
+		local framePointer = self._FrameQueue[frameIndex]
+
+		ffi.copy(
+			self._FrameImageData:getFFIPointer(),
+			framePointer.data[0],
+			framePointer.linesize[0]*framePointer.height
+		)
+		self._Frame:replacePixels(self._FrameImageData)
+
+		return true
+	end
+
+	return false
 end
 
 function VideoReader:Destroy()
 	if not self._Destroyed then
-		libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", self._FormatHandle))
-		self._FormatHandle = nil
-
-		libav.avcodec.avcodec_free_context(ffi.new("AVCodecContext*[1]", self._VideoStreamDecoderHandle))
-		self._VideoStreamDecoderHandle = nil
-
-		self._DecoderParametersHandle = nil
-
-		libav.swscale.sws_freeContext(self._ConversionContextHandle)
-		self._ConversionContextHandle = nil
+		self._PacketDecodeChannel:push("Exit")
 		
-		self._VideoStreamTimeBase = nil
+		self._PacketDecodeThread:wait()
+		self._PacketDecodeThread:release()
+		self._PacketDecodeThread = nil
 
+		self._PacketDecodeChannel:release()
+		self._PacketDecodeChannel = nil
+
+		for index = 1, #self._FrameQueue, 1 do
+			libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", self._FrameQueue[index]))
+		end
+
+		self._FrameQueue = nil
+
+		self._FrameImageData:release()
+		self._FrameImageData = nil
+
+		self._Frame:release()
+		self._Frame = nil
+
+		libav.swscale.sws_free_context(ffi.new("SwsContext*[1]", self._SwsContextPointer))
+		self._SwsContextPointer = nil
+
+		libav.avcodec.avcodec_free_context(ffi.new("AVCodecContext*[1]", self._DecoderContextPointer))
+		self._DecoderContextPointer = nil
+		
+		self._VideoStreamPointer = nil
+
+		libav.avformat.avformat_close_input(ffi.new("AVFormatContext*[1]", self._FormatContextPointer))
+		self._FormatContextPointer = nil
+		
 		Entity.Destroy(self)
 	end
 end
 
 return Class.CreateClass(VideoReader, "VideoReader", Entity)
---]]

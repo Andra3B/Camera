@@ -8,24 +8,52 @@ function Label.Create()
 	self._Font = UserInterface.Font.Default
 
 	self._Text = ""
-	self._TextObject = nil
+	self._TextObject = love.graphics.newText(self._Font:GetFont(12), "")
 
 	self._TextColour = Vector4.Create(0, 0, 0, 1)
 
 	self._TextRelativePosition = Vector2.Create(0.5, 0.5)
 	self._TextPixelPosition = Vector2.Zero
-	self._TextAbsolutePosition = nil
+	self._TextAbsolutePosition = Vector2.Zero
 
 	self._TextRelativeSize = 0.5
 	self._TextPixelSize = 0
-	self._TextAbsoluteSize = nil
+	self._TextAbsoluteSize = 0
 
 	self._TextRelativeOrigin = Vector2.Create(0.5, 0.5)
 	self._TextPixelOrigin = Vector2.Zero
 
-	self._ScaleToFit = false
+	self._Events:Listen("FontChanged", Label.RefreshTextObject)
+	self._Events:Listen("TextChanged", Label.RefreshTextObject)
+	self._Events:Listen("TextAbsoluteSizeChanged", Label.RefreshTextObject)
+
+	self._Events:Listen("TextRelativePositionChanged", Label.RefreshTextAbsolutePosition)
+	self._Events:Listen("TextPixelPositionChanged", Label.RefreshTextAbsolutePosition)
+	self._Events:Listen("TextRelativeOriginChanged", Label.RefreshTextAbsolutePosition)
+	self._Events:Listen("TextPixelOriginChanged", Label.RefreshTextAbsolutePosition)
+	self._Events:Listen("TextObjectChanged", Label.RefreshTextAbsolutePosition)
+	self._Events:Listen("AbsoluteSizeChanged", Label.RefreshTextAbsolutePosition)
+
+	self._Events:Listen("TextRelativeSizeChanged", Label.RefreshTextAbsoluteSize)
+	self._Events:Listen("TextPixelSizeChanged", Label.RefreshTextAbsoluteSize)
+	self._Events:Listen("AbsoluteSizeChanged", Label.RefreshTextAbsoluteSize)
 
 	return self
+end
+
+function Label:RefreshTextObject()
+	self._TextObject:release()
+	self.TextObject = love.graphics.newText(self.Font:GetFont(self._TextAbsoluteSize), self.Text)
+end
+
+function Label:RefreshTextAbsolutePosition()
+	self.TextAbsolutePosition = 
+		self._TextPixelPosition + self._AbsoluteSize*self._TextRelativePosition -
+		self._TextPixelOrigin - self._TextRelativeOrigin*Vector2.Create(self._TextObject:getDimensions())
+end
+
+function Label:RefreshTextAbsoluteSize()
+	self.TextAbsoluteSize = math.floor(self._TextPixelSize + self._AbsoluteSize.Y*self._TextRelativeSize + 0.5)
 end
 
 function Label:Draw()
@@ -44,39 +72,15 @@ function Label:Draw()
 	end
 end
 
-function Label:GetAbsoluteSize()
-	if not self._AbsoluteSize then
-		local absoluteSize = Frame.GetAbsoluteSize(self)
-
-		if self.ScaleToFit then
-			local width, height = self.TextObject:getDimensions()
-
-			self._AbsoluteSize.X = math.max(absoluteSize.X, width)
-			self._AbsoluteSize.Y = math.max(absoluteSize.Y, height)
-		end
-	end
-
-	return self._AbsoluteSize
-end
-
-function Label:Refresh()
-	Frame.Refresh(self)
-
-	self._TextObject = nil
-
-	self._TextAbsolutePosition = nil
-	self._TextAbsoluteSize = nil
-end
-
 function Label:GetTextRelativePosition()
 	return self._TextRelativePosition
 end
 
 function Label:SetTextRelativePosition(position)
-	self._TextRelativePosition = position
+	if position ~= self._TextRelativePosition then
+		self._TextRelativePosition = position
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, position
 	end
 end
 
@@ -85,21 +89,23 @@ function Label:GetTextPixelPosition()
 end
 
 function Label:SetTextPixelPosition(position)
-	self._TextPixelPosition = position
+	if position ~= self._TextPixelPosition then
+		self._TextPixelPosition = position
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, position
 	end
 end
 
 function Label:GetTextAbsolutePosition()
-	if not self._TextAbsolutePosition then
-		self._TextAbsolutePosition = 
-			self._TextPixelPosition + self.AbsoluteSize*self._TextRelativePosition -
-			self._TextPixelOrigin - self._TextRelativeOrigin*Vector2.Create(self.TextObject:getDimensions())
-	end
-
 	return self._TextAbsolutePosition
+end
+
+function Label:SetTextAbsolutePosition(position)
+	if position ~= self._TextAbsolutePosition then
+		self._TextAbsolutePosition = position
+
+		return true, position
+	end
 end
 
 function Label:GetTextRelativeSize()
@@ -107,10 +113,10 @@ function Label:GetTextRelativeSize()
 end
 
 function Label:SetTextRelativeSize(size)
-	self._TextRelativeSize = size
+	if size ~= self._TextRelativeSize then
+		self._TextRelativeSize = size
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, size
 	end
 end
 
@@ -119,23 +125,23 @@ function Label:GetTextPixelSize()
 end
 
 function Label:SetTextPixelSize(size)
-	self._TextPixelSize = size
+	if size ~= self._TextPixelSize then
+		self._TextPixelSize = size
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, size
 	end
 end
 
 function Label:GetTextAbsoluteSize()
-	if not self._TextAbsoluteSize then
-		if self.ScaleToFit then
-			self._TextAbsoluteSize = math.floor(self._TextPixelSize + 0.5)
-		else
-			self._TextAbsoluteSize = math.floor(self._TextPixelSize + self.AbsoluteSize.Y*self._TextRelativeSize + 0.5)
-		end
-	end
-
 	return self._TextAbsoluteSize
+end
+
+function Label:SetTextAbsoluteSize(size)
+	if size ~= self._TextAbsoluteSize then
+		self._TextAbsoluteSize = size
+
+		return true, size
+	end
 end
 
 function Label:GetTextRelativeOrigin()
@@ -143,10 +149,10 @@ function Label:GetTextRelativeOrigin()
 end
 
 function Label:SetTextRelativeOrigin(origin)
-	self._TextRelativeOrigin = origin
+	if origin ~= self._TextRelativeOrigin then
+		self._TextRelativeOrigin = origin
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, origin
 	end
 end
 
@@ -155,10 +161,10 @@ function Label:GetTextPixelOrigin()
 end
 
 function Label:SetTextPixelOrigin(origin)
-	self._TextPixelOrigin = origin
+	if origin ~= self._TextPixelOrigin then
+		self._TextPixelOrigin = origin
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, origin
 	end
 end
 
@@ -167,10 +173,10 @@ function Label:GetFont()
 end
 
 function Label:SetFont(font)
-	self._Font = font
+	if font ~= self._Font then
+		self._Font = font
 
-	if self.ScaleToFit then
-		self:RecursiveRefresh(true)
+		return true, font
 	end
 end
 
@@ -184,20 +190,20 @@ function Label:SetText(text)
 	if text ~= self._Text then
 		self._Text = text
 
-		if self.ScaleToFit then
-			self:RecursiveRefresh(true)
-		end
-
-		self.Events:Push("TextChanged", text)
+		return true, text
 	end
 end
 
 function Label:GetTextObject()
-	if not self._TextObject then
-		self._TextObject = love.graphics.newText(self.Font:GetFont(self.TextAbsoluteSize), self.Text)
-	end
-
 	return self._TextObject
+end
+
+function Label:SetTextObject(object)
+	if object ~= self._TextObject then
+		self._TextObject = object
+
+		return true, object
+	end
 end
 
 function Label:GetTextColour()
@@ -205,21 +211,18 @@ function Label:GetTextColour()
 end
 
 function Label:SetTextColour(colour)
-	self._TextColour = colour
-end
+	if colour ~= self._TextColour then
+		self._TextColour = colour
 
-function Label:GetScaleToFit()
-	return self._ScaleToFit
-end
-
-function Label:SetScaleToFit(scaleToFit)
-	self._ScaleToFit = scaleToFit
+		return true, colour
+	end
 end
 
 function Label:Destroy()
 	if not self._Destroyed then
 		self._Font = nil
-
+		
+		self._TextObject:release()
 		self._TextObject = nil
 
 		self._TextAbsolutePosition = nil
@@ -231,8 +234,4 @@ function Label:Destroy()
 	end
 end
 
-return Class.CreateClass(Label, "Label", Frame, {
-	["TextObject"] = {"TextAbsoluteSize", "Font", "Text"},
-	["TextAbsolutePosition"] = {"TextObject", "TextPixelPosition", "TextRelativePosition", "TextPixelOrigin", "TestRelativeOrigin"},
-	["TextAbsoluteSize"] = {"AbsoluteSize", "TextPixelSize", "TextRelativeSize"}
-})
+return Class.CreateClass(Label, "Label", Frame)

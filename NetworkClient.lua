@@ -2,12 +2,10 @@ local NetworkController = require("NetworkController")
 
 local NetworkClient = {}
 
-function NetworkClient.Create(clientSocket, owner)
+function NetworkClient.Create(clientSocket, connected)
 	local self = Class.CreateInstance(NetworkController.Create(clientSocket), NetworkClient)
-	
-	self._Owner = owner
 
-	self._Connected = owner ~= nil
+	self._Connected = connected
 
 	return self
 end
@@ -43,11 +41,10 @@ end
 
 function NetworkClient:Disconnect()
 	if self._Connected then
-		if self._Owner then
-			self._Events:Trigger("Disconnected")
-			self._Owner.Events:Trigger("Disconnected", self)
-		else
-			self._Events:Push("Disconnected")
+		self._Events:Trigger("Disconnected")
+
+		if self._Parent then
+			self._Parent.Events:Trigger("Disconnected", self)
 		end
 
 		self:Send({{"Disconnected"}})
@@ -62,10 +59,6 @@ end
 
 function NetworkClient:IsConnected()
 	return self._Connected
-end
-
-function NetworkClient:GetOwner()
-	return self._Owner
 end
 
 function NetworkClient:GetRemoteDetails()
@@ -86,8 +79,6 @@ function NetworkClient:Update()
 			
 			if partialErrorMessage == "closed" then
 				self:Disconnect()
-
-				return false
 			elseif partialData then
 				data:put(partialData)
 
@@ -115,8 +106,8 @@ function NetworkClient:Update()
 					else
 						self._Events:Push(command[1], select(2, unpack(command)))
 							
-						if self._Owner then
-							self._Owner.Events:Push(command[1], self, select(2, unpack(command)))
+						if self._Parent then
+							self._Parent.Events:Push(command[1], self, select(2, unpack(command)))
 						end
 					end
 				end
@@ -135,10 +126,7 @@ function NetworkClient:Update()
 		end
 
 		data:free()
-		return true
 	end
-
-	return false
 end
 
 function NetworkClient:Send(commands)
@@ -164,7 +152,7 @@ end
 
 function NetworkClient:Destroy()
 	if not self._Destroyed then
-		self._Owner = nil
+		self:Disconnect()
 
 		NetworkController.Destroy(self)
 	end

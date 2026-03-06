@@ -22,7 +22,7 @@ function MotionTracker.Create(width, height)
 	return self
 end
 
-function MotionTracker:Update(frame, immediateBackgroundUpdate)
+function MotionTracker:Update(frame)
 	love.graphics.push("all")
 	love.graphics.reset()
 
@@ -48,7 +48,7 @@ function MotionTracker:Update(frame, immediateBackgroundUpdate)
 	love.graphics.setCanvas(self._BackgroundCanvas)
 	love.graphics.setShader(Shaders.BackgroundAdaption)
 	Shaders.BackgroundAdaption:send("PreviousBackground", self._PreviousBackgroundCanvas)
-	Shaders.BackgroundAdaption:send("AdaptionRate", immediateBackgroundUpdate and 1 or self._AdaptionRate)
+	Shaders.BackgroundAdaption:send("AdaptionRate", self._AdaptionRate)
 	love.graphics.draw(frame)
 
 	local backgroundCanvas = self._BackgroundCanvas
@@ -59,14 +59,6 @@ function MotionTracker:Update(frame, immediateBackgroundUpdate)
 	self._LargestMotionShape = nil
 
 	love.graphics.pop()
-end
-
-function MotionTracker:GetWidth()
-	return self._BackgroundCanvas:getWidth()
-end
-
-function MotionTracker:GetHeight()
-	return self._BackgroundCanvas:getHeight()
 end
 
 function MotionTracker:GetBackground()
@@ -82,7 +74,13 @@ function MotionTracker:GetMotionThreshold()
 end
 
 function MotionTracker:SetMotionThreshold(threshold)
-	self._MotionThreshold = math.clamp(threshold, 0, 1)
+	threshold = math.clamp(threshold, 0, 1)
+
+	if threshold ~= self._MotionThreshold then
+		self._MotionThreshold = threshold
+	
+		return true, self._MotionThreshold
+	end
 end
 
 function MotionTracker:GetShapeMinimumArea()
@@ -90,11 +88,13 @@ function MotionTracker:GetShapeMinimumArea()
 end
 
 function MotionTracker:SetShapeMinimumArea(area)
-	self._ShapeMinimumArea = math.clamp(area, 0, 1)
-end
+	area = math.clamp(area, 0, 1)
 
-function MotionTracker:GetAdaptionRate()
-	return self._AdaptionRate
+	if area ~= self._ShapeMinimumArea then
+		self._ShapeMinimumArea = area
+
+		return true, self._ShapeMinimumArea
+	end
 end
 
 function MotionTracker:GetShapeSearchRadius()
@@ -102,11 +102,27 @@ function MotionTracker:GetShapeSearchRadius()
 end
 
 function MotionTracker:SetShapeSearchRadius(radius)
-	self._ShapeSearchRadius = math.max(radius, 1)
+	radius = math.max(radius, 1)
+
+	if radius ~= self._ShapeSearchRadius then
+		self._ShapeSearchRadius = radius
+	
+		return true, self._ShapeSearchRadius
+	end
+end
+
+function MotionTracker:GetAdaptionRate()
+	return self._AdaptionRate
 end
 
 function MotionTracker:SetAdaptionRate(rate)
-	self._AdaptionRate = math.clamp(rate, 0, 1)
+	rate = math.clamp(rate, 0, 1)
+
+	if rate ~= self._AdaptionRate then
+		self._AdaptionRate = rate
+
+		return true, self._AdaptionRate
+	end
 end
 
 function MotionTracker:GetMotionShapes()
@@ -221,21 +237,24 @@ function MotionTracker:GetSubdivisions()
 end
 
 function MotionTracker:SetSubdivisions(subdivisions)
-	local width, height = self._BackgroundCanvas:getDimensions()
 	subdivisions = math.clamp(subdivisions, 0, self._MaxSubdivisions)
 
-	for _ = 1, #self._ReductionCanvases, 1 do
-		table.remove(self._ReductionCanvases):release()
-	end
+	if subdivisions ~= self.Subdivisions then
+		local width, height = self._BackgroundCanvas:getDimensions()
 
-	for _ = 0, self._MaxSubdivisions - subdivisions, 1 do
-		local reductionCanvas = love.graphics.newCanvas(width, height, {format = "rgba8"})
-		reductionCanvas:setWrap("clampzero")
-		reductionCanvas:setFilter("nearest")
-		
-		table.insert(self._ReductionCanvases, reductionCanvas)
+		for _ = 1, #self._ReductionCanvases, 1 do
+			table.remove(self._ReductionCanvases):release()
+		end
 
-		width, height = math.floor(width*0.5), math.floor(height*0.5)
+		for _ = 0, self._MaxSubdivisions - subdivisions, 1 do
+			local reductionCanvas = love.graphics.newCanvas(width, height, {format = "rgba8"})
+			reductionCanvas:setWrap("clampzero")
+			reductionCanvas:setFilter("nearest")
+			
+			table.insert(self._ReductionCanvases, reductionCanvas)
+
+			width, height = math.floor(width*0.5), math.floor(height*0.5)
+		end
 	end
 end
 
