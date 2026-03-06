@@ -11,22 +11,22 @@ function EventListener.Create(callback, userData, userDataCleanup)
 	return self
 end
 
-function EventListener:Trigger(...)
-	local destroy
-
-	if self._UserData == nil then
-		destroy = self._Callback(...)
-	else
-		destroy = self._Callback(self._UserData, ...)
-	end
-
-    if destroy then
+function EventListener:Trigger(source, ...)
+    if self._Callback(source, self._UserData, ...) then
         self:Destroy()
+	end
+end
 
-        return true
-    end
-	
-	return false
+function EventListener:GetCallback()
+	return self._Callback
+end
+
+function EventListener:SetCallback(callback)
+	if callback ~= self._Callback then
+		self._Callback = callback
+
+		return true, callback
+	end
 end
 
 function EventListener:Destroy()

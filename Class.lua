@@ -2,7 +2,6 @@ local Class = {}
 
 Class.__index = Class
 Class.Type = "Class"
-Class.PROPERTY_DEPENDENCIES = table.empty
 
 local function IndexMetamethod(self, name)
 	local getter = self.Class["Get"..name] or self.Class["Is"..name]
@@ -14,39 +13,19 @@ local function IndexMetamethod(self, name)
 	end
 end
 
-local function UpdateDependence(self, property)
-	local dependencies = self.Class.PROPERTY_DEPENDENCIES[property]
-
-	if dependencies then
-		for _, dependency in pairs(dependencies) do
-			UpdateDependence(self, dependency)
-		end
-	end
-
-	self["_"..property] = nil
-end
-
 local function NewIndexMetamethod(self, name, value)
 	local setter = self.Class["Set"..name]
 
 	if setter then
-		local result = setter(self, value)
-
-		local dependencies = self.Class.PROPERTY_DEPENDENCIES[name]
-
-		if dependencies then
-			for _, dependency in pairs(dependencies) do
-				UpdateDependence(self, dependency)
-			end
-		end
-
-		return result
+		setter(self, value)
 	else
 		rawset(self, name, value)
 	end
 end
 
-function Class.CreateClass(class, typeName, base, propertyDependencies)
+Class.INSTANCE_METATABLE = {__index = IndexMetamethod, __newindex = NewIndexMetamethod}
+
+function Class.CreateClass(class, typeName, base, indexMetamethod, newIndexMetamethod)
 	base = base or Class
 	
 	for name, value in pairs(base) do
@@ -67,37 +46,8 @@ function Class.CreateClass(class, typeName, base, propertyDependencies)
 		end
 	end
 	
-	class.INSTANCE_METATABLE.__index = IndexMetamethod
-	class.INSTANCE_METATABLE.__newindex = NewIndexMetamethod
-
-	if propertyDependencies then
-		class.PROPERTY_DEPENDENCIES = {}
-
-		for property, dependencies in pairs(propertyDependencies) do
-			for _, dependency in pairs(dependencies) do
-				local newDependencies = class.PROPERTY_DEPENDENCIES[dependency]
-				
-				if not newDependencies  then
-					newDependencies = {}
-					class.PROPERTY_DEPENDENCIES[dependency] = newDependencies
-				end
-
-				table.insert(newDependencies, property)
-			end
-		end
-
-		for property, dependencies in pairs(base.PROPERTY_DEPENDENCIES) do
-			local classDependencies = class.PROPERTY_DEPENDENCIES[property]
-
-			if classDependencies then
-				for _, dependency in pairs(dependencies) do
-					table.insert(classDependencies, dependency)
-				end
-			else
-				class.PROPERTY_DEPENDENCIES[property] = dependencies
-			end
-		end
-	end
+	class.INSTANCE_METATABLE.__index = indexMetamethod or base.INSTANCE_METATABLE.__index
+	class.INSTANCE_METATABLE.__newindex = newIndexMetamethod or base.INSTANCE_METATABLE.__newindex
 
 	return setmetatable(class, base)
 end
@@ -112,7 +62,9 @@ function Class.CreateInstance(instance, class)
 end
 
 function Class:IsA(typeName)
-	if type(self) == "table" and self.CLASS_INSTANCE_INDICATOR then
+	local luaType = type(self)
+
+	if luaType == "table" and self.CLASS_INSTANCE_INDICATOR then
 		for class in self:IterateInheritance() do
 			if class.Type == typeName then
 				return true
@@ -122,7 +74,7 @@ function Class:IsA(typeName)
 		return false
 	end
 	
-	return Class.GetType(self) == typeName
+	return luaType == typeName
 end
 
 function Class:GetType()

@@ -9,7 +9,7 @@ Enum.PageTransitionDirection = Enum.Create({
 	Right = 4
 })
 
-local function OnTransitionStopped(pages, animation)
+local function OnTransitionFinished(animation, pages)
 	local oldPage = pages._OldPage
 	local page = pages._Page
 
@@ -29,6 +29,13 @@ local function OnTransitionStopped(pages, animation)
 	pages._Events:Push("PageSwitching", oldPage, page, true)
 end
 
+local function OnChildAdded(self, _, child)
+	child.PixelPosition = Vector2.Zero
+	child.RelativePosition = Vector2.Zero
+
+	child.Visible = #self._Children == 1
+end
+
 function Pages.Create()
 	local self = Class.CreateInstance(Frame.Create(), Pages)
 
@@ -37,21 +44,12 @@ function Pages.Create()
 
 	self._PageTransitions = {}
 
-	self._Events:Listen("AnimationStopped", OnTransitionStopped, self)
+	self._Events:Listen("ChildAdded", OnChildAdded)
 
 	return self
 end
 
-function Pages:AddChild(child)
-	if Frame.AddChild(self, child) then
-		child.PixelPosition = Vector2.Zero
-		child.RelativePosition = Vector2.Zero
-
-		child.Visible = #self._Children == 1
-	end
-end
-
-function Pages:IsTransitioning()  
+function Pages:IsTransitioning()
 	return self._Page ~= self._OldPage
 end
 
@@ -64,9 +62,8 @@ function Pages:GetPage()
 end
 
 function Pages:SetPage(page)
-	local oldPage = self._Page
-	
-	if oldPage == self._OldPage and oldPage ~= page then
+	if page ~= self._Page and not self.Transitioning then
+		local oldPage = self._Page
 		local pageFrame = self._Children[page]
 		
 		if pageFrame then
@@ -84,13 +81,16 @@ function Pages:SetPage(page)
 					
 				animation.Playing = true
 
-				self._Events:Trigger("PageSwitching", oldPage, page, false)
+				self._Events:Push("PageSwitching", oldPage, page, false)
 			else
-				self._Events:Trigger("PageSwitching", oldPage, page, false)
-				OnTransitionStopped(self)
+				self._Events:Push("PageSwitching", oldPage, page, false)
+				OnTransitionFinished(nil, self)
 			end
-			
+
+			return true, page
 		end
+
+		return false
 	end
 end
 
@@ -125,8 +125,14 @@ function Pages:AddTransition(from, to, direction)
 				direction == Enum.PageTransitionDirection.Up and Vector2.Create(0, 1) or
 				direction == Enum.PageTransitionDirection.Down and Vector2.Create(0, -1) or
 				direction == Enum.PageTransitionDirection.Left and Vector2.Create(1, 0) or
-				Vector2.Create(-1, 0)
-			, Vector2.Zero, 1, Enum.AnimationType.SharpSmoothStep, false)
+				Vector2.Create(-1, 0),
+				Vector2.Zero,
+				1,
+				Enum.AnimationType.SharpSmoothStep,
+				false
+			)
+
+			animation.Events:Listen("AnimationFinished", OnTransitionFinished, self)
 
 			transitions[to] = animation
 
@@ -138,24 +144,28 @@ function Pages:AddTransition(from, to, direction)
 end
 
 function Pages:RemoveTransition(from, to)
-	local animation = self:GetTransition(from, to)
+	local transitions = self._PageTransitions[from]
 
-	if animation then
-		animation:Destroy()
-		self._PageTransitions[from][to] = nil
+	if transitions then
+		local animation = transitions[to]
+
+		if animation then
+			self._PageTransitions[from][to] = nil
+			animation:Destroy()
+		end
 	end
 end
 
-function Pages:RemoveAllTransitions()
+function Pages:RemoveTransitions()
 	for index, transitions in pairs(self._PageTransitions) do
-		table.erase(transitions, Animation.Destroy)
 		self._PageTransitions[index] = nil
+		table.erase(transitions, Animation.Destroy)
 	end
 end
 
 function Pages:Destroy()
 	if not self._Destroyed then
-		self:RemoveAllTransitions()
+		self:RemoveTransitions()
 		self._PageTransitions = nil
 
 		Frame.Destroy(self)

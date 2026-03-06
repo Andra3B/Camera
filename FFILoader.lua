@@ -1,4 +1,4 @@
-require("main")
+require("Setup")
 
 NIL = table.empty
 
@@ -105,8 +105,8 @@ cDefinitionsFile:close()
 
 ]])
 	
-	for name, library in pairs(libraryPaths) do
-		luaFile:write([[libraries["]]..name..[["] = setmetatable({Library = ffi.load("]]..library..[[", true), Defines = defines}, {__index = IndexMetamethod})]].."\n")
+	for index, library in ipairs(libraryPaths) do
+		luaFile:write([[libraries["]]..library[1]..[["] = setmetatable({Library = ffi.load("]]..library[2]..[[", true), Defines = defines}, {__index = IndexMetamethod})]].."\n")
 	end
 
 	luaFile:write("\n")

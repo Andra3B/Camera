@@ -72,7 +72,8 @@ function Animation.Update(deltaTime)
 				else
 					animation._Object[animation._Property] = animation._Reversed and animation._From or animation._To
 					animation.Playing = false
-					animation._Object.Events:Push("AnimationFinished", animation)
+
+					animation._Events:Trigger("AnimationFinished")
 
 					if animation._DestroyOnFinish then
 						animation:Destroy()
@@ -88,11 +89,10 @@ function Animation.Update(deltaTime)
 end
 
 function Animation.Create(object, property, from, to, duration, animationType, destroyOnFinish)
-	local self = Class.CreateInstance(Entity.Create(), Animation)
+	local self = Class.CreateInstance(Object.Create(), Animation)
 
 	self._Object = object
 	self._Property = property
-	self._PropertyType = Class.GetType(from)
 
 	self._From = from
 	self._To = to
@@ -137,7 +137,11 @@ function Animation:GetAnimationType()
 end
 
 function Animation:SetAnimationType(animationType)
-	self._AnimationType = animationType
+	if animationType ~= self._AnimationType then
+		self._AnimationType = animationType
+
+		return true, animationType
+	end
 end
 
 function Animation:GetDuration()
@@ -145,9 +149,13 @@ function Animation:GetDuration()
 end
 
 function Animation:SetDuration(duration)
-	self._Duration = duration
+	if duration ~= self._Duration then
+		self._Duration = duration
 
-	self.Time = self._Time
+		self.Time = self._Time
+
+		return true, duration
+	end
 end
 
 function Animation:GetTime()
@@ -155,7 +163,13 @@ function Animation:GetTime()
 end
 
 function Animation:SetTime(time)
-	self._Time = math.clamp(time, 0, self._Duration)
+	time = math.clamp(time, 0, self._Duration)
+
+	if time ~= self._Time then
+		self._Time = time
+
+		return true, time
+	end
 end
 
 function Animation:IsPlaying()
@@ -163,12 +177,10 @@ function Animation:IsPlaying()
 end
 
 function Animation:SetPlaying(playing)
-	if self._Playing ~= playing then
+	if playing ~= self._Playing then
 		self._Playing = playing
-
-		if not self._Object.Destroyed then
-			self._Object.Events:Push(playing and "AnimationStarted" or "AnimationStopped", self)
-		end
+		
+		return true, playing
 	end
 end
 
@@ -177,7 +189,11 @@ function Animation:IsReversed()
 end
 
 function Animation:SetReversed(reversed)
-	self._Reversed = reversed
+	if reversed ~= self._Reversed then
+		self._Reversed = reversed
+
+		return true, reversed
+	end
 end
 
 function Animation:Reset()
@@ -197,12 +213,12 @@ function Animation:Destroy()
 		self._From = nil
 		self._To = nil
 
-		Entity.Destroy(self)
+		Object.Destroy(self)
 	end
 end
 
-function Animation.DestroyAllAnimations()
+function Animation.DestroyAnimations()
 	table.erase(Animations, Animation.Destroy)
 end
 
-return Class.CreateClass(Animation, "Animation", Entity)
+return Class.CreateClass(Animation, "Animation", Object)

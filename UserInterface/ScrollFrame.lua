@@ -1,10 +1,8 @@
-local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(
-	require("UserInterface.Frame")
-)
+local Interactive = love.filesystem.load("UserInterface/Interactive.lua")(require("UserInterface.Frame"))
 
 local ScrollFrame = {}
 
-local function ScrollFrameInput(self, inputType, scancode, state)
+local function ScrollFrameInput(self, _, inputType, scancode, state)
 	if scancode == "mousewheelmovement" then
 		local container = self._Container
 
@@ -16,7 +14,7 @@ local function ScrollFrameInput(self, inputType, scancode, state)
 	end
 end
 
-local function VerticalScrollBarInput(self, inputType, scancode, state)
+local function VerticalScrollBarInput(self, _, inputType, scancode, state)
 	if scancode == "leftmousebutton" then
 		if state.Z < 0 then
 			self._VerticalDragOffset = state.Y - self._VerticalScrollBar.AbsolutePosition.Y
@@ -25,8 +23,8 @@ local function VerticalScrollBarInput(self, inputType, scancode, state)
 		end
 	elseif scancode == "mousemovement" and self._VerticalDragOffset then
 		local container = self._Container
-		local absoluteChildTopLeftPosition = container.ChildAbsolutePosition
-		local childAbsoluteSize = container.ChildAbsoluteSize
+		local absoluteChildTopLeftPosition = container.ChildrenAbsolutePosition
+		local childAbsoluteSize = container.ChildrenAbsoluteSize
 		local absoluteChildBottomRightY = absoluteChildTopLeftPosition.Y + childAbsoluteSize.Y
 		local absoluteSize = container.AbsoluteSize
 
@@ -39,7 +37,7 @@ local function VerticalScrollBarInput(self, inputType, scancode, state)
 	end
 end
 
-local function HorizontalScrollBarInput(self, inputType, scancode, state)
+local function HorizontalScrollBarInput(self, _, inputType, scancode, state)
 	if scancode == "leftmousebutton" then
 		if state.Z < 0 then
 			self._HorizontalDragOffset = state.X - self._HorizontalScrollBar.AbsolutePosition.X
@@ -48,8 +46,8 @@ local function HorizontalScrollBarInput(self, inputType, scancode, state)
 		end
 	elseif scancode == "mousemovement" and self._HorizontalDragOffset then
 		local container = self._Container
-		local absoluteChildTopLeftPosition = container.ChildAbsolutePosition
-		local childAbsoluteSize = container.ChildAbsoluteSize
+		local absoluteChildTopLeftPosition = container.ChildrenAbsolutePosition
+		local childAbsoluteSize = container.ChildrenAbsoluteSize
 		local absoluteChildBottomRightX = absoluteChildTopLeftPosition.X + childAbsoluteSize.X
 		local absoluteSize = container.AbsoluteSize
 
@@ -106,12 +104,12 @@ function ScrollFrame.Create()
 	self._VerticalDragOffset = nil
 	self._HorizontalDragOffset = nil
 
-	self:AddChild(self._Container)
-	self:AddChild(self._Overlay)
+	self._Container.Parent = self
+	self._Overlay.Parent = self
 
-	self._Events:Listen("Input", ScrollFrameInput, self)
-	self._VerticalScrollBar._Events:Listen("Input", VerticalScrollBarInput, self)
-	self._HorizontalScrollBar._Events:Listen("Input", HorizontalScrollBarInput, self)
+	self._Events:Listen("Input", ScrollFrameInput)
+	self._VerticalScrollBar._Events:Listen("Input", VerticalScrollBarInput)
+	self._HorizontalScrollBar._Events:Listen("Input", HorizontalScrollBarInput)
 
 	return self
 end
@@ -138,9 +136,9 @@ function ScrollFrame:Draw()
 	self._VerticalScrollBar.Visible = false
 	self._HorizontalScrollBar.Visible = false
 
-	if #container._Children > 0 then
-		local absoluteChildTopLeftPosition = container.ChildAbsolutePosition
-		local childAbsoluteSize = container.ChildAbsoluteSize
+	if #container.Children > 0 then
+		local absoluteChildTopLeftPosition = container.ChildrenAbsolutePosition
+		local childAbsoluteSize = container.ChildrenAbsoluteSize
 		local absoluteChildBottomRightPosition = absoluteChildTopLeftPosition + childAbsoluteSize
 		local childAbsoluteOffset = container.ChildAbsoluteOffset
 		local absoluteSize = container.AbsoluteSize

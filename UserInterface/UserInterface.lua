@@ -19,7 +19,7 @@ UserInterface.LogFrame = require("UserInterface.LogFrame")
 
 UserInterface.Font = require("UserInterface.Font")
 
-UserInterface.Events = EventDirector.Create()
+UserInterface.Events = EventDirector.Create(UserInterface)
 
 UserInterface.Root = nil
 
@@ -45,7 +45,7 @@ end
 
 function UserInterface.Refresh()
 	if UserInterface.Root then
-		UserInterface.Root:RecursiveRefresh(false)
+		UserInterface.Root:Refresh()
 	end
 end
 
@@ -63,6 +63,8 @@ function UserInterface.SetFocus(focus)
 		if oldFocus then
 			oldFocus.Events:Push("FocusLost")
 		end
+
+		return true, focus
 	end
 end
 
@@ -82,7 +84,7 @@ function UserInterface.Input(inputType, scancode, state)
 
 		if scancode == "leftmousebutton" then
 			if state.Z < 0 then
-				if interactiveFrame and interactiveFrame.AbsoluteActive then
+				if interactiveFrame and interactiveFrame.Active then
 					UserInterface.Pressed = interactiveFrame
 					UserInterface.SetFocus(interactiveFrame)
 
@@ -99,11 +101,11 @@ function UserInterface.Input(inputType, scancode, state)
 		end
 	end
 
-	if UserInterface.Focus and UserInterface.Focus.AbsoluteActive then
+	if UserInterface.Focus and UserInterface.Focus.Active then
 		UserInterface.Focus.Events:Trigger("Input", inputType, scancode, state)
 	end
 
-	if UserInterface.Hovering and UserInterface.Hovering ~= UserInterface.Focus and UserInterface.Hovering.AbsoluteActive then
+	if UserInterface.Hovering and UserInterface.Hovering ~= UserInterface.Focus and UserInterface.Hovering.Active then
 		UserInterface.Hovering.Events:Trigger("Input", inputType, scancode, state)
 	end
 
@@ -113,7 +115,7 @@ function UserInterface.Input(inputType, scancode, state)
 
 		if
 			scrollFrame and
-			scrollFrame.AbsoluteActive and
+			scrollFrame.Active and
 			UserInterface.Focus ~= scrollFrame and
 			UserInterface.Hovering ~= scrollFrame
 		then
@@ -157,13 +159,11 @@ function UserInterface.GetFrameContainingPoint(x, y, frame, frameType)
 end
 
 function UserInterface.SetRoot(root)
-	if Class.IsA(root, "Frame") then
+	if root ~= UserInterface.Root then
 		UserInterface.Root = root
 
-		return true
+		return true, root
 	end
-
-	return false
 end
 
 function UserInterface.Draw()

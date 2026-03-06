@@ -1,5 +1,4 @@
 libav = require("libav.libav")
-
 VideoReader = require("VideoReader")
 
 MotionTracker = require("MotionTracker")
@@ -18,19 +17,19 @@ local function StartLivestream()
 
 		AppNetworkClient:Send({{"StartLivestream", freePort}})
 
-		local livestream = VideoReader.CreateFromURL(
-			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?timeout=5000000&fifo_size=1000000&overrun_nonfatal=1",
-			"mpegts"
+		local livestream = VideoReader.Create(
+			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?fifo_size=100000",
+			"mpegts",
+			8,
+			"timeout=1000000,fflags=nobuffer,probesize=32,analyzeduration=0,flush_packets=1,overrun_nonfatal=1"
 		)
 
 		if livestream then
 			motionTracker = MotionTracker.Create(livestream.Width, livestream.Height)
 
 			LivestreamFrame.Video = livestream
-			LivestreamFrame.Playing = true
-
 			LivestreamFrame.VideoVisible = true
-			LivestreamFrame.BackgroundImage = motionTracker.MotionMask
+			LivestreamFrame.Playing = true
 
 			CalibrationControlButton.Active = true
 
@@ -45,17 +44,13 @@ local function StopLivestream()
 	if livestreaming then
 		AppNetworkClient:Send({{"StopLivestream"}})
 
-		if motionTracker then
-			motionTracker:Destroy()
-			motionTracker = nil
-		end
+		motionTracker:Destroy()
+		motionTracker = nil
 		
 		calibratingMotionTracking = false
-		trackerRelativePosition = nil
-
-		LivestreamFrame.Video:Destroy()
-		LivestreamFrame.Video = nil
+		
 		LivestreamFrame.BackgroundImage = nil
+		LivestreamFrame.Video = nil
 
 		CalibrationControlButton.Active = false
 
@@ -65,21 +60,10 @@ local function StopLivestream()
 	end
 end
 
-local function Disconnect()
-	StopLivestream()
-
-	motionTracking = false
-	TrackingControlButton.BorderColour = Vector4.Create(1, 0, 0, 1)
-
-	AppPages.Page = 1
-end
-
 function love.load()
+	VideoReader.Initialize()
+
 	AppNetworkClient = NetworkClient.Create()
-
-	AppNetworkClient.Events:Listen("Disconnected", Disconnect)
-	AppNetworkClient.Events:Listen("StopLivestream", StopLivestream)
-
 	AppNetworkClient:Bind()
 
 	local width, height = love.window.getDesktopDimensions(1)
@@ -128,7 +112,7 @@ function love.load()
 	ConnectionTitle.RelativeSize = Vector2.Create(1, 0.1)
 	ConnectionTitle.RelativePosition = Vector2.Create(0.5, 0.45)
 	ConnectionTitle.PixelPosition = Vector2.Create(0, -10)
-	ConnectionTitle.Text = "Camera Connection Details:"
+	ConnectionTitle.Text = "Camera Details:"
 	ConnectionTitle.Font = UserInterface.Font.FreeSansBold
 	ConnectionTitle.Parent = ConnectionPage
 
@@ -306,9 +290,13 @@ function love.load()
 	CalibrationControlButton.Parent = ControlBar
 
 	local calibrationModeAnimation = Animation.Create(
-		LivestreamFrame, "PixelSize",
-		LivestreamFrame.PixelSize, LivestreamFrame.PixelSize - Vector2.Create(0, 50),
-		1, Enum.AnimationType.SharpSmoothStep, false
+		LivestreamFrame,
+		"PixelSize",
+		LivestreamFrame.PixelSize,
+		LivestreamFrame.PixelSize - Vector2.Create(0, 50),
+		1,
+		Enum.AnimationType.SharpSmoothStep,
+		false
 	)
 
 	CalibrationControlButton.Events:Listen("Pressed", function()
@@ -451,6 +439,7 @@ function love.load()
 
 	SaveCalibrationButton.Events:Listen("Pressed", function()
 		if calibratingMotionTracking then
+			LivestreamFrame.BackgroundImage = nil
 			LivestreamFrame.VideoVisible = true
 
 			motionTracker.MotionThreshold = MotionThresholdEntry.Value
@@ -557,7 +546,7 @@ function love.load()
 		LivestreamFrame.VideoVisible = not LivestreamFrame.VideoVisible
 	end)
 
-	BottomBarPages.Events:Listen("PageSwitching", function(from, to, switched)
+	BottomBarPages.Events:Listen("PageSwitching", function(_, _, from, to, switched)
 		if livestreaming then
 			LivestreamFrame.VideoVisible = true
 			
@@ -707,13 +696,24 @@ function love.load()
 	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
 
 	FPSLabel = UserInterface.Label.Create()
-	FPSLabel.PixelSize = Vector2.Create(200, 50)
+	FPSLabel.PixelSize = Vector2.Create(100, 50)
 	FPSLabel.BackgroundColour = Vector4.Zero
 	FPSLabel.Parent = Root
 
-	Log.SetWriter(function(category, priority, message, ...)
+	Log.Writer = function(category, priority, message, ...)
 		ConsoleHistory:Push(Log.Format(category, priority, nil, message, ...))
+	end
+
+	AppNetworkClient.Events:Listen("Disconnected", function()
+		StopLivestream()
+
+		motionTracking = false
+		TrackingControlButton.BorderColour = Vector4.Create(1, 0, 0, 1)
+
+		AppPages.Page = 1
 	end)
+	
+	AppNetworkClient.Events:Listen("StopLivestream", StopLivestream)
 
 	UserInterface.SetRoot(Root)
 
@@ -733,7 +733,7 @@ function love.draw()
 
 	if livestreaming then
 		if LivestreamFrame.FrameChanged then
-			motionTracker:Update(LivestreamFrame.VideoImage)
+			motionTracker:Update(LivestreamFrame.Video.Frame)
 		end
 
 		if calibratingMotionTracking then
@@ -775,4 +775,6 @@ function love.quit(exitCode)
 	StopLivestream()
 	
 	AppNetworkClient:Destroy()
+
+	VideoReader.Deinitialize()
 end

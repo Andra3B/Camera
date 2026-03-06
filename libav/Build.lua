@@ -1,25 +1,34 @@
-require("Setup")
+local bit = require("bit")
 
 local libraries
 
 if jit.os == "Windows" then
 	libraries = {
-		["avutil"] = "avutil-59",
-		["avcodec"] = "avcodec-61",
-		["avformat"] = "avformat-61",
-		["avdevice"] = "avdevice-61",
-		["avfilter"] = "avfilter-10",
-		["swscale"] = "swscale-8"
+		{"avutil", "avutil-60"},
+		{"avcodec", "avcodec-62"},
+		{"avformat", "avformat-62"},
+		{"avdevice", "avdevice-62"},
+		{"avfilter", "avfilter-11"},
+		{"swscale", "swscale-9"}
 	}
 else
 	libraries = {
-		["avutil"] = "avutil.so.59",
-		["avcodec"] = "avcodec.so.61",
-		["avformat"] = "avformat.so.61",
-		["avdevice"] = "avdevice.so.61",
-		["avfilter"] = "avfilter.so.10",
-		["swscale"] = "swscale.so.8"
+		{"avutil", "avutil-59"},
+		{"avcodec", "avcodec-61"},
+		{"avformat", "avformat-61"},
+		{"avdevice", "avdevice-61"},
+		{"avfilter", "avfilter-10"},
+		{"swscale", "swscale-8"}
 	}
+end
+
+local function FFERRTAG(a, b, c, d)
+	return -bit.bor(
+		type(a) == "string" and string.byte(a) or a, 
+		bit.lshift(type(b) == "string" and string.byte(b) or b, 8),
+		bit.lshift(type(c) == "string" and string.byte(c) or c, 16),
+		bit.lshift(type(d) == "string" and string.byte(d) or d, 24)
+	)
 end
 
 require("FFILoader").CreateBindings({"libav", "libsw"}, "libav/libav.i", libraries, ".", "libav", {
@@ -30,14 +39,9 @@ require("FFILoader").CreateBindings({"libav", "libsw"}, "libav/libav.i", librari
 
 		MKTAG = true,
 		AVERROR_EAGAIN = -11,
-		FFERRTAG = function(a, b, c, d)
-			return -bit.bor(
-				type(a) == "string" and string.byte(a) or a, 
-				bit.lshift(type(b) == "string" and string.byte(b) or b, 8),
-				bit.lshift(type(c) == "string" and string.byte(c) or c, 16),
-				bit.lshift(type(d) == "string" and string.byte(d) or d, 24)
-			)
-		end
+		AVERROR_EINVAL = -22,
+		AVERROR_ENOMEM = -12,
+		["FFERRTAG"] = FFERRTAG 
 	}, nil
 )
 

@@ -9,88 +9,57 @@ function VideoFrame.Create()
 	self._VideoVisible = true
 
 	self._Playing = false
-	self._Time = 0
-	
-	self._FrameHandle = nil
+	self._Looping = false
+
+	self._RenderTimeTolerance = 0.03
+
 	self._FrameChanged = false
 
-	self._VideoImageBuffer = nil
-	self._VideoImageBufferHandle = nil
-
-	self._VideoImage = nil
+	self._Events:Listen("VideoVisibleChanged", VideoFrame.RefreshBackgroundImageAbsoluteValues)
+	self._Events:Listen("VideoChanged", VideoFrame.RefreshBackgroundImageAbsoluteValues)
 
 	return self
 end
 
 function VideoFrame:Update(deltaTime)
 	Frame.Update(self, deltaTime)
+
 	local video = self._Video
-
 	if video and self._Playing then
-		self._Time = self._Time + deltaTime
+		local now = love.timer.getTime()
+		local videoDeltaTime = video.Time - now + (video.FrameReferenceTime or now)
 		
-		if self._Time > video.FrameTime then
-			while true do
-				local packetHandle = video:ReadPacket()
-				local frameHandle, needsAnotherPacket, endOfFrames = video:ReadFrame(packetHandle, self._VideoImageBufferHandle)
-
-				if packetHandle then
-					libav.avcodec.av_packet_free(ffi.new("AVPacket*[1]", packetHandle))
-				end
-
-				if frameHandle then
-					self._VideoImage:replacePixels(self._VideoImageBuffer)
-
-					if self._FrameHandle then
-						libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", self._FrameHandle))
-					end
-
-					self._FrameHandle = frameHandle
-					self._FrameChanged = true
-					
-					break
-				elseif not needsAnotherPacket then
-					self.Playing = false
-
-					break
-				end
-			end
+		if videoDeltaTime < -self._RenderTimeTolerance then
+			video:Update(true)
+		elseif videoDeltaTime <= self._RenderTimeTolerance then
+			video:Update(false)
+			self._FrameChanged = true
 		end
 	end
+end
+
+function VideoFrame:GetFrameChanged()
+	local changed = self._FrameChanged
+	self._FrameChanged = false
+
+	return changed
+end
+
+function VideoFrame:GetBackgroundImage()
+	return (self._VideoVisible and self._Video) and self._Video.Frame or Frame.GetBackgroundImage(self)
 end
 
 function VideoFrame:GetVideo()
 	return self._Video
 end
 
-function VideoFrame:GetBackgroundImage()
-	return self._VideoVisible and self._VideoImage or Frame.GetBackgroundImage(self)
-end
-
 function VideoFrame:SetVideo(video)
-	if self._Video then
-		self._VideoImageBuffer:release()
-		self._VideoImageBuffer = nil
-		self._VideoImageBufferHandle = nil
+	if video ~= self._Video then
+		self._Video = video
 
-		self._VideoImage:release()
-		self._VideoImage = nil
-
-		if self._FrameHandle then
-			libav.avutil.av_frame_free(ffi.new("AVFrame*[1]", self._FrameHandle))
-			self._FrameHandle = nil
-		end
-	end
-	
-	self._Video = video
-
-	if video then		
-		self._VideoImageBuffer = love.image.newImageData(video.Width, video.Height, "rgba8")
-		self._VideoImageBufferHandle = ffi.cast("uint8_t*", self._VideoImageBuffer:getFFIPointer())
-		
-		self._VideoImage = love.graphics.newImage(self._VideoImageBuffer)
-	else
 		self.Playing = false
+
+		return true, video
 	end
 end
 
@@ -99,7 +68,11 @@ function VideoFrame:IsVideoVisible()
 end
 
 function VideoFrame:SetVideoVisible(visible)
-	self._VideoVisible = visible
+	if visible ~= self._VideoVisible then
+		self._VideoVisible = visible
+
+		return true, visible
+	end
 end
 
 function VideoFrame:IsPlaying()
@@ -107,22 +80,27 @@ function VideoFrame:IsPlaying()
 end
 
 function VideoFrame:SetPlaying(playing)
-	self._Playing = playing
+	if playing ~= self._Playing then
+		self._Playing = playing
+
+		if self._Video then
+			self._Video.FrameReferenceTime = nil
+		end
+
+		return true, playing
+	end
 end
 
-function VideoFrame:GetFrameHandle()
-	return self._FrameHandle
+function VideoFrame:IsLooping()
+	return self._Looping
 end
 
-function VideoFrame:GetFrameChanged()
-	local frameChanged = self._FrameChanged
-	self._FrameChanged = false
+function VideoFrame:SetLooping(looping)
+	if looping ~= self._Looping then
+		self._Looping = looping
 
-	return frameChanged
-end
-
-function VideoFrame:GetVideoImage()
-	return self._VideoImage
+		return true, looping
+	end
 end
 
 function VideoFrame:Destroy()
@@ -131,7 +109,6 @@ function VideoFrame:Destroy()
 
 		if video then
 			self.Video = nil
-
 			video:Destroy()
 		end
 
@@ -139,6 +116,4 @@ function VideoFrame:Destroy()
 	end
 end
 
-return Class.CreateClass(VideoFrame, "VideoFrame", Frame, {
-	["BackgroundImageAbsolutePosition"] = {"Video", "VideoVisible"}
-})
+return Class.CreateClass(VideoFrame, "VideoFrame", Frame)

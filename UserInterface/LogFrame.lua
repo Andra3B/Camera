@@ -2,21 +2,26 @@ local ScrollFrame = require("UserInterface.ScrollFrame")
 
 local LogFrame = {}
 
+local function OnLogTextObjectChanged(self, _, textObject)
+	self.PixelSize = Vector2.Create(textObject:getDimensions()) + self.TextPixelPosition
+end
+
 function LogFrame.Create()
 	local self = Class.CreateInstance(ScrollFrame.Create(), LogFrame)
 
 	self._Capacity = 50
 
 	self._Logs = UserInterface.Label.Create()
-	self._Logs.RelativeSize = Vector2.One
 	self._Logs.BackgroundColour = Vector4.Zero
+	self._Logs.TextRelativeSize = 0
 	self._Logs.TextPixelSize = 20
 	self._Logs.TextRelativeOrigin = Vector2.Zero
 	self._Logs.TextRelativePosition = Vector2.Zero
 	self._Logs.TextPixelPosition = Vector2.Create(10, 10)
-	self._Logs.ScaleToFit = true
 
-	self._Container:AddChild(self._Logs)
+	self._Logs.Parent = self._Container
+
+	self._Logs.Events:Listen("TextObjectChanged", OnLogTextObjectChanged)
 	
 	return self
 end
@@ -30,11 +35,15 @@ function LogFrame:GetCapacity()
 end
 
 function LogFrame:SetCapacity(capacity)
-	for _ = 1, self._Capacity - capacity, 1 do
-		self:Pop()
-	end
+	if capacity ~= self._Capacity then
+		for _ = 1, self._Capacity - capacity, 1 do
+			self:Pop()
+		end
 
-	self._Capacity = capacity
+		self._Capacity = capacity
+
+		return true, capacity
+	end
 end
 
 function LogFrame:Push(text, ...)
@@ -65,7 +74,6 @@ function LogFrame:Pop()
 
 	if #logsText > 0 then
 		local newLineIndex = string.find(logsText, "\n", 1, true) or #logsText
-
 		self._Logs.Text = string.sub(logsText, newLineIndex + 1)
 
 		return string.sub(logsText, 1, newLineIndex)
