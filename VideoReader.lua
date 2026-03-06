@@ -103,12 +103,12 @@ function VideoReader.Create(url, format, frameQueueCapacity, options)
 				if previousOptionPointer == nil then
 					break
 				else
-					message = message..tostring(previousOptionPointer.key)..", "
+					message = message..ffi.string(previousOptionPointer.key)..", "
 				end
 			end
 
 			Log.Warn("VideoReader", string.sub(message, 1, -3))
-			libav.avutil.av_dict_free(optionsPointer)
+			libav.avutil.av_dict_free(optionsPointerPointer)
 		end
 
 		if errorCode >= 0 then

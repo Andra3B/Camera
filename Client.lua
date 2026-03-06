@@ -18,10 +18,10 @@ local function StartLivestream()
 		AppNetworkClient:Send({{"StartLivestream", freePort}})
 
 		local livestream = VideoReader.Create(
-			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort,
+			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?fifo_size=50000",
 			"mpegts",
 			8,
-			"timeout=1000000,fifo_size=1000000,overrun_nonfatal=1"
+			"timeout=1000000,fflags=nobuffer,probesize=32,analyzeduration=0,flush_packets=1,overrun_nonfatal=1"
 		)
 
 		if livestream then

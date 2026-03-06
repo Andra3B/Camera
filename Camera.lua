@@ -17,17 +17,17 @@ else
 	pigpio = require("pigpio.pigpio")["1"]
 
 	livestreamPID = -1
-	
+
 	function StartLivestream(_, _, from, port)
 		if livestreamPID < 0 then
 			os.execute(
-				"setsid sh -c 'rpicam-vid -t 0 -n --framerate 30 -b 3000000 --width 1280 --height 720 --inline --codec h264 -o - | ffmpeg -fflags nobuffer -flags low_delay -f h264 -i - -f mpegts udp://"..from:GetRemoteDetails()..":"..port.."' >/dev/null 2>&1 & echo $! > LivestreamPID.txt"
+				"setsid sh -c 'rpicam-vid -t 0 --inline --width 1280 --height 720 --framerate 30 --profile high --intra 30 --flush -o - | ffmpeg -hide_banner -loglevel error -fflags nobuffer -flags low_delay -framerate 30 -f h264 -i - -c copy -f mpegts -muxdelay 0 -flush_packets 1 \"udp://"..from:GetRemoteDetails()..":"..port.."?pkt_size=1316&fifo_size=50000&overrun_nonfatal=1\"' >/dev/null 2>&1 & echo $! > pgid.txt"
 			)
 
-			local livestreamFile = io.open("LivestreamPID.txt", "r")
+			local livestreamFile = io.open("pgid.txt", "r")
 			livestreamPID = tonumber(livestreamFile:read("*a"):match("%d+"))
 			livestreamFile:close()
-			os.remove("LivestreamPID.txt")
+			os.remove("pgid.txt")
 
 			livestreamReceiver = from
 			livestreamReceiverPort = port
@@ -38,7 +38,7 @@ else
 
 	function StopLivestream(_, _, from)
 		if livestreamPID > 0 and livestreamReceiver == from then
-			os.execute("kill -- -"..livestreamPID)
+			os.execute("kill -INT -"..livestreamPID)
 			livestreamPID = -1
 
 			Log.Info("Camera", "Livestream stopped")
@@ -61,7 +61,7 @@ function love.load()
 
 		AppNetworkServer.Events:Listen("SetAngle", function(_, _, from, angle)
 			angle = tonumber(angle)
-			
+
 			if angle then
 				targetServoAngle = math.clamp(angle, -90, 90)
 			end
