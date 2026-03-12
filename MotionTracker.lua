@@ -139,43 +139,57 @@ function MotionTracker:GetMotionShapes()
 		
 		for y = 0, height - 1, 1 do
 			for x = 0, width - 1, 1 do
+				-- Convert pixel position (x, y) to array index.
 				local index = y*height + x
+				-- Get pixel value from motion mask.
 				local motion = blockGrid:getPixel(x, y)
 
+				-- If pixel not visted (not assigned a shape) and is a motion pixel (0.95 for safety).
 				if not visited[index] and motion > 0.95 then
+					-- Create a new motion shape and add the shape to the list of motion shapes.
 					shape = {x, y, x + 1, y + 1}
 					table.insert(shapes, shape)
 
+					-- Mark the pixel as a pixel that needs to be visited.
 					table.insert(toVisit, x)
 					table.insert(toVisit, y)
 
+					-- Mark the pixel as visited so its not processed again.
 					visited[index] = true
 				end
 
+				-- While there are still pixels to visit.
 				while #toVisit > 0 do
+					-- Get the next pixel to visit.
 					local x2 = table.remove(toVisit, 1)
 					local y2 = table.remove(toVisit, 1)
 
+					-- For each neighbour pixel within the shape search radius.
 					for subY = -self._ShapeSearchRadius, self._ShapeSearchRadius, 1 do
 						for subX = -self._ShapeSearchRadius, self._ShapeSearchRadius, 1 do
 							local x3, y3 = x2 + subX, y2 + subY
 							local subIndex = y3*height + x3
 
+							-- If neighbour position is within the mask and is not visited.
 							if
 								x3 >= 0 and x3 < width and y3 >= 0 and y3 < height and
 								not visited[subIndex]
 							then
 								local subMotion = blockGrid:getPixel(x3, y3)
 								
+								-- Check neighbour is a motion pixel.
 								if subMotion > 0.95 then
+									-- Update extents of the motion shape to include this neighbour pixel.
 									shape[1] = math.min(shape[1], x3)
 									shape[2] = math.min(shape[2], y3)
 									shape[3] = math.max(shape[3], x3 + 1)
 									shape[4] = math.max(shape[4], y3 + 1)
 
+									-- Mark the neighbour as a pixel that needs to be visited.
 									table.insert(toVisit, x3)
 									table.insert(toVisit, y3)
 
+									-- Mark the neighbour as visited so its not processed again.
 									visited[subIndex] = true
 								end
 							end
