@@ -28,6 +28,18 @@ function love.update(deltaTime) end
 function love.draw() end
 function love.quit(exitCode) end
 
+function love.errorhandler(message)
+	Log.Error(arg[2], debug.traceback(tostring(message), 2):gsub("\n[^\n]+$", ""))
+
+	love.quit(1)
+
+	Animation.DestroyAnimations()
+	Timer.DestroyTimers()
+	UserInterface.DestroyRoot()
+end
+
+function love.threaderror(thread, message) love.errorhandler(message) end
+
 function love.run()
 	love.load()
 	
@@ -43,6 +55,7 @@ function love.run()
 	
 				Animation.DestroyAnimations()
 				Timer.DestroyTimers()
+				UserInterface.DestroyRoot()
 	
 				return a
 			end

@@ -10,6 +10,7 @@ UserInterface.Initialised = false
 UserInterface.Frame = require("UserInterface.Frame")
 UserInterface.Label = require("UserInterface.Label")
 UserInterface.Button = require("UserInterface.Button")
+UserInterface.ToggleButton = require("UserInterface.ToggleButton")
 UserInterface.TextBox = require("UserInterface.TextBox")
 UserInterface.NumericTextBox = require("UserInterface.NumericTextBox")
 UserInterface.VideoFrame = require("UserInterface.VideoFrame")
@@ -163,6 +164,13 @@ function UserInterface.SetRoot(root)
 		UserInterface.Root = root
 
 		return true, root
+	end
+end
+
+function UserInterface.DestroyRoot()
+	if UserInterface.Root then
+		UserInterface.Root:Destroy()
+		UserInterface.Root = nil
 	end
 end
 

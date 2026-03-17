@@ -11,6 +11,7 @@ function NetworkController.Create(controllerSocket)
 	return self
 end
 
+-- Syntax: &CommandOne:1,2,hello \, world\!&CommandTwo!
 function NetworkController.GetStringFromCommands(commands)
 	local commandsString = buffer.new()
 

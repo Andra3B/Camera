@@ -31,6 +31,7 @@ function Frame.Create()
 
 	self._BackgroundColour = Vector4.One
 	self._BackgroundImage = nil
+	self._BackgroundImageScale = 1
 	self._BackgroundImageScaleMode = Enum.ScaleMode.Stretch
 
 	self._BackgroundImageAbsolutePosition = Vector2.Zero
@@ -74,6 +75,7 @@ function Frame.Create()
 
 	self._Events:Listen("BackgroundImageChanged", Frame.RefreshBackgroundImageAbsoluteValues)
 	self._Events:Listen("BackgroundImageScaleModeChanged", Frame.RefreshBackgroundImageAbsoluteValues)
+	self._Events:Listen("BackgroundImageScaleChanged", Frame.RefreshBackgroundImageAbsoluteValues)
 	self._Events:Listen("AbsolutePositionChanged", Frame.RefreshBackgroundImageAbsoluteValues)
 	self._Events:Listen("AbsoluteSizeChanged", Frame.RefreshBackgroundImageAbsoluteValues)
 
@@ -148,16 +150,19 @@ function Frame:RefreshBackgroundImageAbsoluteValues()
 		local absolutePosition = self._AbsolutePosition
 		local absoluteSize = self._AbsoluteSize
 
-		if self._BackgroundImageScaleMode == Enum.ScaleMode.Stretch then
-			self.BackgroundImageAbsoluteSize = absoluteSize
-			self.BackgroundImageAbsolutePosition = absolutePosition
-		else
+		local backgroundImageAbsolutePosition = absolutePosition
+		local backgroundImageAbsoluteSize = absoluteSize
+
+		if self._BackgroundImageScaleMode == Enum.ScaleMode.MaintainAspectRatio then
 			local width, height = backgroundImage:getDimensions()
 			local scaleFactor = math.min(absoluteSize.X/width, absoluteSize.Y/height)
 
-			self.BackgroundImageAbsoluteSize = Vector2.Create(width*scaleFactor, height*scaleFactor)
-			self.BackgroundImageAbsolutePosition = absolutePosition + (absoluteSize - self._BackgroundImageAbsoluteSize)*0.5
+			backgroundImageAbsoluteSize = Vector2.Create(width*scaleFactor, height*scaleFactor)
+			backgroundImageAbsolutePosition = absolutePosition + (absoluteSize - backgroundImageAbsoluteSize)*0.5
 		end
+
+		self.BackgroundImageAbsoluteSize = backgroundImageAbsoluteSize*self._BackgroundImageScale
+		self.BackgroundImageAbsolutePosition = backgroundImageAbsolutePosition + backgroundImageAbsoluteSize*((1 - self._BackgroundImageScale)*0.5)
 	else
 		self.BackgroundImageAbsoluteSize = Vector2.Zero
 		self.BackgroundImageAbsolutePosition = Vector2.Zero
@@ -463,6 +468,20 @@ function Frame:SetBackgroundImageScaleMode(mode)
 		self._BackgroundImageScaleMode = mode
 
 		return true, mode
+	end
+end
+
+function Frame:GetBackgroundImageScale()
+	return self._BackgroundImageScale
+end
+
+function Frame:SetBackgroundImageScale(scale)
+	scale = math.max(0, scale)
+
+	if scale ~= self._BackgroundImageScale then
+		self._BackgroundImageScale = scale
+
+		return true, scale
 	end
 end
 

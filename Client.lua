@@ -5,34 +5,31 @@ MotionTracker = require("MotionTracker")
 
 local appClient
 
-local motionTracker
+local tracker = nil
 
 local livestreaming = false
-local motionTracking = false
-local calibratingMotionTracking = false
+local tracking = false
 
 local function StartLivestream()
 	if not livestreaming then
 		local freePort = NetworkClient.GetFreePort()
 
-		appClient:Send({{"StartLivestream", freePort}})
+		appClient:Send("&StartLivestream:%d!", freePort)
 
 		local livestream = VideoReader.Create(
-			"udp://"..appClient:GetLocalDetails()..":"..freePort.."?timeout=1000000&fifo_size=1024&buffer_size=65535&overrun_nonfatal=1",
+			"udp://"..appClient:GetLocalDetails()..":"..freePort.."?timeout=1000000&fifo_size=262144&overrun_nonfatal=1",
 			"mpegts",
 			5
 		)
 
 		if livestream then
-			motionTracker = MotionTracker.Create(livestream.Width, livestream.Height)
+			tracker = MotionTracker.Create(livestream.Width, livestream.Height)
 
 			LivestreamFrame.Video = livestream
 			LivestreamFrame.VideoVisible = true
 			LivestreamFrame.Playing = true
 
-			CalibrationControlButton.Active = true
-
-			LivestreamControlButton.Text = "Stop"
+			LivestreamButton.Text = "STOP"
 
 			livestreaming = true
 		end
@@ -41,21 +38,17 @@ end
 
 local function StopLivestream()
 	if livestreaming then
-		appClient:Send({{"StopLivestream"}})
+		appClient:Send("&StopLivestream!")
 
-		motionTracker:Destroy()
-		motionTracker = nil
-		
-		calibratingMotionTracking = false
+		tracker:Destroy()
+		tracker = nil
 		
 		LivestreamFrame.BackgroundImage = nil
 		
 		LivestreamFrame.Video:Destroy()
 		LivestreamFrame.Video = nil
 
-		CalibrationControlButton.Active = false
-
-		LivestreamControlButton.Text = "Start"
+		LivestreamButton.Text = "START"
 
 		livestreaming = false
 	end
@@ -97,179 +90,158 @@ function love.load()
 		)
 	}
 
-	Root = UserInterface.Frame.Create()
+	Icons = {
+		["Close"] = love.graphics.newImage("Assets/Images/Icons/Close.png"),
+		["Settings"] = love.graphics.newImage("Assets/Images/Icons/Settings.png"),
+		["LeftArrow"] = love.graphics.newImage("Assets/Images/Icons/LeftArrow.png"),
+		["RightArrow"] = love.graphics.newImage("Assets/Images/Icons/RightArrow.png"),
+		["Anchor"] = love.graphics.newImage("Assets/Images/Icons/Anchor.png"),
+		["Sliders"] = love.graphics.newImage("Assets/Images/Icons/Sliders.png")
+	}
+
+	local Root = UserInterface.Frame.Create()
+	Root.BackgroundColour = Vector4.Create(0.12, 0.12, 0.12, 1)
 	Root.RelativeSize = Vector2.One
 
-	AppPages = UserInterface.Pages.Create()
-	AppPages.RelativeSize = Vector2.One
+	local Topbar = UserInterface.Frame.Create()
+	Topbar.RelativeSize = Vector2.Create(1, 0)
+	Topbar.PixelSize = Vector2.Create(0, 50)
+	Topbar.BackgroundColour = Vector4.Create(1, 1, 1, 0.05)
+	Topbar.Parent = Root
+	
+	local AppPages = UserInterface.Pages.Create()
+	AppPages.RelativeSize = Vector2.Create(1, 1)
+	AppPages.PixelSize = Vector2.Create(0, -Topbar.AbsoluteSize.Y)
+	AppPages.PixelPosition = Vector2.Create(0, Topbar.AbsoluteSize.Y)
+	AppPages.BackgroundColour = Vector4.Zero
 	AppPages.Parent = Root
+
+	local DisconnectButton = UserInterface.Button.Create()
+	DisconnectButton.AspectRatio = 1
+	DisconnectButton.DominantAxis = Enum.Axis.Y
+	DisconnectButton.RelativeSize = Vector2.Create(1, 1)
+	DisconnectButton.BackgroundImage = Icons.Close
+	DisconnectButton.BackgroundColour = Vector4.Zero
+	DisconnectButton.Parent = Topbar
+
+	DisconnectButton.Events:Listen("Pressed", function()
+		appClient:Disconnect()
+	end)
+
+	local TitleLabel = UserInterface.Label.Create()
+	TitleLabel.RelativeOrigin = Vector2.Create(0.5, 0)
+	TitleLabel.RelativeSize = Vector2.Create(1, 1)
+	TitleLabel.RelativePosition = Vector2.Create(0.5, 0)
+	TitleLabel.Text = "Connection Details:"
+	TitleLabel.TextColour = Vector4.One
+	TitleLabel.BackgroundColour = Vector4.Zero
+	TitleLabel.Parent = Topbar
+
+	local SettingsButton = UserInterface.Button.Create()
+	SettingsButton.AspectRatio = 1
+	SettingsButton.DominantAxis = Enum.Axis.Y
+	SettingsButton.RelativeOrigin = Vector2.Create(1, 0)
+	SettingsButton.RelativeSize = Vector2.Create(1, 1)
+	SettingsButton.RelativePosition = Vector2.Create(1, 0)
+	SettingsButton.BackgroundImage = Icons.Settings
+	SettingsButton.BackgroundImageScale = 0.8
+	SettingsButton.BackgroundColour = Vector4.Zero
+	SettingsButton.Parent = Topbar
+
+	SettingsButton.Events:Listen("Pressed", function()
+		if AppPages.Page == 3 then
+			if appClient.Connected then
+				AppPages.Page = 2
+			else
+				AppPages.Page = 1
+			end
+		else
+			AppPages.Page = 3
+		end
+	end)
 	
 	local ConnectionPage = UserInterface.Frame.Create()
 	ConnectionPage.RelativeSize = Vector2.One
+	ConnectionPage.BackgroundColour = Vector4.Zero
 	ConnectionPage.Parent = AppPages
 
-	local ConnectionTitle = UserInterface.Label.Create()
-	ConnectionTitle.RelativeOrigin = Vector2.Create(0.5, 1)
-	ConnectionTitle.RelativeSize = Vector2.Create(1, 0.1)
-	ConnectionTitle.RelativePosition = Vector2.Create(0.5, 0.45)
-	ConnectionTitle.PixelPosition = Vector2.Create(0, -10)
-	ConnectionTitle.Text = "Camera Details:"
-	ConnectionTitle.Font = UserInterface.Font.FreeSansBold
-	ConnectionTitle.Parent = ConnectionPage
+	local CameraAddressEntry = UserInterface.TextBox.Create()
+	CameraAddressEntry.RelativeOrigin = Vector2.Create(0.5, 1)
+	CameraAddressEntry.RelativeSize = Vector2.Create(0.7, 0)
+	CameraAddressEntry.PixelSize = Vector2.Create(0, 50)
+	CameraAddressEntry.RelativePosition = Vector2.Create(0.5, 0.5)
+	CameraAddressEntry.PixelPosition = Vector2.Create(0, -5)
+	CameraAddressEntry.PlaceholderText = "Enter camera address (hostname:port)..."
+	CameraAddressEntry.PlaceholderTextColour = Vector4.Create(1, 1, 1, 0.5)
+	CameraAddressEntry.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	CameraAddressEntry.TextColour = Vector4.One
+	CameraAddressEntry.CornerPixelRadius = 10
+	CameraAddressEntry.Parent = ConnectionPage
 
-	HostEntry = UserInterface.TextBox.Create()
-	HostEntry.RelativeOrigin = Vector2.Create(1, 0.5)
-	HostEntry.RelativeSize = Vector2.Create(0.4, 0.1)
-	HostEntry.RelativePosition = Vector2.Create(0.5, 0.5)
-	HostEntry.PixelPosition = Vector2.Create(-5, 0)
-	HostEntry.PlaceholderText = "Enter Host..."
-	HostEntry.CornerRelativeRadius = 1
-	HostEntry.BorderThickness = 1
-	HostEntry.Parent = ConnectionPage
+	local ConnectionErrorLabel = UserInterface.Label.Create()
+	ConnectionErrorLabel.RelativeOrigin = Vector2.Create(0.5, 0)
+	ConnectionErrorLabel.RelativeSize = Vector2.Create(0.7, 0)
+	ConnectionErrorLabel.PixelSize = Vector2.Create(0, 50)
+	ConnectionErrorLabel.RelativePosition = Vector2.Create(0.5, 0.5)
+	ConnectionErrorLabel.PixelPosition = Vector2.Create(0, CameraAddressEntry.AbsoluteSize.Y + 15)
+	ConnectionErrorLabel.BackgroundColour = Vector4.Create(0.3, 0.3, 0.3, 1)
+	ConnectionErrorLabel.TextColour = Vector4.Create(1, 0, 0, 1)
+	ConnectionErrorLabel.CornerPixelRadius = 10
+	ConnectionErrorLabel.Visible = false
+	ConnectionErrorLabel.Parent = ConnectionPage
 
-	PortEntry = UserInterface.TextBox.Create()
-	PortEntry.RelativeOrigin = Vector2.Create(0, 0.5)
-	PortEntry.RelativeSize = Vector2.Create(0.4, 0.1)
-	PortEntry.RelativePosition = Vector2.Create(0.5, 0.5)
-	PortEntry.PixelPosition = Vector2.Create(5, 0)
-	PortEntry.PlaceholderText = "Enter Port..."
-	PortEntry.CornerRelativeRadius = 1
-	PortEntry.BorderThickness = 1
-	PortEntry.Parent = ConnectionPage
-
-	ConnectButton = UserInterface.Button.Create()
+	local ConnectButton = UserInterface.Button.Create()
 	ConnectButton.RelativeOrigin = Vector2.Create(0.5, 0)
-	ConnectButton.RelativeSize = Vector2.Create(0.8, 0.1)
-	ConnectButton.PixelSize = Vector2.Create(10, 0)
-	ConnectButton.RelativePosition = Vector2.Create(0.5, 0.55)
-	ConnectButton.PixelPosition = Vector2.Create(0, 10)
-	ConnectButton.CornerRelativeRadius = 1
-	ConnectButton.BorderThickness = 1
+	ConnectButton.RelativeSize = Vector2.Create(0.6, 0)
+	ConnectButton.PixelSize = Vector2.Create(0, 50)
+	ConnectButton.RelativePosition = Vector2.Create(0.5, 0.5)
+	ConnectButton.PixelPosition = Vector2.Create(0, 5)
 	ConnectButton.Text = "Connect"
-	ConnectButton.Parent = ConnectionPage
-
-	local ErrorLabel = UserInterface.Label.Create()
-	ErrorLabel.RelativeOrigin = Vector2.Create(0.5, 0)
-	ErrorLabel.RelativeSize = Vector2.Create(0.8, 0.075)
-	ErrorLabel.PixelSize = Vector2.Create(10, 0)
-	ErrorLabel.RelativePosition = Vector2.Create(0.5, 0.65)
-	ErrorLabel.PixelPosition = Vector2.Create(0, 20)
-	ErrorLabel.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
-	ErrorLabel.TextColour = Vector4.Create(1, 0, 0, 1)
-	ErrorLabel.Font = UserInterface.Font.FreeSansBold
-	ErrorLabel.CornerRelativeRadius = 1
-	ErrorLabel.Visible = false
-	ErrorLabel.Parent = ConnectionPage
+	ConnectButton.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	ConnectButton.TextColour = Vector4.One
+	ConnectButton.CornerPixelRadius = 10
+	ConnectButton.Parent = ConnectionPage	
 
 	ConnectButton.Events:Listen("Pressed", function()
-		local host = HostEntry.Text
-		local success, errorMessage = false, "Invalid host"
+		local host, port = string.match(CameraAddressEntry.Text, "([%w_%.]+):(%d+)")
+		
+		local success, errorMessage = false, "Invalid address"
 
-		if #host > 0 then
-			success, errorMessage = appClient:Connect(host, PortEntry.Text, 3)
+		if host then
+			success, errorMessage = appClient:Connect(host, port, 3)
 		end
 
 		if success then
-			ErrorLabel.Visible = false
+			ConnectionErrorLabel.Visible = false
 			AppPages.Page = 2
 		else
-			ErrorLabel.Text = errorMessage.."!"
-			ErrorLabel.Visible = true
+			ConnectionErrorLabel.Text = errorMessage.."!"
+			ConnectionErrorLabel.Visible = true
 		end
 	end)
 
-	local SubPagesFrame = UserInterface.Frame.Create()
-	SubPagesFrame.RelativeSize = Vector2.One
-	SubPagesFrame.BackgroundColour = Vector4.Zero
-	SubPagesFrame.Parent = AppPages
-
-	local SubPages = UserInterface.Pages.Create()
-	SubPages.RelativeSize = Vector2.Create(1, 1)
-	SubPages.BackgroundColour = Vector4.Zero
-	SubPages.Parent = SubPagesFrame
-	
 	local LivestreamPage = UserInterface.Frame.Create()
 	LivestreamPage.RelativeSize = Vector2.One
-	LivestreamPage.Parent = SubPages
+	LivestreamPage.BackgroundColour = Vector4.Zero
+	LivestreamPage.Parent = AppPages
 
-	LivestreamFrame = UserInterface.VideoFrame.Create()
-	LivestreamFrame.RelativeSize = Vector2.Create(1, 1)
-	LivestreamFrame.PixelSize = Vector2.Create(-20, -140)
-	LivestreamFrame.PixelPosition = Vector2.Create(10, 70)
-	LivestreamFrame.CornerRelativeRadius = 0.1
-	LivestreamFrame.BorderThickness = 1
-	LivestreamFrame.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	LivestreamFrame.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
-	LivestreamFrame.Parent = LivestreamPage
+	LivestreamButton = UserInterface.Button.Create()
+	LivestreamButton.AspectRatio = 3
+	LivestreamButton.DominantAxis = Enum.Axis.Y
+	LivestreamButton.RelativeOrigin = Vector2.Create(0.5, 1)
+	LivestreamButton.RelativeSize = Vector2.Create(1, 0)
+	LivestreamButton.PixelSize = Vector2.Create(0, 60)
+	LivestreamButton.RelativePosition = Vector2.Create(0.5, 1)
+	LivestreamButton.PixelPosition = Vector2.Create(0, -20)
+	LivestreamButton.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	LivestreamButton.TextColour = Vector4.One
+	LivestreamButton.BorderThickness = 3
+	LivestreamButton.BorderColour = Vector4.One
+	LivestreamButton.CornerRelativeRadius = 1
+	LivestreamButton.Text = "START"
+	LivestreamButton.Parent = LivestreamPage
 
-	local BottomBarPages = UserInterface.Pages.Create()
-	BottomBarPages.RelativeOrigin = Vector2.Create(0, 1)
-	BottomBarPages.RelativeSize = Vector2.Create(1, 0)
-	BottomBarPages.PixelSize = Vector2.Create(0, 100)
-	BottomBarPages.RelativePosition = Vector2.Create(0, 1)
-	BottomBarPages.PixelPosition = Vector2.Create(0, -10)
-	BottomBarPages.BackgroundColour = Vector4.Zero
-	BottomBarPages.Parent = LivestreamPage
-
-	local ControlFrame = UserInterface.Frame.Create()
-	ControlFrame.RelativeSize = Vector2.One
-	ControlFrame.BackgroundColour = Vector4.Zero
-	ControlFrame.Parent = BottomBarPages
-	
-	local ControlBar = UserInterface.Frame.Create()
-	ControlBar.AspectRatio = 6
-	ControlBar.DominantAxis = Enum.Axis.Y
-	ControlBar.RelativeOrigin = Vector2.Create(0.5, 0)
-	ControlBar.RelativeSize = Vector2.Create(1, 0.5)
-	ControlBar.RelativePosition = Vector2.Create(0.5, 0.5)
-	ControlBar.CornerRelativeRadius = 1
-	ControlBar.BorderThickness = 1
-	ControlBar.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
-	ControlBar.Parent = ControlFrame
-
-	LeftControlButton = UserInterface.Button.Create()
-	LeftControlButton.AspectRatio = 1
-	LeftControlButton.DominantAxis = Enum.Axis.Y
-	LeftControlButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	LeftControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
-	LeftControlButton.RelativePosition = Vector2.Create(1/12, 0.5)
-	LeftControlButton.Text = "<"
-	LeftControlButton.CornerRelativeRadius = 1
-	LeftControlButton.BorderThickness = 1
-	LeftControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	LeftControlButton.Parent = ControlBar
-
-	TrackingControlButton = UserInterface.Button.Create()
-	TrackingControlButton.AspectRatio = 1
-	TrackingControlButton.DominantAxis = Enum.Axis.Y
-	TrackingControlButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	TrackingControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
-	TrackingControlButton.RelativePosition = Vector2.Create(3/12, 0.5)
-	TrackingControlButton.Text = "MT"
-	TrackingControlButton.CornerRelativeRadius = 1
-	TrackingControlButton.BorderThickness = 1
-	TrackingControlButton.BorderColour = Vector4.Create(1, 0, 0, 1)
-	TrackingControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	TrackingControlButton.Parent = ControlBar
-
-	TrackingControlButton.Events:Listen("Pressed", function()
-		motionTracking = not motionTracking
-		TrackingControlButton.BorderColour = motionTracking and Vector4.Create(0, 1, 0, 1) or Vector4.Create(1, 0, 0, 1)
-	end)
-
-	LivestreamControlButton = UserInterface.Button.Create()
-	LivestreamControlButton.AspectRatio = 2.1
-	LivestreamControlButton.DominantAxis = Enum.Axis.Y
-	LivestreamControlButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	LivestreamControlButton.RelativeSize = Vector2.Create(1, 0.8)
-	LivestreamControlButton.RelativePosition = Vector2.Create(0.5, 0.5)
-	LivestreamControlButton.Text = "Start"
-	LivestreamControlButton.CornerRelativeRadius = 1
-	LivestreamControlButton.BorderThickness = 1
-	LivestreamControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	LivestreamControlButton.Parent = ControlBar
-
-	LivestreamControlButton.Events:Listen("Pressed", function()
+	LivestreamButton.Events:Listen("Released", function()
 		if livestreaming then
 			StopLivestream()
 		else
@@ -277,390 +249,99 @@ function love.load()
 		end
 	end)
 
-	CalibrationControlButton = UserInterface.Button.Create()
-	CalibrationControlButton.AspectRatio = 1
-	CalibrationControlButton.DominantAxis = Enum.Axis.Y
-	CalibrationControlButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	CalibrationControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
-	CalibrationControlButton.RelativePosition = Vector2.Create(9/12, 0.5)
-	CalibrationControlButton.Text = "C"
-	CalibrationControlButton.CornerRelativeRadius = 1
-	CalibrationControlButton.BorderThickness = 1
-	CalibrationControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	CalibrationControlButton.Active = false
-	CalibrationControlButton.Parent = ControlBar
+	local RotateLeftButton = UserInterface.Button.Create()
+	RotateLeftButton.AspectRatio = 1
+	RotateLeftButton.DominantAxis = Enum.Axis.Y
+	RotateLeftButton.RelativeOrigin = Vector2.Create(1, 1)
+	RotateLeftButton.RelativeSize = Vector2.Create(1, 0)
+	RotateLeftButton.PixelSize = Vector2.Create(0, 60)
+	RotateLeftButton.RelativePosition = Vector2.Create(0.5, 1)
+	RotateLeftButton.PixelPosition = Vector2.Create(-LivestreamButton.AbsoluteSize.X*0.5 - 10, -20)
+	RotateLeftButton.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	RotateLeftButton.TextColour = Vector4.One
+	RotateLeftButton.BorderThickness = 3
+	RotateLeftButton.BorderColour = Vector4.One
+	RotateLeftButton.CornerRelativeRadius = 1
+	RotateLeftButton.BackgroundImage = Icons.LeftArrow
+	RotateLeftButton.Parent = LivestreamPage
 
-	local calibrationModeAnimation = Animation.Create(
-		LivestreamFrame,
-		"PixelSize",
-		LivestreamFrame.PixelSize,
-		LivestreamFrame.PixelSize - Vector2.Create(0, 50),
-		1,
-		Enum.AnimationType.SharpSmoothStep,
-		false
-	)
-
-	CalibrationControlButton.Events:Listen("Pressed", function()
-		BottomBarPages.Page = 2
-
-		calibrationModeAnimation:Reset()
-		calibrationModeAnimation.Reversed = false
-		calibrationModeAnimation.Playing = true
+	RotateLeftButton.Events:Listen("Released", function()
+		appClient:Send("&IncrementServoAngle:%d!", 10)
 	end)
 
-	local RightControlButton = UserInterface.Button.Create()
-	RightControlButton.AspectRatio = 1
-	RightControlButton.DominantAxis = Enum.Axis.Y
-	RightControlButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	RightControlButton.RelativeSize = Vector2.Create(0.8, 0.8)
-	RightControlButton.RelativePosition = Vector2.Create(11/12, 0.5)
-	RightControlButton.Text = ">"
-	RightControlButton.CornerRelativeRadius = 1
-	RightControlButton.BorderThickness = 1
-	RightControlButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	RightControlButton.Parent = ControlBar
+	local RotateRightButton = UserInterface.Button.Create()
+	RotateRightButton.AspectRatio = 1
+	RotateRightButton.DominantAxis = Enum.Axis.Y
+	RotateRightButton.RelativeOrigin = Vector2.Create(0, 1)
+	RotateRightButton.RelativeSize = Vector2.Create(1, 0)
+	RotateRightButton.PixelSize = Vector2.Create(0, 60)
+	RotateRightButton.RelativePosition = Vector2.Create(0.5, 1)
+	RotateRightButton.PixelPosition = Vector2.Create(LivestreamButton.AbsoluteSize.X*0.5 + 10, -20)
+	RotateRightButton.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	RotateRightButton.TextColour = Vector4.One
+	RotateRightButton.BorderThickness = 3
+	RotateRightButton.BorderColour = Vector4.One
+	RotateRightButton.CornerRelativeRadius = 1
+	RotateRightButton.BackgroundImage = Icons.RightArrow
+	RotateRightButton.Parent = LivestreamPage
 
-	local _CalibrationFrame = UserInterface.Frame.Create()
-	_CalibrationFrame.RelativeSize = Vector2.One
-	_CalibrationFrame.BackgroundColour = Vector4.Zero
-	_CalibrationFrame.Parent = BottomBarPages
-
-	local CalibrationFrame = UserInterface.Frame.Create()
-	CalibrationFrame.RelativeSize = Vector2.Create(1, 0.5)
-	CalibrationFrame.BackgroundColour = Vector4.Zero
-	CalibrationFrame.Parent = _CalibrationFrame
-
-	local CalibrationButtonFrame = UserInterface.Frame.Create()
-	CalibrationButtonFrame.RelativeSize = Vector2.Create(1, 0.5)
-	CalibrationButtonFrame.RelativePosition = Vector2.Create(0, 0.5)
-	CalibrationButtonFrame.BackgroundColour = Vector4.Zero
-	CalibrationButtonFrame.Parent = _CalibrationFrame
-
-	local MotionThresholdTitle = UserInterface.Label.Create()
-	MotionThresholdTitle.RelativeSize = Vector2.Create(0.2, 0.5)
-	MotionThresholdTitle.BackgroundColour = Vector4.Zero
-	MotionThresholdTitle.Text = "Motion Threshold:"
-	MotionThresholdTitle.Parent = CalibrationFrame
-
-	MotionThresholdEntry = UserInterface.NumericTextBox.Create()
-	MotionThresholdEntry.RelativeOrigin = Vector2.Create(0.5, 1)
-	MotionThresholdEntry.RelativeSize = Vector2.Create(0.175, 0.5)
-	MotionThresholdEntry.RelativePosition = Vector2.Create(0.1, 1)
-	MotionThresholdEntry.PlaceholderText = "Enter threshold..."
-	MotionThresholdEntry.Value = 0.12
-	MotionThresholdEntry.Cursor = math.huge
-	MotionThresholdEntry.BorderThickness = 1
-	MotionThresholdEntry.CornerRelativeRadius = 1
-	MotionThresholdEntry.Parent = CalibrationFrame
-
-	local ShapeMinimumAreaTitle = UserInterface.Label.Create()
-	ShapeMinimumAreaTitle.RelativeSize = Vector2.Create(0.2, 0.5)
-	ShapeMinimumAreaTitle.RelativePosition = Vector2.Create(0.2, 0)
-	ShapeMinimumAreaTitle.BackgroundColour = Vector4.Zero
-	ShapeMinimumAreaTitle.Text = "Shape Minimum Area:"
-	ShapeMinimumAreaTitle.Parent = CalibrationFrame
-
-	ShapeMinimumAreaEntry = UserInterface.NumericTextBox.Create()
-	ShapeMinimumAreaEntry.RelativeOrigin = Vector2.Create(0.5, 1)
-	ShapeMinimumAreaEntry.RelativeSize = Vector2.Create(0.175, 0.5)
-	ShapeMinimumAreaEntry.RelativePosition = Vector2.Create(0.3, 1)
-	ShapeMinimumAreaEntry.PlaceholderText = "Enter area..."
-	ShapeMinimumAreaEntry.Value = 0.03
-	ShapeMinimumAreaEntry.Cursor = math.huge
-	ShapeMinimumAreaEntry.BorderThickness = 1
-	ShapeMinimumAreaEntry.CornerRelativeRadius = 1
-	ShapeMinimumAreaEntry.Parent = CalibrationFrame
-
-	local ShapeSearchRadiusTitle = UserInterface.Label.Create()
-	ShapeSearchRadiusTitle.RelativeSize = Vector2.Create(0.2, 0.5)
-	ShapeSearchRadiusTitle.RelativePosition = Vector2.Create(0.4, 0)
-	ShapeSearchRadiusTitle.BackgroundColour = Vector4.Zero
-	ShapeSearchRadiusTitle.Text = "Shape Search Radius:"
-	ShapeSearchRadiusTitle.Parent = CalibrationFrame
-
-	ShapeSearchRadiusEntry = UserInterface.NumericTextBox.Create()
-	ShapeSearchRadiusEntry.RelativeOrigin = Vector2.Create(0.5, 1)
-	ShapeSearchRadiusEntry.RelativeSize = Vector2.Create(0.175, 0.5)
-	ShapeSearchRadiusEntry.RelativePosition = Vector2.Create(0.5, 1)
-	ShapeSearchRadiusEntry.PlaceholderText = "Enter radius..."
-	ShapeSearchRadiusEntry.Value = 7
-	ShapeSearchRadiusEntry.Minimum = 1
-	ShapeSearchRadiusEntry.Maximum = math.huge
-	ShapeSearchRadiusEntry.Cursor = math.huge
-	ShapeSearchRadiusEntry.BorderThickness = 1
-	ShapeSearchRadiusEntry.CornerRelativeRadius = 1
-	ShapeSearchRadiusEntry.Parent = CalibrationFrame
-
-	local AdaptionRateTitle = UserInterface.Label.Create()
-	AdaptionRateTitle.RelativeSize = Vector2.Create(0.2, 0.5)
-	AdaptionRateTitle.RelativePosition = Vector2.Create(0.6, 0)
-	AdaptionRateTitle.BackgroundColour = Vector4.Zero
-	AdaptionRateTitle.Text = "Adaption Rate:"
-	AdaptionRateTitle.Parent = CalibrationFrame
-
-	AdaptionRateEntry = UserInterface.NumericTextBox.Create()
-	AdaptionRateEntry.RelativeOrigin = Vector2.Create(0.5, 1)
-	AdaptionRateEntry.RelativeSize = Vector2.Create(0.175, 0.5)
-	AdaptionRateEntry.RelativePosition = Vector2.Create(0.7, 1)
-	AdaptionRateEntry.PlaceholderText = "Enter rate..."
-	AdaptionRateEntry.Value = 0.1
-	AdaptionRateEntry.Cursor = math.huge
-	AdaptionRateEntry.BorderThickness = 1
-	AdaptionRateEntry.CornerRelativeRadius = 1
-	AdaptionRateEntry.Parent = CalibrationFrame
-
-	local SubdivisionsTitle = UserInterface.Label.Create()
-	SubdivisionsTitle.RelativeSize = Vector2.Create(0.2, 0.5)
-	SubdivisionsTitle.RelativePosition = Vector2.Create(0.8, 0)
-	SubdivisionsTitle.BackgroundColour = Vector4.Zero
-	SubdivisionsTitle.Text = "Subdivisions:"
-	SubdivisionsTitle.Parent = CalibrationFrame
-
-	SubdivisionsEntry = UserInterface.NumericTextBox.Create()
-	SubdivisionsEntry.RelativeOrigin = Vector2.Create(0.5, 1)
-	SubdivisionsEntry.RelativeSize = Vector2.Create(0.175, 0.5)
-	SubdivisionsEntry.RelativePosition = Vector2.Create(0.9, 1)
-	SubdivisionsEntry.PlaceholderText = "Enter subdivisions..."
-	SubdivisionsEntry.Value = 6
-	SubdivisionsEntry.Minimum = 0
-	SubdivisionsEntry.Maximum = math.huge
-	SubdivisionsEntry.Cursor = math.huge
-	SubdivisionsEntry.BorderThickness = 1
-	SubdivisionsEntry.CornerRelativeRadius = 1
-	SubdivisionsEntry.Parent = CalibrationFrame
-
-	local SaveCalibrationButton = UserInterface.Button.Create()
-	SaveCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	SaveCalibrationButton.RelativeSize = Vector2.Create(0.175, 0.5)
-	SaveCalibrationButton.RelativePosition = Vector2.Create(0.3, 0.5)
-	SaveCalibrationButton.Text = "Save"
-	SaveCalibrationButton.BorderThickness = 1
-	SaveCalibrationButton.CornerRelativeRadius = 1
-	SaveCalibrationButton.Parent = CalibrationButtonFrame
-
-	SaveCalibrationButton.Events:Listen("Pressed", function()
-		if calibratingMotionTracking then
-			LivestreamFrame.BackgroundImage = nil
-			LivestreamFrame.VideoVisible = true
-
-			motionTracker.MotionThreshold = MotionThresholdEntry.Value
-			motionTracker.ShapeMinimumArea = ShapeMinimumAreaEntry.Value
-			motionTracker.ShapeSearchRadius = ShapeSearchRadiusEntry.Value
-			motionTracker.AdaptionRate = AdaptionRateEntry.Value
-			motionTracker.Subdivisions = SubdivisionsEntry.Value
-		end
+	RotateRightButton.Events:Listen("Released", function()
+		appClient:Send("&IncrementServoAngle:%d!", 10)
 	end)
 
-	local ResetCalibrationButton = UserInterface.Button.Create()
-	ResetCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	ResetCalibrationButton.RelativeSize = Vector2.Create(0.175, 0.5)
-	ResetCalibrationButton.RelativePosition = Vector2.Create(0.5, 0.5)
-	ResetCalibrationButton.Text = "Reset"
-	ResetCalibrationButton.BorderThickness = 1
-	ResetCalibrationButton.CornerRelativeRadius = 1
-	ResetCalibrationButton.Parent = CalibrationButtonFrame
+	local TrackingToggleButton = UserInterface.ToggleButton.Create()
+	TrackingToggleButton.AspectRatio = 1
+	TrackingToggleButton.DominantAxis = Enum.Axis.Y
+	TrackingToggleButton.RelativeOrigin = Vector2.Create(0, 1)
+	TrackingToggleButton.RelativeSize = Vector2.Create(1, 0)
+	TrackingToggleButton.PixelSize = Vector2.Create(0, 60)
+	TrackingToggleButton.RelativePosition = Vector2.Create(0, 1)
+	TrackingToggleButton.PixelPosition = Vector2.Create(20, -20)
+	TrackingToggleButton.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	TrackingToggleButton.TextColour = Vector4.One
+	TrackingToggleButton.BorderThickness = 3
+	TrackingToggleButton.BorderColour = Vector4.One
+	TrackingToggleButton.CornerRelativeRadius = 1
+	TrackingToggleButton.BackgroundImage = Icons.Anchor
+	TrackingToggleButton.BackgroundImageScale = 0.8
+	TrackingToggleButton.Value = true
+	TrackingToggleButton.Parent = LivestreamPage
 
-	ResetCalibrationButton.Events:Listen("Pressed", function()
-		MotionThresholdEntry.Value = 0.12
-		MotionThresholdEntry.Cursor = math.huge
+	LivestreamFrame = UserInterface.VideoFrame.Create()
+	LivestreamFrame.RelativeSize = Vector2.Create(1, 1)
+	LivestreamFrame.PixelSize = Vector2.Create(0, -TrackingToggleButton.AbsoluteSize.Y - 40)
+	LivestreamFrame.BackgroundImageScaleMode = Enum.ScaleMode.MaintainAspectRatio
+	LivestreamFrame.BackgroundColour = Vector4.Create(0.2, 0.2, 0.2, 1)
+	LivestreamFrame.Parent = LivestreamPage
 
-		ShapeMinimumAreaEntry.Value = 0.03
-		ShapeMinimumAreaEntry.Cursor = math.huge
+	local SettingsPage = UserInterface.ScrollFrame.Create()
+	SettingsPage.RelativeSize = Vector2.One
+	SettingsPage.BackgroundColour = Vector4.Zero
+	SettingsPage.Parent = AppPages
 
-		ShapeSearchRadiusEntry.Value = 7
-		ShapeSearchRadiusEntry.Cursor = math.huge
+	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
+	AppPages:AddTransition(1, 3, Enum.PageTransitionDirection.Left)
 
-		AdaptionRateEntry.Value = 0.1
-		AdaptionRateEntry.Cursor = math.huge
+	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
+	AppPages:AddTransition(2, 3, Enum.PageTransitionDirection.Left)
 
-		SubdivisionsEntry.Value = 6
-		SubdivisionsEntry.Cursor = math.huge
-	end)
+	AppPages:AddTransition(3, 1, Enum.PageTransitionDirection.Right)
+	AppPages:AddTransition(3, 2, Enum.PageTransitionDirection.Right)
 
-	local BackCalibrationButton = UserInterface.Button.Create()
-	BackCalibrationButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	BackCalibrationButton.RelativeSize = Vector2.Create(0.175, 0.5)
-	BackCalibrationButton.RelativePosition = Vector2.Create(0.7, 0.5)
-	BackCalibrationButton.Text = "Back"
-	BackCalibrationButton.BorderThickness = 1
-	BackCalibrationButton.CornerRelativeRadius = 1
-	BackCalibrationButton.Parent = CalibrationButtonFrame
-
-	BackCalibrationButton.Events:Listen("Pressed", function()
-		BottomBarPages.Page = 1
-
-		calibrationModeAnimation:Reset()
-		calibrationModeAnimation.Reversed = true
-		calibrationModeAnimation.Playing = true
-	end)
-
-	NoMotionLabel = UserInterface.Label.Create()
-	NoMotionLabel.AspectRatio = 5
-	NoMotionLabel.DominantAxis = Enum.Axis.Y
-	NoMotionLabel.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	NoMotionLabel.RelativeSize = Vector2.Create(1, 0.1)
-	NoMotionLabel.RelativePosition = Vector2.Create(0.5, 0.5)
-	NoMotionLabel.Text = "No Motion"
-	NoMotionLabel.TextColour = Vector4.Create(1, 0, 0, 1)
-	NoMotionLabel.Font = UserInterface.Font.FreeSansBold
-	NoMotionLabel.CornerRelativeRadius = 1
-	NoMotionLabel.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.5)
-	NoMotionLabel.BorderThickness = 1
-	NoMotionLabel.Visible = false
-	NoMotionLabel.Parent = LivestreamFrame
-
-	MotionMaskButton = UserInterface.Button.Create()
-	MotionMaskButton.AspectRatio = 1
-	MotionMaskButton.DominantAxis = Enum.Axis.Y
-	MotionMaskButton.RelativeOrigin = Vector2.Create(1, 0)
-	MotionMaskButton.RelativeSize = Vector2.Create(1, 0.08)
-	MotionMaskButton.RelativePosition = Vector2.Create(1, 0)
-	MotionMaskButton.PixelPosition = Vector2.Create(-10, 10)
-	MotionMaskButton.Text = "MM"
-	MotionMaskButton.CornerRelativeRadius = 1
-	MotionMaskButton.BorderThickness = 1
-	MotionMaskButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	MotionMaskButton.Visible = false
-	MotionMaskButton.Parent = LivestreamFrame
-
-	MotionMaskButton.Events:Listen("Pressed", function()
-		LivestreamFrame.BackgroundImage = motionTracker.MotionMask
-		LivestreamFrame.VideoVisible = not LivestreamFrame.VideoVisible
-	end)
-
-	BackgroundButton = UserInterface.Button.Create()
-	BackgroundButton.AspectRatio = 1
-	BackgroundButton.DominantAxis = Enum.Axis.Y
-	BackgroundButton.RelativeOrigin = Vector2.Create(1, 1)
-	BackgroundButton.RelativeSize = Vector2.Create(1, 0.08)
-	BackgroundButton.RelativePosition = Vector2.Create(1, 1)
-	BackgroundButton.PixelPosition = Vector2.Create(-10, -10)
-	BackgroundButton.Text = "B"
-	BackgroundButton.CornerRelativeRadius = 1
-	BackgroundButton.BorderThickness = 1
-	BackgroundButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	BackgroundButton.Visible = false
-	BackgroundButton.Parent = LivestreamFrame
-
-	BackgroundButton.Events:Listen("Pressed", function()
-		LivestreamFrame.BackgroundImage = motionTracker.Background
-		LivestreamFrame.VideoVisible = not LivestreamFrame.VideoVisible
-	end)
-
-	BottomBarPages.Events:Listen("PageSwitching", function(_, _, from, to, switched)
-		if livestreaming then
-			LivestreamFrame.VideoVisible = true
-			
-			if to == 2 then
-				if switched then
-					calibratingMotionTracking = true
-					MotionMaskButton.Visible = true
-					BackgroundButton.Visible = true
-				end
-			elseif from == 2 then
-				if not switched then
-					calibratingMotionTracking = false
-					MotionMaskButton.Visible = false
-					BackgroundButton.Visible = false
-				end
+	AppPages.Events:Listen("PageSwitching", function(_, _, from, to, switched)
+		if switched then
+			if to == 1 then
+				TitleLabel.Text = "Connection Details:"
+			elseif to == 2 then
+				TitleLabel.Text = "Livestream:"
+			else
+				TitleLabel.Text = "Settings:"
 			end
 		end
 	end)
 
-	BottomBarPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
-	BottomBarPages:AddTransition(2, 1, Enum.PageTransitionDirection.Right)
-
-	local SettingsPage = UserInterface.Frame.Create()
-	SettingsPage.RelativeSize = Vector2.One
-	SettingsPage.Parent = SubPages
-
-	local TopBar = UserInterface.Button.Create()
-	TopBar.RelativeOrigin = Vector2.Create(0.5, 0)
-	TopBar.PixelSize = Vector2.Create(420, 50)
-	TopBar.RelativePosition = Vector2.Create(0.5, 0)
-	TopBar.PixelPosition = Vector2.Create(0, 10)
-	TopBar.CornerRelativeRadius = 1
-	TopBar.BorderThickness = 1
-	TopBar.BackgroundColour = Vector4.Create(0, 0, 0, 0.2)
-	TopBar.FocusedBackgroundColour = TopBar.BackgroundColour
-	TopBar.HoveringBackgroundColour = TopBar.BackgroundColour
-	TopBar.PressedBackgroundColour = TopBar.BackgroundColour
-	TopBar.InactiveOverlayColour = TopBar.BackgroundColour
-	TopBar.Parent = SubPagesFrame
-
-	local LivestreamPageButton = UserInterface.Button.Create()
-	LivestreamPageButton.RelativeOrigin = Vector2.Create(0, 0.5)
-	LivestreamPageButton.RelativeSize = Vector2.Create(0.27, 0.8)
-	LivestreamPageButton.RelativePosition = Vector2.Create(0.02, 0.5)
-	LivestreamPageButton.Text = "Livestream"
-	LivestreamPageButton.CornerRelativeRadius = 1
-	LivestreamPageButton.BorderThickness = 1
-	LivestreamPageButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	LivestreamPageButton.Parent = TopBar
-
-	LivestreamPageButton.Events:Listen("Pressed", function()
-		SubPages.Page = 1
-	end)
-
-	local SettingsPageButton = UserInterface.Button.Create()
-	SettingsPageButton.RelativeOrigin = Vector2.Create(1, 0.5)
-	SettingsPageButton.RelativeSize = Vector2.Create(0.27, 0.8)
-	SettingsPageButton.RelativePosition = Vector2.Create(0.86, 0.5)
-	SettingsPageButton.Text = "Settings"
-	SettingsPageButton.CornerRelativeRadius = 1
-	SettingsPageButton.BorderThickness = 1
-	SettingsPageButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	SettingsPageButton.Parent = TopBar
-
-	SettingsPageButton.Events:Listen("Pressed", function()
-		SubPages.Page = 2
-	end)
-
-	local DisconnectButton = UserInterface.Button.Create()
-	DisconnectButton.AspectRatio = 1
-	DisconnectButton.DominantAxis = Enum.Axis.Y
-	DisconnectButton.RelativeOrigin = Vector2.Create(1, 0.5)
-	DisconnectButton.RelativeSize = Vector2.Create(0.8, 0.8)
-	DisconnectButton.RelativePosition = Vector2.Create(0.98, 0.5)
-	DisconnectButton.Text = "X"
-	DisconnectButton.CornerRelativeRadius = 1
-	DisconnectButton.BorderThickness = 1
-	DisconnectButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	DisconnectButton.Parent = TopBar
-
-	DisconnectButton.Events:Listen("Pressed", function()
-		StopLivestream()
-
-		appClient:Disconnect()
-
-		AppPages.Page = 1
-	end)
-
-	local SettingsScrollFrame = UserInterface.ScrollFrame.Create()
-	SettingsScrollFrame.RelativeSize = Vector2.Create(1, 1)
-	SettingsScrollFrame.PixelSize = Vector2.Create(-20, -80)
-	SettingsScrollFrame.PixelPosition = Vector2.Create(10, 70)
-	SettingsScrollFrame.BorderThickness = 1
-	SettingsScrollFrame.CornerRelativeRadius = 0.1
-	SettingsScrollFrame.BackgroundColour = Vector4.One
-	SettingsScrollFrame.Parent = SettingsPage
-
-	SubPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
-	SubPages:AddTransition(2, 1, Enum.PageTransitionDirection.Right)
-
-	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
-	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
-
-	FPSLabel = UserInterface.Label.Create()
-	FPSLabel.PixelSize = Vector2.Create(100, 50)
-	FPSLabel.BackgroundColour = Vector4.Zero
-	FPSLabel.Parent = Root
-
 	appClient.Events:Listen("Disconnected", function()
 		StopLivestream()
-
-		motionTracking = false
-		TrackingControlButton.BorderColour = Vector4.Create(1, 0, 0, 1)
 
 		AppPages.Page = 1
 	end)
@@ -674,50 +355,19 @@ end
 
 function love.update(deltaTime)
 	appClient:Update()
-
-	FPSLabel.Text = string.format("FPS: %d", love.timer.getFPS())
-	
-	NoMotionLabel.Visible = motionTracker and #motionTracker.MotionShapes == 0
 end
 
 function love.draw()
-	UserInterface.Draw()
-
 	if livestreaming then
 		if LivestreamFrame.FrameChanged then
-			motionTracker:Update(LivestreamFrame.Video.Frame)
+			tracker:Update(LivestreamFrame.Video.Frame)
 		end
 
-		if calibratingMotionTracking then
-			local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
-			local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
-
-			love.graphics.setLineWidth(3)
-
-			for index, shape in pairs(motionTracker.MotionShapes) do
-				local topLeft, bottomRight = unpack(shape)
-				
-				if shape == motionTracker.LargestMotionShape then
-					love.graphics.setColor(0, 0, 1, 1)
-				else
-					love.graphics.setColor(0, 1, 0, 1)
-				end
-
-				love.graphics.rectangle(
-					"line",
-					absolutePosition.X + absoluteSize.X*topLeft.X,
-					absolutePosition.Y + absoluteSize.Y*topLeft.Y,
-					absoluteSize.X*(bottomRight.X - topLeft.X),
-					absoluteSize.Y*(bottomRight.Y - topLeft.Y)
-				)
-			end
-		end
-
-		if motionTracking then
-			local trackingShape = motionTracker.LargestMotionShape
+		if tracker then
+			local trackingShape = tracker.LargestMotionShape
 
 			if trackingShape then
-				appClient:Send({{"IncrementServoAngle", (trackingShape[1].X + trackingShape[2].X - 1)*30}})
+				appClient:Send("&IncrementServoAngle:%d!", 30*(trackingShape[1].X + trackingShape[2].X - 1))
 			end
 		end
 	end
@@ -728,5 +378,21 @@ function love.quit(exitCode)
 	
 	appClient:Destroy()
 
+	for index, shader in pairs(Shaders) do
+		Shaders[index] = nil
+		shader:release()
+	end
+
+	Shaders = nil
+
+	for index, image in pairs(Icons) do
+		Icons[index] = nil
+		image:release()
+	end
+
+	Icons = nil
+
 	VideoReader.Deinitialize()
+
+	Log.Info("Client", "Client stopping")
 end

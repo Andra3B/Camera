@@ -6,7 +6,7 @@ local function NewIndexMetamethod(self, name, value)
 	if setter then
 		local set, setValue = setter(self, value)
 
-		if set then
+		if set and not self._Destroyed then
 			self._Events:Trigger(name.."Changed", setValue)
 
 			if self._Parent then
@@ -198,13 +198,12 @@ function Object:Destroy()
 			table.remove(self._Children, index)
 			child:Destroy()
 		end
-		
-		self.Parent = nil
+
+		self._Parent = nil
 
 		self._Events:Trigger("Destroyed")
-		
 		self._Events:Destroy()
-
+		
 		Entity.Destroy(self)
 	end
 end

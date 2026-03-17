@@ -5,9 +5,43 @@ local NetworkClient = {}
 function NetworkClient.Create(clientSocket, connected)
 	local self = Class.CreateInstance(NetworkController.Create(clientSocket), NetworkClient)
 
+	self._LastInteractionTime = socket.gettime()
+	self._LastPingTime = 0
+
+	self._PingPeriod = 1
+	self._IdleTime = 3
+
 	self._Connected = connected
 
 	return self
+end
+
+function NetworkClient:GetPingPeriod()
+	return self._PingPeriod
+end
+
+function NetworkClient:SetPingPeriod(period)
+	period = math.max(0, period)
+
+	if period ~= self._PingPeriod then
+		self._PingPeriod = period
+
+		return true, period
+	end
+end
+
+function NetworkClient:GetIdleTime()
+	return self._IdleTime
+end
+
+function NetworkClient:SetIdleTime(time)
+	time = math.max(0, time)
+
+	if time ~= self._IdleTime then
+		self._IdleTime = time
+
+		return true, time
+	end
 end
 
 function NetworkClient:Connect(ipAddress, port, timeout)
@@ -25,13 +59,16 @@ function NetworkClient:Connect(ipAddress, port, timeout)
 			errorMessage = "Invalid port"
 		end
 	else
-		errorMessage = "Invalid IP Address"
+		errorMessage = "Invalid IP address"
 	end
 
 	if success == 1 then
 		self._Connected = true
 		
-		self:Send({{"Connected"}})
+		self:Send("&Connected!")
+
+		self._LastInteractionTime = socket.gettime()
+		self._LastPingTime = 0
 
 		return true
 	else
@@ -46,9 +83,9 @@ function NetworkClient:Disconnect()
 		if self._Parent then
 			self._Parent.Events:Trigger("Disconnected", self)
 		end
-
-		self:Send({{"Disconnected"}})
 		
+		self:Send("&Disconnect!")
+
 		self._Socket:close()
 		self._Socket = socket.tcp()
 		self._Socket:settimeout(0)
@@ -67,77 +104,94 @@ end
 
 function NetworkClient:Update()
 	NetworkController.Update(self)
-
+	
 	if self._Connected then
-		local commands = nil
-		local data = buffer.new()
-		local retries = 0
-		local errorMessage = "Retry limit reached"
+		local now = socket.gettime()
 
-		while retries <= self._Retries do
-			local partialData, partialErrorMessage = self._Socket:receive("*l")
-			
-			if partialErrorMessage == "closed" then
-				self:Disconnect()
-			elseif partialData then
-				data:put(partialData)
+		if now - self._LastPingTime >= self._PingPeriod then
+			self:Send("Ping")
 
-				commands = NetworkController.GetCommandsFromString(data:tostring())
-
-				if commands then
-					break
-				end
-			else
-				errorMessage = partialErrorMessage
-
-				break
-			end
-
-			retries = retries + 1
+			self._LastPingTime = now
 		end
 
-		if #data > 0 then
-			if commands then
-				for _, command in ipairs(commands) do
-					if command[1] == "Disconnected" then
-						self:Disconnect()
+		if now - self._LastInteractionTime <= self._IdleTime then
+			local commands = nil
+			local data = buffer.new()
+			local retries = 0
+			local errorMessage = "Retry limit reached"
 
-						break
-					else
-						self._Events:Push(command[1], select(2, unpack(command)))
-							
-						if self._Parent then
-							self._Parent.Events:Push(command[1], self, select(2, unpack(command)))
+			while retries <= self._Retries do
+				local partialData, partialErrorMessage = self._Socket:receive("*l")
+
+				if partialData then
+					self._LastInteractionTime = now
+					self._LastPingTime = now
+
+					if partialData == "Ping" then
+						self:Send("Pong")
+					elseif partialData ~= "Pong" then
+						data:put(partialData)
+
+						commands = NetworkController.GetCommandsFromString(data:tostring())
+						
+						if commands then
+							break
 						end
 					end
+				else
+					errorMessage = partialErrorMessage
+					
+					break
 				end
-			else
-				local sourceIPAddress, sourcePort = self:GetLocalDetails()
-				local remoteIPAddress, remotePort = self:GetRemoteDetails()
 
-				Log.Error(
-					"Network",
-					"%s:%s failed to read valid data from %s:%s! %s",
-					sourceIPAddress, sourcePort,
-					remoteIPAddress, remotePort,
-					errorMessage
-				)
+				retries = retries + 1
 			end
-		end
+			
+			if #data > 0 then
+				if commands then
+					for _, command in ipairs(commands) do
+						if command[1] == "Disconnect" then
+							self:Disconnect()
 
-		data:free()
+							break
+						else
+							self._Events:Push(command[1], select(2, unpack(command)))
+									
+							if self._Parent then
+								self._Parent.Events:Push(command[1], self, select(2, unpack(command)))
+							end
+						end
+					end
+				else
+					local sourceIPAddress, sourcePort = self:GetLocalDetails()
+					local remoteIPAddress, remotePort = self:GetRemoteDetails()
+
+					Log.Error(
+						"Network",
+						"%s:%s failed to read valid data from %s:%s! %s",
+						sourceIPAddress, sourcePort,
+						remoteIPAddress, remotePort,
+						errorMessage
+					)
+				end
+			end
+
+			data:free()
+		else
+			self:Disconnect()
+		end
 	end
 end
 
-function NetworkClient:Send(commands)
+function NetworkClient:Send(message, ...)
 	if self._Connected then
-		local commandsString = " "..NetworkController.GetStringFromCommands(commands).."\n"
+		message = " "..string.format(message, ...).."\n"
 
 		local lastByteSent = 1
 		local errorMessage
 
-		while lastByteSent < #commandsString do
-			lastByteSent, errorMessage = self._Socket:send(commandsString, lastByteSent + 1)
+		while lastByteSent < #message do
+			lastByteSent, errorMessage = self._Socket:send(message, lastByteSent + 1)
 
 			if not lastByteSent then
 				return false, errorMessage

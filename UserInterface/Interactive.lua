@@ -1,5 +1,7 @@
 local BASE_CLASS = ...
-if not BASE_CLASS then error("Failed to create interative! BASE_CLASS not defined.", 2) end
+if not BASE_CLASS then
+	error("Failed to create interative! BASE_CLASS not defined.", 2)
+end
 
 local Interactive = {}
 
@@ -10,9 +12,9 @@ function Interactive.Create()
 
 	self._CanFocus = true
 
-	self._FocusedBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
-	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 1)
-	self._HoveringBackgroundColour = Vector4.Create(0.9, 0.9, 0.9, 1)
+	self._FocusedBackgroundColour = nil
+	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 0.3)
+	self._HoveringBackgroundColour = Vector4.Create(1, 1, 1, 0.2)
 	self._InactiveOverlayColour = Vector4.Create(0.9, 0.9, 0.9, 0.8)
 
 	return self

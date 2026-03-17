@@ -12,7 +12,7 @@ if jit.os == "Windows" then
 	function StartLivestream(from, port)
 		StopLivestream()
 
-		os.execute([[start /B ffmpeg -fflags nobuffer -flags low_delay -f dshow -video_size 1280x720 -framerate 30 -i video="Integrated Camera" -an -f mpegts -muxdelay 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=16384&overrun_nonfatal=1"]])
+		os.execute([[start /B ffmpeg -f dshow -video_size 1280x720 -framerate 30 -i video="Integrated Camera" -an -flags low_delay -bf 0 -g 30 -keyint_min 30 -b:v 4M -maxrate 4M -bufsize 1M -fflags flush_packets -flush_packets 1 -muxdelay 0 -f mpegts "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=262144&overrun_nonfatal=1"]])
 	end
 
 	function StopLivestream()
@@ -51,7 +51,7 @@ function love.load()
 			function StartLivestream(from, port)
 				StopLivestream()
 
-				os.execute([[start /B ffmpeg -re -stream_loop -1 -i "Assets/Videos/Cars.mp4" -an -f mpegts -muxdelay 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=8192&overrun_nonfatal=1"]])
+				os.execute([[start /B ffmpeg -re -stream_loop -1 -i "Assets/Videos/Cars.mp4" -an -flags low_delay -bf 0 -g 30 -keyint_min 30 -b:v 4M -maxrate 4M -bufsize 1M -fflags flush_packets -flush_packets 1 -muxdelay 0 -f mpegts "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=262144&overrun_nonfatal=1"]])
 			end
 		end
 	elseif jit.os == "Linux" then
@@ -85,8 +85,8 @@ function love.load()
 
 	appServer:Listen()
 
-	Log.Info("Camera", "Camera ready")
 	Log.Info("Camera", "Camera listening for clients on %s:%d", appServer:GetLocalDetails())
+	Log.Info("Camera", "Camera ready")
 end
 
 function love.update(deltaTime)
