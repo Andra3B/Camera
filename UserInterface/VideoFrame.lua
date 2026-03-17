@@ -11,9 +11,7 @@ function VideoFrame.Create()
 	self._Playing = false
 	self._Looping = false
 
-	self._RenderTimeTolerance = 0.03
-
-	self._FrameChanged = false
+	self._FrameUpdated = false
 
 	self._Events:Listen("VideoVisibleChanged", VideoFrame.RefreshBackgroundImageAbsoluteValues)
 	self._Events:Listen("VideoChanged", VideoFrame.RefreshBackgroundImageAbsoluteValues)
@@ -25,24 +23,17 @@ function VideoFrame:Update(deltaTime)
 	Frame.Update(self, deltaTime)
 
 	local video = self._Video
+
 	if video and self._Playing then
-		local now = love.timer.getTime()
-		local videoDeltaTime = video.Time - now + (video.FrameReferenceTime or now)
-		
-		if videoDeltaTime < -self._RenderTimeTolerance then
-			video:Update(true)
-		elseif videoDeltaTime <= self._RenderTimeTolerance then
-			video:Update(false)
-			self._FrameChanged = true
-		end
+		self._FrameUpdated = video:Update()
 	end
 end
 
-function VideoFrame:GetFrameChanged()
-	local changed = self._FrameChanged
-	self._FrameChanged = false
+function VideoFrame:GetFrameUpdated()
+	local updated = self._FrameUpdated
+	self._FrameUpdated = false
 
-	return changed
+	return updated
 end
 
 function VideoFrame:GetBackgroundImage()
@@ -82,10 +73,6 @@ end
 function VideoFrame:SetPlaying(playing)
 	if playing ~= self._Playing then
 		self._Playing = playing
-
-		if self._Video then
-			self._Video.FrameReferenceTime = nil
-		end
 
 		return true, playing
 	end

@@ -2,13 +2,13 @@ local Frame = require("UserInterface.Frame")
 
 local Label = {}
 
-function Label.Create()
-	local self = Class.CreateInstance(Frame.Create(), Label)
+function Label.Create(label)
+	local self = Class.CreateInstance(Frame.Create(label), Label)
 	
 	self._Font = UserInterface.Font.Default
 
 	self._Text = ""
-	self._TextObject = love.graphics.newText(self._Font:GetFont(12), "")
+	self._TextObject = love.graphics.newText(self._Font:GetFont(0), "")
 
 	self._TextColour = Vector4.Create(0, 0, 0, 1)
 
@@ -22,6 +22,18 @@ function Label.Create()
 
 	self._TextRelativeOrigin = Vector2.Create(0.5, 0.5)
 	self._TextPixelOrigin = Vector2.Zero
+
+	self._ScaleToFitText = false
+	
+	self._Events:GetListener("ParentChanged", 2).Callback = Label.RefreshAbsoluteSize
+	self._Events:GetListener("ParentAbsoluteSizeChanged", 2).Callback = Label.RefreshAbsoluteSize
+	self._Events:GetListener("RelativeSizeChanged", 1).Callback = Label.RefreshAbsoluteSize
+	self._Events:GetListener("PixelSizeChanged", 1).Callback = Label.RefreshAbsoluteSize
+	self._Events:GetListener("DominantAxisChanged", 1).Callback = Label.RefreshAbsoluteSize
+	self._Events:GetListener("AspectRatioChanged", 1).Callback = Label.RefreshAbsoluteSize
+	self._Events:Listen("ScaleToFitTextChanged", Label.RefreshAbsoluteSize)
+	self._Events:Listen("TextObjectChanged", Label.RefreshAbsoluteSize)
+	self._Events:Listen("TextAbsolutePositionChanged", Label.RefreshAbsoluteSize)
 
 	self._Events:Listen("FontChanged", Label.RefreshTextObject)
 	self._Events:Listen("TextChanged", Label.RefreshTextObject)
@@ -38,7 +50,36 @@ function Label.Create()
 	self._Events:Listen("TextPixelSizeChanged", Label.RefreshTextAbsoluteSize)
 	self._Events:Listen("AbsoluteSizeChanged", Label.RefreshTextAbsoluteSize)
 
+	if label then
+		self.Font = label.Font
+
+		if #label.Text > 0 then
+			self.Text = label.Text
+		end
+
+		self.TextColour = label.TextColour
+
+		self.TextRelativePosition = label.TextRelativePosition
+		self.TextPixelPosition = label.TextPixelPosition
+
+		self.TextRelativeSize = label.TextRelativeSize
+		self.TextPixelSize = label.TextPixelSize
+
+		self.TextRelativeOrigin = label.TextRelativeOrigin
+		self.TextPixelOrigin = label.TextPixelOrigin
+
+		self.ScaleToFitText = label.ScaleToFitText
+	end
+
 	return self
+end
+
+function Label:RefreshAbsoluteSize()
+	if self._ScaleToFitText then
+		self.AbsoluteSize = Vector2.Create(self._TextObject:getDimensions()) + self._TextAbsolutePosition
+	else
+		Frame.RefreshAbsoluteSize(self)
+	end
 end
 
 function Label:RefreshTextObject()
@@ -215,6 +256,22 @@ function Label:SetTextColour(colour)
 		self._TextColour = colour
 
 		return true, colour
+	end
+end
+
+function Label:GetScaleToFitText()
+	return self._ScaleToFitText
+end
+
+function Label:SetScaleToFitText(scale)
+	if scale ~= self._ScaleToFitText then
+		self._ScaleToFitText = scale
+
+		self.TextRelativePosition = Vector2.Zero
+		self.TextRelativeSize = 0
+		self.TextRelativeOrigin = Vector2.Zero
+
+		return true, scale
 	end
 end
 

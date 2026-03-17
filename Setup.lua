@@ -39,6 +39,7 @@ math.sign = function(value)
 	end
 end
 
+bit = require("bit")
 ffi = require("ffi")
 buffer = require("string.buffer")
 

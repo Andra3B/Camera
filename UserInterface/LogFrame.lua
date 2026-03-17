@@ -6,23 +6,29 @@ local function OnLogTextObjectChanged(self, _, textObject)
 	self.PixelSize = Vector2.Create(textObject:getDimensions()) + self.TextPixelPosition
 end
 
-function LogFrame.Create()
-	local self = Class.CreateInstance(ScrollFrame.Create(), LogFrame)
+function LogFrame.Create(logFrame)
+	local self = Class.CreateInstance(ScrollFrame.Create(logFrame), LogFrame)
 
 	self._Capacity = 50
 
-	self._Logs = UserInterface.Label.Create()
-	self._Logs.BackgroundColour = Vector4.Zero
-	self._Logs.TextRelativeSize = 0
-	self._Logs.TextPixelSize = 20
-	self._Logs.TextRelativeOrigin = Vector2.Zero
-	self._Logs.TextRelativePosition = Vector2.Zero
-	self._Logs.TextPixelPosition = Vector2.Create(10, 10)
+	if logFrame then
+		self.Capacity = logFrame.Capacity
+
+		self._Logs = UserInterface.Label.Create(logFrame.Logs)
+	else
+		self._Logs = UserInterface.Label.Create()
+		self._Logs.BackgroundColour = Vector4.Zero
+		self._Logs.TextRelativeSize = 0
+		self._Logs.TextPixelSize = 20
+		self._Logs.TextRelativeOrigin = Vector2.Zero
+		self._Logs.TextRelativePosition = Vector2.Zero
+		self._Logs.TextPixelPosition = Vector2.Create(10, 10)
+	end
 
 	self._Logs.Parent = self._Container
 
 	self._Logs.Events:Listen("TextObjectChanged", OnLogTextObjectChanged)
-	
+
 	return self
 end
 

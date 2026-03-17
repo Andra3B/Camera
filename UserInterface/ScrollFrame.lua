@@ -14,7 +14,7 @@ local function ScrollFrameInput(self, _, inputType, scancode, state)
 	end
 end
 
-local function VerticalScrollBarInput(self, _, inputType, scancode, state)
+local function VerticalScrollBarInput(_, self, inputType, scancode, state)
 	if scancode == "leftmousebutton" then
 		if state.Z < 0 then
 			self._VerticalDragOffset = state.Y - self._VerticalScrollBar.AbsolutePosition.Y
@@ -37,7 +37,7 @@ local function VerticalScrollBarInput(self, _, inputType, scancode, state)
 	end
 end
 
-local function HorizontalScrollBarInput(self, _, inputType, scancode, state)
+local function HorizontalScrollBarInput(_, self, inputType, scancode, state)
 	if scancode == "leftmousebutton" then
 		if state.Z < 0 then
 			self._HorizontalDragOffset = state.X - self._HorizontalScrollBar.AbsolutePosition.X
@@ -61,55 +61,71 @@ local function HorizontalScrollBarInput(self, _, inputType, scancode, state)
 	end
 end
 
-function ScrollFrame.Create()
-	local self = Class.CreateInstance(Interactive.Create(), ScrollFrame)
+function ScrollFrame.Create(scrollFrame)
+	local self = Class.CreateInstance(Interactive.Create(scrollFrame), ScrollFrame)
 
 	self._CanFocus = false
 	self._FocusedBackgroundColour = nil
 	self._HoveringBackgroundColour = nil
 	self._PressedBackgroundColour = nil
 
-	self._Container = UserInterface.Frame.Create()
-	self._Container.RelativeSize = Vector2.One
-	self._Container.BackgroundColour = Vector4.Zero
+	if scrollFrame then
+		self.CanFocus = scrollFrame.CanFocus
+		self.FocusedBackgroundColour = scrollFrame.FocusedBackgroundColour
+		self.HoveringBackgroundColour = scrollFrame.HoveringBackgroundColour
+		self.PressedBackgroundColour = scrollFrame.PressedBackgroundColour
 
-	self._Overlay = UserInterface.Frame.Create()
-	self._Overlay.RelativeSize = Vector2.One
-	self._Overlay.BackgroundColour = Vector4.Zero
+		self._Container = UserInterface.Frame.Create(scrollFrame.Container)
 
-	self._VerticalScrollBar = UserInterface.Button.Create()
-	self._VerticalScrollBar.RelativeOrigin = Vector2.Create(1, 0)
-	self._VerticalScrollBar.PixelSize = Vector2.Create(10, 0)
-	self._VerticalScrollBar.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
-	self._VerticalScrollBar.FocusedBackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
-	self._VerticalScrollBar.HoveringBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
-	self._VerticalScrollBar.PressedBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
-	self._VerticalScrollBar.CornerRelativeRadius = 1
-	self._VerticalScrollBar.CanFocus = true
-	self._VerticalScrollBar.Visible = false
-	self._VerticalScrollBar.Parent = self._Overlay
+		self._Overlay = UserInterface.Frame.Create(scrollFrame.Overlay)
 
-	self._HorizontalScrollBar = UserInterface.Button.Create()
-	self._HorizontalScrollBar.RelativeOrigin = Vector2.Create(0, 1)
-	self._HorizontalScrollBar.PixelSize = Vector2.Create(0, 10)
-	self._HorizontalScrollBar.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
-	self._HorizontalScrollBar.FocusedBackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
-	self._HorizontalScrollBar.HoveringBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
-	self._HorizontalScrollBar.PressedBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
-	self._HorizontalScrollBar.CornerRelativeRadius = 1
-	self._HorizontalScrollBar.CanFocus = true
-	self._HorizontalScrollBar.Visible = false
-	self._HorizontalScrollBar.Parent = self._Overlay
+		self._VerticalScrollBar = UserInterface.Button.Create(scrollFrame.VerticalScrollBar)
+		
+		self._HorizontalScrollBar = UserInterface.Button.Create(scrollFrame.HorizontalScrollBar)
+	else
+		self._Container = UserInterface.Frame.Create()
+		self._Container.RelativeSize = Vector2.One
+		self._Container.BackgroundColour = Vector4.Zero
+	
+		self._Overlay = UserInterface.Frame.Create()
+		self._Overlay.RelativeSize = Vector2.One
+		self._Overlay.BackgroundColour = Vector4.Zero
+	
+		self._VerticalScrollBar = UserInterface.Button.Create()
+		self._VerticalScrollBar.RelativeOrigin = Vector2.Create(1, 0)
+		self._VerticalScrollBar.PixelSize = Vector2.Create(10, 0)
+		self._VerticalScrollBar.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
+		self._VerticalScrollBar.FocusedBackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
+		self._VerticalScrollBar.HoveringBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
+		self._VerticalScrollBar.PressedBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
+		self._VerticalScrollBar.CornerRelativeRadius = 1
+		self._VerticalScrollBar.CanFocus = true
+		self._VerticalScrollBar.Visible = false
+	
+		self._HorizontalScrollBar = UserInterface.Button.Create()
+		self._HorizontalScrollBar.RelativeOrigin = Vector2.Create(0, 1)
+		self._HorizontalScrollBar.PixelSize = Vector2.Create(0, 10)
+		self._HorizontalScrollBar.BackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
+		self._HorizontalScrollBar.FocusedBackgroundColour = Vector4.Create(0.6, 0.6, 0.6, 0.8)
+		self._HorizontalScrollBar.HoveringBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
+		self._HorizontalScrollBar.PressedBackgroundColour = Vector4.Create(0.8, 0.8, 0.8, 0.8)
+		self._HorizontalScrollBar.CornerRelativeRadius = 1
+		self._HorizontalScrollBar.CanFocus = true
+		self._HorizontalScrollBar.Visible = false
+	end
 
 	self._VerticalDragOffset = nil
 	self._HorizontalDragOffset = nil
+
+	self._VerticalScrollBar.Parent = self._Overlay
+	self._HorizontalScrollBar.Parent = self._Overlay
 
 	self._Container.Parent = self
 	self._Overlay.Parent = self
 
 	self._Events:Listen("Input", ScrollFrameInput)
-	self._VerticalScrollBar._Events:Listen("Input", VerticalScrollBarInput)
-	self._HorizontalScrollBar._Events:Listen("Input", HorizontalScrollBarInput)
+	self._VerticalScrollBar._Events:Listen("Input", VerticalScrollBarInput, self)
+	self._HorizontalScrollBar._Events:Listen("Input", HorizontalScrollBarInput, self)
 
 	return self
 end

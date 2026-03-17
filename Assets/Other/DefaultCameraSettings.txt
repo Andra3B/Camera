@@ -1,0 +1,39 @@
+[Camera]
+[[Servo]]
+&AngleControlCoefficient:Number,Enter coefficient,5,180,50!
+[[[Sets the servo angle control coefficient (in degrees).]]]
+[[[Default: 30]]]
+
+&AngularSpeed:Number,Enter speed,10,500,50!
+[[[Sets the angular speed of the servo (in degrees per second).]]]
+[[[Default: 50]]]
+
+[[Tracking]]
+&MotionThreshold:Number,Enter threshold,0,1,0.12!
+[[[Sets the tracking motion threshold.]]]
+[[[Default: 0.12]]]
+
+&ShapeMinimumArea:Number,Enter area,0,1,0.03!
+[[[Sets the minimum motion shape area that is considered for tracking.]]]
+[[[Default: 0.03]]]
+
+&ShapeSearchRadius:Number,Enter radius,1,20,7!
+[[[Sets the radius for merging of motion shapes motion for tracking.]]]
+[[[Default: 5]]]
+
+&AdaptionRate:Number,Enter rate,0,1,0.1!
+[[[Sets the background adaption rate for tracking.]]]
+[[[Default: 0.1]]]
+	
+&Subdivisions:Number,Enter subdivisions,0,20,5!
+[[[Sets the number of subdivisions of the motion mask for tracking.]]]
+[[[Default: 5]]]
+
+[[Network]]
+&IdleTime:Number,Enter time,3,60,5!
+[[[Sets the amount of time (in seconds) a network connection can be idle before the camera automatically disconnects.]]]
+[[[Default: 5]]]
+
+&PingPeriod:Number,Enter period,0.1,30,1!
+[[[Sets the period (in seconds) between network pings to determine if a network connection is still alive.]]]
+[[[Default: 1]]]

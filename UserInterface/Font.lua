@@ -18,6 +18,10 @@ end
 function Font:GetFont(size, sizeTolerance)
 	size = math.floor(size + 0.5)
 
+	if size <= 0 then
+		size = 12
+	end
+
 	if self._Fonts[size] then
 		return self._Fonts[size]
 	else

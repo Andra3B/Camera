@@ -11,8 +11,8 @@ Enum.ScaleMode = Enum.Create({
 	MaintainAspectRatio = 2
 })
 
-function Frame.Create()
-	local self = Class.CreateInstance(Object.Create(), Frame)
+function Frame.Create(frame)
+	local self = Class.CreateInstance(Object.Create(frame), Frame)
 
 	self._RelativePosition = Vector2.Zero
 	self._PixelPosition = Vector2.Zero
@@ -52,8 +52,7 @@ function Frame.Create()
 
 	self._Visible = true
 
-	self._Events:Listen("ParentChanged", Frame.Refresh)
-
+	self._Events:Listen("ParentChanged", Frame.RefreshAbsolutePosition)
 	self._Events:Listen("ParentAbsolutePositionChanged", Frame.RefreshAbsolutePosition)
 	self._Events:Listen("ParentAbsoluteSizeChanged", Frame.RefreshAbsolutePosition)
 	self._Events:Listen("ParentChildAbsoluteOffsetChanged", Frame.RefreshAbsolutePosition)
@@ -63,6 +62,7 @@ function Frame.Create()
 	self._Events:Listen("RelativeOriginChanged", Frame.RefreshAbsolutePosition)
 	self._Events:Listen("PixelOriginChanged", Frame.RefreshAbsolutePosition)
 
+	self._Events:Listen("ParentChanged", Frame.RefreshAbsoluteSize)
 	self._Events:Listen("ParentAbsoluteSizeChanged", Frame.RefreshAbsoluteSize)
 	self._Events:Listen("RelativeSizeChanged", Frame.RefreshAbsoluteSize)
 	self._Events:Listen("PixelSizeChanged", Frame.RefreshAbsoluteSize)
@@ -89,13 +89,46 @@ function Frame.Create()
 	self._Events:Listen("CornerPixelRadiusChanged", Frame.RefreshCornerAbsoluteRadius)
 	self._Events:Listen("AbsoluteSizeChanged", Frame.RefreshCornerAbsoluteRadius)
 
+	if frame then
+		self.RelativePosition = frame.RelativePosition
+		self.PixelPosition = frame.PixelPosition
+
+		self.RelativeSize = frame.RelativeSize
+		self.PixelSize = frame.PixelSize
+
+		self.RelativeOrigin = frame.RelativeOrigin
+		self.PixelOrigin = frame.PixelOrigin
+
+		self.ChildPixelOffset = frame.ChildPixelOffset
+		self.ChildRelativeOffset = frame.ChildRelativeOffset
+
+		self.BackgroundColour = frame.BackgroundColour
+		self.BackgroundImage = frame.BackgroundImage
+		self.BackgroundImageScale = frame.BackgroundImageScale
+		self.BackgroundImageScaleMode = frame.BackgroundImageScaleMode
+
+		self.BorderColour = frame.BorderColour
+		self.BorderThickness = frame.BorderThickness
+
+		self.CornerRelativeRadius = frame.CornerRelativeRadius
+		self.CornerPixelRadius = frame.CornerPixelRadius
+		self.CornerAbsoluteRadius = frame.CornerAbsoluteRadius
+
+		self.AspectRatio = frame.AspectRatio
+		self.DominantAxis = frame.DominantAxis
+
+		self.Visible = frame.Visible
+
+		self:Refresh()
+	end
+
 	return self
 end
 
 function Frame:Refresh()
-	Object.Refresh(self)
+	Object.Refresh()
 
-	-- Refreshing absolute size causes all others to refresh
+	self._AbsoluteSize = nil
 	self:RefreshAbsoluteSize()
 end
 

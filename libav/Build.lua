@@ -41,7 +41,9 @@ require("FFILoader").CreateBindings({"libav", "libsw"}, "libav/libav.i", librari
 		AVERROR_EAGAIN = -11,
 		AVERROR_EINVAL = -22,
 		AVERROR_ENOMEM = -12,
-		["FFERRTAG"] = FFERRTAG 
+		["FFERRTAG"] = FFERRTAG,
+		
+		AV_CODEC_FLAG_LOW_DELAY = bit.lshift(1, 19)
 	}, nil
 )
 

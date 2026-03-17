@@ -77,13 +77,13 @@ function Animation.Update(deltaTime)
 
 					if animation._DestroyOnFinish then
 						animation:Destroy()
-						table.remove(Animations, index)
+						Animations[index] = nil
 					end
 				end
 			end
 		else
 			animation:Destroy()
-			table.remove(Animations, index)
+			Animations[index] = index
 		end
 	end
 end

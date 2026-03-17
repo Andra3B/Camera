@@ -46,7 +46,7 @@ end
 
 function UserInterface.Refresh()
 	if UserInterface.Root then
-		UserInterface.Root:Refresh()
+		UserInterface.Root:RefreshAbsoluteSize()
 	end
 end
 
@@ -79,25 +79,37 @@ function UserInterface.Input(inputType, scancode, state)
 			end
 		end
 
-		local interactiveFrame = UserInterface.GetFrameContainingPoint(state.X, state.Y, UserInterface.Root, "Interactive")
+		if scancode == "mousewheelmovement" then
+			local x, y = love.mouse.getPosition()
+			local scrollFrame = UserInterface.GetFrameContainingPoint(x, y, UserInterface.Root, "ScrollFrame")
 
-		UserInterface.Hovering = interactiveFrame
+			if
+				scrollFrame and scrollFrame.Active and
+				UserInterface.Focus ~= scrollFrame and UserInterface.Hovering ~= scrollFrame
+			then
+				scrollFrame.Events:Trigger("Input", inputType, scancode, state)
+			end
+		else
+			local interactiveFrame = UserInterface.GetFrameContainingPoint(state.X, state.Y, UserInterface.Root, "Interactive")
 
-		if scancode == "leftmousebutton" then
-			if state.Z < 0 then
-				if interactiveFrame and interactiveFrame.Active then
-					UserInterface.Pressed = interactiveFrame
-					UserInterface.SetFocus(interactiveFrame)
+			UserInterface.Hovering = interactiveFrame
 
-					interactiveFrame.Events:Trigger("Pressed")
-				else
+			if scancode == "leftmousebutton" then
+				if state.Z < 0 then
+					if interactiveFrame and interactiveFrame.Active then
+						UserInterface.Pressed = interactiveFrame
+						UserInterface.SetFocus(interactiveFrame)
+
+						interactiveFrame.Events:Trigger("Pressed")
+					else
+						UserInterface.Pressed = nil
+						UserInterface.SetFocus(nil)
+					end
+				elseif UserInterface.Pressed then
+					UserInterface.Pressed.Events:Trigger("Released")
+
 					UserInterface.Pressed = nil
-					UserInterface.SetFocus(nil)
 				end
-			elseif UserInterface.Pressed then
-				UserInterface.Pressed.Events:Trigger("Released")
-
-				UserInterface.Pressed = nil
 			end
 		end
 	end
@@ -108,20 +120,6 @@ function UserInterface.Input(inputType, scancode, state)
 
 	if UserInterface.Hovering and UserInterface.Hovering ~= UserInterface.Focus and UserInterface.Hovering.Active then
 		UserInterface.Hovering.Events:Trigger("Input", inputType, scancode, state)
-	end
-
-	if scancode == "mousewheelmovement" then
-		local x, y = love.mouse.getPosition()
-		local scrollFrame = UserInterface.GetFrameContainingPoint(x, y, UserInterface.Root, "ScrollFrame")
-
-		if
-			scrollFrame and
-			scrollFrame.Active and
-			UserInterface.Focus ~= scrollFrame and
-			UserInterface.Hovering ~= scrollFrame
-		then
-			scrollFrame.Events:Trigger("Input", inputType, scancode, state)
-		end
 	end
 end
 

@@ -53,7 +53,7 @@ function EventDirector:Trigger(event, ...)
     local eventListeners = self._Listeners[event]
 
     if eventListeners then
-        for index, eventListener in pairs(eventListeners) do
+        for index, eventListener in ipairs(eventListeners) do
             if eventListener._Destroyed then
                 eventListeners[index] = nil
 			else
@@ -63,7 +63,7 @@ function EventDirector:Trigger(event, ...)
     end
 
 	if self._Listeners.All then
-		for index, eventListener in pairs(self._Listeners.All) do
+		for index, eventListener in ipairs(self._Listeners.All) do
 			if eventListener._Destroyed then
 				self._Listeners.All[index] = nil
 			else

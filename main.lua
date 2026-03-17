@@ -43,6 +43,8 @@ function love.threaderror(thread, message) love.errorhandler(message) end
 function love.run()
 	love.load()
 	
+	LOAD_TIME = love.timer.getTime()
+
 	love.timer.step()
 	return function()
 		love.event.pump()
