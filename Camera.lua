@@ -12,7 +12,7 @@ if jit.os == "Windows" then
 	function StartLivestream(from, port)
 		StopLivestream()
 
-		os.execute([[start /B ffmpeg -f dshow -video_size 1280x720 -framerate 30 -i video="Integrated Camera" -an -flags low_delay -bf 0 -g 30 -keyint_min 30 -b:v 4M -maxrate 4M -bufsize 1M -fflags flush_packets -flush_packets 1 -muxdelay 0 -f mpegts "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=262144&overrun_nonfatal=1"]])
+		os.execute([[start /B ffmpeg -f dshow -i video="Integrated Camera" -s 1280x720 -r 30 -b:v 1000k -an -bf 0 -g 30 -fflags flush_packets -flush_packets 1 -muxdelay 0 -f mpegts "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay=1&send_buffer_size=65536"]])
 	end
 
 	function StopLivestream()
@@ -22,7 +22,7 @@ else
 	function StartLivestream(from, port)
 		StopLivestream()
 
-		os.execute([[(rpicam-vid -t 0 --low-latency --inline --width 1280 --height 720 --framerate 30 --profile high --intra 10 --flush -o - | ffmpeg -hide_banner -loglevel error -fflags nobuffer -flags low_delay -framerate 30 -f h264 -i - -c copy -f mpegts -muxdelay 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=16384&overrun_nonfatal=1") > /dev/null 2>&1 & echo $! > Livestream.pid]])
+		os.execute([[(rpicam-vid -t 0 --inline --width 1280 --height 720 --framerate 30 --profile high --intra 5 --flush -o - | ffmpeg -loglevel error -fflags nobuffer -flags low_delay -probesize 32 -analyzeduration 0 -avioflags direct -f h264 -i - -map 0:v:0 -c:v copy -f mpegts -muxdelay 0 -muxpreload 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&buffer_size=65535") > /dev/null 2>&1 & echo $! > Livestream.pid]])
 	end
 	
 	function StopLivestream()
@@ -51,7 +51,7 @@ function love.load()
 			function StartLivestream(from, port)
 				StopLivestream()
 
-				os.execute([[start /B ffmpeg -re -stream_loop -1 -i "Assets/Videos/Cars.mp4" -an -flags low_delay -bf 0 -g 30 -keyint_min 30 -b:v 4M -maxrate 4M -bufsize 1M -fflags flush_packets -flush_packets 1 -muxdelay 0 -f mpegts "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=262144&overrun_nonfatal=1"]])
+				os.execute([[start /B ffmpeg -re -stream_loop -1 -i "Assets/Videos/Cars.mp4" -an -bf 0 -g 30 -pix_fmt yuv420p -f mpegts "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316"]])
 			end
 		end
 	elseif jit.os == "Linux" then

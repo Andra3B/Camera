@@ -9,7 +9,7 @@ function NetworkClient.Create(clientSocket, connected)
 	self._LastPingTime = 0
 
 	self._PingPeriod = 1
-	self._IdleTime = 3
+	self._IdleTime = 10
 
 	self._Connected = connected
 
