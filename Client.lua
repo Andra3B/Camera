@@ -3,7 +3,7 @@ VideoReader = require("VideoReader")
 
 MotionTracker = require("MotionTracker")
 
-local AppNetworkClient
+local appClient
 
 local motionTracker
 
@@ -15,13 +15,12 @@ local function StartLivestream()
 	if not livestreaming then
 		local freePort = NetworkClient.GetFreePort()
 
-		AppNetworkClient:Send({{"StartLivestream", freePort}})
+		appClient:Send({{"StartLivestream", freePort}})
 
 		local livestream = VideoReader.Create(
-			"udp://"..AppNetworkClient:GetLocalDetails()..":"..freePort.."?fifo_size=100000",
+			"udp://"..appClient:GetLocalDetails()..":"..freePort.."?timeout=1000000&fifo_size=1024&buffer_size=65535&overrun_nonfatal=1",
 			"mpegts",
-			8,
-			"timeout=1000000,fflags=nobuffer,probesize=32,analyzeduration=0,flush_packets=1,overrun_nonfatal=1"
+			5
 		)
 
 		if livestream then
@@ -42,7 +41,7 @@ end
 
 local function StopLivestream()
 	if livestreaming then
-		AppNetworkClient:Send({{"StopLivestream"}})
+		appClient:Send({{"StopLivestream"}})
 
 		motionTracker:Destroy()
 		motionTracker = nil
@@ -50,6 +49,8 @@ local function StopLivestream()
 		calibratingMotionTracking = false
 		
 		LivestreamFrame.BackgroundImage = nil
+		
+		LivestreamFrame.Video:Destroy()
 		LivestreamFrame.Video = nil
 
 		CalibrationControlButton.Active = false
@@ -61,10 +62,10 @@ local function StopLivestream()
 end
 
 function love.load()
+	appClient = NetworkClient.Create()
+	appClient:Bind()
+	
 	VideoReader.Initialize()
-
-	AppNetworkClient = NetworkClient.Create()
-	AppNetworkClient:Bind()
 
 	local width, height = love.window.getDesktopDimensions(1)
 	love.window.setTitle("Camera Client")
@@ -165,7 +166,7 @@ function love.load()
 		local success, errorMessage = false, "Invalid host"
 
 		if #host > 0 then
-			success, errorMessage = AppNetworkClient:Connect(host, PortEntry.Text, 3)
+			success, errorMessage = appClient:Connect(host, PortEntry.Text, 3)
 		end
 
 		if success then
@@ -569,33 +570,6 @@ function love.load()
 	BottomBarPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
 	BottomBarPages:AddTransition(2, 1, Enum.PageTransitionDirection.Right)
 
-	local ConsolePage = UserInterface.Frame.Create()
-	ConsolePage.RelativeSize = Vector2.One
-	ConsolePage.Parent = SubPages 
-
-	ConsoleHistory = UserInterface.LogFrame.Create()
-	ConsoleHistory.RelativeSize = Vector2.One
-	ConsoleHistory.PixelSize = Vector2.Create(-20, -140)
-	ConsoleHistory.PixelPosition = Vector2.Create(10, 70)
-	ConsoleHistory.CornerRelativeRadius = 0.1
-	ConsoleHistory.BorderThickness = 1
-	ConsoleHistory.Parent = ConsolePage
-
-	ConsoleInput = UserInterface.TextBox.Create()
-	ConsoleInput.RelativeOrigin = Vector2.Create(0, 1)
-	ConsoleInput.RelativeSize = Vector2.Create(1, 0)
-	ConsoleInput.PixelSize = Vector2.Create(-20, 50)
-	ConsoleInput.RelativePosition = Vector2.Create(0, 1)
-	ConsoleInput.PixelPosition = Vector2.Create(10, -10)
-	ConsoleInput.TextRelativeOrigin = Vector2.Create(0, 0.5)
-	ConsoleInput.TextRelativePosition = Vector2.Create(0, 0.5)
-	ConsoleInput.TextPixelPosition = Vector2.Create(10, 0)
-	ConsoleInput.PlaceholderText = "Enter Command..."
-	ConsoleInput.ReleaseFocusOnSubmit = false
-	ConsoleInput.CornerRelativeRadius = 1
-	ConsoleInput.BorderThickness = 1
-	ConsoleInput.Parent = ConsolePage
-
 	local SettingsPage = UserInterface.Frame.Create()
 	SettingsPage.RelativeSize = Vector2.One
 	SettingsPage.Parent = SubPages
@@ -628,20 +602,6 @@ function love.load()
 		SubPages.Page = 1
 	end)
 
-	local ConsolePageButton = UserInterface.Button.Create()
-	ConsolePageButton.RelativeOrigin = Vector2.Create(0.5, 0.5)
-	ConsolePageButton.RelativeSize = Vector2.Create(0.27, 0.8)
-	ConsolePageButton.RelativePosition = Vector2.Create(0.44, 0.5)
-	ConsolePageButton.Text = "Console"
-	ConsolePageButton.CornerRelativeRadius = 1
-	ConsolePageButton.BorderThickness = 1
-	ConsolePageButton.BackgroundColour = Vector4.Create(1, 1, 1, 1)
-	ConsolePageButton.Parent = TopBar
-
-	ConsolePageButton.Events:Listen("Pressed", function()
-		SubPages.Page = 2
-	end)
-
 	local SettingsPageButton = UserInterface.Button.Create()
 	SettingsPageButton.RelativeOrigin = Vector2.Create(1, 0.5)
 	SettingsPageButton.RelativeSize = Vector2.Create(0.27, 0.8)
@@ -653,7 +613,7 @@ function love.load()
 	SettingsPageButton.Parent = TopBar
 
 	SettingsPageButton.Events:Listen("Pressed", function()
-		SubPages.Page = 3
+		SubPages.Page = 2
 	end)
 
 	local DisconnectButton = UserInterface.Button.Create()
@@ -671,7 +631,7 @@ function love.load()
 	DisconnectButton.Events:Listen("Pressed", function()
 		StopLivestream()
 
-		AppNetworkClient:Disconnect()
+		appClient:Disconnect()
 
 		AppPages.Page = 1
 	end)
@@ -686,11 +646,7 @@ function love.load()
 	SettingsScrollFrame.Parent = SettingsPage
 
 	SubPages:AddTransition(1, 2, Enum.PageTransitionDirection.Left)
-	SubPages:AddTransition(1, 3, Enum.PageTransitionDirection.Left)
 	SubPages:AddTransition(2, 1, Enum.PageTransitionDirection.Right)
-	SubPages:AddTransition(2, 3, Enum.PageTransitionDirection.Left)
-	SubPages:AddTransition(3, 1, Enum.PageTransitionDirection.Right)
-	SubPages:AddTransition(3, 2, Enum.PageTransitionDirection.Right)
 
 	AppPages:AddTransition(1, 2, Enum.PageTransitionDirection.Down)
 	AppPages:AddTransition(2, 1, Enum.PageTransitionDirection.Up)
@@ -700,11 +656,7 @@ function love.load()
 	FPSLabel.BackgroundColour = Vector4.Zero
 	FPSLabel.Parent = Root
 
-	Log.Writer = function(category, priority, message, ...)
-		ConsoleHistory:Push(Log.Format(category, priority, nil, message, ...))
-	end
-
-	AppNetworkClient.Events:Listen("Disconnected", function()
+	appClient.Events:Listen("Disconnected", function()
 		StopLivestream()
 
 		motionTracking = false
@@ -713,15 +665,15 @@ function love.load()
 		AppPages.Page = 1
 	end)
 	
-	AppNetworkClient.Events:Listen("StopLivestream", StopLivestream)
+	appClient.Events:Listen("StopLivestream", StopLivestream)
 
 	UserInterface.SetRoot(Root)
 
-	Log.Info("Client", "Client ready.")
+	Log.Info("Client", "Client ready")
 end
 
 function love.update(deltaTime)
-	AppNetworkClient:Update()
+	appClient:Update()
 
 	FPSLabel.Text = string.format("FPS: %d", love.timer.getFPS())
 	
@@ -765,7 +717,7 @@ function love.draw()
 			local trackingShape = motionTracker.LargestMotionShape
 
 			if trackingShape then
-				AppNetworkClient:Send({{"SetAngle", (trackingShape[1].X + trackingShape[2].X - 1)*90}})
+				appClient:Send({{"IncrementServoAngle", (trackingShape[1].X + trackingShape[2].X - 1)*30}})
 			end
 		end
 	end
@@ -774,7 +726,7 @@ end
 function love.quit(exitCode)
 	StopLivestream()
 	
-	AppNetworkClient:Destroy()
+	appClient:Destroy()
 
 	VideoReader.Deinitialize()
 end

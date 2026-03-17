@@ -10,7 +10,8 @@ local function GetAVErrorString(errorCode)
 end
 
 function VideoReader.GetDefaultCameraURL(format)
-	local inputFormatPointer = libav.avformat.av_find_input_format(format or (jit.os == "Windows" and "dshow" or "v4l2"))
+	format = format or (jit.os == "Windows" and "dshow" or "v4l2")
+	local inputFormatPointer = libav.avformat.av_find_input_format(format)
 	
 	local url = nil
 	if inputFormatPointer ~= nil then
@@ -41,7 +42,7 @@ function VideoReader.GetDefaultCameraURL(format)
 		libav.avdevice.avdevice_free_list_devices(inputDeviceListPointer)
 	end
 
-	return url
+	return url, format
 end
 
 function VideoReader.Initialize()
@@ -70,10 +71,9 @@ function VideoReader.Create(url, format, frameQueueCapacity, options)
 	frameQueueCapacity = frameQueueCapacity or 8
 
 	local errorCode = 0
-	local optionsPointerPointer = nil
+	local optionsPointerPointer = ffi.new("AVDictionary*[1]")
 
 	if options then
-		optionsPointerPointer = ffi.new("AVDictionary*[1]")
 		errorCode = libav.avutil.av_dict_parse_string(
 			optionsPointerPointer,
 			options,

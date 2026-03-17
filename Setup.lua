@@ -29,6 +29,16 @@ math.clamp = function(value, min, max)
 	end
 end
 
+math.sign = function(value)
+	if value < 0 then
+		return -1
+	elseif value > 0 then
+		return 1
+	else
+		return 0
+	end
+end
+
 ffi = require("ffi")
 buffer = require("string.buffer")
 
@@ -45,5 +55,3 @@ Vector3 = require("Vector3")
 Vector4 = require("Vector4")
 
 EventDirector = require("EventDirector")
-
-ThreadLogChannel = love.thread.getChannel("ThreadLogs")

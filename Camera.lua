@@ -1,105 +1,115 @@
-local livestreamReceiver = nil
-local livestreamReceiverPort = nil
+libav = require("libav.libav")
+VideoReader = require("VideoReader")
 
-if jit.os == "Windows" then
-	function StartLivestream(_, _, from, port)
-		os.execute(
-			"ffmpeg -stream_loop -1 -re -i Assets/Videos/Cars.mp4 -c copy -f mpegts udp://"..from:GetRemoteDetails()..":"..port
-		)
-
-		Log.Info("Camera", "Livestream started")
-	end
-
-	function StopLivestream(_, _, from, port)
-		Log.Info("Camera", "Livestream stopped")
-	end
-else
-	pigpio = require("pigpio.pigpio")["1"]
-
-	livestreamPID = -1
-
-	function StartLivestream(_, _, from, port)
-		if livestreamPID < 0 then
-			os.execute(
-				"setsid sh -c 'rpicam-vid -t 0 --inline --width 1280 --height 720 --framerate 30 --profile high --intra 30 --flush -o - | ffmpeg -hide_banner -loglevel error -fflags nobuffer -flags low_delay -framerate 30 -f h264 -i - -c copy -f mpegts -muxdelay 0 -flush_packets 1 \"udp://"..from:GetRemoteDetails()..":"..port.."?pkt_size=1316&fifo_size=100000&overrun_nonfatal=1\"' >/dev/null 2>&1 & echo $! > pgid.txt"
-			)
-
-			local livestreamFile = io.open("pgid.txt", "r")
-			livestreamPID = tonumber(livestreamFile:read("*a"):match("%d+"))
-			livestreamFile:close()
-			os.remove("pgid.txt")
-
-			livestreamReceiver = from
-			livestreamReceiverPort = port
-
-			Log.Info("Camera", "Livestream started")
-		end
-	end
-
-	function StopLivestream(_, _, from)
-		if livestreamPID > 0 and livestreamReceiver == from then
-			os.execute("kill -INT -"..livestreamPID)
-			livestreamPID = -1
-
-			Log.Info("Camera", "Livestream stopped")
-		end
-	end
-end
-
-local AppNetworkServer = nil
+local appServer = nil
 
 local targetServoAngle = 0
 local currentServoAngle = 0
 
-function love.load()
-	AppNetworkServer = NetworkServer.Create()
-	AppNetworkServer:Bind(nil, 64641)
+local servoAngularSpeed = 10
 
-	if jit.os == "Windows" then
-	else
-		pigpio.gpioInitialise()
+if jit.os == "Windows" then
+	function StartLivestream(from, port)
+		StopLivestream()
 
-		AppNetworkServer.Events:Listen("SetAngle", function(_, _, from, angle)
-			angle = tonumber(angle)
-
-			if angle then
-				targetServoAngle = math.clamp(angle, -90, 90)
-			end
-		end)
+		os.execute([[start /B ffmpeg -fflags nobuffer -flags low_delay -f dshow -video_size 1280x720 -framerate 30 -i video="Integrated Camera" -an -f mpegts -muxdelay 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=16384&overrun_nonfatal=1"]])
 	end
 
-	AppNetworkServer.Events:Listen("StartLivestream", StartLivestream)
-	AppNetworkServer.Events:Listen("StopLivestream", StopLivestream)
-	AppNetworkServer.Events:Listen("Connected", function(_, _, from)
+	function StopLivestream()
+		os.execute([[taskkill /IM ffmpeg.exe /F]])
+	end
+else
+	function StartLivestream(from, port)
+		StopLivestream()
+
+		os.execute([[(rpicam-vid -t 0 --low-latency --inline --width 1280 --height 720 --framerate 30 --profile high --intra 10 --flush -o - | ffmpeg -hide_banner -loglevel error -fflags nobuffer -flags low_delay -framerate 30 -f h264 -i - -c copy -f mpegts -muxdelay 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=16384&overrun_nonfatal=1") > /dev/null 2>&1 & echo $! > Livestream.pid]])
+	end
+	
+	function StopLivestream()
+		os.execute([[kill -2 $(cat Livestream.pid) && rm -f Livestream.pid]])
+	end
+end
+
+local function IncrementServoAngle(deltaAngle)	
+	if deltaAngle then
+		targetServoAngle = math.clamp(currentServoAngle + deltaAngle, -90, 90)
+	end
+end
+
+local function SetServoAngularSpeed(speed)
+	servoAngularSpeed = speed
+end
+
+function love.load()
+	appServer = NetworkServer.Create()
+	appServer:Bind(nil, 64641)
+
+	VideoReader.Initialize()
+
+	if not VideoReader.GetDefaultCameraURL() then
+		if jit.os == "Windows" then
+			function StartLivestream(from, port)
+				StopLivestream()
+
+				os.execute([[start /B ffmpeg -re -stream_loop -1 -i "Assets/Videos/Cars.mp4" -an -f mpegts -muxdelay 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&fifo_size=8192&overrun_nonfatal=1"]])
+			end
+		end
+	elseif jit.os == "Linux" then
+		pigpio = require("pigpio.pigpio").pigpio
+
+		pigpio.gpioInitialise()
+	end
+
+	appServer.Events:Listen("StartLivestream", function(_, _, from, port) StartLivestream(from, port) end)
+	appServer.Events:Listen("StopLivestream", function(_, _, from) StopLivestream() end)
+	appServer.Events:Listen("IncrementServoAngle", function(_, _, deltaAngle) IncrementServoAngle(tonumber(deltaAngle)) end)
+	appServer.Events:Listen("SetServoAngularSpeed", function(_, _, speed)
+		speed = tonumber(speed)
+
+		if speed then
+			servoAngularSpeed = speed
+		end
+	end)
+
+	appServer.Events:Listen("Connected", function(_, _, from)
 		Log.Info("Camera", "Client %s:%d connected", from:GetRemoteDetails())
 	end)
-	AppNetworkServer.Events:Listen("Disconnected", function(_, _, from)
-		StopLivestream(nil, nil, from)
+
+	appServer.Events:Listen("Disconnected", function(_, _, from)
+		StopLivestream()
 
 		Log.Info("Camera", "Client %s:%d disconnected", from:GetRemoteDetails())
 	end)
+	
+	StopLivestream()
+
+	appServer:Listen()
 
 	Log.Info("Camera", "Camera ready")
-	Log.Info("Camera", "Camera configured for \"%s\"", jit.os)
-
-	AppNetworkServer:Listen()
-
-	Log.Info("Camera", "Camera listening for clients on %s:%d", AppNetworkServer:GetLocalDetails())
+	Log.Info("Camera", "Camera listening for clients on %s:%d", appServer:GetLocalDetails())
 end
 
 function love.update(deltaTime)
-	AppNetworkServer:RecursiveUpdate()
+	appServer:RecursiveUpdate()
 
-	currentServoAngle = (1 - deltaTime)*currentServoAngle + deltaTime*targetServoAngle
-	pigpio.gpioServo(18, 1500 + math.clamp(currentServoAngle/90, -1, 1)*800)
+	local targetAngleError = targetServoAngle - currentServoAngle
+	currentServoAngle = currentServoAngle + math.sign(targetAngleError)*math.min(math.abs(targetAngleError), servoAngularSpeed*deltaTime)
+
+	if pigpio then
+		pigpio.gpioServo(18, 750 + ((currentServoAngle + 90)/180)*(2250 - 750))
+	end
 end
 
 function love.quit(exitCode)
-	StopLivestream(livestreamReceiver)
+	StopLivestream()
+
+	VideoReader.Deinitialize()
 
 	if pigpio then
 		pigpio.gpioTerminate()
 	end
 
-	AppNetworkServer:Destroy()
+	appServer:Destroy()
+
+	Log.Info("Camera", "Camera stopping")
 end

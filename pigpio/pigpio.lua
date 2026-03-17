@@ -18,7 +18,7 @@ local cDefinitionsFile = io.open("./pigpio/pigpio.cdef", "r")
 ffi.cdef(cDefinitionsFile:read("a*"))
 cDefinitionsFile:close()
 
-libraries["1"] = setmetatable({Library = ffi.load("pigpio", true), Defines = defines}, {__index = IndexMetamethod})
+libraries["pigpio"] = setmetatable({Library = ffi.load("pigpio", true), Defines = defines}, {__index = IndexMetamethod})
 
 defines["PIGPIO_H"] = true
 defines["PIGPIO_VERSION"] = 79

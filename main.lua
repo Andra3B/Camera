@@ -35,16 +35,6 @@ function love.run()
 	return function()
 		love.event.pump()
 
-		while true do
-			local log = ThreadLogChannel:pop() 
-
-			if log then
-				Log.Log(unpack(log))
-			else
-				break
-			end
-		end
-
 		for name, a, b, c, d, e, f in love.event.poll() do
 			if name == "quit" then
 				a = a or 0

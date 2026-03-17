@@ -21,10 +21,6 @@ pointerData:release()
 pointerData = nil
 pointerDataPointer = nil
 
-Log.Writer = function(category, priority, message, ...)
-	ThreadLogChannel:push({category, priority, string.format(message, ...)})
-end
-
 local avErrorBuffer = ffi.new("char[256]")
 local function GetAVErrorString(errorCode)
 	libav.avutil.av_strerror(errorCode, avErrorBuffer, 256)
