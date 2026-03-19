@@ -163,7 +163,7 @@ function VideoReader.Create(url, format, frameQueueCapacity, options)
 
 							self._AVFramePointerIndex = nil
 
-							self._PacketDecodeThread = love.thread.newThread("Assets/Scripts/PacketDecode.lua")
+							self._PacketDecodeThread = love.thread.newThread("PacketDecode.lua")
 							self._PacketDecodeChannel = love.thread.newChannel()
 			
 							self._EndOfVideo = false

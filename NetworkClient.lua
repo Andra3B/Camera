@@ -9,7 +9,7 @@ function NetworkClient.Create(clientSocket, connected)
 	self._LastPingTime = 0
 
 	self._PingPeriod = 1
-	self._IdleTime = 10
+	self._IdleTime = 5
 
 	self._Connected = connected
 
@@ -64,8 +64,6 @@ function NetworkClient:Connect(ipAddress, port, timeout)
 
 	if success == 1 then
 		self._Connected = true
-		
-		self:Send("&Connected!")
 
 		self._LastInteractionTime = socket.gettime()
 		self._LastPingTime = 0
@@ -117,11 +115,12 @@ function NetworkClient:Update()
 		if now - self._LastInteractionTime <= self._IdleTime then
 			local commands = nil
 			local data = buffer.new()
-			local retries = 0
-			local errorMessage = "Retry limit reached"
 
-			while retries <= self._Retries do
-				local partialData, partialErrorMessage = self._Socket:receive("*l")
+			local partialData = nil
+			local errorMessage = nil
+
+			while true do
+				partialData, errorMessage = self._Socket:receive("*l")
 
 				if partialData then
 					self._LastInteractionTime = now
@@ -130,7 +129,11 @@ function NetworkClient:Update()
 					if partialData == "Ping" then
 						self:Send("Pong")
 					elseif partialData ~= "Pong" then
-						data:put(partialData)
+						if #data > 0 then
+							data:put("\n"..partialData)
+						else
+							data:put(partialData)
+						end
 
 						commands = NetworkController.GetCommandsFromString(data:tostring())
 						
@@ -138,16 +141,12 @@ function NetworkClient:Update()
 							break
 						end
 					end
-				else
-					errorMessage = partialErrorMessage
-					
+				else					
 					break
 				end
-
-				retries = retries + 1
 			end
 			
-			if #data > 0 then
+			if errorMessage ~= "timeout" then
 				if commands then
 					for _, command in ipairs(commands) do
 						if command[1] == "Disconnect" then

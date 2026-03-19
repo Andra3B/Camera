@@ -5,17 +5,28 @@ end
 
 local Interactive = {}
 
-function Interactive.Create()
-	local self = Class.CreateInstance(BASE_CLASS.Create(), Interactive)
+function Interactive.Create(interactive)
+	local self = Class.CreateInstance(BASE_CLASS.Create(interactive), Interactive)
 	
 	self._Active = true
 
 	self._CanFocus = true
 
 	self._FocusedBackgroundColour = nil
-	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 0.3)
-	self._HoveringBackgroundColour = Vector4.Create(1, 1, 1, 0.2)
-	self._InactiveOverlayColour = Vector4.Create(0.9, 0.9, 0.9, 0.8)
+	self._PressedBackgroundColour = Vector4.Create(1, 1, 1, 0.2)
+	self._HoveringBackgroundColour = Vector4.Create(1, 1, 1, 0.15)
+	self._InactiveOverlayColour = Vector4.Create(1, 1, 1, 0.7)
+
+	if interactive then
+		self.Active = interactive.Active
+
+		self.CanFocus = interactive.CanFocus
+		
+		self.FocusedBackgroundColour = interactive.FocusedBackgroundColour
+		self.PressedBackgroundColour = interactive.PressedBackgroundColour
+		self.HoveringBackgroundColour = interactive.HoveringBackgroundColour
+		self.InactiveOverlayColour = interactive.InactiveOverlayColour
+	end
 
 	return self
 end

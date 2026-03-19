@@ -32,8 +32,8 @@ local function TextInput(self, _, text)
 	end
 end
 
-function TextBox.Create()
-	local self = Class.CreateInstance(Interactive.Create(), TextBox)
+function TextBox.Create(textBox)
+	local self = Class.CreateInstance(Interactive.Create(textBox), TextBox)
 
 	self._PlaceholderText = "Enter text here..."
 	self._PlaceholderTextColour = Vector4.Create(0.0, 0.0, 0.0, 0.5)
@@ -54,6 +54,13 @@ function TextBox.Create()
 	self._Events:Listen("TextAbsolutePositionChanged", TextBox.RefreshCursorAbsolutePosition)
 	self._Events:Listen("TextObjectChanged", TextBox.RefreshCursorAbsolutePosition)
 	self._Events:Listen("CursorChanged", TextBox.RefreshCursorAbsolutePosition)
+
+	if textBox then
+		self.PlaceholderText = textBox.PlaceholderText
+		self.PlaceholderTextColour = textBox.PlaceholderTextColour
+
+		self.ReleaseFocusOnSubmit = textBox.ReleaseFocusOnSubmit
+	end
 
 	return self
 end
@@ -104,6 +111,14 @@ function TextBox:Draw()
 			absolutePosition.X + textAbsolutePosition.X,
 			absolutePosition.Y + textAbsolutePosition.Y
 		)
+	end
+end
+
+function TextBox:SetText(text)
+	if Interactive.SetText(self, text) then
+		self.Cursor = self._Cursor
+
+		return true, self._Text
 	end
 end
 

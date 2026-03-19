@@ -36,8 +36,8 @@ local function OnChildAdded(self, _, child)
 	child.Visible = #self._Children == 1
 end
 
-function Pages.Create()
-	local self = Class.CreateInstance(Frame.Create(), Pages)
+function Pages.Create(pages)
+	local self = Class.CreateInstance(Frame.Create(pages), Pages)
 
 	self._Page = 1
 	self._OldPage = 1

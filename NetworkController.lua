@@ -55,7 +55,7 @@ function NetworkController.GetStringFromCommands(commands)
 end
 
 function NetworkController.GetCommandsFromString(commandsString)
-	if string.sub(commandsString, -1) == "!" then
+	if string.sub(commandsString, -1, -1) == "!" and string.sub(commandsString, -2, -2) ~= "\\" then
 		local parsedCommands = {}
 
 		local commandStart = nil

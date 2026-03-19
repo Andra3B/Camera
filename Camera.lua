@@ -1,12 +1,12 @@
-libav = require("libav.libav")
-VideoReader = require("VideoReader")
-
 local appServer = nil
 
-local targetServoAngle = 0
-local currentServoAngle = 0
+local targetAngle = 0
+local currentAngle = 0
 
-local servoAngularSpeed = 10
+local angularSpeed = 10
+
+local settingsString = nil
+local settings = {}
 
 if jit.os == "Windows" then
 	function StartLivestream(from, port)
@@ -30,31 +30,102 @@ else
 	end
 end
 
-local function IncrementServoAngle(deltaAngle)	
-	if deltaAngle then
-		targetServoAngle = math.clamp(currentServoAngle + deltaAngle, -90, 90)
+local function SetSetting(name, value)
+	local settingType = type(settings[name])
+
+	if name == "AngularSpeed" then
+		angularSpeed = tonumber(value)
+	end
+
+	if settingType == "number" then
+		settings[name] = tonumber(value)
+
+		settingsString = string.gsub(
+			settingsString,
+			"&"..name..":Number,(.-),(.-),(.-),.-!",
+			"&"..name..":Number,%1,%2,%3,"..value.."!"
+		)
+	elseif settingType == "boolean" then
+		settings[name] = value == "true"
+
+		settingsString = string.gsub(
+			settingsString,
+			"&"..name..":Boolean,.-!",
+			"&"..name..":Boolean,"..value.."!"
+		)
+	elseif settingType == "string" then
+		settings[name] = value
+
+		settingsString = string.gsub(
+			settingsString,
+			"&"..name..":String,(.-),.-!",
+			"&"..name..":String,%1,"..value.."!"
+		)
 	end
 end
 
-local function SetServoAngularSpeed(speed)
-	servoAngularSpeed = speed
+local function SaveSettings()
+	local success, errorMessage
+	local retry = 0
+
+	repeat
+		success, errorMessage = love.filesystem.write("Settings.txt", settingsString)
+		retry = retry + 1
+	until success or retry > 3
+
+	if not success then
+		Log.Error("Camera", "Failed to save settings to file! %s", errorMessage)
+	end
 end
 
 function love.load()
+	if not love.filesystem.getInfo("Settings.txt", "file") then
+		local settingsString = love.filesystem.read("Assets/Other/DefaultCameraSettings.txt")
+
+		if settingsString then
+			love.filesystem.write("Settings.txt", settingsString)
+		end
+	end
+
+	local cameraSettingsString, errorMessage = love.filesystem.read("Settings.txt")
+
+	if not cameraSettingsString then
+		error("Failed to read settings file! "..errorMessage)
+	end
+
+	settingsString = cameraSettingsString
+
+	for line in string.gmatch(settingsString, "&[^\n]*") do
+		line = string.sub(line, 1, -2)
+
+		local settingDetails = NetworkClient.GetCommandsFromString(line)
+
+		if settingDetails then
+			settingDetails = settingDetails[1]
+
+			local settingName = settingDetails[1]
+
+			if settingDetails[2] == "Number" then
+				local value = tonumber(settingDetails[6])
+					
+				if value then
+					settings[settingName] = value		
+					SetSetting(settingName, value)
+				end
+			elseif settingDetails[2] == "Boolean" then
+				settings[settingName] = settingDetails[3] == "true"
+				SetSetting(settingName, settingDetails[3] == "true")
+			elseif settingDetails[2] == "String" then
+				settings[settingName] = settingDetails[4]
+				SetSetting(settingName, settingDetails[4])
+			end
+		end
+	end
+
 	appServer = NetworkServer.Create()
 	appServer:Bind(nil, 64641)
 
-	VideoReader.Initialize()
-
-	if not VideoReader.GetDefaultCameraURL() then
-		if jit.os == "Windows" then
-			function StartLivestream(from, port)
-				StopLivestream()
-
-				os.execute([[start /B ffmpeg -re -stream_loop -1 -i "Assets/Videos/Cars.mp4" -an -bf 0 -g 30 -pix_fmt yuv420p -f mpegts "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316"]])
-			end
-		end
-	elseif jit.os == "Linux" then
+	if jit.os == "Linux" then
 		pigpio = require("pigpio.pigpio").pigpio
 
 		pigpio.gpioInitialise()
@@ -62,25 +133,65 @@ function love.load()
 
 	appServer.Events:Listen("StartLivestream", function(_, _, from, port) StartLivestream(from, port) end)
 	appServer.Events:Listen("StopLivestream", function(_, _, from) StopLivestream() end)
-	appServer.Events:Listen("IncrementServoAngle", function(_, _, deltaAngle) IncrementServoAngle(tonumber(deltaAngle)) end)
-	appServer.Events:Listen("SetServoAngularSpeed", function(_, _, speed)
-		speed = tonumber(speed)
 
-		if speed then
-			servoAngularSpeed = speed
+	appServer.Events:Listen("IncrementAngle", function(_, _, from, deltaAngle)
+		deltaAngle = tonumber(deltaAngle)
+
+		if deltaAngle then
+			targetAngle = math.clamp(currentAngle + deltaAngle, -90, 90)
 		end
 	end)
 
-	appServer.Events:Listen("Connected", function(_, _, from)
+	appServer.Events:Listen("SetAngle", function(_, _, from, angle)
+		angle = tonumber(angle)
+
+		if angle then
+			targetAngle = math.clamp(angle, -90, 90)
+		end
+	end)
+
+	appServer.Events:Listen("GetSettings", function(_, _, from)
+		from:Send(NetworkServer.GetStringFromCommands({{"GetSettings", settingsString}}))
+	end)
+
+	appServer.Events:Listen("SetSetting", function(_, _, from, name, value)
+		SetSetting(name, value)
+	end)
+
+	appServer.Events:Listen("SaveSettings", SaveSettings)
+
+	appServer.Events:Listen("ChildAdded", function(_, _, from)
+		from.IdleTime = settings.IdleTime
+		from.PingPeriod = settings.PingPeriod
+
 		Log.Info("Camera", "Client %s:%d connected", from:GetRemoteDetails())
 	end)
 
 	appServer.Events:Listen("Disconnected", function(_, _, from)
 		StopLivestream()
+		SaveSettings()
 
 		Log.Info("Camera", "Client %s:%d disconnected", from:GetRemoteDetails())
 	end)
 	
+	appServer.Events:Listen("All", function(_, _, command, from, ...)
+		local ip, port = from:GetRemoteDetails()
+
+		if command == "StartLivestream" then
+			Log.Info("Camera", "Client %s:%d started a livestream", ip, port)
+		elseif command == "StopLivestream" then
+			Log.Info("Camera", "Client %s:%d stopped the livestream", ip, port)
+		elseif command == "SetAngle" then
+			Log.Info("Camera", "Client %s:%d set the servo angle to %d degrees", ip, port, ...)
+		elseif command == "GetSettings" then
+			Log.Info("Camera", "Client %s:%d requested settings", ip, port)
+		elseif command == "SetSetting" then
+			Log.Info("Camera", "Client %s:%d set \"%s\" to %d", ip, port, ...)
+		elseif command == "SaveSettings" then
+			Log.Info("Camera", "Client %s:%d requested settings to be saved", ip, port)
+		end
+	end)
+
 	StopLivestream()
 
 	appServer:Listen()
@@ -92,24 +203,24 @@ end
 function love.update(deltaTime)
 	appServer:RecursiveUpdate()
 
-	local targetAngleError = targetServoAngle - currentServoAngle
-	currentServoAngle = currentServoAngle + math.sign(targetAngleError)*math.min(math.abs(targetAngleError), servoAngularSpeed*deltaTime)
+	local targetAngleError = targetAngle - currentAngle
+	currentAngle = currentAngle + math.sign(targetAngleError)*math.min(math.abs(targetAngleError), angularSpeed*deltaTime)
 
 	if pigpio then
-		pigpio.gpioServo(18, 750 + ((currentServoAngle + 90)/180)*(2250 - 750))
+		pigpio.gpioServo(18, 750 + ((currentAngle + 90)/180)*(2250 - 750))
 	end
 end
 
 function love.quit(exitCode)
 	StopLivestream()
 
-	VideoReader.Deinitialize()
-
 	if pigpio then
 		pigpio.gpioTerminate()
 	end
 
 	appServer:Destroy()
+
+	SaveSettings()
 
 	Log.Info("Camera", "Camera stopping")
 end

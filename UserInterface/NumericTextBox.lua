@@ -2,8 +2,8 @@ local TextBox = require("UserInterface.TextBox")
 
 local NumericTextBox = {}
 
-function NumericTextBox.Create()
-	local self = Class.CreateInstance(TextBox.Create(), NumericTextBox)
+function NumericTextBox.Create(numericTextBox)
+	local self = Class.CreateInstance(TextBox.Create(numericTextBox), NumericTextBox)
 
 	self._Minimum = 0
 	self._Maximum = 1
@@ -11,6 +11,11 @@ function NumericTextBox.Create()
 	self._LastValidValue = nil
 
 	self._Events:Listen("FocusLost", NumericTextBox.CorrectValue)
+
+	if numericTextBox then
+		self.Minimum = numericTextBox.Minimum
+		self.Maximum = numericTextBox.Maximum
+	end
 
 	return self
 end
@@ -31,6 +36,7 @@ function NumericTextBox:CorrectValue()
 	end
 
 	self.Text = self._LastValidValue or self._Minimum
+	self.Cursor = math.huge
 end
 
 function NumericTextBox:GetValue()
@@ -39,6 +45,12 @@ end
 
 function NumericTextBox:SetValue(value)
 	self.Text = value
+end
+
+function NumericTextBox:Submit()
+	self:CorrectValue()
+	
+	TextBox.Submit(self)
 end
 
 function NumericTextBox:GetMinimum()

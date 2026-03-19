@@ -1,0 +1,18 @@
+[Camera]
+[[Servo]]
+&AngleControlCoefficient:Number,Enter coefficient,5,90,30!
+[[[Sets the servo angle control coefficient (in degrees).]]]
+[[[Default: 30]]]
+
+&AngularSpeed:Number,Enter speed,5,50,10!
+[[[Sets the angular speed of the servo (in degrees per second).]]]
+[[[Default: 10]]]
+
+[[Network]]
+&IdleTime:Number,Enter time,3,60,5!
+[[[Sets the amount of time (in seconds) a network connection can be idle before the camera automatically disconnects.]]]
+[[[Default: 5]]]
+
+&PingPeriod:Number,Enter period,0.1,30,1!
+[[[Sets the period (in seconds) between network pings to determine if a network connection is still alive.]]]
+[[[Default: 1]]]

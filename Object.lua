@@ -22,7 +22,7 @@ local function NewIndexMetamethod(self, name, value)
 	end
 end
 
-function Object.Create()
+function Object.Create(object)
 	local self = Class.CreateInstance(Entity.Create(), Object)
 
 	self._Name = ""
@@ -32,7 +32,14 @@ function Object.Create()
 
 	self._Events = EventDirector.Create(self)
 
+	if object then
+		self.Name = object.Name
+	end
+
 	return self
+end
+
+function Object:Refresh()
 end
 
 function Object:Update(deltaTime)
@@ -45,9 +52,6 @@ function Object:RecursiveUpdate(deltaTime)
 	for _, child in ipairs(self._Children) do
 		child:RecursiveUpdate(deltaTime)
 	end
-end
-
-function Object:Refresh()
 end
 
 function Object:GetName()
@@ -109,12 +113,12 @@ end
 function Object:SetParent(parent, where)
 	if parent ~= self._Parent then
 		if self._Parent then
-			for index, currentChild in ipairs(self._Parent._Children) do
+			for index, currentChild in pairs(self._Parent._Children) do
 				if currentChild == self then
-					table.remove(self._Children, index)
-					self._Parent = nil
+					table.remove(self._Parent._Children, index)
 
-					self._Parent._Events:Trigger("ChildRemoved", self)
+					self._Parent.Events:Trigger("ChildRemoved", self)
+					self._Parent = nil
 
 					break
 				end
@@ -124,8 +128,8 @@ function Object:SetParent(parent, where)
 		if parent then
 			table.insert(parent._Children, math.clamp(where or (#parent._Children + 1), 1, #parent._Children + 1), self)
 			self._Parent = parent
-			
-			parent._Events:Trigger("ChildAdded", self)
+
+			parent.Events:Trigger("ChildAdded", self)
 		end
 
 		return true, parent
@@ -180,11 +184,17 @@ function Object:GetDescendantWithType(descendantType)
 end
 
 function Object:RemoveChildren()
-	for index, child in ipairs(self._Children) do
-		self._Children[index] = nil
-		child._Parent = nil
+	while #self._Children > 0 do
+		self._Children[1].Parent = nil
+	end
+end
 
-		self._Events:Trigger("ChildRemoved", child)
+function Object:DestroyChildren()
+	while #self._Children > 0 do
+		local child = self._Children[1]
+
+		child.Parent = nil
+		child:Destroy()
 	end
 end
 
@@ -194,10 +204,7 @@ end
 
 function Object:Destroy()
 	if not self._Destroyed then
-		for index, child in ipairs(self._Children) do
-			table.remove(self._Children, index)
-			child:Destroy()
-		end
+		self:DestroyChildren()
 
 		self._Parent = nil
 

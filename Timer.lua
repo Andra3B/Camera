@@ -14,12 +14,12 @@ function Timer.Update(deltaTime)
 
 					if timer._DestroyOnFinish then
 						timer:Destroy()
-						table.remove(Timers, index)
+						Timers[index] = nil
 					end
 				end
 			end
 		else
-			table.remove(Timers, index)
+			Timers[index] = nil
 		end
 	end
 end

@@ -1,0 +1,27 @@
+[Client]
+[[Livestream]]
+&ViewMode:String,Enter view mode,Livestream!
+[[[Sets which view mode is displayed when livestreaming. Valid values are "Livestream", "MotionMask", "Background".]]]
+[[[Default: "Livestream"]]]
+
+&ShowMotionShapes:Boolean,false!
+[[[Sets whether motion shapes can be seen while livestreaming.]]]
+[[[Default: false]]]
+
+[[Servo]]
+&RotationIncrement:Number,Enter increment,10,90,20!
+[[[Sets the servo rotation increment (in degrees) when using the rotate left and right buttons.]]]
+[[[Default: 20]]]
+
+[[Network]]
+&IdleTime:Number,Enter time,3,60,5!
+[[[Sets the amount of time (in seconds) a network connection can be idle before the client automatically disconnects.]]]
+[[[Default: 5]]]
+
+&PingPeriod:Number,Enter period,0.1,30,1!
+[[[Sets the period (in seconds) between network pings to determine if a network connection is still alive.]]]
+[[[Default: 1]]]
+
+&NetworkTimeout:Number,Enter timeout,1,10,5!
+[[[Sets the network timeout (in seconds) which determines how long the client will wait for any given network response.]]]
+[[[Default: 5]]]

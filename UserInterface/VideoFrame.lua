@@ -2,8 +2,8 @@ local Frame = require("UserInterface.Frame")
 
 local VideoFrame = {}
 
-function VideoFrame.Create()
-	local self = Class.CreateInstance(Frame.Create(), VideoFrame)
+function VideoFrame.Create(videoFrame)
+	local self = Class.CreateInstance(Frame.Create(videoFrame), VideoFrame)
 
 	self._Video = nil
 	self._VideoVisible = true
@@ -17,6 +17,14 @@ function VideoFrame.Create()
 
 	self._Events:Listen("VideoVisibleChanged", VideoFrame.RefreshBackgroundImageAbsoluteValues)
 	self._Events:Listen("VideoChanged", VideoFrame.RefreshBackgroundImageAbsoluteValues)
+
+	if videoFrame then
+		self.VideoVisible = videoFrame.VideoVisible
+
+		self.Looping = videoFrame.Looping
+
+		self.RenderTimeTolerance = videoFrame.RenderTimeTolerance
+	end
 
 	return self
 end
