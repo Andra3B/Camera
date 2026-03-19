@@ -17,7 +17,7 @@ function MotionTracker.Create(width, height)
 	self._AdaptionRate = 0.1
 	
 	self._MaxSubdivisions = math.floor(math.log(math.min(width, height))/math.log(2))
-	self.Subdivisions = 6
+	self.Subdivisions = 5
 
 	return self
 end

@@ -23,10 +23,10 @@ local function StartLivestream()
 		appClient:Send("&StartLivestream:%d!", freePort)
 
 		local livestream = VideoReader.Create(
-			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen=1&timeout="..(settings.Client.NetworkTimeout*1000000).."&recv_buffer_size=65536",
+			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen",
 			"mpegts",
 			5,
-			"fflags=nobuffer,avioflags=direct"
+			"listen=1,rw_timeout=5000000,fflags=nobuffer,probesize=32768,analyzeduration=0"
 		)
 
 		if livestream then
@@ -684,10 +684,10 @@ function love.draw()
 
 				love.graphics.setLineWidth(3)
 
-				for index, shape in pairs(motionTracker.MotionShapes) do
+				for index, shape in pairs(tracker.MotionShapes) do
 					local topLeft, bottomRight = unpack(shape)
 					
-					if shape == motionTracker.LargestMotionShape then
+					if shape == tracker.LargestMotionShape then
 						love.graphics.setColor(0, 0, 1, 1)
 					else
 						love.graphics.setColor(0, 1, 0, 1)

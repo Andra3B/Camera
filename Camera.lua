@@ -22,7 +22,7 @@ else
 	function StartLivestream(from, port)
 		StopLivestream()
 
-		os.execute([[(rpicam-vid -t 0 --inline --width 1280 --height 720 --framerate 30 --profile high --intra 5 --flush -o - | ffmpeg -loglevel error -fflags nobuffer -flags low_delay -probesize 32 -analyzeduration 0 -avioflags direct -f h264 -i - -map 0:v:0 -c:v copy -f mpegts -muxdelay 0 -muxpreload 0 -flush_packets 1 "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316&buffer_size=65535") > /dev/null 2>&1 & echo $! > Livestream.pid]])
+		os.execute([[(rpicam-vid -t 0 --inline --width 1280 --height 720 --framerate 30 --denoise cdn_off --awb indoor --metering centre --flicker-period 20000 -o - | ffmpeg -i - -c:v copy -f mpegts "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay&send_buffer_size=10M") > /dev/null 2>&1 & echo $! > Livestream.pid]])
 	end
 	
 	function StopLivestream()
