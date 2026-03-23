@@ -9,6 +9,8 @@ local tracker = nil
 
 local livestreaming = false
 local tracking = false
+local servoMoving = false
+local servoSettleTimer = nil
 
 local settingsString = nil
 local settings = {
@@ -26,15 +28,24 @@ local function StartLivestream()
 			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen",
 			"mpegts",
 			5,
-			"listen=1,rw_timeout=5000000,fflags=nobuffer,probesize=32768,analyzeduration=0"
+			"listen=1,rw_timeout="..(settings.Client.NetworkTimeout*1000000)..",fflags=nobuffer,probesize=32768,analyzeduration=0"
 		)
 
 		if livestream then
 			tracker = MotionTracker.Create(livestream.Width, livestream.Height)
 
 			LivestreamFrame.Video = livestream
-			LivestreamFrame.VideoVisible = true
 			LivestreamFrame.Playing = true
+
+			if settings.Client.ViewMode == "MotionMask" then
+				LivestreamFrame.BackgroundImage = tracker.MotionMask
+				LivestreamFrame.VideoVisible = false
+			elseif settings.Client.ViewMode == "Background" then
+				LivestreamFrame.BackgroundImage = tracker.Background
+				LivestreamFrame.VideoVisible = false
+			else
+				LivestreamFrame.VideoVisible = true
+			end
 
 			LivestreamButton.Text = "STOP"
 
@@ -71,6 +82,8 @@ local function SetSetting(name, value, clientSetting)
 			appClient.IdleTime = value
 		elseif name == "PingPeriod" then
 			appClient.PingPeriod = value
+		elseif name == "ServoSettleTime" then
+			servoSettleTimer.Duration = value
 		elseif livestreaming then
 			if name == "ViewMode" then
 				if value == "MotionMask" then
@@ -87,18 +100,24 @@ local function SetSetting(name, value, clientSetting)
 		end
 
 		if valueType == "number" then
+			settings[name] = tonumber(value)
+
 			settingsString = string.gsub(
 				settingsString,
 				"&"..name..":Number,(.-),(.-),(.-),.-!",
 				"&"..name..":Number,%1,%2,%3,"..value.."!"
 			)
 		elseif valueType == "boolean" then
+			settings[name] = value == "true"
+
 			settingsString = string.gsub(
 				settingsString,
 				"&"..name..":Boolean,.-!",
 				"&"..name..":Boolean,"..tostring(value).."!"
 			)
 		elseif valueType == "string" then
+			settings[name] = value
+
 			settingsString = string.gsub(
 				settingsString,
 				"&"..name..":String,(.-),.-!",
@@ -175,7 +194,7 @@ local function RefreshSettings(_settingsString)
 						settingEntry.Cursor = math.huge
 						
 						settingEntry.Events:Listen("Submit", function(self, clientSetting, value)
-							SetSetting(self.Name, tonumber(value), clientSetting)
+							SetSetting(self.Name, value, clientSetting)
 						end, clientSetting)
 						
 						SetSetting(settingName, value, clientSetting)
@@ -188,7 +207,7 @@ local function RefreshSettings(_settingsString)
 					settingEntry.Value = settingDetails[3] == "true"
 
 					settingEntry.Events:Listen("ValueChanged", function(self, clientSetting, value)
-						SetSetting(self.Name, value, clientSetting)
+						SetSetting(self.Name, tostring(value), clientSetting)
 					end, clientSetting)
 					
 					SetSetting(settingName, settingEntry.Value, clientSetting)
@@ -278,7 +297,6 @@ function love.load()
 			"Assets/Shaders/MotionMask.frag",
 			"Assets/Shaders/Default.vert"
 		),
-
 		
 		["Reduction"] = love.graphics.newShader(
 			"Assets/Shaders/Reduction.frag",
@@ -327,8 +345,6 @@ function love.load()
 	DisconnectButton.Parent = Topbar
 
 	DisconnectButton.Events:Listen("Pressed", function()
-		appClient:Send("&SetAngle:0!")
-
 		appClient:Disconnect()
 	end)
 
@@ -407,7 +423,7 @@ function love.load()
 	ConnectButton.Parent = ConnectionPage	
 
 	ConnectButton.Events:Listen("Pressed", function()
-		local host, port = string.match(CameraAddressEntry.Text, "([%w_%.]+):(%d+)")
+		local host, port = string.match(CameraAddressEntry.Text, "([%w_%-%.]+):(%d+)")
 		
 		local success, errorMessage = false, "Invalid address"
 
@@ -472,7 +488,9 @@ function love.load()
 	RotateLeftButton.Parent = LivestreamPage
 
 	RotateLeftButton.Events:Listen("Released", function()
-		appClient:Send("&IncrementAngle:%d!", -settings.Client.RotationIncrement)
+		servoMoving = true
+
+		appClient:Send("&IncrementAngle:%d!", settings.Client.RotationIncrement)
 	end)
 
 	local RotateRightButton = UserInterface.Button.Create()
@@ -492,7 +510,9 @@ function love.load()
 	RotateRightButton.Parent = LivestreamPage
 
 	RotateRightButton.Events:Listen("Released", function()
-		appClient:Send("&IncrementAngle:%d!", settings.Client.RotationIncrement)
+		servoMoving = true
+
+		appClient:Send("&IncrementAngle:%d!", -settings.Client.RotationIncrement)
 	end)
 
 	local TrackingToggleButton = UserInterface.ToggleButton.Create()
@@ -652,14 +672,27 @@ function love.load()
 
 	appClient.Events:Listen("Disconnected", function()
 		StopLivestream()
+		appClient:Send("&SetAngle:0!")
 
 		AppPages.Page = 1
+	end)
+
+	appClient.Events:Listen("ServoSettled", function()
+		servoSettleTimer:Reset()
+		servoSettleTimer.Running = true
 	end)
 	
 	appClient.Events:Listen("StopLivestream", StopLivestream)
 
 	UserInterface.SetRoot(Root)
-
+	
+	servoSettleTimer = Timer.Create(settings.Client.ServoSettleTime, false)
+	servoSettleTimer.Events:Listen("TimerElapsed", function()
+		servoMoving = false
+		
+		print("Servo finished moving!")
+	end)
+	
 	RefreshSettings(settingsString)
 
 	Log.Info("Client", "Client ready")
@@ -677,7 +710,7 @@ function love.draw()
 			tracker:Update(LivestreamFrame.Video.Frame)
 		end
 
-		if tracker and tracker.LargestMotionShape then
+		if not servoMoving and tracker.LargestMotionShape then
 			if settings.Client.ShowMotionShapes then
 				local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
 				local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
@@ -705,7 +738,9 @@ function love.draw()
 
 			if tracking then
 				local trackingShape = tracker.LargestMotionShape
-				appClient:Send("&IncrementAngle:%d!", settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1))
+				servoMoving = true
+
+				appClient:Send("&IncrementAngle:"..(settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1)).."!")
 			end
 		end
 	end
@@ -713,24 +748,22 @@ end
 
 function love.quit(exitCode)
 	StopLivestream()
-	
-	appClient:Destroy()
 
 	for index, shader in pairs(Shaders) do
 		Shaders[index] = nil
 		shader:release()
 	end
 
-	Shaders = nil
-
 	for index, icon in pairs(Icons) do
 		Icons[index] = nil
 		icon:release()
 	end
 
-	Icons = nil
-
 	VideoReader.Deinitialize()
+
+	appClient:Destroy()
+
+	servoSettleTimer:Destroy()
 
 	SaveSettings()
 

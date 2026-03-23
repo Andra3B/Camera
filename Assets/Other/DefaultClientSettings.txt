@@ -13,6 +13,10 @@
 [[[Sets the servo rotation increment (in degrees) when using the rotate left and right buttons.]]]
 [[[Default: 20]]]
 
+&ServoSettleTime:Number,Enter time,0,10,3!
+[[[Sets the amount of time the servo takes to settle after moving.]]]
+[[[Default: 3]]]
+
 [[Network]]
 &IdleTime:Number,Enter time,3,60,5!
 [[[Sets the amount of time (in seconds) a network connection can be idle before the client automatically disconnects.]]]
@@ -22,6 +26,6 @@
 [[[Sets the period (in seconds) between network pings to determine if a network connection is still alive.]]]
 [[[Default: 1]]]
 
-&NetworkTimeout:Number,Enter timeout,1,10,5!
+&NetworkTimeout:Number,Enter timeout,1,30,5!
 [[[Sets the network timeout (in seconds) which determines how long the client will wait for any given network response.]]]
 [[[Default: 5]]]

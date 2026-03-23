@@ -2,6 +2,8 @@ local appServer = nil
 
 local targetAngle = 0
 local currentAngle = 0
+local servoMoving = false
+local servoSettleTimer = nil
 
 local angularSpeed = 10
 
@@ -31,13 +33,15 @@ else
 end
 
 local function SetSetting(name, value)
-	local settingType = type(settings[name])
+	local valueType = type(value)
 
 	if name == "AngularSpeed" then
 		angularSpeed = tonumber(value)
+	elseif name == "ServoSettleTime" then
+		servoSettleTimer.Duration = tonumber(value)
 	end
 
-	if settingType == "number" then
+	if valueType == "number" then
 		settings[name] = tonumber(value)
 
 		settingsString = string.gsub(
@@ -45,7 +49,7 @@ local function SetSetting(name, value)
 			"&"..name..":Number,(.-),(.-),(.-),.-!",
 			"&"..name..":Number,%1,%2,%3,"..value.."!"
 		)
-	elseif settingType == "boolean" then
+	elseif valueType == "boolean" then
 		settings[name] = value == "true"
 
 		settingsString = string.gsub(
@@ -53,7 +57,7 @@ local function SetSetting(name, value)
 			"&"..name..":Boolean,.-!",
 			"&"..name..":Boolean,"..value.."!"
 		)
-	elseif settingType == "string" then
+	elseif valueType == "string" then
 		settings[name] = value
 
 		settingsString = string.gsub(
@@ -95,32 +99,14 @@ function love.load()
 
 	settingsString = cameraSettingsString
 
-	for line in string.gmatch(settingsString, "&[^\n]*") do
-		line = string.sub(line, 1, -2)
+	servoSettleTimer = Timer.Create(0.5, false)
+	servoSettleTimer.Events:Listen("TimerElapsed", function()
+		local client = appServer.Children[1]
 
-		local settingDetails = NetworkClient.GetCommandsFromString(line)
-
-		if settingDetails then
-			settingDetails = settingDetails[1]
-
-			local settingName = settingDetails[1]
-
-			if settingDetails[2] == "Number" then
-				local value = tonumber(settingDetails[6])
-					
-				if value then
-					settings[settingName] = value		
-					SetSetting(settingName, value)
-				end
-			elseif settingDetails[2] == "Boolean" then
-				settings[settingName] = settingDetails[3] == "true"
-				SetSetting(settingName, settingDetails[3] == "true")
-			elseif settingDetails[2] == "String" then
-				settings[settingName] = settingDetails[4]
-				SetSetting(settingName, settingDetails[4])
-			end
+		if client then
+			client:Send("&ServoSettled!")
 		end
-	end
+	end)
 
 	appServer = NetworkServer.Create()
 	appServer:Bind(nil, 64641)
@@ -139,6 +125,8 @@ function love.load()
 
 		if deltaAngle then
 			targetAngle = math.clamp(currentAngle + deltaAngle, -90, 90)
+			
+			servoMoving = true
 		end
 	end)
 
@@ -192,6 +180,30 @@ function love.load()
 		end
 	end)
 
+	for line in string.gmatch(settingsString, "&[^\n]*") do
+		line = string.sub(line, 1, -2)
+
+		local settingDetails = NetworkClient.GetCommandsFromString(line)
+
+		if settingDetails then
+			settingDetails = settingDetails[1]
+
+			local settingName = settingDetails[1]
+
+			if settingDetails[2] == "Number" then
+				local value = tonumber(settingDetails[6])
+					
+				if value then
+					SetSetting(settingName, value)
+				end
+			elseif settingDetails[2] == "Boolean" then
+				SetSetting(settingName, settingDetails[3])
+			elseif settingDetails[2] == "String" then
+				SetSetting(settingName, settingDetails[4])
+			end
+		end
+	end
+
 	StopLivestream()
 
 	appServer:Listen()
@@ -209,16 +221,25 @@ function love.update(deltaTime)
 	if pigpio then
 		pigpio.gpioServo(18, 750 + ((currentAngle + 90)/180)*(2250 - 750))
 	end
+
+	if servoMoving and targetAngleError == 0 then
+		servoMoving = false
+
+		servoSettleTimer:Reset()
+		servoSettleTimer.Running = true
+	end
 end
 
 function love.quit(exitCode)
-	StopLivestream()
+	StopLivestream()	
 
 	if pigpio then
 		pigpio.gpioTerminate()
 	end
 
 	appServer:Destroy()
+
+	servoSettleTimer:Destroy()
 
 	SaveSettings()
 
