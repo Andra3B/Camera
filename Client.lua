@@ -10,6 +10,9 @@ local tracker = nil
 local livestreaming = false
 local tracking = false
 
+local trackingCooldownTimer = nil
+local trackingCooldown = false
+
 local settingsString = nil
 local settings = {
 	["Client"] = {},
@@ -23,10 +26,10 @@ local function StartLivestream()
 		appClient:Send("&StartLivestream:%d!", freePort)
 
 		local livestream = VideoReader.Create(
-			"udp://"..appClient:GetLocalDetails()..":"..freePort,
+			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen",
 			"mpegts",
 			5,
-			"timeout="..(settings.Client.NetworkTimeout*1000000)..",fflags=nobuffer"
+			"rw_timeout="..(settings.Client.NetworkTimeout*1000000)..",tcp_nodelay=1,fflags=nobuffer"
 		)
 
 		if livestream then
@@ -73,9 +76,9 @@ end
 local function SetSetting(name, value, clientSetting)
 	settings[clientSetting and "Client" or "Camera"][name] = value
 
-	if clientSetting then
-		local valueType = type(value)
+	local valueType = type(value)
 
+	if clientSetting then
 		if name == "IdleTime" then
 			appClient.IdleTime = value
 		elseif name == "PingPeriod" then
@@ -121,7 +124,7 @@ local function SetSetting(name, value, clientSetting)
 			)
 		end
 	else
-		appClient:Send("&SetSetting:"..name..","..tostring(value).."!")
+		appClient:Send("&SetSetting:"..name..","..tostring(value)..","..valueType.."!")
 	end
 end
 
@@ -193,7 +196,7 @@ local function RefreshSettings(_settingsString)
 							SetSetting(self.Name, value, clientSetting)
 						end, clientSetting)
 						
-						SetSetting(settingName, value, clientSetting)
+						SetSetting(settingName, tonumber(value), clientSetting)
 					else
 						goto End
 					end
@@ -203,7 +206,7 @@ local function RefreshSettings(_settingsString)
 					settingEntry.Value = settingDetails[3] == "true"
 
 					settingEntry.Events:Listen("ValueChanged", function(self, clientSetting, value)
-						SetSetting(self.Name, tostring(value), clientSetting)
+						SetSetting(self.Name, value, clientSetting)
 					end, clientSetting)
 					
 					SetSetting(settingName, settingEntry.Value, clientSetting)
@@ -270,6 +273,13 @@ function love.load()
 	end
 
 	settingsString = clientSettingsString
+
+	trackingCooldownTimer = Timer.Create(1.5, false)
+	trackingCooldownTimer.Events:Listen("TimerElapsed", function()
+		trackingCooldown = false
+
+		print("Cooldown done!")
+	end)
 
 	appClient = NetworkClient.Create()
 	appClient:Bind()
@@ -484,6 +494,8 @@ function love.load()
 	RotateLeftButton.Parent = LivestreamPage
 
 	RotateLeftButton.Events:Listen("Released", function()
+		trackingCooldown = true
+		
 		appClient:Send("&IncrementAngle:%d!", settings.Client.RotationIncrement)
 	end)
 
@@ -504,6 +516,8 @@ function love.load()
 	RotateRightButton.Parent = LivestreamPage
 
 	RotateRightButton.Events:Listen("Released", function()
+		trackingCooldown = true
+
 		appClient:Send("&IncrementAngle:%d!", -settings.Client.RotationIncrement)
 	end)
 
@@ -690,9 +704,7 @@ function love.draw()
 			tracker:Update(LivestreamFrame.Video.Frame)
 		end
 
-		if tracker.LargestMotionShape and tracker.MotionCoverage < 0.75 then
-			print("Tracking")
-
+		if tracker.LargestMotionShape then
 			if settings.Client.ShowMotionShapes then
 				local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
 				local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
@@ -720,8 +732,21 @@ function love.draw()
 
 			if tracking then
 				local trackingShape = tracker.LargestMotionShape
+				local trackingArea = (trackingShape[2].X - trackingShape[1].X)*(trackingShape[2].Y - trackingShape[1].Y)
 
-				appClient:Send("&IncrementAngle:"..(-settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1)).."!")
+				if trackingArea < 0.9 then
+					if not trackingCooldown then
+						trackingCooldown = true
+
+						appClient:Send("&IncrementAngle:"..(-settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1)).."!")
+						
+						trackingCooldownTimer:Reset()
+						trackingCooldownTimer.Running = true
+					end
+				elseif trackingCooldown then
+					trackingCooldownTimer:Reset()
+					trackingCooldownTimer.Running = true
+				end
 			end
 		end
 	end
@@ -743,6 +768,8 @@ function love.quit(exitCode)
 	VideoReader.Deinitialize()
 
 	appClient:Destroy()
+
+	trackingCooldownTimer:Destroy()
 
 	SaveSettings()
 

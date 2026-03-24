@@ -147,7 +147,7 @@ function MotionTracker:GetMotionShapes()
 				-- Get pixel value from motion mask.
 				local motion = blockGrid:getPixel(x, y)
 
-				motionSum = motionSum + 1
+				motionSum = motionSum + motion
 
 				-- If pixel not visted (not assigned a shape) and is a motion pixel (0.95 for safety).
 				if not visited[index] and motion > 0.95 then

@@ -17,11 +17,11 @@ end
 local function StartLivestream(from, port)
 	StopLivestream()
 
-	os.execute([[rpicam-vid -t 0 -n --codec libav --libav-format mpegts --width 1280 --height 720 --bitrate 1000000 --intra 5 --framerate 30 --inline --flush --denoise cdn_off -o "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316" > /dev/null 2>&1 & echo $! > Livestream.pid]])
+	os.execute([[rpicam-vid -t 0 -n --codec libav --libav-format mpegts --width 1280 --height 720 --bitrate 1000000 --intra 5 --framerate 30 --inline --flush --denoise cdn_off -o "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay=1" > /dev/null 2>&1 & echo $! > Livestream.pid]])
 end
 
-local function SetSetting(name, value)
-	local valueType = type(value)
+local function SetSetting(name, value, valueType)
+	valueType = valueType or type(value)
 
 	if name == "AngularSpeed" then
 		angularSpeed = tonumber(value)
@@ -113,8 +113,8 @@ function love.load()
 		from:Send(NetworkServer.GetStringFromCommands({{"GetSettings", settingsString}}))
 	end)
 
-	appServer.Events:Listen("SetSetting", function(_, _, from, name, value)
-		SetSetting(name, value)
+	appServer.Events:Listen("SetSetting", function(_, _, from, name, value, valueType)
+		SetSetting(name, value, valueType)
 	end)
 
 	appServer.Events:Listen("SaveSettings", SaveSettings)
@@ -168,7 +168,7 @@ function love.load()
 					SetSetting(settingName, value)
 				end
 			elseif settingDetails[2] == "Boolean" then
-				SetSetting(settingName, settingDetails[3])
+				SetSetting(settingName, settingDetails[3] == "true")
 			elseif settingDetails[2] == "String" then
 				SetSetting(settingName, settingDetails[4])
 			end

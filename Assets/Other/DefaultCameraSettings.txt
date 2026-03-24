@@ -1,6 +1,6 @@
 [Camera]
 [[Servo]]
-&AngleControlCoefficient:Number,Enter coefficient,5,90,30!
+&AngleControlCoefficient:Number,Enter coefficient,5,180,50!
 [[[Sets the servo angle control coefficient (in degrees).]]]
 [[[Default: 30]]]
 
