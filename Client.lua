@@ -25,10 +25,10 @@ local function StartLivestream()
 		appClient:Send("&StartLivestream:%d!", freePort)
 
 		local livestream = VideoReader.Create(
-			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen",
+			"udp://"..appClient:GetLocalDetails()..":"..freePort,
 			"mpegts",
 			5,
-			"probesize=32,analyzeduration=0,rw_timeout="..(settings.Client.NetworkTimeout*1000000)..",fflags=nobuffer"
+			"timeout="..(settings.Client.NetworkTimeout*1000000)..",fflags=nobuffer"
 		)
 
 		if livestream then

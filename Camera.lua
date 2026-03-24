@@ -19,7 +19,7 @@ end
 local function StartLivestream(from, port)
 	StopLivestream()
 
-	os.execute([[rpicam-vid -t 0 --codec libav --libav-format mpegts --width 1280 --height 720 --framerate 30 --inline --flush -o "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay=1" > /dev/null 2>&1 & echo $! > Livestream.pid]])
+	os.execute([[rpicam-vid -t 0 -n --codec libav --libav-format mpegts --width 1280 --height 720 --bitrate 1000000 --intra 5 --framerate 30 --inline --flush --denoise cdn_off -o "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316" > /dev/null 2>&1 & echo $! > Livestream.pid]])
 end
 
 local function SetSetting(name, value)
