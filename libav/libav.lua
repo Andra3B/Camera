@@ -25,10 +25,11 @@ libraries["avdevice"] = setmetatable({Library = ffi.load("avdevice-62", true), D
 libraries["avfilter"] = setmetatable({Library = ffi.load("avfilter-11", true), Defines = defines}, {__index = IndexMetamethod})
 libraries["swscale"] = setmetatable({Library = ffi.load("swscale-9", true), Defines = defines}, {__index = IndexMetamethod})
 
-defines["AVERROR_ENOMEM"] = -12
 defines["MKTAG"] = true
 defines["AVERROR_EAGAIN"] = -11
 defines["AVERROR_EINVAL"] = -22
+defines["AVERROR_ENOMEM"] = -12
+defines["AV_CODEC_FLAG_LOW_DELAY"] = 524288
 defines["AVCODEC_AVCODEC_H"] = true
 defines["AVUTIL_SAMPLEFMT_H"] = true
 defines["AVUTIL_ATTRIBUTES_H"] = true

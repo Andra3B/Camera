@@ -25,10 +25,10 @@ local function StartLivestream()
 		appClient:Send("&StartLivestream:%d!", freePort)
 
 		local livestream = VideoReader.Create(
-			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen",
+			"udp://"..appClient:GetLocalDetails()..":"..freePort,
 			"mpegts",
 			5,
-			"listen=1,rw_timeout="..(settings.Client.NetworkTimeout*1000000)..",fflags=nobuffer,probesize=32768,analyzeduration=0"
+			"probesize=32,analyzeduration=0,timeout="..(settings.Client.NetworkTimeout*1000000)..",fflags=nobuffer,flags=low_delay,buffer_size=1024000"
 		)
 
 		if livestream then
@@ -526,11 +526,11 @@ function love.load()
 	TrackingToggleButton.BackgroundColour = Vector4.Create(1, 1, 1, 0.1)
 	TrackingToggleButton.TextColour = Vector4.One
 	TrackingToggleButton.BorderThickness = 3
-	TrackingToggleButton.BorderColour = Vector4.Create(0, 1, 0, 1)
+	TrackingToggleButton.BorderColour = Vector4.Create(1, 0, 0, 1)
 	TrackingToggleButton.CornerRelativeRadius = 1
 	TrackingToggleButton.BackgroundImage = Icons.Box
 	TrackingToggleButton.BackgroundImageScale = 0.8
-	TrackingToggleButton.Value = true
+	TrackingToggleButton.Value = false
 	TrackingToggleButton.Parent = LivestreamPage
 
 	TrackingToggleButton.Events:Listen("Released", function()
@@ -689,7 +689,7 @@ function love.load()
 	servoSettleTimer = Timer.Create(settings.Client.ServoSettleTime, false)
 	servoSettleTimer.Events:Listen("TimerElapsed", function()
 		servoMoving = false
-		
+
 		print("Servo finished moving!")
 	end)
 	
@@ -710,7 +710,7 @@ function love.draw()
 			tracker:Update(LivestreamFrame.Video.Frame)
 		end
 
-		if not servoMoving and tracker.LargestMotionShape then
+		if tracker.LargestMotionShape then
 			if settings.Client.ShowMotionShapes then
 				local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
 				local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
@@ -736,11 +736,11 @@ function love.draw()
 				end
 			end
 
-			if tracking then
+			if not servoMoving and tracking then
 				local trackingShape = tracker.LargestMotionShape
 				servoMoving = true
 
-				appClient:Send("&IncrementAngle:"..(settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1)).."!")
+				appClient:Send("&IncrementAngle:"..(-settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1)).."!")
 			end
 		end
 	end

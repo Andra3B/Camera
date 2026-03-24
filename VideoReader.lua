@@ -131,6 +131,9 @@ function VideoReader.Create(url, format, frameQueueCapacity, options)
 				)
 
 				if errorCode >= 0 then
+					decoderContextPointer.flags = bit.bor(decoderContextPointer.flags, libav.avcodec.AV_CODEC_FLAG_LOW_DELAY)
+					decoderContextPointer.thread_count = 1
+
 					errorCode = libav.avcodec.avcodec_open2(decoderContextPointer, decoderPointer, nil)
 
 					if errorCode >= 0 then

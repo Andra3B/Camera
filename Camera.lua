@@ -1,3 +1,5 @@
+pigpio = require("pigpio.pigpio").pigpio
+
 local appServer = nil
 
 local targetAngle = 0
@@ -10,26 +12,14 @@ local angularSpeed = 10
 local settingsString = nil
 local settings = {}
 
-if jit.os == "Windows" then
-	function StartLivestream(from, port)
-		StopLivestream()
+local function StartLivestream(from, port)
+	StopLivestream()
 
-		os.execute([[start /B ffmpeg -f dshow -i video="Integrated Camera" -s 1280x720 -r 30 -b:v 1000k -an -bf 0 -g 30 -fflags flush_packets -flush_packets 1 -muxdelay 0 -f mpegts "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay=1&send_buffer_size=65536"]])
-	end
+	os.execute([[rpicam-vid -t 0 --codec libav --libav-format mpegts --width 1280 --height 720 --framerate 30 --inline --flush --denoise cdn_off -o "udp://]]..from:GetRemoteDetails()..":"..port..[[?pkt_size=1316" > /dev/null 2>&1 & echo $! > Livestream.pid]])
+end
 
-	function StopLivestream()
-		os.execute([[taskkill /IM ffmpeg.exe /F]])
-	end
-else
-	function StartLivestream(from, port)
-		StopLivestream()
-
-		os.execute([[(rpicam-vid -t 0 --inline --width 1280 --height 720 --framerate 30 --denoise cdn_off --awb indoor --metering centre --flicker-period 20000 -o - | ffmpeg -i - -c:v copy -f mpegts "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay&send_buffer_size=10M") > /dev/null 2>&1 & echo $! > Livestream.pid]])
-	end
-	
-	function StopLivestream()
-		os.execute([[kill -2 $(cat Livestream.pid) && rm -f Livestream.pid]])
-	end
+local function StopLivestream()
+	os.execute([[kill -2 $(cat Livestream.pid) && rm -f Livestream.pid]])
 end
 
 local function SetSetting(name, value)
@@ -108,14 +98,10 @@ function love.load()
 		end
 	end)
 
+	pigpio.gpioInitialise()
+
 	appServer = NetworkServer.Create()
 	appServer:Bind(nil, 64641)
-
-	if jit.os == "Linux" then
-		pigpio = require("pigpio.pigpio").pigpio
-
-		pigpio.gpioInitialise()
-	end
 
 	appServer.Events:Listen("StartLivestream", function(_, _, from, port) StartLivestream(from, port) end)
 	appServer.Events:Listen("StopLivestream", function(_, _, from) StopLivestream() end)
@@ -218,9 +204,7 @@ function love.update(deltaTime)
 	local targetAngleError = targetAngle - currentAngle
 	currentAngle = currentAngle + math.sign(targetAngleError)*math.min(math.abs(targetAngleError), angularSpeed*deltaTime)
 
-	if pigpio then
-		pigpio.gpioServo(18, 750 + ((currentAngle + 90)/180)*(2250 - 750))
-	end
+	pigpio.gpioServo(18, 750 + ((currentAngle + 90)/180)*(2250 - 750))
 
 	if servoMoving and targetAngleError == 0 then
 		servoMoving = false
@@ -233,9 +217,7 @@ end
 function love.quit(exitCode)
 	StopLivestream()	
 
-	if pigpio then
-		pigpio.gpioTerminate()
-	end
+	pigpio.gpioTerminate()
 
 	appServer:Destroy()
 
