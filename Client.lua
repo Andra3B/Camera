@@ -9,8 +9,6 @@ local tracker = nil
 
 local livestreaming = false
 local tracking = false
-local servoMoving = false
-local servoSettleTimer = nil
 
 local settingsString = nil
 local settings = {
@@ -82,8 +80,6 @@ local function SetSetting(name, value, clientSetting)
 			appClient.IdleTime = value
 		elseif name == "PingPeriod" then
 			appClient.PingPeriod = value
-		elseif name == "ServoSettleTime" then
-			servoSettleTimer.Duration = value
 		elseif livestreaming then
 			if name == "ViewMode" then
 				if value == "MotionMask" then
@@ -488,8 +484,6 @@ function love.load()
 	RotateLeftButton.Parent = LivestreamPage
 
 	RotateLeftButton.Events:Listen("Released", function()
-		servoMoving = true
-
 		appClient:Send("&IncrementAngle:%d!", settings.Client.RotationIncrement)
 	end)
 
@@ -510,8 +504,6 @@ function love.load()
 	RotateRightButton.Parent = LivestreamPage
 
 	RotateRightButton.Events:Listen("Released", function()
-		servoMoving = true
-
 		appClient:Send("&IncrementAngle:%d!", -settings.Client.RotationIncrement)
 	end)
 
@@ -676,22 +668,10 @@ function love.load()
 
 		AppPages.Page = 1
 	end)
-
-	appClient.Events:Listen("ServoSettled", function()
-		servoSettleTimer:Reset()
-		servoSettleTimer.Running = true
-	end)
 	
 	appClient.Events:Listen("StopLivestream", StopLivestream)
 
 	UserInterface.SetRoot(Root)
-	
-	servoSettleTimer = Timer.Create(settings.Client.ServoSettleTime, false)
-	servoSettleTimer.Events:Listen("TimerElapsed", function()
-		servoMoving = false
-
-		print("Servo finished moving!")
-	end)
 	
 	RefreshSettings(settingsString)
 
@@ -710,7 +690,9 @@ function love.draw()
 			tracker:Update(LivestreamFrame.Video.Frame)
 		end
 
-		if tracker.LargestMotionShape then
+		if tracker.LargestMotionShape and tracker.MotionCoverage < 0.75 then
+			print("Tracking")
+
 			if settings.Client.ShowMotionShapes then
 				local absolutePosition = LivestreamFrame.BackgroundImageAbsolutePosition
 				local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
@@ -736,9 +718,8 @@ function love.draw()
 				end
 			end
 
-			if not servoMoving and tracking then
+			if tracking then
 				local trackingShape = tracker.LargestMotionShape
-				servoMoving = true
 
 				appClient:Send("&IncrementAngle:"..(-settings.Camera.AngleControlCoefficient*(trackingShape[1].X + trackingShape[2].X - 1)).."!")
 			end
@@ -762,8 +743,6 @@ function love.quit(exitCode)
 	VideoReader.Deinitialize()
 
 	appClient:Destroy()
-
-	servoSettleTimer:Destroy()
 
 	SaveSettings()
 

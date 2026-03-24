@@ -8,10 +8,6 @@
 [[[Sets the angular speed of the servo (in degrees per second).]]]
 [[[Default: 50]]]
 
-&ServoSettleTime:Number,Enter time,0,10,0.5!
-[[[Sets the amount of time the servo takes to settle after moving.]]]
-[[[Default: 0.5]]]
-
 [[Network]]
 &IdleTime:Number,Enter time,3,60,5!
 [[[Sets the amount of time (in seconds) a network connection can be idle before the camera automatically disconnects.]]]

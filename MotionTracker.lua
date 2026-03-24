@@ -10,6 +10,7 @@ function MotionTracker.Create(width, height)
 
 	self._MotionShapes = nil
 	self._LargestMotionShape = nil
+	self._MotionCoverage = 0
 
 	self._MotionThreshold = 0.12
 	self._ShapeMinimumArea = 0.03
@@ -136,6 +137,8 @@ function MotionTracker:GetMotionShapes()
 		local toVisit = {}
 
 		local shape = nil
+
+		local motionSum = 0
 		
 		for y = 0, height - 1, 1 do
 			for x = 0, width - 1, 1 do
@@ -143,6 +146,8 @@ function MotionTracker:GetMotionShapes()
 				local index = y*height + x
 				-- Get pixel value from motion mask.
 				local motion = blockGrid:getPixel(x, y)
+
+				motionSum = motionSum + 1
 
 				-- If pixel not visted (not assigned a shape) and is a motion pixel (0.95 for safety).
 				if not visited[index] and motion > 0.95 then
@@ -231,6 +236,7 @@ function MotionTracker:GetMotionShapes()
 
 		self._MotionShapes = shapes
 		self._LargestMotionShape = shapes[largestShape]
+		self._MotionCoverage = motionSum / (width*height)
 	end
 	
 	return self._MotionShapes
@@ -270,6 +276,12 @@ function MotionTracker:SetSubdivisions(subdivisions)
 			width, height = math.floor(width*0.5), math.floor(height*0.5)
 		end
 	end
+end
+
+function MotionTracker:GetMotionCoverage()
+	self:GetMotionShapes()
+
+	return self._MotionCoverage
 end
 
 function MotionTracker:Destroy()

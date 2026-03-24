@@ -13,10 +13,6 @@
 [[[Sets the servo rotation increment (in degrees) when using the rotate left and right buttons.]]]
 [[[Default: 20]]]
 
-&ServoSettleTime:Number,Enter time,0,10,3!
-[[[Sets the amount of time the servo takes to settle after moving.]]]
-[[[Default: 3]]]
-
 [[Network]]
 &IdleTime:Number,Enter time,3,60,5!
 [[[Sets the amount of time (in seconds) a network connection can be idle before the client automatically disconnects.]]]

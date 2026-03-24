@@ -4,8 +4,6 @@ local appServer = nil
 
 local targetAngle = 0
 local currentAngle = 0
-local servoMoving = false
-local servoSettleTimer = nil
 
 local angularSpeed = 10
 
@@ -27,8 +25,6 @@ local function SetSetting(name, value)
 
 	if name == "AngularSpeed" then
 		angularSpeed = tonumber(value)
-	elseif name == "ServoSettleTime" then
-		servoSettleTimer.Duration = tonumber(value)
 	end
 
 	if valueType == "number" then
@@ -89,15 +85,6 @@ function love.load()
 
 	settingsString = cameraSettingsString
 
-	servoSettleTimer = Timer.Create(0.5, false)
-	servoSettleTimer.Events:Listen("TimerElapsed", function()
-		local client = appServer.Children[1]
-
-		if client then
-			client:Send("&ServoSettled!")
-		end
-	end)
-
 	pigpio.gpioInitialise()
 
 	appServer = NetworkServer.Create()
@@ -111,8 +98,6 @@ function love.load()
 
 		if deltaAngle then
 			targetAngle = math.clamp(currentAngle + deltaAngle, -90, 90)
-			
-			servoMoving = true
 		end
 	end)
 
@@ -205,13 +190,6 @@ function love.update(deltaTime)
 	currentAngle = currentAngle + math.sign(targetAngleError)*math.min(math.abs(targetAngleError), angularSpeed*deltaTime)
 
 	pigpio.gpioServo(18, 750 + ((currentAngle + 90)/180)*(2250 - 750))
-
-	if servoMoving and targetAngleError == 0 then
-		servoMoving = false
-
-		servoSettleTimer:Reset()
-		servoSettleTimer.Running = true
-	end
 end
 
 function love.quit(exitCode)
@@ -220,8 +198,6 @@ function love.quit(exitCode)
 	pigpio.gpioTerminate()
 
 	appServer:Destroy()
-
-	servoSettleTimer:Destroy()
 
 	SaveSettings()
 
