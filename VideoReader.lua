@@ -173,7 +173,6 @@ function VideoReader.Create(url, format, frameQueueCapacity, options)
 			
 							self._EndOfVideo = false
 
-
 							self._FrameQueue = {}
 
 							local pointerData = love.data.newByteData((3 + frameQueueCapacity)*ffi.sizeof("uintptr_t"))
