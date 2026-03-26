@@ -131,8 +131,10 @@ function VideoReader.Create(url, format, frameQueueCapacity, options)
 				)
 
 				if errorCode >= 0 then
+					--[[
 					decoderContextPointer.flags = bit.bor(decoderContextPointer.flags, libav.avcodec.AV_CODEC_FLAG_LOW_DELAY)
 					decoderContextPointer.thread_count = 1
+					--]]
 
 					errorCode = libav.avcodec.avcodec_open2(decoderContextPointer, decoderPointer, nil)
 
@@ -303,31 +305,35 @@ end
 
 function VideoReader:Update(drop)
 	self._PacketDecodeChannel:supply("Pop")
+	self._PacketDecodeChannel:supply("Stop")
 	local frameIndex = self._PacketDecodeChannel:demand()
 
 	self._EndOfVideo = frameIndex == -1
 
-	if not drop then
-		if frameIndex > 0 then
-			self._AVFramePointerIndex = frameIndex
-			local framePointer = self._FrameQueue[frameIndex]
-
-			if not self._FrameReferenceTime then
-				self.FrameReferenceTime = love.timer.getTime()
-			end
-
-			ffi.copy(
-				self._FrameImageData:getFFIPointer(),
-				framePointer.data[0],
-				framePointer.linesize[0]*framePointer.height
-			)
-			self._Frame:replacePixels(self._FrameImageData)
-		else
-			return false
-		end
-	else
+	if drop then
 		print("Video frame dropped!")
+	elseif frameIndex > 0 then
+		self._AVFramePointerIndex = frameIndex
+		local framePointer = self._FrameQueue[frameIndex]
+
+		if not self._FrameReferenceTime then
+			self.FrameReferenceTime = love.timer.getTime()
+		end
+
+		ffi.copy(
+			self._FrameImageData:getFFIPointer(),
+			framePointer.data[0],
+			framePointer.linesize[0]*framePointer.height
+		)
+
+		self._Frame:replacePixels(self._FrameImageData)
+	else
+		self._PacketDecodeChannel:supply("Start")
+
+		return false
 	end
+
+	self._PacketDecodeChannel:supply("Start")
 	
 	return true
 end
@@ -335,8 +341,8 @@ end
 function VideoReader:Destroy()
 	if not self._Destroyed then
 		self._PacketDecodeChannel:push("Exit")
-		
 		self._PacketDecodeThread:wait()
+
 		self._PacketDecodeThread:release()
 		self._PacketDecodeThread = nil
 
