@@ -62,7 +62,11 @@ while true do
 		break
 	end
 
-	if command == "Stop" or (endOfStream and queueSize == 0) then
+	if
+		command == "Stop" or
+		queueSize == #frameQueue or
+		(queueSize == 0 and endOfStream)
+	then
 		repeat
 			command = channel:demand()
 		until command ~= "Stop"
@@ -70,66 +74,63 @@ while true do
 		command = channel:pop()
 	end
 
-	local errorCode = 0
+	if queueSize < #frameQueue then
+		local errorCode = 0
 
-	libav.avcodec.av_packet_unref(packetPointer)
-	local packetReadResult = libav.avformat.av_read_frame(formatContextPointer, packetPointer)
+		libav.avcodec.av_packet_unref(packetPointer)
+		local packetReadResult = libav.avformat.av_read_frame(formatContextPointer, packetPointer)
 
-	if packetReadResult == libav.avformat.AVERROR_EOF then
-		if not endOfStream then
-			libav.avcodec.avcodec_send_packet(decoderContextPointer, nil)
-		end
+		if packetReadResult == libav.avformat.AVERROR_EOF then
+			if not endOfStream then
+				libav.avcodec.avcodec_send_packet(decoderContextPointer, nil)
+			end
 
-		endOfStream = true
-	else
-		if packetReadResult == 0 then
-			if packetPointer.stream_index == videoStreamIndex then
-				local packetSendResult = libav.avcodec.avcodec_send_packet(decoderContextPointer, packetPointer)
+			endOfStream = true
+		else
+			if packetReadResult == 0 then
+				if packetPointer.stream_index == videoStreamIndex then
+					local packetSendResult = libav.avcodec.avcodec_send_packet(decoderContextPointer, packetPointer)
 
-				if packetSendResult == 0 then
-					decoderFlushed = false
-				elseif packetSendResult == libav.avcodec.AVERROR_EINVAL then
-					libav.avcodec.avcodec_send_packet(decoderContextPointer, nil)
-					decoderFlushed = false
-				elseif packetSendResult ~= libav.avcodec.AVERROR_EAGAIN then
-					errorCode = packetSendResult
+					if packetSendResult == 0 then
+						decoderFlushed = false
+					elseif packetSendResult == libav.avcodec.AVERROR_EINVAL then
+						libav.avcodec.avcodec_send_packet(decoderContextPointer, nil)
+						decoderFlushed = false
+					elseif packetSendResult ~= libav.avcodec.AVERROR_EAGAIN then
+						errorCode = packetSendResult
+					end
+				else
+					goto End
 				end
 			else
-				goto End
+				errorCode = packetReadResult
+			end
+
+			endOfStream = false
+		end
+
+		if errorCode >= 0 then
+			if not decoderFlushed then
+				local frameReceiveResult = libav.avcodec.avcodec_receive_frame(decoderContextPointer, framePointer)
+
+				if frameReceiveResult == 0 then
+					errorCode = libav.swscale.sws_scale_frame(swsContextPointer, frameQueue[queueBack], framePointer)
+
+					if errorCode >= 0 then
+						libav.avutil.av_frame_copy_props(frameQueue[queueBack], framePointer)
+
+						queueBack = queueBack == #frameQueue and 1 or (queueBack + 1)
+						queueSize = queueSize + 1
+					end
+				elseif frameReceiveResult == libav.avcodec.AVERROR_EOF then
+					decoderFlushed = true
+				elseif frameReceiveResult ~= libav.avcodec.AVERROR_EAGAIN then
+					errorCode = frameReceiveResult
+				end
 			end
 		else
-			errorCode = packetReadResult
+			Log.Warn("PacketDecode", GetAVErrorString(errorCode))
 		end
-
-		endOfStream = false
-	end
-
-	if errorCode >= 0 then
-		if not decoderFlushed then
-			local frameReceiveResult = libav.avcodec.avcodec_receive_frame(decoderContextPointer, framePointer)
-
-			if frameReceiveResult == 0 then
-				errorCode = libav.swscale.sws_scale_frame(swsContextPointer, frameQueue[queueBack], framePointer)
-
-				if errorCode >= 0 then
-					libav.avutil.av_frame_copy_props(frameQueue[queueBack], framePointer)
-
-					if queueSize == #frameQueue then
-						queueFront = queueFront == #frameQueue and 1 or (queueFront + 1)
-						queueSize = queueSize - 1
-					end
-
-					queueBack = queueBack == #frameQueue and 1 or (queueBack + 1)
-					queueSize = queueSize + 1
-				end
-			elseif frameReceiveResult == libav.avcodec.AVERROR_EOF then
-				decoderFlushed = true
-			elseif frameReceiveResult ~= libav.avcodec.AVERROR_EAGAIN then
-				errorCode = frameReceiveResult
-			end
-		end
-	else
-		Log.Warn("PacketDecode", GetAVErrorString(errorCode))
 	end
 	
 	::End::

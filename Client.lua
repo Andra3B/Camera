@@ -26,7 +26,7 @@ local function StartLivestream()
 		appClient:Send("&StartLivestream:%d!", freePort)
 
 		local livestream = VideoReader.Create(
-			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen=1",
+			"tcp://"..appClient:GetLocalDetails()..":"..freePort.."?listen",
 			"mpegts",
 			5,
 			"listen_timeout="..(settings.Client.NetworkTimeout*1000)..",tcp_nodelay=1,fflags=nobuffer"
@@ -277,8 +277,6 @@ function love.load()
 	trackingCooldownTimer = Timer.Create(1.5, false)
 	trackingCooldownTimer.Events:Listen("TimerElapsed", function()
 		trackingCooldown = false
-
-		print("Cooldown done!")
 	end)
 
 	appClient = NetworkClient.Create()

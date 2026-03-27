@@ -304,7 +304,6 @@ end
 
 function VideoReader:Update(drop)
 	self._PacketDecodeChannel:supply("Pop")
-	self._PacketDecodeChannel:supply("Stop")
 	local frameIndex = self._PacketDecodeChannel:demand()
 
 	self._EndOfVideo = frameIndex == -1
@@ -327,12 +326,8 @@ function VideoReader:Update(drop)
 
 		self._Frame:replacePixels(self._FrameImageData)
 	else
-		self._PacketDecodeChannel:supply("Start")
-
 		return false
 	end
-
-	self._PacketDecodeChannel:supply("Start")
 	
 	return true
 end

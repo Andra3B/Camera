@@ -11,12 +11,14 @@ local settingsString = nil
 local settings = {}
 
 local function StopLivestream()
-	os.execute([[kill -2 $(cat Livestream.pid) && rm -f Livestream.pid]])
+	if love.filesystem.getInfo("Livestream.pid", "file") then
+		os.execute([[kill -2 $(cat Livestream.pid) && rm -f Livestream.pid]])
+	end
 end
 
 local function StartLivestream(from, port)
 	StopLivestream()
-
+	
 	os.execute([[rpicam-vid -t 0 -n --codec libav --libav-format mpegts --width 1280 --height 720 --bitrate 1000000 --intra 5 --framerate 30 --inline --flush --denoise cdn_off -o "tcp://]]..from:GetRemoteDetails()..":"..port..[[?tcp_nodelay=1" > /dev/null 2>&1 & echo $! > Livestream.pid]])
 end
 
