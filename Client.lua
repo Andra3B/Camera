@@ -495,6 +495,9 @@ function love.load()
 		trackingCooldown = true
 		
 		appClient:Send("&IncrementAngle:%d!", settings.Client.RotationIncrement)
+
+		trackingCooldownTimer:Reset()
+		trackingCooldownTimer.Running = true
 	end)
 
 	local RotateRightButton = UserInterface.Button.Create()
@@ -517,6 +520,9 @@ function love.load()
 		trackingCooldown = true
 
 		appClient:Send("&IncrementAngle:%d!", -settings.Client.RotationIncrement)
+
+		trackingCooldownTimer:Reset()
+		trackingCooldownTimer.Running = true
 	end)
 
 	local TrackingToggleButton = UserInterface.ToggleButton.Create()
