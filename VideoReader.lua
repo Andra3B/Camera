@@ -9,7 +9,8 @@ function VideoReader.Create(url, format, width, height, inputOptions, outputOpti
 	self._FrameData = love.image.newImageData(width, height, "rgba8")
 	self._FrameDataPointer = self._FrameData:getFFIPointer()
 	self._Frame = love.graphics.newImage(self._FrameData)
-	
+	self._FrameCount = 0
+
 	self._Error = nil
 
 	self._DecoderCommandChannel = love.thread.newChannel()
@@ -46,6 +47,10 @@ function VideoReader:GetFrame()
 	return self._Frame
 end
 
+function VideoReader:GetFrameCount()
+	return self._FrameCount
+end
+
 function VideoReader:GetError()
 	return self._Error
 end
@@ -68,6 +73,8 @@ function VideoReader:Update(deltaTime)
 			)
 
 			self._Frame:replacePixels(self._FrameData)
+
+			self._FrameCount = self._FrameCount + 1
 
 			return true
 		end

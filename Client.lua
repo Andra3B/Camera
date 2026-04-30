@@ -101,7 +101,7 @@ local function SetSetting(name, value, clientSetting)
 				"&"..name..":Number,%1,%2,%3,"..value.."!"
 			)
 		elseif valueType == "boolean" then
-			_settings[name] = value == "true"
+			_settings[name] = value or value == "true"
 
 			settingsString = string.gsub(
 				settingsString,
@@ -129,6 +129,9 @@ local function SetSetting(name, value, clientSetting)
 				tracker.AdaptionRate = tonumber(value)
 			elseif name == "Subdivisions" then
 				tracker.Subdivisions = tonumber(value)
+				
+				LivestreamFrame.BackgroundImage = nil
+				LivestreamFrame.VideoVisible = true
 			end
 		end
 		
@@ -691,8 +694,6 @@ function love.load()
 
 	appClient.Events:Listen("GetSettings", function(_, _, cameraSettingsString)
 		RefreshSettings(settingsString.."\n"..cameraSettingsString)
-
-		print(settings.Camera.MotionThreshold)
 	end)
 
 	appClient.Events:Listen("Disconnected", function()
@@ -715,19 +716,28 @@ function love.update(deltaTime)
 	appClient:Update()
 
 	AppInfoLabel.Text = string.format(
-		"FPS: %d | RT: %.3f s",
+		"Frame Rate: %d | Runtime: %.3f s",
 		love.timer.getFPS(),
 		love.timer.getTime() - LOAD_TIME
 	)
 
-	if LivestreamFrame.Video and tracker.LargestMotionShape then
+	if LivestreamFrame.Video then
 		AppInfoLabel.Text = AppInfoLabel.Text..string.format(
-			" | MC: %.2f%% | CE: %.2f%%",
-			tracker.MotionCoverage * 100,
-			math.abs(tracker.LargestMotionShape[1].X + tracker.LargestMotionShape[2].X - 1) * 100
+			" | Frame: %d | Motion Coverage: %.2f%%",
+			LivestreamFrame.Video.FrameCount,
+			tracker.MotionCoverage * 100
 		)
+
+		if tracker.LargestMotionShape then
+			AppInfoLabel.Text = AppInfoLabel.Text..string.format(
+				" | Centering Error: %.2f%%",
+				math.abs(tracker.LargestMotionShape[1].X + tracker.LargestMotionShape[2].X - 1) * 100
+			)
+		else
+			AppInfoLabel.Text = AppInfoLabel.Text.." | Centering Error: 0.00%"
+		end
 	else
-		AppInfoLabel.Text = AppInfoLabel.Text.." | MC: 0.00% | CE: 0.00%"
+		AppInfoLabel.Text = AppInfoLabel.Text.." | Frame: 0 | Motion Coverage: 0.00% | Centering Error: 0.00%"
 	end
 end
 
@@ -743,6 +753,7 @@ function love.draw()
 				local absoluteSize = LivestreamFrame.BackgroundImageAbsoluteSize
 
 				love.graphics.setLineWidth(3)
+
 
 				for index, shape in pairs(tracker.MotionShapes) do
 					local topLeft, bottomRight = unpack(shape)

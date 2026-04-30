@@ -154,11 +154,11 @@ function love.load()
 		elseif command == "StopLivestream" then
 			Log.Info("Camera", "Client %s:%d stopped the livestream", ip, port)
 		elseif command == "SetAngle" then
-			Log.Info("Camera", "Client %s:%d set the servo angle to %d degrees", ip, port, ...)
+			Log.Info("Camera", "Client %s:%d set the servo angle to %f degrees", ip, port, ...)
 		elseif command == "GetSettings" then
 			Log.Info("Camera", "Client %s:%d requested settings", ip, port)
 		elseif command == "SetSetting" then
-			Log.Info("Camera", "Client %s:%d set \"%s\" to %d", ip, port, ...)
+			Log.Info("Camera", "Client %s:%d set \"%s\" to %f", ip, port, ...)
 		elseif command == "SaveSettings" then
 			Log.Info("Camera", "Client %s:%d requested settings to be saved", ip, port)
 		end
